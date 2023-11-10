@@ -261,6 +261,125 @@
 ]]></content>
   </entry>
   <entry>
+    <title>php 安装redis，protobuf,mcryp扩展</title>
+    <url>/2023/11/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/</url>
+    <content><![CDATA[<p>&nbsp; 测试机上测试一些数据需要用到redis扩展，偷懒yum安装的php，以前yum install php-pecl-redis.x86_64可以安装扩展，这次找不到安装包，不折腾手动安装下。</p>
+<p>1.下载phpredis</p>
+<p>cd /usr/local/src</p>
+<p>wget <a href="https://github.com/nicolasff/phpredis/archive/2.2.4.tar.gz">https://github.com/nicolasff/phpredis/archive/2.2.4.tar.gz</a></p>
+<p>tar -zxvf 2.2.4.tar.gz</p>
+<p>cd phpredis-2.2.4/</p>
+<p>2.用phpize生成configure配置文件</p>
+<p>/usr/bin/phpize&nbsp; #会生成几个新文件，默认安装路径自定义的按照自定义路径；</p>
+<p>./configure –with-php-config=/usr/bin/php-config</p>
+<p>make #编译</p>
+<p>make install #安装</p>
+<p>make test #测试</p>
+<p>3.配置php支持</p>
+<p>vim /usr/local/php/etc/php.ini #编辑配置文件，在最后一行添加以下内容</p>
+<p>extension=”redis.so”</p>
+<ol start="4">
+<li></li>
+</ol>
+<p>重启http加载查看phpinfo信息：</p>
+<p>redis</p>
+<p>Redis Supportenabled</p>
+<p>Redis Version2.2.4</p>
+<p>成功！</p>
+<p>php扩展Protobuf</p>
+<p>下载protobuf扩展包：wget <a href="https://github.com/allegro/php-protobuf/archive/master.zip%E8%BF%99%E4%B8%AAmaster.zip%E4%BC%9A%E6%8A%A5%E9%94%99%EF%BC%9B">https://github.com/allegro/php-protobuf/archive/master.zip这个master.zip会报错；</a></p>
+<p>master.zip</p>
+<p>cd /home/tools/php-protobuf-master/</p>
+<p>phpize</p>
+<p>可能会报错php-devel</p>
+<p>yum install php-devel</p>
+<p>./configure<br>1.<br>make&nbsp;&amp;&amp;&nbsp;make&nbsp;install<br>1.</p>
+<p>If you ever happen to want to link against installed libraries</p>
+<p>in a given directory, LIBDIR, you must either use libtool, and</p>
+<p>specify the full pathname of the library, or use the `-LLIBDIR’</p>
+<p>flag during linking and do at least one of the following:</p>
+<p>&nbsp;&nbsp; - add LIBDIR to the `LD_LIBRARY_PATH’ environment variable</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; during execution</p>
+<p>&nbsp;&nbsp; - add LIBDIR to the `LD_RUN_PATH’ environment variable</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; during linking</p>
+<p>&nbsp;&nbsp; - use the `-Wl,-rpath -Wl,LIBDIR’ linker flag</p>
+<p>&nbsp;&nbsp; - have your system administrator add LIBDIR to `/etc/ld.so.conf’</p>
+<p>&nbsp;</p>
+<p>See any operating system documentation about shared libraries for</p>
+<p>more information, such as the ld(1) and ld.so(8) manual pages.</p>
+<hr>
+<p>&nbsp;</p>
+<p>Build complete.</p>
+<p>Don’t forget to run ‘make test’.</p>
+<p>&nbsp;</p>
+<p>Installing shared extensions:&nbsp;&nbsp;&nbsp;&nbsp; /usr/lib64/php/modules/</p>
+<p>然后再php.ini增加</p>
+<p>extension = protocolbuffers.so</p>
+<p>重启下http就可以了；</p>
+<p>装载protobuff库：</p>
+<p>&nbsp;pear&nbsp;channel-discover&nbsp;pear.pollinimini.net&nbsp;</p>
+<p>pear&nbsp;install&nbsp;drslump/Protobuf-beta&nbsp;</p>
+<p>mcryp扩展：</p>
+<p>yum install libmcrypt libmcrypt-devel mcrypt mhash 如果报错找不到补丁的话手动安装；</p>
+<p>下载Libmcrypt,mhash,mcrypt安装包</p>
+<p>Libmcrypt(libmcrypt-2.5.8.tar.gz)：<a href="http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91774&amp;release_id=487459">http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91774&amp;release_id=487459</a></p>
+<p>mcrypt(mcrypt-2.6.8.tar.gz ):<a href="http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91948&amp;release_id=642101">http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91948&amp;release_id=642101</a></p>
+<p>mhash(mhash-0.9.9.9.tar.gz):<a href="http://sourceforge.net/project/showfiles.php?group_id=4286&amp;package_id=4300&amp;release_id=645636">http://sourceforge.net/project/showfiles.php?group_id=4286&amp;package_id=4300&amp;release_id=645636</a></p>
+<p>2.先安装Libmcrypt</p>
+<p>tar -zxvf libmcrypt-2.5.8.tar.gz</p>
+<p>cd libmcrypt-2.5.8</p>
+<p>./configure</p>
+<p>make</p>
+<p>make install</p>
+<p>说明：libmcript默认安装在/usr/local&nbsp;</p>
+<p>3.再安装mhash</p>
+<p>tar -zxvf mhash-0.9.9.9.tar.gz</p>
+<p>cd mhash-0.9.9.9</p>
+<p>./configure</p>
+<p>make &amp;&amp; make install</p>
+<p>4.最后安装mcrypt</p>
+<p>tar -zxvf mcrypt-2.6.8.tar.gz</p>
+<p>cd mcrypt-2.6.8</p>
+<p>LD_LIBRARY_PATH=/usr/local/lib ./configure</p>
+<p>make &amp;&amp; make install</p>
+<p>说明：由于在配置Mcrypt时，会找不到libmcrypt的链接库，导致无法编译，因为Libmcrypt的链接库在/usr/local/lib文件夹下。</p>
+<p>因次，在配置mcrypt时要加入LD_LIBRARY_PATH=/usr/local/lib导入键接库。</p>
+<p>到&nbsp;<a href="http://cn.php.net/releases/">http://cn.php.net/releases/</a>&nbsp;网页下找到自己对应php版本，下载后解压</p>
+<p>cd php-5.4.16/ext/mcrypt/</p>
+<p>phpize (执行phpize命令（phpize是用来扩展php扩展模块的，通过phpize可以建立php的外挂模块，如果没有？yum install php-devel)</p>
+<p>phpize&nbsp;</p>
+<p>Configuring for:</p>
+<p>PHP Api Version:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;20100412</p>
+<p>Zend Module Api No:&nbsp; &nbsp; &nbsp; 20100525</p>
+<p>Zend Extension Api No:&nbsp; &nbsp;220100525</p>
+<p>yum 安装php./configure就可以，定制的需要自己的路径如比：./configure –with-php-config=/usr/bin/php-config</p>
+<p>./configure</p>
+<p>make &amp;&amp; make install</p>
+<p>Libraries have been installed in:</p>
+<p>&nbsp; &nbsp;/home/tools/php-5.4.16/ext/mcrypt/modules</p>
+<p>If you ever happen to want to link against installed libraries</p>
+<p>in a given directory, LIBDIR, you must either use libtool, and</p>
+<p>specify the full pathname of the library, or use the `-LLIBDIR’</p>
+<p>flag during linking and do at least one of the following:</p>
+<p>&nbsp; &nbsp;- add LIBDIR to the `LD_LIBRARY_PATH’ environment variable</p>
+<p>&nbsp; &nbsp; &nbsp;during execution</p>
+<p>&nbsp; &nbsp;- add LIBDIR to the `LD_RUN_PATH’ environment variable</p>
+<p>&nbsp; &nbsp; &nbsp;during linking</p>
+<p>&nbsp; &nbsp;- use the `-Wl,-rpath -Wl,LIBDIR’ linker flag</p>
+<p>&nbsp; &nbsp;- have your system administrator add LIBDIR to `/etc/ld.so.conf’</p>
+<p>See any operating system documentation about shared libraries for</p>
+<p>more information, such as the ld(1) and ld.so(8) manual pages.</p>
+<hr>
+<p>Build complete.</p>
+<p>Don’t forget to run ‘make test’.</p>
+<p>Installing shared extensions:&nbsp; &nbsp; &nbsp;/usr/lib64/php/modules/</p>
+<p>php.ini添加一条extension=mcrypt.so</p>
+<p>extension = protocolbuffers.so</p>
+<p>extension = mcrypt.so</p>
+<hr>
+]]></content>
+  </entry>
+  <entry>
     <title>linux 磁盘挂载扩充格式化</title>
     <url>/2023/11/10/linux-%E7%A3%81%E7%9B%98%E6%8C%82%E8%BD%BD%E6%89%A9%E5%85%85%E6%A0%BC%E5%BC%8F%E5%8C%96/</url>
     <content><![CDATA[<h1 id="linux服务器硬盘格式化挂载："><a href="#linux服务器硬盘格式化挂载：" class="headerlink" title="linux服务器硬盘格式化挂载："></a>linux服务器硬盘格式化挂载：</h1><p>请根据以下步骤对数据盘进行分区以及格式化，并挂载分区使数据盘可用。</p>
@@ -412,125 +531,6 @@
 <p>debugfs              /sys/kernel/debug    debugfs    noauto                0 0</p>
 <p>devpts               /dev/pts             devpts     mode=0620,gid=5       0 0</p>
 <p>/dev/disk/bd/virtio-diskt1            /data                    ext4       defaults,nofail 0 1</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>php 安装redis，protobuf,mcryp扩展</title>
-    <url>/2023/11/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/</url>
-    <content><![CDATA[<p>&nbsp; 测试机上测试一些数据需要用到redis扩展，偷懒yum安装的php，以前yum install php-pecl-redis.x86_64可以安装扩展，这次找不到安装包，不折腾手动安装下。</p>
-<p>1.下载phpredis</p>
-<p>cd /usr/local/src</p>
-<p>wget <a href="https://github.com/nicolasff/phpredis/archive/2.2.4.tar.gz">https://github.com/nicolasff/phpredis/archive/2.2.4.tar.gz</a></p>
-<p>tar -zxvf 2.2.4.tar.gz</p>
-<p>cd phpredis-2.2.4/</p>
-<p>2.用phpize生成configure配置文件</p>
-<p>/usr/bin/phpize&nbsp; #会生成几个新文件，默认安装路径自定义的按照自定义路径；</p>
-<p>./configure –with-php-config=/usr/bin/php-config</p>
-<p>make #编译</p>
-<p>make install #安装</p>
-<p>make test #测试</p>
-<p>3.配置php支持</p>
-<p>vim /usr/local/php/etc/php.ini #编辑配置文件，在最后一行添加以下内容</p>
-<p>extension=”redis.so”</p>
-<ol start="4">
-<li></li>
-</ol>
-<p>重启http加载查看phpinfo信息：</p>
-<p>redis</p>
-<p>Redis Supportenabled</p>
-<p>Redis Version2.2.4</p>
-<p>成功！</p>
-<p>php扩展Protobuf</p>
-<p>下载protobuf扩展包：wget <a href="https://github.com/allegro/php-protobuf/archive/master.zip%E8%BF%99%E4%B8%AAmaster.zip%E4%BC%9A%E6%8A%A5%E9%94%99%EF%BC%9B">https://github.com/allegro/php-protobuf/archive/master.zip这个master.zip会报错；</a></p>
-<p>master.zip</p>
-<p>cd /home/tools/php-protobuf-master/</p>
-<p>phpize</p>
-<p>可能会报错php-devel</p>
-<p>yum install php-devel</p>
-<p>./configure<br>1.<br>make&nbsp;&amp;&amp;&nbsp;make&nbsp;install<br>1.</p>
-<p>If you ever happen to want to link against installed libraries</p>
-<p>in a given directory, LIBDIR, you must either use libtool, and</p>
-<p>specify the full pathname of the library, or use the `-LLIBDIR’</p>
-<p>flag during linking and do at least one of the following:</p>
-<p>&nbsp;&nbsp; - add LIBDIR to the `LD_LIBRARY_PATH’ environment variable</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp; during execution</p>
-<p>&nbsp;&nbsp; - add LIBDIR to the `LD_RUN_PATH’ environment variable</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp; during linking</p>
-<p>&nbsp;&nbsp; - use the `-Wl,-rpath -Wl,LIBDIR’ linker flag</p>
-<p>&nbsp;&nbsp; - have your system administrator add LIBDIR to `/etc/ld.so.conf’</p>
-<p>&nbsp;</p>
-<p>See any operating system documentation about shared libraries for</p>
-<p>more information, such as the ld(1) and ld.so(8) manual pages.</p>
-<hr>
-<p>&nbsp;</p>
-<p>Build complete.</p>
-<p>Don’t forget to run ‘make test’.</p>
-<p>&nbsp;</p>
-<p>Installing shared extensions:&nbsp;&nbsp;&nbsp;&nbsp; /usr/lib64/php/modules/</p>
-<p>然后再php.ini增加</p>
-<p>extension = protocolbuffers.so</p>
-<p>重启下http就可以了；</p>
-<p>装载protobuff库：</p>
-<p>&nbsp;pear&nbsp;channel-discover&nbsp;pear.pollinimini.net&nbsp;</p>
-<p>pear&nbsp;install&nbsp;drslump/Protobuf-beta&nbsp;</p>
-<p>mcryp扩展：</p>
-<p>yum install libmcrypt libmcrypt-devel mcrypt mhash 如果报错找不到补丁的话手动安装；</p>
-<p>下载Libmcrypt,mhash,mcrypt安装包</p>
-<p>Libmcrypt(libmcrypt-2.5.8.tar.gz)：<a href="http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91774&amp;release_id=487459">http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91774&amp;release_id=487459</a></p>
-<p>mcrypt(mcrypt-2.6.8.tar.gz ):<a href="http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91948&amp;release_id=642101">http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91948&amp;release_id=642101</a></p>
-<p>mhash(mhash-0.9.9.9.tar.gz):<a href="http://sourceforge.net/project/showfiles.php?group_id=4286&amp;package_id=4300&amp;release_id=645636">http://sourceforge.net/project/showfiles.php?group_id=4286&amp;package_id=4300&amp;release_id=645636</a></p>
-<p>2.先安装Libmcrypt</p>
-<p>tar -zxvf libmcrypt-2.5.8.tar.gz</p>
-<p>cd libmcrypt-2.5.8</p>
-<p>./configure</p>
-<p>make</p>
-<p>make install</p>
-<p>说明：libmcript默认安装在/usr/local&nbsp;</p>
-<p>3.再安装mhash</p>
-<p>tar -zxvf mhash-0.9.9.9.tar.gz</p>
-<p>cd mhash-0.9.9.9</p>
-<p>./configure</p>
-<p>make &amp;&amp; make install</p>
-<p>4.最后安装mcrypt</p>
-<p>tar -zxvf mcrypt-2.6.8.tar.gz</p>
-<p>cd mcrypt-2.6.8</p>
-<p>LD_LIBRARY_PATH=/usr/local/lib ./configure</p>
-<p>make &amp;&amp; make install</p>
-<p>说明：由于在配置Mcrypt时，会找不到libmcrypt的链接库，导致无法编译，因为Libmcrypt的链接库在/usr/local/lib文件夹下。</p>
-<p>因次，在配置mcrypt时要加入LD_LIBRARY_PATH=/usr/local/lib导入键接库。</p>
-<p>到&nbsp;<a href="http://cn.php.net/releases/">http://cn.php.net/releases/</a>&nbsp;网页下找到自己对应php版本，下载后解压</p>
-<p>cd php-5.4.16/ext/mcrypt/</p>
-<p>phpize (执行phpize命令（phpize是用来扩展php扩展模块的，通过phpize可以建立php的外挂模块，如果没有？yum install php-devel)</p>
-<p>phpize&nbsp;</p>
-<p>Configuring for:</p>
-<p>PHP Api Version:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;20100412</p>
-<p>Zend Module Api No:&nbsp; &nbsp; &nbsp; 20100525</p>
-<p>Zend Extension Api No:&nbsp; &nbsp;220100525</p>
-<p>yum 安装php./configure就可以，定制的需要自己的路径如比：./configure –with-php-config=/usr/bin/php-config</p>
-<p>./configure</p>
-<p>make &amp;&amp; make install</p>
-<p>Libraries have been installed in:</p>
-<p>&nbsp; &nbsp;/home/tools/php-5.4.16/ext/mcrypt/modules</p>
-<p>If you ever happen to want to link against installed libraries</p>
-<p>in a given directory, LIBDIR, you must either use libtool, and</p>
-<p>specify the full pathname of the library, or use the `-LLIBDIR’</p>
-<p>flag during linking and do at least one of the following:</p>
-<p>&nbsp; &nbsp;- add LIBDIR to the `LD_LIBRARY_PATH’ environment variable</p>
-<p>&nbsp; &nbsp; &nbsp;during execution</p>
-<p>&nbsp; &nbsp;- add LIBDIR to the `LD_RUN_PATH’ environment variable</p>
-<p>&nbsp; &nbsp; &nbsp;during linking</p>
-<p>&nbsp; &nbsp;- use the `-Wl,-rpath -Wl,LIBDIR’ linker flag</p>
-<p>&nbsp; &nbsp;- have your system administrator add LIBDIR to `/etc/ld.so.conf’</p>
-<p>See any operating system documentation about shared libraries for</p>
-<p>more information, such as the ld(1) and ld.so(8) manual pages.</p>
-<hr>
-<p>Build complete.</p>
-<p>Don’t forget to run ‘make test’.</p>
-<p>Installing shared extensions:&nbsp; &nbsp; &nbsp;/usr/lib64/php/modules/</p>
-<p>php.ini添加一条extension=mcrypt.so</p>
-<p>extension = protocolbuffers.so</p>
-<p>extension = mcrypt.so</p>
-<hr>
 ]]></content>
   </entry>
 </search>
