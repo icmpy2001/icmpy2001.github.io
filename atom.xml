@@ -2,11 +2,11 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>云上的小雨滴</title>
   
-  <subtitle>Jary 的小破屋</subtitle>
+  <subtitle>Jary 的小茅屋</subtitle>
   <link href="https://icmpy2001.github.io.git/atom.xml" rel="self"/>
   
   <link href="https://icmpy2001.github.io.git/"/>
-  <updated>2023-11-10T08:50:05.918Z</updated>
+  <updated>2023-11-10T08:59:24.997Z</updated>
   <id>https://icmpy2001.github.io.git/</id>
   
   <author>
@@ -15,6 +15,52 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Rsync同步文件</title>
+    <link href="https://icmpy2001.github.io.git/2023/11/10/Rsync%E5%90%8C%E6%AD%A5%E6%96%87%E4%BB%B6/"/>
+    <id>https://icmpy2001.github.io.git/2023/11/10/Rsync%E5%90%8C%E6%AD%A5%E6%96%87%E4%BB%B6/</id>
+    <published>2023-11-10T08:58:37.000Z</published>
+    <updated>2023-11-10T08:59:24.997Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;Rsync常用的一款同步文件工具。配置也很方便。&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;yum install sync -y或者apt-get install</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>frp搭建</title>
+    <link href="https://icmpy2001.github.io.git/2023/11/10/frp%E6%90%AD%E5%BB%BA/"/>
+    <id>https://icmpy2001.github.io.git/2023/11/10/frp%E6%90%AD%E5%BB%BA/</id>
+    <published>2023-11-10T08:56:46.000Z</published>
+    <updated>2023-11-10T08:57:14.174Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt; &amp;nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。&lt;/p&gt;
+&lt;p&gt;首先到官网：&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;&lt;a</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>coredump 路径格式</title>
