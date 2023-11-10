@@ -4,11 +4,9 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="coredump 路径格式, 云上的小雨滴">
-    <meta name="description" content="Coredump
-业务进程宕机以后开发需要查看dump查找定位问题，所有服务器初始化环境时候统一定制coredump路径；
-1.Core文件简介
-Core文件其实就是内存的映像，当程序崩溃时，存储内存的相应信息，主用用于对程序进行调试。当程">
+    <meta name="keywords" content="linux 磁盘挂载扩充格式化, 云上的小雨滴">
+    <meta name="description" content="linux服务器硬盘格式化挂载：请根据以下步骤对数据盘进行分区以及格式化，并挂载分区使数据盘可用。
+1.1 查看数据盘信息登录Linux云服务器后，可以使用“fdisk -l”命令查看数据盘相关信息。使用“df -h”命令，无法看到未分区和">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -20,7 +18,7 @@ Core文件其实就是内存的映像，当程序崩溃时，存储内存的相�
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>coredump 路径格式 | 云上的小雨滴</title>
+    <title>linux 磁盘挂载扩充格式化 | 云上的小雨滴</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -338,12 +336,12 @@ Core文件其实就是内存的映像，当程序崩溃时，存储内存的相�
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">coredump 路径格式</h1>
+                    <h1 class="description center-align post-title">linux 磁盘挂载扩充格式化</h1>
                 </div>
             </div>
         </div>
@@ -403,83 +401,156 @@ Core文件其实就是内存的映像，当程序崩溃时，存储内存的相�
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Coredump</p>
-<p>业务进程宕机以后开发需要查看dump查找定位问题，所有服务器初始化环境时候统一定制coredump路径；</p>
-<p>1.Core文件简介</p>
-<p>Core文件其实就是内存的映像，当程序崩溃时，存储内存的相应信息，主用用于对程序进行调试。当程序崩溃时便会产生core文件，其实准确的应该说是core dump 文件,默认生成位置与可执行程序位于同一目录下，文件名为core.<em><strong>,其中</strong></em>是某一数字。</p>
-<p>2.开启或关闭Core文件的生成</p>
-<p>关闭或阻止core文件生成：</p>
-<p>$ulimit -c 0</p>
-<p>打开core文件生成：</p>
-<p>$ulimit -c unlimited</p>
-<p>检查core文件的选项是否打开：</p>
-<p>$ulimit -a</p>
-<p>ulimit参数含义如下：&nbsp;</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -a&nbsp;&nbsp;&nbsp;&nbsp; All current limits are reported<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -c&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of core files created<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -d&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of a process data segment<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -e&nbsp;&nbsp;&nbsp;&nbsp; The maximum scheduling priority (“nice”)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -f&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of files written by the shell and its children<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -i&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of pending signals<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -l&nbsp;&nbsp;&nbsp;&nbsp; The maximum size that may be locked into memory<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -m&nbsp;&nbsp;&nbsp;&nbsp; The maximum resident set size (has no effect on Linux)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -n&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of open file descriptors (most systems do not allow this value to be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -p&nbsp;&nbsp;&nbsp;&nbsp; The pipe size in 512-byte blocks (this may not be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -q&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of bytes in POSIX message queues<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -r&nbsp;&nbsp;&nbsp;&nbsp; The maximum real-time scheduling priority<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -s&nbsp;&nbsp;&nbsp;&nbsp; The maximum stack size<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -t&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of cpu time in seconds<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -u&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of processes available to a single user<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -v&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of virtual memory available to the shell<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -x&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of file locks</p>
-<p>&nbsp;</p>
-<p>#ulimit -a</p>
-<p>core file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -c) unlimited</p>
-<p>data seg size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -d) unlimited</p>
-<p>scheduling priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-e) 0</p>
-<p>file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -f) unlimited</p>
-<p>pending signals&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-i) 127974</p>
-<p>max locked memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -l) 64</p>
-<p>max memory size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -m) unlimited</p>
-<p>open files&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-n) 100000</p>
-<p>pipe size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (512 bytes, -p) 8</p>
-<p>POSIX message queues&nbsp;&nbsp;&nbsp;&nbsp; (bytes, -q) 819200</p>
-<p>real-time priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-r) 0</p>
-<p>stack size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -s) 8192</p>
-<p>cpu time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (seconds, -t) unlimited</p>
-<p>max user processes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-u) 655360</p>
-<p>virtual memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -v) unlimited</p>
-<p>file locks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-x) unlimited而我们需要修改的是open files (-n) 1024的值</p>
-<p>于是命令就是limit -n 2048(随各自需要设置)</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>以上配置只对当前会话起作用，下次重新登陆后，还是得重新配置。要想配置永久生效，得在/etc/profile或者/etc/security/limits.conf文件中进行配置。</p>
-<p>首先以root权限登陆，然后打开/etc/security/limits.conf文件，进行配置：</p>
-<p>#vim /etc/security/limits.conf</p>
-<p><domain> &nbsp; &nbsp;<type> &nbsp; &nbsp;<item> &nbsp; &nbsp; &nbsp; &nbsp;<value></value></item></type></domain></p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp;* &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;soft &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;core &nbsp; &nbsp; &nbsp; &nbsp; unlimited</p>
-<p>或者在/etc/profile中作如下配置：</p>
-<p>#vim /etc/profile</p>
-<p>ulimit -S -c unlimited &gt;/dev/null 2&gt;&amp;1</p>
-<p>或者想配置只针对某一用户有效，则修改此用户的<del>/.bashrc或者</del>/.bash_profile文件：</p>
-<p>limit -c unlimited</p>
-<p>ulimit -c 0 是禁止产生core文件，而ulimit -c 1024则限制产生的core文件的大小不能超过1024kb</p>
-<p>3.设置Core Dump的核心转储文件目录和命名规则</p>
-<p>/proc/sys/kernel/core_uses_pid可以控制产生的core文件的文件名中是否添加pid作为扩展，如果添加则文件内容为1，否则为0<br>/proc/sys/kernel/core_pattern可以设置格式化的core文件保存位置或文件名，比如原来文件内容是core-%e<br>可以这样修改:<br>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern<br>将会控制所产生的core文件会存放到/data/common/coredump目录下，产生的文件名为core-进程名-pid-时间戳<br>以下是参数列表:<br>&nbsp;&nbsp;&nbsp; %p - insert pid into filename 添加pid<br>&nbsp;&nbsp;&nbsp; %u - insert current uid into filename 添加当前uid<br>&nbsp;&nbsp;&nbsp; %g - insert current gid into filename 添加当前gid<br>&nbsp;&nbsp;&nbsp; %s - insert signal that caused the coredump into the filename 添加导致产生core的信号<br>&nbsp;&nbsp;&nbsp; %t - insert UNIX time that the coredump occurred into filename 添加core文件生成时的unix时间<br>&nbsp;&nbsp;&nbsp; %h - insert hostname where the coredump happened into filename 添加主机名<br>&nbsp;&nbsp;&nbsp; %e - insert coredumping executable name into filename 添加命令名</p>
-<p>4.core文件的使用</p>
-<p>在core文件所在目录下键入:<br>gdb -c core &nbsp; （-c指定core文件）<br>它会启动GNU的调试器，来调试core文件，并且会显示生成此core文件的程序名，中止此程序的信号等等<br>如果你已经知道是由什么程序生成此core文件的，比如MyServer崩溃了生成core.12345，那么用此指令调试:<br>gdb -c core MyServer</p>
-<p>&nbsp;源：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html">https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html</a>&nbsp;</p>
-<p>5.永久生效：<br>当前不重启生效：<br>你可以用下列方式来完成<br>sysctl -w kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
-<p>或</p>
-<p>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern</p>
-<p>这些操作一旦计算机重启，则会丢失，如果你想持久化这些操作，可以在 /etc/sysctl.conf文件中增加：<br>kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
-<p>加好后，如果你想不重启看看效果的话，则用下面的命令：<br>sysctl -p /etc/sysctl.conf</p>
-<h1 id="sysctl-p-etc-sysctl-conf"><a href="#sysctl-p-etc-sysctl-conf" class="headerlink" title="sysctl -p /etc/sysctl.conf"></a>sysctl -p /etc/sysctl.conf</h1><p>net.ipv4.ip_forward = 0</p>
-<p>net.ipv4.conf.default.rp_filter = 1</p>
-<p>net.ipv4.conf.default.accept_source_route = 0</p>
-<p>kernel.core_uses_pid = 1</p>
-<p>net.ipv4.tcp_syncookies = 1</p>
-<p>kernel.msgmnb = 65536</p>
-<p>kernel.msgmax = 65536</p>
-<p>net.ipv6.conf.lo.disable_ipv6 = 1</p>
-<p>net.ipv4.conf.all.promote_secondaries = 1</p>
-<p>net.ipv4.conf.default.promote_secondaries = 1</p>
-<p>net.ipv6.neigh.default.gc_thresh3 = 4096</p>
-<p>net.ipv4.neigh.default.gc_thresh3 = 4096</p>
-<p>kernel.softlockup_panic = 1</p>
-<p>kernel.sysrq = 1</p>
-<p>net.ipv6.conf.all.disable_ipv6 = 1</p>
-<p>net.ipv6.conf.default.disable_ipv6 = 1</p>
-<p>vm.overcommit_memory = 1</p>
-<p>kernel.numa_balancing = 0</p>
-<p>kernel.shmmax = 68719476736</p>
-<p>kernel.printk = 5</p>
-<h2 id="kernel-core-pattern-data-common-coredump-core-e-p-t"><a href="#kernel-core-pattern-data-common-coredump-core-e-p-t" class="headerlink" title="kernel.core_pattern = /data/common/coredump/core-%e-%p-%t"></a>kernel.core_pattern = /data/common/coredump/core-%e-%p-%t</h2>
+                <h1 id="linux服务器硬盘格式化挂载："><a href="#linux服务器硬盘格式化挂载：" class="headerlink" title="linux服务器硬盘格式化挂载："></a>linux服务器硬盘格式化挂载：</h1><p>请根据以下步骤对数据盘进行分区以及格式化，并挂载分区使数据盘可用。</p>
+<h2 id="1-1-查看数据盘信息"><a href="#1-1-查看数据盘信息" class="headerlink" title="1.1 查看数据盘信息"></a>1.1 查看数据盘信息</h2><p>登录Linux云服务器后，可以使用“fdisk -l”命令查看数据盘相关信息。<br>使用“df -h”命令，无法看到未分区和格式化的数据盘。 </p>
+<h2 id="1-2-数据盘分区"><a href="#1-2-数据盘分区" class="headerlink" title="1.2 数据盘分区"></a>1.2 数据盘分区</h2><p>执行以下命令，对数据盘进行分区。</p>
+<p>fdisk /dev/xvdb</p>
+<p>按照界面的提示，依次输入“n”(新建分区)、“p”(新建扩展分区)、“1”(使用第1个主分区)，两次回车(使用默认配置)，输入“wq”(保存分区表)，开始分区。<br>这里是以创建1个分区为例，开发者也可以根据自己的需求创建多个分区。</p>
+<h2 id="1-3-查看新分区"><a href="#1-3-查看新分区" class="headerlink" title="1.3 查看新分区"></a>1.3 查看新分区</h2><p>使用“fdisk -l”命令，即可查看到，新的分区xvdb1已经创建完成。</p>
+<h2 id="1-4-格式化新分区"><a href="#1-4-格式化新分区" class="headerlink" title="1.4 格式化新分区"></a>1.4 格式化新分区</h2><p>在进行分区格式化时，开发者可以自行决定文件系统的格式，如ext2、ext3等。<br>这里以“ext3”为例：<br>使用下面的命令对新分区进行格式化。 </p>
+<p>mkfs.ext3 /dev/xvdb1</p>
+<h2 id="1-5-挂载新分区"><a href="#1-5-挂载新分区" class="headerlink" title="1.5 挂载新分区"></a>1.5 挂载新分区</h2><p>使用命令“mkdir /mydata”创建mydata目录，再通过“mount /dev/xvdb1 /mydata”命令手动挂载新分区后，用“df -h”命令查看，出现以下信息说明挂载成功，即可以查看到数据盘了。</p>
+<h2 id="1-6-添加分区信息"><a href="#1-6-添加分区信息" class="headerlink" title="1.6 添加分区信息"></a>1.6 添加分区信息</h2><p>如果希望云服务器在重启或开机时能自动挂载数据盘，必须将分区信息添加到/etc/fstab中。如果没有添加，则云服务器重启或开机后，都不能自动挂载数据盘。<br>使用“echo ‘/dev/xvdb1 /mydata ext3 defaults 0 0’ &gt;&gt; /etc/fstab”命令添加分区信息后，使用“cat /etc/fstab”命令查看，出现以下信息表示添加分区信息成功。</p>
+<h1 id="2-腾讯云服务器硬盘扩充，新空间增加到已有分区空间中："><a href="#2-腾讯云服务器硬盘扩充，新空间增加到已有分区空间中：" class="headerlink" title="2.腾讯云服务器硬盘扩充，新空间增加到已有分区空间中："></a>2.腾讯云服务器硬盘扩充，新空间增加到已有分区空间中：</h1><p>  线上业务服务器1T硬盘，日志量太大，需要扩充到2T硬盘，关机购买硬盘以后启动开始在原有盘上面开始扩充：</p>
+<h2 id="2-1-查看数据盘信息"><a href="#2-1-查看数据盘信息" class="headerlink" title="2.1 查看数据盘信息"></a>2.1 查看数据盘信息</h2><h2 id="root-VM-0-17-centos-fdisk-l"><a href="#root-VM-0-17-centos-fdisk-l" class="headerlink" title="[root@VM_0_17_centos ~]# fdisk -l"></a>[root@VM_0_17_centos ~]# fdisk -l</h2><p> Disk /dev/vda: 53.7 GB, 53687091200 bytes, 104857600 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x000c7a75</p>
+<p>   Device Boot      Start         End      Blocks   Id  System</p>
+<p>/dev/vda1   *        2048   104857599    52427776   83  Linux</p>
+<p>Disk /dev/vdb: 2147.5 GB, 2147483648000 bytes, 4194304000 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x947d4eff</p>
+<p>   Device Boot      Start         End      Blocks   Id  System</p>
+<p>/dev/vdb1            2048  2097151999  1048574976   83  Linux</p>
+<h2 id="2-2查看原来1T磁盘："><a href="#2-2查看原来1T磁盘：" class="headerlink" title="2.2查看原来1T磁盘："></a>2.2查看原来1T磁盘：</h2><p>df -h</p>
+<p>Filesystem      Size  Used Avail Use% Mounted on</p>
+<p>/dev/vda1        50G  4.1G   43G   9% /</p>
+<p>devtmpfs         16G     0   16G   0% /dev</p>
+<p>tmpfs            16G   24K   16G   1% /dev/shm</p>
+<p>tmpfs            16G  300K   16G   1% /run</p>
+<p>tmpfs            16G     0   16G   0% /sys/fs/cgroup</p>
+<p>/dev/vdb1       985G  150G  785G  17% /data</p>
+<p>tmpfs           3.2G     0  3.2G   0% /run/user/0</p>
+<h2 id="2-3卸载原硬盘："><a href="#2-3卸载原硬盘：" class="headerlink" title="2.3卸载原硬盘："></a>2.3卸载原硬盘：</h2><p>umount /data/</p>
+<p>[root@VM_0_17_centos ~]# df -h</p>
+<p>Filesystem      Size  Used Avail Use% Mounted on</p>
+<p>/dev/vda1        50G  4.1G   43G   9% /</p>
+<p>devtmpfs         16G     0   16G   0% /dev</p>
+<p>tmpfs            16G   24K   16G   1% /dev/shm</p>
+<p>tmpfs            16G  300K   16G   1% /run</p>
+<p>tmpfs            16G     0   16G   0% /sys/fs/cgroup</p>
+<p>tmpfs           3.2G     0  3.2G   0% /run/user/0</p>
+<h2 id="2-4确认卸载："><a href="#2-4确认卸载：" class="headerlink" title="2.4确认卸载："></a>2.4确认卸载：</h2><p>[root@VM_0_17_centos ~]# fdisk -l</p>
+<p>Disk /dev/vda: 53.7 GB, 53687091200 bytes, 104857600 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x000c7a75</p>
+<p>   Device Boot      Start         End      Blocks   Id  System</p>
+<p>/dev/vda1   *        2048   104857599    52427776   83  Linux</p>
+<p>Disk /dev/vdb: 2147.5 GB, 2147483648000 bytes, 4194304000 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x947d4eff</p>
+<p>   Device Boot      Start         End      Blocks   Id  System</p>
+<p>/dev/vdb1            2048  2097151999  1048574976   83  Linux</p>
+<h2 id="2-5-开始格盘："><a href="#2-5-开始格盘：" class="headerlink" title="2.5 开始格盘："></a>2.5 开始格盘：</h2><p> 按照界面的提示，一次输入”p”(查看已有分区信息), ”d”(删除需要扩容的分区)、“n”(新建分区)、“p”(新建主分区)、“1”(使用第1个主分区，必须保持与需要扩容的分区一样)，两次回车(使用默认配置)，输入“w”(保存分区表)，开始分区。<br>这里是以创建1个分区为例，用户也可以根据自己的需求扩容多个分区。</p>
+<p>[root@VM_0_17_centos ~]# fdisk  /dev/vdb</p>
+<p>Welcome to fdisk (util-linux 2.23.2).</p>
+<p>Changes will remain in memory only, until you decide to write them.</p>
+<p>Be careful before using the write command.</p>
+<p> Command (m for help): p</p>
+<p>Disk /dev/vdb: 2147.5 GB, 2147483648000 bytes, 4194304000 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x947d4eff</p>
+<p>   Device Boot      Start         End      Blocks   Id  System</p>
+<p>/dev/vdb1            2048  2097151999  1048574976   83  Linux</p>
+<p>Command (m for help): d</p>
+<p>Selected partition 1</p>
+<p>Partition 1 is deleted</p>
+<p>Command (m for help): n</p>
+<p>Partition type:</p>
+<p>   p   primary (0 primary, 0 extended, 4 free)</p>
+<p>   e   extended</p>
+<p>Select (default p): p</p>
+<p>Partition number (1-4, default 1): 1</p>
+<p>First sector (2048-4194303999, default 2048):</p>
+<p>Using default value 2048</p>
+<p>Last sector, +sectors or +size{K,M,G} (2048-4194303999, default 4194303999):</p>
+<p>Using default value 4194303999</p>
+<p>Partition 1 of type Linux and of size 2 TiB is set</p>
+<p>Command (m for help): w</p>
+<p>The partition table has been altered!</p>
+<p>Calling ioctl() to re-read partition table.</p>
+<p>Syncing disks.</p>
+<p>[root@VM_0_17_centos ~]# fdisk -l</p>
+<p>Disk /dev/vda: 53.7 GB, 53687091200 bytes, 104857600 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x000c7a75</p>
+<p>   Device Boot      Start         End      Blocks   Id  System</p>
+<p>/dev/vda1   *        2048   104857599    52427776   83  Linux</p>
+<p>Disk /dev/vdb: 2147.5 GB, 2147483648000 bytes, 4194304000 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x947d4eff</p>
+<pre><code>Device Boot      Start         End      Blocks   Id  System
+</code></pre>
+<p>/dev/vdb1            2048  4194303999  2097150976   83  Linux</p>
+<h2 id="2-6确认磁盘"><a href="#2-6确认磁盘" class="headerlink" title="2.6确认磁盘"></a>2.6确认磁盘</h2><p>使用“fdisk –l /dev/vdb1”命令，即可查看到，新的分区vdb1已经创建并扩容完成：</p>
+<p>[root@VM_0_17_centos ~]# fdisk -l /dev/vdb1</p>
+<p> Disk /dev/vdb1: 2147.5 GB, 2147482599424 bytes, 4194301952 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<h2 id="2-7-再使用e2fsck-f-dev-xvdc1检查扩容的分区是否ok"><a href="#2-7-再使用e2fsck-f-dev-xvdc1检查扩容的分区是否ok" class="headerlink" title="2.7 再使用e2fsck -f /dev/xvdc1检查扩容的分区是否ok"></a>2.7 再使用e2fsck -f /dev/xvdc1检查扩容的分区是否ok</h2><p>[root@VM_0_17_centos /]# e2fsck -f /dev/vd</p>
+<p>vda   vda1  vdb   vdb1 </p>
+<p>[root@VM_0_17_centos /]# e2fsck -f /dev/vdb1</p>
+<p>e2fsck 1.42.9 (28-Dec-2013)</p>
+<p>/dev/vdb1 is mounted.</p>
+<p>e2fsck: Cannot continue, aborting.</p>
+<p>似乎看到一个报错，不过后面查看扩充成功了，是不是成功了半信半疑的。。</p>
+<h2 id="2-8-使用resize2fs-dev-xvdc1命令扩容分区："><a href="#2-8-使用resize2fs-dev-xvdc1命令扩容分区：" class="headerlink" title="2.8 使用resize2fs /dev/xvdc1命令扩容分区："></a>2.8 使用resize2fs /dev/xvdc1命令扩容分区：</h2><p>resize2fs /dev/vdb</p>
+<p>vdb   vdb1 </p>
+<p>[root@VM_0_17_centos /]# resize2fs /dev/vdb1</p>
+<p>resize2fs 1.42.9 (28-Dec-2013)</p>
+<p>Filesystem at /dev/vdb1 is mounted on /data; on-line resizing required</p>
+<p>old_desc_blocks = 125, new_desc_blocks = 250</p>
+<p>The filesystem on /dev/vdb1 is now 524287744 blocks long.</p>
+<p>df -h</p>
+<p>Filesystem      Size  Used Avail Use% Mounted on</p>
+<p>/dev/vda1        50G  4.1G   43G   9% /</p>
+<p>devtmpfs         16G     0   16G   0% /dev</p>
+<p>tmpfs            16G   24K   16G   1% /dev/shm</p>
+<p>tmpfs            16G  300K   16G   1% /run</p>
+<p>tmpfs            16G     0   16G   0% /sys/fs/cgroup</p>
+<p>/dev/vdb1       2.0T  150G  1.7T   8% /data</p>
+<p>tmpfs           3.2G     0  3.2G   0% /run/user/0</p>
+<h2 id="2-9-挂载-data盘，写入-etc-fstab"><a href="#2-9-挂载-data盘，写入-etc-fstab" class="headerlink" title="2.9  挂载/data盘，写入/etc/fstab"></a>2.9  挂载/data盘，写入/etc/fstab</h2><p> 不过做扩充时候是自动写进去的，重启过正常，数据没丢。。</p>
+<p>cat /etc/fstab</p>
+<p>/dev/vda1            /                    ext3       noatime,acl,user_xattr 1 1</p>
+<p>proc                 /proc                proc       defaults              0 0</p>
+<p>sysfs                /sys                 sysfs      noauto                0 0</p>
+<p>debugfs              /sys/kernel/debug    debugfs    noauto                0 0</p>
+<p>devpts               /dev/pts             devpts     mode=0620,gid=5       0 0</p>
+<p>/dev/disk/bd/virtio-diskt1            /data                    ext4       defaults,nofail 0 1</p>
+
                 
             </div>
             <hr/>
@@ -505,7 +576,7 @@ Core文件其实就是内存的映像，当程序崩溃时，存储内存的相�
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://icmpy2001.github.io.git/2023/11/10/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/">https://icmpy2001.github.io.git/2023/11/10/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/</a>
+                    <a href="https://icmpy2001.github.io.git/2023/11/10/linux-%E7%A3%81%E7%9B%98%E6%8C%82%E8%BD%BD%E6%89%A9%E5%85%85%E6%A0%BC%E5%BC%8F%E5%8C%96/">https://icmpy2001.github.io.git/2023/11/10/linux-%E7%A3%81%E7%9B%98%E6%8C%82%E8%BD%BD%E6%89%A9%E5%85%85%E6%A0%BC%E5%BC%8F%E5%8C%96/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -590,13 +661,13 @@ Core文件其实就是内存的映像，当程序崩溃时，存储内存的相�
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/11/10/frp%E6%90%AD%E5%BB%BA/">
+                <a href="/2023/11/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="frp搭建">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="php 安装redis，protobuf,mcryp扩展">
                         
-                        <span class="card-title">frp搭建</span>
+                        <span class="card-title">php 安装redis，protobuf,mcryp扩展</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -627,13 +698,13 @@ Core文件其实就是内存的映像，当程序崩溃时，存储内存的相�
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/11/10/hello-world/">
+                <a href="/2023/11/10/Rsync%E5%90%8C%E6%AD%A5%E6%96%87%E4%BB%B6/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Rsync同步文件">
                         
-                        <span class="card-title">Hello World</span>
+                        <span class="card-title">Rsync同步文件</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
