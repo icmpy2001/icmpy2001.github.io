@@ -4,8 +4,11 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="分类, 云上的小雨滴">
-    <meta name="description" content="选择有时候比努力更重要">
+    <meta name="keywords" content="coredump 路径格式, 云上的小雨滴">
+    <meta name="description" content="Coredump
+业务进程宕机以后开发需要查看dump查找定位问题，所有服务器初始化环境时候统一定制coredump路径；
+1.Core文件简介
+Core文件其实就是内存的映像，当程序崩溃时，存储内存的相应信息，主用用于对程序进行调试。当程">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +20,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>分类 | 云上的小雨滴</title>
+    <title>coredump 路径格式 | 云上的小雨滴</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -331,84 +334,450 @@
 
 </header>
 
-    <div class="bg-cover pd-header about-cover">
-    <div class="container">
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">coredump 路径格式</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
     <div class="row">
-    <div class="col s10 offset-s1 m8 offset-m2 l8 offset-l2">
-        <div class="brand">
-            <div class="title center-align">
-                
-                Jary 的小破屋
-                
-            </div>
-
-            <div class="description center-align">
-                
-                <span id="subtitle"></span>
-                <script src="/libs/typed/typed.js"></script>
-                <script>
-                    var typed = new Typed("#subtitle", {
-                        strings: [ 
-                            
-                                "从来没有真正的绝境, 只有心灵的迷途",
-                            
-                                "Never really desperate, only the lost of the soul",
-                            
-                        ],
-                        startDelay: 300,
-                        typeSpeed: 100,
-                        loop: true,
-                        backSpeed: 50,
-                        showCursor: true
-                    });
-                </script>
-                
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<script>
-    // 每天切换 banner 图.  Switch banner image every day.
-    var bannerUrl = "/medias/banner/" + new Date().getDay() + '.jpg';
-    $('.bg-cover').css('background-image', 'url(' + bannerUrl + ')');
-</script>
-<script>
-    
-      var bannerUrl = "/medias/featureimages/" + Math.floor(Math.random() * 24) + '.jpg';
-    
-    $('.bg-cover.about-cover').css('background-image', 'url(' + bannerUrl + ')');
-
-</script>
-
-
-    </div>
-</div>
-
-<main class="content">
-
-    
-
-<div id="category-cloud" class="container chip-container">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
     <div class="card">
-        <div class="card-content">
-            <div class="tag-title center-align">
-                <i class="fas fa-bookmark"></i>&nbsp;&nbsp;文章分类
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                </div>
             </div>
-            <div class="tag-chips">
+
+            <div class="post-info">
                 
-                你目前还没有对文章进行分类.
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2023-11-10
+                </div>
+                
+
+                
+
+                
+
+                
+
                 
             </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>Coredump</p>
+<p>业务进程宕机以后开发需要查看dump查找定位问题，所有服务器初始化环境时候统一定制coredump路径；</p>
+<p>1.Core文件简介</p>
+<p>Core文件其实就是内存的映像，当程序崩溃时，存储内存的相应信息，主用用于对程序进行调试。当程序崩溃时便会产生core文件，其实准确的应该说是core dump 文件,默认生成位置与可执行程序位于同一目录下，文件名为core.<em><strong>,其中</strong></em>是某一数字。</p>
+<p>2.开启或关闭Core文件的生成</p>
+<p>关闭或阻止core文件生成：</p>
+<p>$ulimit -c 0</p>
+<p>打开core文件生成：</p>
+<p>$ulimit -c unlimited</p>
+<p>检查core文件的选项是否打开：</p>
+<p>$ulimit -a</p>
+<p>ulimit参数含义如下：&nbsp;</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -a&nbsp;&nbsp;&nbsp;&nbsp; All current limits are reported<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -c&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of core files created<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -d&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of a process data segment<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -e&nbsp;&nbsp;&nbsp;&nbsp; The maximum scheduling priority (“nice”)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -f&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of files written by the shell and its children<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -i&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of pending signals<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -l&nbsp;&nbsp;&nbsp;&nbsp; The maximum size that may be locked into memory<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -m&nbsp;&nbsp;&nbsp;&nbsp; The maximum resident set size (has no effect on Linux)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -n&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of open file descriptors (most systems do not allow this value to be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -p&nbsp;&nbsp;&nbsp;&nbsp; The pipe size in 512-byte blocks (this may not be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -q&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of bytes in POSIX message queues<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -r&nbsp;&nbsp;&nbsp;&nbsp; The maximum real-time scheduling priority<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -s&nbsp;&nbsp;&nbsp;&nbsp; The maximum stack size<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -t&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of cpu time in seconds<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -u&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of processes available to a single user<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -v&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of virtual memory available to the shell<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -x&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of file locks</p>
+<p>&nbsp;</p>
+<p>#ulimit -a</p>
+<p>core file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -c) unlimited</p>
+<p>data seg size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -d) unlimited</p>
+<p>scheduling priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-e) 0</p>
+<p>file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -f) unlimited</p>
+<p>pending signals&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-i) 127974</p>
+<p>max locked memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -l) 64</p>
+<p>max memory size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -m) unlimited</p>
+<p>open files&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-n) 100000</p>
+<p>pipe size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (512 bytes, -p) 8</p>
+<p>POSIX message queues&nbsp;&nbsp;&nbsp;&nbsp; (bytes, -q) 819200</p>
+<p>real-time priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-r) 0</p>
+<p>stack size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -s) 8192</p>
+<p>cpu time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (seconds, -t) unlimited</p>
+<p>max user processes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-u) 655360</p>
+<p>virtual memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -v) unlimited</p>
+<p>file locks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-x) unlimited而我们需要修改的是open files (-n) 1024的值</p>
+<p>于是命令就是limit -n 2048(随各自需要设置)</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>以上配置只对当前会话起作用，下次重新登陆后，还是得重新配置。要想配置永久生效，得在/etc/profile或者/etc/security/limits.conf文件中进行配置。</p>
+<p>首先以root权限登陆，然后打开/etc/security/limits.conf文件，进行配置：</p>
+<p>#vim /etc/security/limits.conf</p>
+<p><domain> &nbsp; &nbsp;<type> &nbsp; &nbsp;<item> &nbsp; &nbsp; &nbsp; &nbsp;<value></value></item></type></domain></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;* &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;soft &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;core &nbsp; &nbsp; &nbsp; &nbsp; unlimited</p>
+<p>或者在/etc/profile中作如下配置：</p>
+<p>#vim /etc/profile</p>
+<p>ulimit -S -c unlimited &gt;/dev/null 2&gt;&amp;1</p>
+<p>或者想配置只针对某一用户有效，则修改此用户的<del>/.bashrc或者</del>/.bash_profile文件：</p>
+<p>limit -c unlimited</p>
+<p>ulimit -c 0 是禁止产生core文件，而ulimit -c 1024则限制产生的core文件的大小不能超过1024kb</p>
+<p>3.设置Core Dump的核心转储文件目录和命名规则</p>
+<p>/proc/sys/kernel/core_uses_pid可以控制产生的core文件的文件名中是否添加pid作为扩展，如果添加则文件内容为1，否则为0<br>/proc/sys/kernel/core_pattern可以设置格式化的core文件保存位置或文件名，比如原来文件内容是core-%e<br>可以这样修改:<br>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern<br>将会控制所产生的core文件会存放到/data/common/coredump目录下，产生的文件名为core-进程名-pid-时间戳<br>以下是参数列表:<br>&nbsp;&nbsp;&nbsp; %p - insert pid into filename 添加pid<br>&nbsp;&nbsp;&nbsp; %u - insert current uid into filename 添加当前uid<br>&nbsp;&nbsp;&nbsp; %g - insert current gid into filename 添加当前gid<br>&nbsp;&nbsp;&nbsp; %s - insert signal that caused the coredump into the filename 添加导致产生core的信号<br>&nbsp;&nbsp;&nbsp; %t - insert UNIX time that the coredump occurred into filename 添加core文件生成时的unix时间<br>&nbsp;&nbsp;&nbsp; %h - insert hostname where the coredump happened into filename 添加主机名<br>&nbsp;&nbsp;&nbsp; %e - insert coredumping executable name into filename 添加命令名</p>
+<p>4.core文件的使用</p>
+<p>在core文件所在目录下键入:<br>gdb -c core &nbsp; （-c指定core文件）<br>它会启动GNU的调试器，来调试core文件，并且会显示生成此core文件的程序名，中止此程序的信号等等<br>如果你已经知道是由什么程序生成此core文件的，比如MyServer崩溃了生成core.12345，那么用此指令调试:<br>gdb -c core MyServer</p>
+<p>&nbsp;源：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html">https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html</a>&nbsp;</p>
+<p>5.永久生效：<br>当前不重启生效：<br>你可以用下列方式来完成<br>sysctl -w kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
+<p>或</p>
+<p>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern</p>
+<p>这些操作一旦计算机重启，则会丢失，如果你想持久化这些操作，可以在 /etc/sysctl.conf文件中增加：<br>kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
+<p>加好后，如果你想不重启看看效果的话，则用下面的命令：<br>sysctl -p /etc/sysctl.conf</p>
+<h1 id="sysctl-p-etc-sysctl-conf"><a href="#sysctl-p-etc-sysctl-conf" class="headerlink" title="sysctl -p /etc/sysctl.conf"></a>sysctl -p /etc/sysctl.conf</h1><p>net.ipv4.ip_forward = 0</p>
+<p>net.ipv4.conf.default.rp_filter = 1</p>
+<p>net.ipv4.conf.default.accept_source_route = 0</p>
+<p>kernel.core_uses_pid = 1</p>
+<p>net.ipv4.tcp_syncookies = 1</p>
+<p>kernel.msgmnb = 65536</p>
+<p>kernel.msgmax = 65536</p>
+<p>net.ipv6.conf.lo.disable_ipv6 = 1</p>
+<p>net.ipv4.conf.all.promote_secondaries = 1</p>
+<p>net.ipv4.conf.default.promote_secondaries = 1</p>
+<p>net.ipv6.neigh.default.gc_thresh3 = 4096</p>
+<p>net.ipv4.neigh.default.gc_thresh3 = 4096</p>
+<p>kernel.softlockup_panic = 1</p>
+<p>kernel.sysrq = 1</p>
+<p>net.ipv6.conf.all.disable_ipv6 = 1</p>
+<p>net.ipv6.conf.default.disable_ipv6 = 1</p>
+<p>vm.overcommit_memory = 1</p>
+<p>kernel.numa_balancing = 0</p>
+<p>kernel.shmmax = 68719476736</p>
+<p>kernel.printk = 5</p>
+<p>kernel.core_pattern = /data/common/coredump/core-%e-%p-%t</p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">Jary</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://icmpy2001.github.io.git/2023/11/10/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/">https://icmpy2001.github.io.git/2023/11/10/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">Jary</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2023/11/10/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="coredump 路径格式">
+                        
+                        <span class="card-title">coredump 路径格式</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-11-10
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Jary
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2023/11/10/hello-world/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
+                        
+                        <span class="card-title">Hello World</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-11-10
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Jary
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
         </div>
     </div>
 </div>
 
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
 
     
 
 </main>
+
+
 
 
     <footer class="page-footer bg-color">
