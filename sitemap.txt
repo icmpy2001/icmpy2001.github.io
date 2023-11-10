@@ -1,6 +1,6 @@
+https://icmpy2001.github.io.git/2023/11/10/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/
 https://icmpy2001.github.io.git/2023/11/10/Rsync%E5%90%8C%E6%AD%A5%E6%96%87%E4%BB%B6/
 https://icmpy2001.github.io.git/2023/11/10/frp%E6%90%AD%E5%BB%BA/
-https://icmpy2001.github.io.git/2023/11/10/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/
 https://icmpy2001.github.io.git/2023/11/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/
 https://icmpy2001.github.io.git/2023/11/10/linux-%E7%A3%81%E7%9B%98%E6%8C%82%E8%BD%BD%E6%89%A9%E5%85%85%E6%A0%BC%E5%BC%8F%E5%8C%96/
 https://icmpy2001.github.io.git/404/index.html
@@ -14,3 +14,4 @@ https://icmpy2001.github.io.git/categories/index.html
 https://icmpy2001.github.io.git/about/index.html
 https://icmpy2001.github.io.git/tags/index.html
 https://icmpy2001.github.io.git/
+https://icmpy2001.github.io.git/tags/%E9%9A%8F%E7%AC%94/

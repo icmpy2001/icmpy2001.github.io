@@ -111,7 +111,7 @@
     <link href="https://icmpy2001.github.io.git/2023/11/10/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/"/>
     <id>https://icmpy2001.github.io.git/2023/11/10/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/</id>
     <published>2023-11-10T08:49:30.000Z</published>
-    <updated>2023-11-10T10:01:39.699Z</updated>
+    <updated>2023-11-10T10:08:43.000Z</updated>
     
     
       
@@ -120,13 +120,14 @@
         
     <summary type="html">&lt;p&gt;Coredump&lt;/p&gt;
 &lt;p&gt;业务进程宕机以后开发需要查看dump查找定位问题，所有服务器初始化环境时候统一定制coredump路径；&lt;/p&gt;
-&lt;p&gt;1.Core文件简介&lt;/p&gt;
-&lt;p&gt;Core文件其实就是内存的映像，当程序崩溃时，存储内存的相应信息，主用用于对程序进行调</summary>
+&lt;h2 id=&quot;1-Core文件简介&quot;&gt;&lt;a href=&quot;#1-Core文件简介&quot; class=&quot;headerlink&quot;</summary>
         
       
     
     
     
+    
+    <category term="随笔" scheme="https://icmpy2001.github.io.git/tags/%E9%9A%8F%E7%AC%94/"/>
     
   </entry>
   
