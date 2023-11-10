@@ -6,7 +6,7 @@
   <link href="https://icmpy2001.github.io.git/atom.xml" rel="self"/>
   
   <link href="https://icmpy2001.github.io.git/"/>
-  <updated>2023-11-10T10:02:28.139Z</updated>
+  <updated>2023-11-10T10:00:58.483Z</updated>
   <id>https://icmpy2001.github.io.git/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>php 安装redis，protobuf,mcryp扩展</title>
+    <link href="https://icmpy2001.github.io.git/2023/11/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/"/>
+    <id>https://icmpy2001.github.io.git/2023/11/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/</id>
+    <published>2023-11-10T10:00:29.000Z</published>
+    <updated>2023-11-10T10:00:58.483Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&amp;nbsp; 测试机上测试一些数据需要用到redis扩展，偷懒yum安装的php，以前yum install php-pecl-redis.x86_64可以安装扩展，这次找不到安装包，不折腾手动安装下。&lt;/p&gt;
+&lt;p&gt;1.下载phpredis&lt;/p&gt;
+&lt;p&gt;cd</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>Rsync同步文件</title>
@@ -31,6 +54,29 @@
     <summary type="html">&lt;p&gt;Rsync常用的一款同步文件工具。配置也很方便。&lt;/p&gt;
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
 &lt;p&gt;yum install sync -y或者apt-get install</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>frp搭建</title>
+    <link href="https://icmpy2001.github.io.git/2023/11/10/frp%E6%90%AD%E5%BB%BA/"/>
+    <id>https://icmpy2001.github.io.git/2023/11/10/frp%E6%90%AD%E5%BB%BA/</id>
+    <published>2023-11-10T08:56:46.000Z</published>
+    <updated>2023-11-10T10:01:46.459Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt; &amp;nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。&lt;/p&gt;
+&lt;p&gt;首先到官网：&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;&lt;a</summary>
         
       
     
