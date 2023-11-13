@@ -3,14 +3,14 @@
   <title>云上的小雨滴</title>
   
   <subtitle>Jary 的小茅屋</subtitle>
-  <link href="https://icmpy2001.github.io.git/atom.xml" rel="self"/>
+  <link href="https://blog.icmpy.top/atom.xml" rel="self"/>
   
-  <link href="https://icmpy2001.github.io.git/"/>
+  <link href="https://blog.icmpy.top/"/>
   <updated>2023-11-13T07:39:56.454Z</updated>
-  <id>https://icmpy2001.github.io.git/</id>
+  <id>https://blog.icmpy.top/</id>
   
   <author>
-    <name>Jary</name>
+    <name>云上的小雨滴</name>
     
   </author>
   
@@ -18,8 +18,8 @@
   
   <entry>
     <title>ssh免密登录问题</title>
-    <link href="https://icmpy2001.github.io.git/2023/11/13/ssh%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98/"/>
-    <id>https://icmpy2001.github.io.git/2023/11/13/ssh%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98/</id>
+    <link href="https://blog.icmpy.top/2023/11/13/ssh%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98/"/>
+    <id>https://blog.icmpy.top/2023/11/13/ssh%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98/</id>
     <published>2023-11-13T07:39:21.000Z</published>
     <updated>2023-11-13T07:39:56.454Z</updated>
     
@@ -39,8 +39,8 @@
   
   <entry>
     <title>coredump 路径格式</title>
-    <link href="https://icmpy2001.github.io.git/2023/11/13/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/"/>
-    <id>https://icmpy2001.github.io.git/2023/11/13/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/</id>
+    <link href="https://blog.icmpy.top/2023/11/13/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/"/>
+    <id>https://blog.icmpy.top/2023/11/13/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/</id>
     <published>2023-11-13T07:38:29.000Z</published>
     <updated>2023-11-13T07:38:52.057Z</updated>
     
@@ -63,8 +63,8 @@
   
   <entry>
     <title>linux有足够内存还使用swap</title>
-    <link href="https://icmpy2001.github.io.git/2023/11/13/linux%E6%9C%89%E8%B6%B3%E5%A4%9F%E5%86%85%E5%AD%98%E8%BF%98%E4%BD%BF%E7%94%A8swap/"/>
-    <id>https://icmpy2001.github.io.git/2023/11/13/linux%E6%9C%89%E8%B6%B3%E5%A4%9F%E5%86%85%E5%AD%98%E8%BF%98%E4%BD%BF%E7%94%A8swap/</id>
+    <link href="https://blog.icmpy.top/2023/11/13/linux%E6%9C%89%E8%B6%B3%E5%A4%9F%E5%86%85%E5%AD%98%E8%BF%98%E4%BD%BF%E7%94%A8swap/"/>
+    <id>https://blog.icmpy.top/2023/11/13/linux%E6%9C%89%E8%B6%B3%E5%A4%9F%E5%86%85%E5%AD%98%E8%BF%98%E4%BD%BF%E7%94%A8swap/</id>
     <published>2023-11-13T07:36:36.000Z</published>
     <updated>2023-11-13T07:37:34.238Z</updated>
     
@@ -86,8 +86,8 @@
   
   <entry>
     <title>php 安装redis，protobuf,mcryp扩展</title>
-    <link href="https://icmpy2001.github.io.git/2023/11/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/"/>
-    <id>https://icmpy2001.github.io.git/2023/11/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/</id>
+    <link href="https://blog.icmpy.top/2023/11/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/"/>
+    <id>https://blog.icmpy.top/2023/11/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/</id>
     <published>2023-11-10T10:00:29.000Z</published>
     <updated>2023-11-10T10:00:58.483Z</updated>
     
@@ -109,8 +109,8 @@
   
   <entry>
     <title>linux 磁盘挂载扩充格式化</title>
-    <link href="https://icmpy2001.github.io.git/2023/11/10/linux-%E7%A3%81%E7%9B%98%E6%8C%82%E8%BD%BD%E6%89%A9%E5%85%85%E6%A0%BC%E5%BC%8F%E5%8C%96/"/>
-    <id>https://icmpy2001.github.io.git/2023/11/10/linux-%E7%A3%81%E7%9B%98%E6%8C%82%E8%BD%BD%E6%89%A9%E5%85%85%E6%A0%BC%E5%BC%8F%E5%8C%96/</id>
+    <link href="https://blog.icmpy.top/2023/11/10/linux-%E7%A3%81%E7%9B%98%E6%8C%82%E8%BD%BD%E6%89%A9%E5%85%85%E6%A0%BC%E5%BC%8F%E5%8C%96/"/>
+    <id>https://blog.icmpy.top/2023/11/10/linux-%E7%A3%81%E7%9B%98%E6%8C%82%E8%BD%BD%E6%89%A9%E5%85%85%E6%A0%BC%E5%BC%8F%E5%8C%96/</id>
     <published>2023-11-10T09:58:10.000Z</published>
     <updated>2023-11-10T09:58:49.244Z</updated>
     
@@ -130,8 +130,8 @@
   
   <entry>
     <title>Rsync同步文件</title>
-    <link href="https://icmpy2001.github.io.git/2023/11/10/Rsync%E5%90%8C%E6%AD%A5%E6%96%87%E4%BB%B6/"/>
-    <id>https://icmpy2001.github.io.git/2023/11/10/Rsync%E5%90%8C%E6%AD%A5%E6%96%87%E4%BB%B6/</id>
+    <link href="https://blog.icmpy.top/2023/11/10/Rsync%E5%90%8C%E6%AD%A5%E6%96%87%E4%BB%B6/"/>
+    <id>https://blog.icmpy.top/2023/11/10/Rsync%E5%90%8C%E6%AD%A5%E6%96%87%E4%BB%B6/</id>
     <published>2023-11-10T08:58:37.000Z</published>
     <updated>2023-11-10T10:02:28.139Z</updated>
     
@@ -153,8 +153,8 @@
   
   <entry>
     <title>frp搭建</title>
-    <link href="https://icmpy2001.github.io.git/2023/11/10/frp%E6%90%AD%E5%BB%BA/"/>
-    <id>https://icmpy2001.github.io.git/2023/11/10/frp%E6%90%AD%E5%BB%BA/</id>
+    <link href="https://blog.icmpy.top/2023/11/10/frp%E6%90%AD%E5%BB%BA/"/>
+    <id>https://blog.icmpy.top/2023/11/10/frp%E6%90%AD%E5%BB%BA/</id>
     <published>2023-11-10T08:56:46.000Z</published>
     <updated>2023-11-10T10:01:46.459Z</updated>
     
@@ -176,8 +176,8 @@
   
   <entry>
     <title>Hello World</title>
-    <link href="https://icmpy2001.github.io.git/2023/11/10/hello-world/"/>
-    <id>https://icmpy2001.github.io.git/2023/11/10/hello-world/</id>
+    <link href="https://blog.icmpy.top/2023/11/10/hello-world/"/>
+    <id>https://blog.icmpy.top/2023/11/10/hello-world/</id>
     <published>2023-11-10T04:10:36.330Z</published>
     <updated>2023-11-10T04:10:36.330Z</updated>
     
