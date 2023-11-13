@@ -1,32 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>zabbix监控业务进程变动</title>
-    <url>/2023/11/13/Zabbix_%E7%9B%91%E6%8E%A7%E8%BF%9B%E7%A8%8B%E5%AE%95%E6%9C%BA/</url>
-    <content><![CDATA[<p>Zabbix 监控进程宕机</p>
-<p>  业务需求后端进程宕机以后能在短时间内迅速拉起，业务影响不大，但是开发需要查看coredump，要求能监控到pid变化；在现有构架下zabbix能监控并报警；</p>
-<p>当然zabbix设置报警设置就不再一一</p>
-<p>在每台服务器/etc/zabbix/zabbix_agentd.conf设置路径：此例只需要piddiff.sh</p>
-<p>UserParameter=checkpid,sh /usr/local/script/piddiff.sh</p>
-<p>UserParameter=test,sh /usr/local/script/test.sh</p>
-<p>UserParameter=discovery.process,/usr/local/script/disprocess.sh</p>
-<p>UserParameter=process.check[*],/usr/local/script/proc_check.sh $1 $2 $3</p>
-<p>/usr/local/script下面存放脚本</p>
-<p>Vim piddiff.sh</p>
-<p>aapid为业务监控id 取值根据业务需求；</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#/bin/sh</span></span><br><span class="line"></span><br><span class="line">onl_ok=1</span><br><span class="line"></span><br><span class="line">onl_cored=3</span><br><span class="line"></span><br><span class="line"><span class="built_in">dir</span>=/usr/local/script</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ ! -f <span class="string">"<span class="variable">$dir</span>/old.txt"</span> ]];<span class="keyword">then</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/old.txt</span><br><span class="line"></span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">         <span class="built_in">sleep</span> 1s           </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/now.txt</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ! diff -q <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; /dev/null; <span class="keyword">then</span></span><br><span class="line"></span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_cored</span></span><br><span class="line">    </span><br><span class="line">          diff -c <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; <span class="variable">$dir</span>/`<span class="built_in">date</span> <span class="string">"+%Y%m%d%H%M"</span>`_diff.txt</span><br><span class="line">    </span><br><span class="line">          <span class="built_in">cat</span> <span class="variable">$dir</span>/now.txt &gt;<span class="variable">$dir</span>/old.txt</span><br><span class="line">    </span><br><span class="line">     <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_ok</span>    </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>一个简单的判断脚本；</p>
-<p>Zabbix30秒会抓取一次，正常没变化为1，有变化为3，那么zabbix抓取数值为3则表示pid有变化，会发出警报；</p>
-<p>Zabbix设置：</p>
-<p>监控项模板添加如下：</p>
-<p><img src="/../imgages/20231113-1.png"></p>
-<p>触发器：{Template OS Linux:checkpid.last()}=3</p>
-<p><img src="/../images/20231113-2.jpg"></p>
-<hr>
-]]></content>
-  </entry>
-  <entry>
     <title>Rsync同步文件</title>
     <url>/2023/11/10/Rsync%E5%90%8C%E6%AD%A5%E6%96%87%E4%BB%B6/</url>
     <content><![CDATA[<p>Rsync常用的一款同步文件工具。配置也很方便。</p>
@@ -109,6 +83,32 @@
 ]]></content>
   </entry>
   <entry>
+    <title>zabbix监控业务进程变动</title>
+    <url>/2023/11/13/Zabbix_%E7%9B%91%E6%8E%A7%E8%BF%9B%E7%A8%8B%E5%AE%95%E6%9C%BA/</url>
+    <content><![CDATA[<p>Zabbix 监控进程宕机</p>
+<p>  业务需求后端进程宕机以后能在短时间内迅速拉起，业务影响不大，但是开发需要查看coredump，要求能监控到pid变化；在现有构架下zabbix能监控并报警；</p>
+<p>当然zabbix设置报警设置就不再一一</p>
+<p>在每台服务器/etc/zabbix/zabbix_agentd.conf设置路径：此例只需要piddiff.sh</p>
+<p>UserParameter=checkpid,sh /usr/local/script/piddiff.sh</p>
+<p>UserParameter=test,sh /usr/local/script/test.sh</p>
+<p>UserParameter=discovery.process,/usr/local/script/disprocess.sh</p>
+<p>UserParameter=process.check[*],/usr/local/script/proc_check.sh $1 $2 $3</p>
+<p>/usr/local/script下面存放脚本</p>
+<p>Vim piddiff.sh</p>
+<p>aapid为业务监控id 取值根据业务需求；</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#/bin/sh</span></span><br><span class="line"></span><br><span class="line">onl_ok=1</span><br><span class="line"></span><br><span class="line">onl_cored=3</span><br><span class="line"></span><br><span class="line"><span class="built_in">dir</span>=/usr/local/script</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ ! -f <span class="string">"<span class="variable">$dir</span>/old.txt"</span> ]];<span class="keyword">then</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/old.txt</span><br><span class="line"></span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">         <span class="built_in">sleep</span> 1s           </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/now.txt</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ! diff -q <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; /dev/null; <span class="keyword">then</span></span><br><span class="line"></span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_cored</span></span><br><span class="line">    </span><br><span class="line">          diff -c <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; <span class="variable">$dir</span>/`<span class="built_in">date</span> <span class="string">"+%Y%m%d%H%M"</span>`_diff.txt</span><br><span class="line">    </span><br><span class="line">          <span class="built_in">cat</span> <span class="variable">$dir</span>/now.txt &gt;<span class="variable">$dir</span>/old.txt</span><br><span class="line">    </span><br><span class="line">     <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_ok</span>    </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>一个简单的判断脚本；</p>
+<p>Zabbix30秒会抓取一次，正常没变化为1，有变化为3，那么zabbix抓取数值为3则表示pid有变化，会发出警报；</p>
+<p>Zabbix设置：</p>
+<p>监控项模板添加如下：</p>
+<p><img src="/../imgages/20231113-1.png"></p>
+<p>触发器：{Template OS Linux:checkpid.last()}=3</p>
+<p><img src="/../images/20231113-2.jpg"></p>
+<hr>
+]]></content>
+  </entry>
+  <entry>
     <title>apache多网站对应80端口</title>
     <url>/2023/11/13/apache%E5%A4%9A%E7%BD%91%E7%AB%99%E5%AF%B9%E5%BA%9480%E7%AB%AF%E5%8F%A3/</url>
     <content><![CDATA[<p>一台服务器绑定多个域名，已经装了apache，nginx就不使用了，利用apache主机头名虚拟主机用80端口对应多个网站，万能的网络上面有文档如下：</p>
@@ -157,85 +157,6 @@
 
 
 <h2 id="这样都可以访问，apache也可以实现，做个小笔记。"><a href="#这样都可以访问，apache也可以实现，做个小笔记。" class="headerlink" title="这样都可以访问，apache也可以实现，做个小笔记。"></a>这样都可以访问，apache也可以实现，做个小笔记。</h2>]]></content>
-  </entry>
-  <entry>
-    <title>frp搭建</title>
-    <url>/2023/11/10/frp%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<p> &nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。</p>
-<p>首先到官网：</p>
-<p>&nbsp;<a href="https://github.com/fatedier/frp/releases">https://github.com/fatedier/frp/releases</a></p>
-<p>下载: frp_0.16.0_linux_amd64.tar.gz服务器端</p>
-<p>解压出来ls:</p>
-<p>frpc&nbsp; frpc_full.ini&nbsp; frpc_http.ini&nbsp; frpc.ini&nbsp; frps&nbsp; frps_full.ini&nbsp; frps.ini&nbsp; LICENSE&nbsp; nohup.out</p>
-<p>服务器端只需要两个文件frps和frps.ini,其中frps为可执行文件，frps.ini为配置文件默认配置文件如下：其中bind_addr为本机IP,bind_port为frp对客户端的端口号，auto_token是客户端连接服务器端的口令。</p>
-<p>[common]</p>
-<p>Bind_addr=0.0.0.0</p>
-<p>Bind_port =4443</p>
-<p>Auto_token = frp</p>
-<p>配置好以后可以运行起来./frps -c ./frps.ini</p>
-<p>最好后台运行：nohup ./frps -c ./frps.ini &amp;</p>
-<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:4443</p>
-<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
-<p>&nbsp;需要穿透端口的服务器端开启：</p>
-<p>nohup ./frps -c ./frps.ini &amp;</p>
-<p>同样将客户端解压后有七个文件，只需要frpc和frpc.ini,配置文件如下：</p>
-<p>&nbsp;[common]</p>
-<p>Server_addr = 123.123.123.123</p>
-<p>Server_port = 4443</p>
-<p>Auto-token = frp</p>
-<p>[ssh_1]</p>
-<p>Type = tcp</p>
-<p>Local_ip = 127.0.0.1</p>
-<p>Local_port = 22</p>
-<p>Remote_port = 10085</p>
-<p>注意：server_addr是服务器端的公网IP地址，server_port是frp服务端口号，auto_token是连接服务器的口令，必须和服务器保持一致。[ssh_1]是客户端通过服务器与用户之间的通道名，每个客户端必须不一样，remote_port是服务器端对外提供本机服务的端口号，即用户连接123.123.123.123:10085，相当于连接127.0.0.1:22,即arm板上的ssh服务</p>
-<p>运行客户端：./frpc -c ./frpc.ini</p>
-<p>&nbsp;</p>
-<p>当前的配置</p>
-<p>more frpc.ini</p>
-<p>[common]</p>
-<p>server_addr = dem.abc.com</p>
-<p>server_port = 7000</p>
-<p>[game]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.232</p>
-<p>local_port = 9001</p>
-<p>remote_port = 6000</p>
-<p>&nbsp;</p>
-<p>[http]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.232</p>
-<p>local_port = 80</p>
-<p>remote_port = 6001</p>
-<p>&nbsp;</p>
-<p>[mysql]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.235</p>
-<p>local_port = 3306</p>
-<p>remote_port = 13306</p>
-<p>more frpc_http.ini</p>
-<p>[common]</p>
-<p>server_addr = dem.abc.com</p>
-<p>server_port = 7000</p>
-<p>&nbsp;</p>
-<p>[http]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.232</p>
-<p>local_port = 80</p>
-<p>remote_port = 6001</p>
-<p>这样demo.abc.com 的13306映射到3306,6001映射到80端口等等；</p>
-<p>在客户端开启：最好后台运行启动客户端proxy：</p>
-<p>nohup ./frpc&nbsp; -c ./frpc.ini &amp;</p>
-<p>[I] [control.go:240] [e465e02f8bad1e5b] login to server success, get run id [e465e02f8bad1e5b], server udp port [0]</p>
-<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [http] start proxy success</p>
-<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [mysql] start proxy success</p>
-<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:7000</p>
-<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
-<p>2018/05/17 10:49:11 [I] [main.go:114] PrivilegeMode is enabled, you should pay more attention to security issues</p>
-<p>&nbsp;</p>
-<p>PS：配置很简单，但是记得nohup ./frps -c ./frps.ini &amp; 在要穿透的远程服务器开启，nohup ./frpc&nbsp; -c ./frpc.ini &amp; 在内网开启，记得开放远程服务器穿透端口；</p>
-<hr>
-]]></content>
   </entry>
   <entry>
     <title>coredump 路径格式</title>
@@ -317,6 +238,85 @@
 <p>kernel.shmmax = 68719476736</p>
 <p>kernel.printk = 5</p>
 <p>kernel.core_pattern = /data/common/coredump/core-%e-%p-%t</p>
+<hr>
+]]></content>
+  </entry>
+  <entry>
+    <title>frp搭建</title>
+    <url>/2023/11/10/frp%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<p> &nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。</p>
+<p>首先到官网：</p>
+<p>&nbsp;<a href="https://github.com/fatedier/frp/releases">https://github.com/fatedier/frp/releases</a></p>
+<p>下载: frp_0.16.0_linux_amd64.tar.gz服务器端</p>
+<p>解压出来ls:</p>
+<p>frpc&nbsp; frpc_full.ini&nbsp; frpc_http.ini&nbsp; frpc.ini&nbsp; frps&nbsp; frps_full.ini&nbsp; frps.ini&nbsp; LICENSE&nbsp; nohup.out</p>
+<p>服务器端只需要两个文件frps和frps.ini,其中frps为可执行文件，frps.ini为配置文件默认配置文件如下：其中bind_addr为本机IP,bind_port为frp对客户端的端口号，auto_token是客户端连接服务器端的口令。</p>
+<p>[common]</p>
+<p>Bind_addr=0.0.0.0</p>
+<p>Bind_port =4443</p>
+<p>Auto_token = frp</p>
+<p>配置好以后可以运行起来./frps -c ./frps.ini</p>
+<p>最好后台运行：nohup ./frps -c ./frps.ini &amp;</p>
+<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:4443</p>
+<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
+<p>&nbsp;需要穿透端口的服务器端开启：</p>
+<p>nohup ./frps -c ./frps.ini &amp;</p>
+<p>同样将客户端解压后有七个文件，只需要frpc和frpc.ini,配置文件如下：</p>
+<p>&nbsp;[common]</p>
+<p>Server_addr = 123.123.123.123</p>
+<p>Server_port = 4443</p>
+<p>Auto-token = frp</p>
+<p>[ssh_1]</p>
+<p>Type = tcp</p>
+<p>Local_ip = 127.0.0.1</p>
+<p>Local_port = 22</p>
+<p>Remote_port = 10085</p>
+<p>注意：server_addr是服务器端的公网IP地址，server_port是frp服务端口号，auto_token是连接服务器的口令，必须和服务器保持一致。[ssh_1]是客户端通过服务器与用户之间的通道名，每个客户端必须不一样，remote_port是服务器端对外提供本机服务的端口号，即用户连接123.123.123.123:10085，相当于连接127.0.0.1:22,即arm板上的ssh服务</p>
+<p>运行客户端：./frpc -c ./frpc.ini</p>
+<p>&nbsp;</p>
+<p>当前的配置</p>
+<p>more frpc.ini</p>
+<p>[common]</p>
+<p>server_addr = dem.abc.com</p>
+<p>server_port = 7000</p>
+<p>[game]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 9001</p>
+<p>remote_port = 6000</p>
+<p>&nbsp;</p>
+<p>[http]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 80</p>
+<p>remote_port = 6001</p>
+<p>&nbsp;</p>
+<p>[mysql]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.235</p>
+<p>local_port = 3306</p>
+<p>remote_port = 13306</p>
+<p>more frpc_http.ini</p>
+<p>[common]</p>
+<p>server_addr = dem.abc.com</p>
+<p>server_port = 7000</p>
+<p>&nbsp;</p>
+<p>[http]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 80</p>
+<p>remote_port = 6001</p>
+<p>这样demo.abc.com 的13306映射到3306,6001映射到80端口等等；</p>
+<p>在客户端开启：最好后台运行启动客户端proxy：</p>
+<p>nohup ./frpc&nbsp; -c ./frpc.ini &amp;</p>
+<p>[I] [control.go:240] [e465e02f8bad1e5b] login to server success, get run id [e465e02f8bad1e5b], server udp port [0]</p>
+<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [http] start proxy success</p>
+<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [mysql] start proxy success</p>
+<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:7000</p>
+<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
+<p>2018/05/17 10:49:11 [I] [main.go:114] PrivilegeMode is enabled, you should pay more attention to security issues</p>
+<p>&nbsp;</p>
+<p>PS：配置很简单，但是记得nohup ./frps -c ./frps.ini &amp; 在要穿透的远程服务器开启，nohup ./frpc&nbsp; -c ./frpc.ini &amp; 在内网开启，记得开放远程服务器穿透端口；</p>
 <hr>
 ]]></content>
   </entry>
