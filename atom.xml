@@ -6,7 +6,7 @@
   <link href="https://icmpy2001.github.io.git/atom.xml" rel="self"/>
   
   <link href="https://icmpy2001.github.io.git/"/>
-  <updated>2023-11-13T07:37:34.238Z</updated>
+  <updated>2023-11-13T07:39:56.454Z</updated>
   <id>https://icmpy2001.github.io.git/</id>
   
   <author>
@@ -15,6 +15,51 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ssh免密登录问题</title>
+    <link href="https://icmpy2001.github.io.git/2023/11/13/ssh%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98/"/>
+    <id>https://icmpy2001.github.io.git/2023/11/13/ssh%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98/</id>
+    <published>2023-11-13T07:39:21.000Z</published>
+    <updated>2023-11-13T07:39:56.454Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>coredump 路径格式</title>
+    <link href="https://icmpy2001.github.io.git/2023/11/13/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/"/>
+    <id>https://icmpy2001.github.io.git/2023/11/13/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/</id>
+    <published>2023-11-13T07:38:29.000Z</published>
+    <updated>2023-11-13T07:38:52.057Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;Coredump&lt;/p&gt;
+&lt;p&gt;业务进程宕机以后开发需要查看dump查找定位问题，所有服务器初始化环境时候统一定制coredump路径；&lt;/p&gt;
+&lt;p&gt;1.Core文件简介&lt;/p&gt;
+&lt;p&gt;Core文件其实就是内存的映像，当程序崩溃时，存储内存的相应信息，主用用于对程序进行调</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>linux有足够内存还使用swap</title>

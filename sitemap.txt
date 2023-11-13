@@ -1,3 +1,5 @@
+https://icmpy2001.github.io.git/2023/11/13/ssh%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98/
+https://icmpy2001.github.io.git/2023/11/13/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/
 https://icmpy2001.github.io.git/2023/11/13/linux%E6%9C%89%E8%B6%B3%E5%A4%9F%E5%86%85%E5%AD%98%E8%BF%98%E4%BD%BF%E7%94%A8swap/
 https://icmpy2001.github.io.git/2023/11/10/Rsync%E5%90%8C%E6%AD%A5%E6%96%87%E4%BB%B6/
 https://icmpy2001.github.io.git/2023/11/10/frp%E6%90%AD%E5%BB%BA/
