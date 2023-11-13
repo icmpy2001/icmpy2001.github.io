@@ -4,8 +4,9 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="标签, 云上的小雨滴">
-    <meta name="description" content="选择有时候比努力更重要">
+    <meta name="keywords" content="linux 磁盘挂载扩充格式化, 云上的小雨滴">
+    <meta name="description" content="linux服务器硬盘格式化挂载：请根据以下步骤对数据盘进行分区以及格式化，并挂载分区使数据盘可用。
+1.1 查看数据盘信息登录Linux云服务器后，可以使用“fdisk -l”命令查看数据盘相关信息。使用“df -h”命令，无法看到未分区和">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +18,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>标签 | 云上的小雨滴</title>
+    <title>linux 磁盘挂载扩充格式化 | 云上的小雨滴</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -335,12 +336,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">tags</h1>
+                    <h1 class="description center-align post-title">linux 磁盘挂载扩充格式化</h1>
                 </div>
             </div>
         </div>
@@ -376,7 +377,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-11-09
+                    2023-11-10
                 </div>
                 
 
@@ -400,7 +401,156 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <h1 id="linux服务器硬盘格式化挂载："><a href="#linux服务器硬盘格式化挂载：" class="headerlink" title="linux服务器硬盘格式化挂载："></a>linux服务器硬盘格式化挂载：</h1><p>请根据以下步骤对数据盘进行分区以及格式化，并挂载分区使数据盘可用。</p>
+<h2 id="1-1-查看数据盘信息"><a href="#1-1-查看数据盘信息" class="headerlink" title="1.1 查看数据盘信息"></a>1.1 查看数据盘信息</h2><p>登录Linux云服务器后，可以使用“fdisk -l”命令查看数据盘相关信息。<br>使用“df -h”命令，无法看到未分区和格式化的数据盘。 </p>
+<h2 id="1-2-数据盘分区"><a href="#1-2-数据盘分区" class="headerlink" title="1.2 数据盘分区"></a>1.2 数据盘分区</h2><p>执行以下命令，对数据盘进行分区。</p>
+<p>fdisk /dev/xvdb</p>
+<p>按照界面的提示，依次输入“n”(新建分区)、“p”(新建扩展分区)、“1”(使用第1个主分区)，两次回车(使用默认配置)，输入“wq”(保存分区表)，开始分区。<br>这里是以创建1个分区为例，开发者也可以根据自己的需求创建多个分区。</p>
+<h2 id="1-3-查看新分区"><a href="#1-3-查看新分区" class="headerlink" title="1.3 查看新分区"></a>1.3 查看新分区</h2><p>使用“fdisk -l”命令，即可查看到，新的分区xvdb1已经创建完成。</p>
+<h2 id="1-4-格式化新分区"><a href="#1-4-格式化新分区" class="headerlink" title="1.4 格式化新分区"></a>1.4 格式化新分区</h2><p>在进行分区格式化时，开发者可以自行决定文件系统的格式，如ext2、ext3等。<br>这里以“ext3”为例：<br>使用下面的命令对新分区进行格式化。 </p>
+<p>mkfs.ext3 /dev/xvdb1</p>
+<h2 id="1-5-挂载新分区"><a href="#1-5-挂载新分区" class="headerlink" title="1.5 挂载新分区"></a>1.5 挂载新分区</h2><p>使用命令“mkdir /mydata”创建mydata目录，再通过“mount /dev/xvdb1 /mydata”命令手动挂载新分区后，用“df -h”命令查看，出现以下信息说明挂载成功，即可以查看到数据盘了。</p>
+<h2 id="1-6-添加分区信息"><a href="#1-6-添加分区信息" class="headerlink" title="1.6 添加分区信息"></a>1.6 添加分区信息</h2><p>如果希望云服务器在重启或开机时能自动挂载数据盘，必须将分区信息添加到/etc/fstab中。如果没有添加，则云服务器重启或开机后，都不能自动挂载数据盘。<br>使用“echo ‘/dev/xvdb1 /mydata ext3 defaults 0 0’ &gt;&gt; /etc/fstab”命令添加分区信息后，使用“cat /etc/fstab”命令查看，出现以下信息表示添加分区信息成功。</p>
+<h1 id="2-腾讯云服务器硬盘扩充，新空间增加到已有分区空间中："><a href="#2-腾讯云服务器硬盘扩充，新空间增加到已有分区空间中：" class="headerlink" title="2.腾讯云服务器硬盘扩充，新空间增加到已有分区空间中："></a>2.腾讯云服务器硬盘扩充，新空间增加到已有分区空间中：</h1><p>  线上业务服务器1T硬盘，日志量太大，需要扩充到2T硬盘，关机购买硬盘以后启动开始在原有盘上面开始扩充：</p>
+<h2 id="2-1-查看数据盘信息"><a href="#2-1-查看数据盘信息" class="headerlink" title="2.1 查看数据盘信息"></a>2.1 查看数据盘信息</h2><h2 id="root-VM-0-17-centos-fdisk-l"><a href="#root-VM-0-17-centos-fdisk-l" class="headerlink" title="[root@VM_0_17_centos ~]# fdisk -l"></a>[root@VM_0_17_centos ~]# fdisk -l</h2><p> Disk /dev/vda: 53.7 GB, 53687091200 bytes, 104857600 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x000c7a75</p>
+<p>   Device Boot      Start         End      Blocks   Id  System</p>
+<p>/dev/vda1   *        2048   104857599    52427776   83  Linux</p>
+<p>Disk /dev/vdb: 2147.5 GB, 2147483648000 bytes, 4194304000 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x947d4eff</p>
+<p>   Device Boot      Start         End      Blocks   Id  System</p>
+<p>/dev/vdb1            2048  2097151999  1048574976   83  Linux</p>
+<h2 id="2-2查看原来1T磁盘："><a href="#2-2查看原来1T磁盘：" class="headerlink" title="2.2查看原来1T磁盘："></a>2.2查看原来1T磁盘：</h2><p>df -h</p>
+<p>Filesystem      Size  Used Avail Use% Mounted on</p>
+<p>/dev/vda1        50G  4.1G   43G   9% /</p>
+<p>devtmpfs         16G     0   16G   0% /dev</p>
+<p>tmpfs            16G   24K   16G   1% /dev/shm</p>
+<p>tmpfs            16G  300K   16G   1% /run</p>
+<p>tmpfs            16G     0   16G   0% /sys/fs/cgroup</p>
+<p>/dev/vdb1       985G  150G  785G  17% /data</p>
+<p>tmpfs           3.2G     0  3.2G   0% /run/user/0</p>
+<h2 id="2-3卸载原硬盘："><a href="#2-3卸载原硬盘：" class="headerlink" title="2.3卸载原硬盘："></a>2.3卸载原硬盘：</h2><p>umount /data/</p>
+<p>[root@VM_0_17_centos ~]# df -h</p>
+<p>Filesystem      Size  Used Avail Use% Mounted on</p>
+<p>/dev/vda1        50G  4.1G   43G   9% /</p>
+<p>devtmpfs         16G     0   16G   0% /dev</p>
+<p>tmpfs            16G   24K   16G   1% /dev/shm</p>
+<p>tmpfs            16G  300K   16G   1% /run</p>
+<p>tmpfs            16G     0   16G   0% /sys/fs/cgroup</p>
+<p>tmpfs           3.2G     0  3.2G   0% /run/user/0</p>
+<h2 id="2-4确认卸载："><a href="#2-4确认卸载：" class="headerlink" title="2.4确认卸载："></a>2.4确认卸载：</h2><p>[root@VM_0_17_centos ~]# fdisk -l</p>
+<p>Disk /dev/vda: 53.7 GB, 53687091200 bytes, 104857600 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x000c7a75</p>
+<p>   Device Boot      Start         End      Blocks   Id  System</p>
+<p>/dev/vda1   *        2048   104857599    52427776   83  Linux</p>
+<p>Disk /dev/vdb: 2147.5 GB, 2147483648000 bytes, 4194304000 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x947d4eff</p>
+<p>   Device Boot      Start         End      Blocks   Id  System</p>
+<p>/dev/vdb1            2048  2097151999  1048574976   83  Linux</p>
+<h2 id="2-5-开始格盘："><a href="#2-5-开始格盘：" class="headerlink" title="2.5 开始格盘："></a>2.5 开始格盘：</h2><p> 按照界面的提示，一次输入”p”(查看已有分区信息), ”d”(删除需要扩容的分区)、“n”(新建分区)、“p”(新建主分区)、“1”(使用第1个主分区，必须保持与需要扩容的分区一样)，两次回车(使用默认配置)，输入“w”(保存分区表)，开始分区。<br>这里是以创建1个分区为例，用户也可以根据自己的需求扩容多个分区。</p>
+<p>[root@VM_0_17_centos ~]# fdisk  /dev/vdb</p>
+<p>Welcome to fdisk (util-linux 2.23.2).</p>
+<p>Changes will remain in memory only, until you decide to write them.</p>
+<p>Be careful before using the write command.</p>
+<p> Command (m for help): p</p>
+<p>Disk /dev/vdb: 2147.5 GB, 2147483648000 bytes, 4194304000 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x947d4eff</p>
+<p>   Device Boot      Start         End      Blocks   Id  System</p>
+<p>/dev/vdb1            2048  2097151999  1048574976   83  Linux</p>
+<p>Command (m for help): d</p>
+<p>Selected partition 1</p>
+<p>Partition 1 is deleted</p>
+<p>Command (m for help): n</p>
+<p>Partition type:</p>
+<p>   p   primary (0 primary, 0 extended, 4 free)</p>
+<p>   e   extended</p>
+<p>Select (default p): p</p>
+<p>Partition number (1-4, default 1): 1</p>
+<p>First sector (2048-4194303999, default 2048):</p>
+<p>Using default value 2048</p>
+<p>Last sector, +sectors or +size{K,M,G} (2048-4194303999, default 4194303999):</p>
+<p>Using default value 4194303999</p>
+<p>Partition 1 of type Linux and of size 2 TiB is set</p>
+<p>Command (m for help): w</p>
+<p>The partition table has been altered!</p>
+<p>Calling ioctl() to re-read partition table.</p>
+<p>Syncing disks.</p>
+<p>[root@VM_0_17_centos ~]# fdisk -l</p>
+<p>Disk /dev/vda: 53.7 GB, 53687091200 bytes, 104857600 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x000c7a75</p>
+<p>   Device Boot      Start         End      Blocks   Id  System</p>
+<p>/dev/vda1   *        2048   104857599    52427776   83  Linux</p>
+<p>Disk /dev/vdb: 2147.5 GB, 2147483648000 bytes, 4194304000 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x947d4eff</p>
+<pre><code>Device Boot      Start         End      Blocks   Id  System
+</code></pre>
+<p>/dev/vdb1            2048  4194303999  2097150976   83  Linux</p>
+<h2 id="2-6确认磁盘"><a href="#2-6确认磁盘" class="headerlink" title="2.6确认磁盘"></a>2.6确认磁盘</h2><p>使用“fdisk –l /dev/vdb1”命令，即可查看到，新的分区vdb1已经创建并扩容完成：</p>
+<p>[root@VM_0_17_centos ~]# fdisk -l /dev/vdb1</p>
+<p> Disk /dev/vdb1: 2147.5 GB, 2147482599424 bytes, 4194301952 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<h2 id="2-7-再使用e2fsck-f-dev-xvdc1检查扩容的分区是否ok"><a href="#2-7-再使用e2fsck-f-dev-xvdc1检查扩容的分区是否ok" class="headerlink" title="2.7 再使用e2fsck -f /dev/xvdc1检查扩容的分区是否ok"></a>2.7 再使用e2fsck -f /dev/xvdc1检查扩容的分区是否ok</h2><p>[root@VM_0_17_centos /]# e2fsck -f /dev/vd</p>
+<p>vda   vda1  vdb   vdb1 </p>
+<p>[root@VM_0_17_centos /]# e2fsck -f /dev/vdb1</p>
+<p>e2fsck 1.42.9 (28-Dec-2013)</p>
+<p>/dev/vdb1 is mounted.</p>
+<p>e2fsck: Cannot continue, aborting.</p>
+<p>似乎看到一个报错，不过后面查看扩充成功了，是不是成功了半信半疑的。。</p>
+<h2 id="2-8-使用resize2fs-dev-xvdc1命令扩容分区："><a href="#2-8-使用resize2fs-dev-xvdc1命令扩容分区：" class="headerlink" title="2.8 使用resize2fs /dev/xvdc1命令扩容分区："></a>2.8 使用resize2fs /dev/xvdc1命令扩容分区：</h2><p>resize2fs /dev/vdb</p>
+<p>vdb   vdb1 </p>
+<p>[root@VM_0_17_centos /]# resize2fs /dev/vdb1</p>
+<p>resize2fs 1.42.9 (28-Dec-2013)</p>
+<p>Filesystem at /dev/vdb1 is mounted on /data; on-line resizing required</p>
+<p>old_desc_blocks = 125, new_desc_blocks = 250</p>
+<p>The filesystem on /dev/vdb1 is now 524287744 blocks long.</p>
+<p>df -h</p>
+<p>Filesystem      Size  Used Avail Use% Mounted on</p>
+<p>/dev/vda1        50G  4.1G   43G   9% /</p>
+<p>devtmpfs         16G     0   16G   0% /dev</p>
+<p>tmpfs            16G   24K   16G   1% /dev/shm</p>
+<p>tmpfs            16G  300K   16G   1% /run</p>
+<p>tmpfs            16G     0   16G   0% /sys/fs/cgroup</p>
+<p>/dev/vdb1       2.0T  150G  1.7T   8% /data</p>
+<p>tmpfs           3.2G     0  3.2G   0% /run/user/0</p>
+<h2 id="2-9-挂载-data盘，写入-etc-fstab"><a href="#2-9-挂载-data盘，写入-etc-fstab" class="headerlink" title="2.9  挂载/data盘，写入/etc/fstab"></a>2.9  挂载/data盘，写入/etc/fstab</h2><p> 不过做扩充时候是自动写进去的，重启过正常，数据没丢。。</p>
+<p>cat /etc/fstab</p>
+<p>/dev/vda1            /                    ext3       noatime,acl,user_xattr 1 1</p>
+<p>proc                 /proc                proc       defaults              0 0</p>
+<p>sysfs                /sys                 sysfs      noauto                0 0</p>
+<p>debugfs              /sys/kernel/debug    debugfs    noauto                0 0</p>
+<p>devpts               /dev/pts             devpts     mode=0620,gid=5       0 0</p>
+<p>/dev/disk/bd/virtio-diskt1            /data                    ext4       defaults,nofail 0 1</p>
+
                 
             </div>
             <hr/>
@@ -426,7 +576,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://icmpy2001.github.io.git/tags/index.html">https://icmpy2001.github.io.git/tags/index.html</a>
+                    <a href="https://icmpy2001.github.io.git/2023/11/10/linux-%E7%A3%81%E7%9B%98%E6%8C%82%E8%BD%BD%E6%89%A9%E5%85%85%E6%A0%BC%E5%BC%8F%E5%8C%96/">https://icmpy2001.github.io.git/2023/11/10/linux-%E7%A3%81%E7%9B%98%E6%8C%82%E8%BD%BD%E6%89%A9%E5%85%85%E6%A0%BC%E5%BC%8F%E5%8C%96/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -507,18 +657,17 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/tags/index.html">
+                <a href="/2023/11/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="tags">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="php 安装redis，protobuf,mcryp扩展">
                         
-                        <span class="card-title">tags</span>
+                        <span class="card-title">php 安装redis，protobuf,mcryp扩展</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -528,9 +677,9 @@
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-11-09
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-11-10
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -539,7 +688,6 @@
                         </span>
                     </div>
                 </div>
-
                 
             </div>
         </div>
@@ -547,16 +695,16 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/tags/index.html">
+                <a href="/2023/11/10/Rsync%E5%90%8C%E6%AD%A5%E6%96%87%E4%BB%B6/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="tags">
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Rsync同步文件">
                         
-                        <span class="card-title">tags</span>
+                        <span class="card-title">Rsync同步文件</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -567,7 +715,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-11-09
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-11-10
                             </span>
                         <span class="publish-author">
                             
@@ -577,7 +725,6 @@
                         </span>
                     </div>
                 </div>
-
                 
             </div>
         </div>
