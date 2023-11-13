@@ -6,7 +6,7 @@
   <link href="https://icmpy2001.github.io.git/atom.xml" rel="self"/>
   
   <link href="https://icmpy2001.github.io.git/"/>
-  <updated>2023-11-10T10:00:58.483Z</updated>
+  <updated>2023-11-13T07:37:34.238Z</updated>
   <id>https://icmpy2001.github.io.git/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>linux有足够内存还使用swap</title>
+    <link href="https://icmpy2001.github.io.git/2023/11/13/linux%E6%9C%89%E8%B6%B3%E5%A4%9F%E5%86%85%E5%AD%98%E8%BF%98%E4%BD%BF%E7%94%A8swap/"/>
+    <id>https://icmpy2001.github.io.git/2023/11/13/linux%E6%9C%89%E8%B6%B3%E5%A4%9F%E5%86%85%E5%AD%98%E8%BF%98%E4%BD%BF%E7%94%A8swap/</id>
+    <published>2023-11-13T07:36:36.000Z</published>
+    <updated>2023-11-13T07:37:34.238Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;一台主机内存swap报警上去以查看确实swap快耗尽；&lt;/p&gt;
+&lt;p&gt;$free -m&lt;/p&gt;
+&lt;p&gt;&amp;nbsp; total&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>php 安装redis，protobuf,mcryp扩展</title>
