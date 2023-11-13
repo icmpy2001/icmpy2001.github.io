@@ -83,6 +83,89 @@
 ]]></content>
   </entry>
   <entry>
+    <title>coredump 路径格式</title>
+    <url>/2023/11/13/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/</url>
+    <content><![CDATA[<p>Coredump</p>
+<p>业务进程宕机以后开发需要查看dump查找定位问题，所有服务器初始化环境时候统一定制coredump路径；</p>
+<p>1.Core文件简介</p>
+<p>Core文件其实就是内存的映像，当程序崩溃时，存储内存的相应信息，主用用于对程序进行调试。当程序崩溃时便会产生core文件，其实准确的应该说是core dump 文件,默认生成位置与可执行程序位于同一目录下，文件名为core.<em><strong>,其中</strong></em>是某一数字。</p>
+<p>2.开启或关闭Core文件的生成</p>
+<p>关闭或阻止core文件生成：</p>
+<p>$ulimit -c 0</p>
+<p>打开core文件生成：</p>
+<p>$ulimit -c unlimited</p>
+<p>检查core文件的选项是否打开：</p>
+<p>$ulimit -a</p>
+<p>ulimit参数含义如下：&nbsp;</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -a&nbsp;&nbsp;&nbsp;&nbsp; All current limits are reported<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -c&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of core files created<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -d&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of a process data segment<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -e&nbsp;&nbsp;&nbsp;&nbsp; The maximum scheduling priority (“nice”)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -f&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of files written by the shell and its children<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -i&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of pending signals<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -l&nbsp;&nbsp;&nbsp;&nbsp; The maximum size that may be locked into memory<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -m&nbsp;&nbsp;&nbsp;&nbsp; The maximum resident set size (has no effect on Linux)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -n&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of open file descriptors (most systems do not allow this value to be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -p&nbsp;&nbsp;&nbsp;&nbsp; The pipe size in 512-byte blocks (this may not be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -q&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of bytes in POSIX message queues<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -r&nbsp;&nbsp;&nbsp;&nbsp; The maximum real-time scheduling priority<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -s&nbsp;&nbsp;&nbsp;&nbsp; The maximum stack size<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -t&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of cpu time in seconds<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -u&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of processes available to a single user<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -v&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of virtual memory available to the shell<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -x&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of file locks</p>
+<p>&nbsp;</p>
+<p>#ulimit -a</p>
+<p>core file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -c) unlimited</p>
+<p>data seg size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -d) unlimited</p>
+<p>scheduling priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-e) 0</p>
+<p>file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -f) unlimited</p>
+<p>pending signals&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-i) 127974</p>
+<p>max locked memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -l) 64</p>
+<p>max memory size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -m) unlimited</p>
+<p>open files&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-n) 100000</p>
+<p>pipe size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (512 bytes, -p) 8</p>
+<p>POSIX message queues&nbsp;&nbsp;&nbsp;&nbsp; (bytes, -q) 819200</p>
+<p>real-time priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-r) 0</p>
+<p>stack size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -s) 8192</p>
+<p>cpu time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (seconds, -t) unlimited</p>
+<p>max user processes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-u) 655360</p>
+<p>virtual memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -v) unlimited</p>
+<p>file locks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-x) unlimited而我们需要修改的是open files (-n) 1024的值</p>
+<p>于是命令就是limit -n 2048(随各自需要设置)</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>以上配置只对当前会话起作用，下次重新登陆后，还是得重新配置。要想配置永久生效，得在/etc/profile或者/etc/security/limits.conf文件中进行配置。</p>
+<p>首先以root权限登陆，然后打开/etc/security/limits.conf文件，进行配置：</p>
+<p>#vim /etc/security/limits.conf</p>
+<p><domain> &nbsp; &nbsp;<type> &nbsp; &nbsp;<item> &nbsp; &nbsp; &nbsp; &nbsp;<value></value></item></type></domain></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;* &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;soft &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;core &nbsp; &nbsp; &nbsp; &nbsp; unlimited</p>
+<p>或者在/etc/profile中作如下配置：</p>
+<p>#vim /etc/profile</p>
+<p>ulimit -S -c unlimited &gt;/dev/null 2&gt;&amp;1</p>
+<p>或者想配置只针对某一用户有效，则修改此用户的<del>/.bashrc或者</del>/.bash_profile文件：</p>
+<p>limit -c unlimited</p>
+<p>ulimit -c 0 是禁止产生core文件，而ulimit -c 1024则限制产生的core文件的大小不能超过1024kb</p>
+<p>3.设置Core Dump的核心转储文件目录和命名规则</p>
+<p>/proc/sys/kernel/core_uses_pid可以控制产生的core文件的文件名中是否添加pid作为扩展，如果添加则文件内容为1，否则为0<br>/proc/sys/kernel/core_pattern可以设置格式化的core文件保存位置或文件名，比如原来文件内容是core-%e<br>可以这样修改:<br>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern<br>将会控制所产生的core文件会存放到/data/common/coredump目录下，产生的文件名为core-进程名-pid-时间戳<br>以下是参数列表:<br>&nbsp;&nbsp;&nbsp; %p - insert pid into filename 添加pid<br>&nbsp;&nbsp;&nbsp; %u - insert current uid into filename 添加当前uid<br>&nbsp;&nbsp;&nbsp; %g - insert current gid into filename 添加当前gid<br>&nbsp;&nbsp;&nbsp; %s - insert signal that caused the coredump into the filename 添加导致产生core的信号<br>&nbsp;&nbsp;&nbsp; %t - insert UNIX time that the coredump occurred into filename 添加core文件生成时的unix时间<br>&nbsp;&nbsp;&nbsp; %h - insert hostname where the coredump happened into filename 添加主机名<br>&nbsp;&nbsp;&nbsp; %e - insert coredumping executable name into filename 添加命令名</p>
+<p>4.core文件的使用</p>
+<p>在core文件所在目录下键入:<br>gdb -c core &nbsp; （-c指定core文件）<br>它会启动GNU的调试器，来调试core文件，并且会显示生成此core文件的程序名，中止此程序的信号等等<br>如果你已经知道是由什么程序生成此core文件的，比如MyServer崩溃了生成core.12345，那么用此指令调试:<br>gdb -c core MyServer</p>
+<p>&nbsp;源：<a href="https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html">https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html</a>&nbsp;</p>
+<p>5.永久生效：<br>当前不重启生效：<br>你可以用下列方式来完成<br>sysctl -w kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
+<p>或</p>
+<p>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern</p>
+<p>这些操作一旦计算机重启，则会丢失，如果你想持久化这些操作，可以在 /etc/sysctl.conf文件中增加：<br>kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
+<p>加好后，如果你想不重启看看效果的话，则用下面的命令：<br>sysctl -p /etc/sysctl.conf</p>
+<h1 id="sysctl-p-etc-sysctl-conf"><a href="#sysctl-p-etc-sysctl-conf" class="headerlink" title="sysctl -p /etc/sysctl.conf"></a>sysctl -p /etc/sysctl.conf</h1><p>net.ipv4.ip_forward = 0</p>
+<p>net.ipv4.conf.default.rp_filter = 1</p>
+<p>net.ipv4.conf.default.accept_source_route = 0</p>
+<p>kernel.core_uses_pid = 1</p>
+<p>net.ipv4.tcp_syncookies = 1</p>
+<p>kernel.msgmnb = 65536</p>
+<p>kernel.msgmax = 65536</p>
+<p>net.ipv6.conf.lo.disable_ipv6 = 1</p>
+<p>net.ipv4.conf.all.promote_secondaries = 1</p>
+<p>net.ipv4.conf.default.promote_secondaries = 1</p>
+<p>net.ipv6.neigh.default.gc_thresh3 = 4096</p>
+<p>net.ipv4.neigh.default.gc_thresh3 = 4096</p>
+<p>kernel.softlockup_panic = 1</p>
+<p>kernel.sysrq = 1</p>
+<p>net.ipv6.conf.all.disable_ipv6 = 1</p>
+<p>net.ipv6.conf.default.disable_ipv6 = 1</p>
+<p>vm.overcommit_memory = 1</p>
+<p>kernel.numa_balancing = 0</p>
+<p>kernel.shmmax = 68719476736</p>
+<p>kernel.printk = 5</p>
+<p>kernel.core_pattern = /data/common/coredump/core-%e-%p-%t</p>
+<hr>
+]]></content>
+  </entry>
+  <entry>
     <title>frp搭建</title>
     <url>/2023/11/10/frp%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<p> &nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。</p>
@@ -334,6 +417,90 @@
 ]]></content>
   </entry>
   <entry>
+    <title>linux有足够内存还使用swap</title>
+    <url>/2023/11/13/linux%E6%9C%89%E8%B6%B3%E5%A4%9F%E5%86%85%E5%AD%98%E8%BF%98%E4%BD%BF%E7%94%A8swap/</url>
+    <content><![CDATA[<p>一台主机内存swap报警上去以查看确实swap快耗尽；</p>
+<p>$free -m</p>
+<p>&nbsp; total&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; used&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; free&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; shared&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;buff/cache&nbsp;&nbsp; available</p>
+<p>Mem: 32012&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 8293&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 243&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 594&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 23475&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 22638</p>
+<p>Swap:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7999&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7315&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 684</p>
+<p>Linux starts swapping before the RAM is filled up. This is done to improve performance and responsiveness:</p>
+<p>Performance is increased because sometimes RAM is better used for disk cache than to store program memory. So it’s better to swap out a program that’s been inactive for a while, and instead keep often-used files in cache.</p>
+<p>Responsiveness is improved by swapping pages out when the system is idle, rather than when the memory is full and some program is running and requesting more RAM to complete a task.</p>
+<p>Swapping does slow the system down, of course — but the alternative to swapping isn’t not swapping, it’s having more RAM or using less RAM.</p>
+<p>翻译：Linux在物理内存用完之前使用swap，这样有助于提高系统性能和响应能力</p>
+<p>1 性能可以提升的原因是：一些内存放磁盘缓存比方内存更合适。所以，最好交换出暂时不使用的内存，而把经常使用的文件放内存里面</p>
+<p>2 提升响应能力通过，当系统空闲的时候swap page out，而不是当内存忙的时候，正在执行程序的时候执行swap</p>
+<p>swaping确实会是系统性能下降，当然，通过swap可以有更多的可用内存</p>
+<p>如何在有内存可用的时候，不使用swap呢？</p>
+<p>This behaviour can be configured by setting the value of&nbsp;/proc/sys/vm/swappiness. The default value is 60, setting it to 0 means “never use swap when there is still RAM left“ and 100 is swapping out memory as soon as possible.</p>
+<p>To change the value temporarily (lost on reboot):</p>
+<p>sudo sysctl vm.swappiness=10<br>1.<br>To change the value permanently: Edit the file&nbsp;/etc/sysctl.conf&nbsp;as root (e.g.&nbsp;sudo nano /etc/sysctl.conf) and change the line&nbsp;vm.swapiness=…&nbsp;to the desired value.</p>
+<p>There has been some debate on whether swapping out with free memory available is good or bad, but the Ubuntu help does indeed recommend a value of 10 for Desktop systems:&nbsp;<a href="https://help.ubuntu.com/community/SwapFaq">https://help.ubuntu.com/community/SwapFaq</a></p>
+<p>centos swappiness配置的路径 &nbsp;/proc/sys/vm/swappiness</p>
+<p>为什么不建议关闭swap</p>
+<p>It is NOT recommended to turn off swap even if you have enough memory. If your server needs more memory and it did not get it, it will crash. However, this can be prevented (to some extent) when you have a swap area.</p>
+<p>Yes, your server performance will degrade when using swap, but at least it will be operational and accessible. Then, you can plan for adding more memory when needed if your server starts using swap.</p>
+<p>I found&nbsp;&nbsp;this page&nbsp;talking about swap. Have a look at 3rd section.</p>
+<p>Instead of turning off swap, you can control the&nbsp;&nbsp;swapiness.</p>
+<p>参考</p>
+<p><a href="http://unix.stackexchange.com/questions/2658/why-use-swap-when-there-is-more-than-enough-ram">http://unix.stackexchange.com/questions/2658/why-use-swap-when-there-is-more-than-enough-ram</a></p>
+<p>swap知识 &nbsp;<a href="https://help.ubuntu.com/community/SwapFaq">https://help.ubuntu.com/community/SwapFaq</a></p>
+<p><a href="http://linux.cloudibee.com/2007/11/linux-performance-tuning-vm-swappiness/">http://linux.cloudibee.com/2007/11/linux-performance-tuning-vm-swappiness/</a></p>
+<p>转载自:&nbsp;<a href="https://blog.csdn.net/wjciayf/article/details/79913381">https://blog.csdn.net/wjciayf/article/details/79913381</a></p>
+<p>关于linux内存分配机制</p>
+<p>在linux的内存分配机制中，优先使用物理内存，当物理内存还有空闲时（还够用），不会释放其占用内存，就算占用内存的程序已经被关闭了，该程序所占用的内存用来做缓存使用，对于开启过的程序、或是读取刚存取过得数据会比较快。</p>
+<p>一．&nbsp;&nbsp;我们先来查看一个内存使用的例子：<br>[oracle@db1 ~]$ free -m<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; total&nbsp; &nbsp;&nbsp; &nbsp; used&nbsp; &nbsp;&nbsp;&nbsp; free&nbsp; &nbsp;&nbsp;&nbsp;shared&nbsp; &nbsp; buffers&nbsp;&nbsp;&nbsp;&nbsp;cached<br>Mem:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;72433&nbsp; &nbsp;&nbsp;&nbsp;67075&nbsp; &nbsp;&nbsp;&nbsp;5357&nbsp; &nbsp;&nbsp; &nbsp;0&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;558&nbsp; &nbsp;&nbsp; &nbsp; 62221<br>-/+ buffers/cache:&nbsp;&nbsp;&nbsp;&nbsp;4295&nbsp; &nbsp;&nbsp; &nbsp;68138<br>Swap:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;72096&nbsp; &nbsp;&nbsp; &nbsp;91&nbsp; &nbsp;&nbsp; &nbsp;72004<br>上述结果显示了67075M的used，但是（-/+ buffers/cache）减去buffers和cache的结果可以看到，所以当前进程实际占用内存是4296M。<br>可以这么理解：在linux的内存分配机制中，优先使用物理内存，当物理内存还有空闲时（还够用），不会释放其占用内存，就算占用内存的程序已经被关闭了，该程序所占用的内存用来做缓存使用，对于开启过的程序、或是读取刚存取过得数据会比较快。<br>如上面的例子：使用了72433M的内存，67075M被占用，但是buuffer和cached部分作为缓存，可以使用命中率的方式提高使用效率，而且这部分缓存是根据指令随时可以释放的，我们可以认为这部分内存没有实际被使用，也可以认为它是空闲的。<br>因此查看目前进程正在实际被使用的内存，是used-(buffers+cache)，也可以认为如果swap没有大量使用，mem还是够用的，只有mem被当前进程实际占用完（没有了buffers和cache），才会使用到swap的。</p>
+<p>二．&nbsp;Swap配置对性能的影响<br>分配太多的Swap空间会浪费磁盘空间，而Swap空间太少，则系统会发生错误。如果系统的物理内存用光了，系统就会跑得很慢，但仍能运行；如果Swap空间用光了，那么系统就会发生错误。例如，Web服务器能根据不同的请求数量衍生出多个服务进程（或线程），如果Swap空间用完，则服务进程无法启动，通常会出现“application is out of memory”的错误，严重时会造成服务进程的死锁。因此Swap空间的分配是很重要的。<br>通常情况下，Swap空间应大于或等于物理内存的大小，最小不应小于64M，通常Swap空间的大小应是物理内存的2-2.5倍。但根据不同的应用，应有不同的配置：如果是小的桌面系统，则只需要较小的Swap空间，而大的服务器系统则视情况不同需要不同大小的Swap空间。特别是数据库服务器和Web服务器，随着访问量的增加，对Swap空间的要求也会增加，一般来说对于4G&nbsp;以下的物理内存，配置2倍的swap，4G&nbsp;以上配置1倍。<br>另外，Swap分区的数量对性能也有很大的影响。因为Swap交换的操作是磁盘IO的操作，如果有多个Swap交换区，Swap空间的分配会以轮流的方式操作于所有的Swap，这样会大大均衡IO的负载，加快Swap交换的速度。如果只有一个交换区，所有的交换操作会使交换区变得很忙，使系统大多数时间处于等待状态，效率很低。用性能监视工具就会发现，此时的CPU并不很忙，而系统却慢。这说明，瓶颈在IO上，依靠提高CPU的速度是解决不了问题的。</p>
+<p>三.&nbsp;&nbsp;Linux&nbsp;内存机制<br>Linux支持虚拟内存(VirtualMmemory)，虚拟内存是指使用磁盘当作RAM的扩展，这样可用的内存的大小就相应地增大了。内核会将暂时不用的内存块的内容写到硬盘上，这样一来，这块内存就可用于其它目的。当需要用到原始的内容时，它们被重新读入内存。这些操作对用户来说是完全透明的;Linux下运行的程序只是看到有大量的内存可供使用而并没有注意到时不时它们的一部分是驻留在硬盘上的。当然，读写硬盘要比直接使用真实内存慢得多(要慢数千倍)，所以程序就不会象一直在内存中运行的那样快。用作虚拟内存的硬盘部分被称为交换空间(Swap Space)。<br>一般，在交换空间中的页面首先被换入内存;如果此时没有足够的物理内存来容纳它们又将被交换出来(到其他的交换空间中)。如果没有足够的虚拟内存来容纳所有这些页面，Linux就会波动而不正常;但经过一段较长的时间Linux会恢复，但此时系统已不可用了。<br>有时，尽管有许多的空闲内存，仍然会有许多的交换空间正被使用。这种情况是有可能发生的，例如如果在某一时刻有进行交换的必要，但后来一个占用很多物理内存的大进程结束并释放内存时。被交换出的数据并不会自动地交换进内存，除非有这个需要时。此时物理内存会在一段时间内保持空闲状态。对此并没有什么可担心的，但是知道了是怎么一回事，也就无所谓了。<br>许多操作系统使用了虚拟内存的方法。因为它们仅在运行时才需要交换空间，以解决不会在同一时间使用交换空间，因此，除了当前正在运行的操作系统的交换空间，其它的就是一种浪费。所以让它们共享一个交换空间将会更有效率。<br>注意：如果会有几个人同时使用这个系统，他们都将消耗内存。然而，如果两个人同时运行一个程序，内存消耗的总量并不是翻倍，因为代码页以及共享的库只存在一份。</p>
+<p>Linux系统常常动不动就使用交换空间，以保持尽可能多的空闲物理内存。即使并没有什么事情需要内存，Linux也会交换出暂时不用的内存页面。这可以避免等待交换所需的时间：当磁盘闲着，就可以提前做好交换。可以将交换空间分散在几个硬盘之上。针对相关磁盘的速度以及对磁盘的访问模式，这样做可以提高性能。</p>
+<p>与访问物理内存相比，磁盘的读写是很慢的。另外，在相应较短的时间内多次读磁盘同样的部分也是常有的事。例如，某人也许首先阅读了一段E-mail消息，然后为了答复又将这段消息读入编辑器中，然后又在将这个消息拷贝到文件夹中时，使得邮件程序又一次读入它。或者考虑一下在一个有着许多用户的系统中&nbsp;ls命令会被使用多少次。通过将信息从磁盘上仅读入一次并将其存于内存中，除了第一次读以外，可以加快所有其它读的速度。这叫作磁盘缓冲(Disk Buffering)，被用作此目的的内存称为高速缓冲(Buffer Cache)。但是，由于内存是一种有限而又不充足的资源，高速缓冲不可能做的很大(它不可能包容要用到的所有数据)。当缓冲充满了数据时，其中最长时间不用的数据将被舍弃以腾出内存空间用于新的数据。</p>
+<p>对写磁盘操作来说磁盘缓冲技术同样有效。一方面，被写入磁盘的数据常常会很快地又被读出(例如，原代码文件被保存到一个文件中，又被编译器读入)，所以将要被写的数据放入缓冲中是个好主意。另一方面，通过将数据放入缓冲中，而不是将其立刻写入磁盘，程序可以加快运行的速度。以后，写的操作可以在后台完成，而不会拖延程序的执行。<br>大多数操作系统都有高速缓冲(尽管可能称呼不同)，但是并不是都遵守上面的原理。有些是直接写(Write-Through)：数据将被立刻写入磁盘(当然，数据也被放入缓存中)。如果写操作是在以后做的，那么该缓存被称为后台写(Write-Back)。后台写比直接写更有效，但也容易出错：如果机器崩溃，或者突然掉电，缓冲中改变过的数据就被丢失了。如果仍未被写入的数据含有重要的薄记信息，这甚至可能意味着文件系统(如果有的话)已不完整。<br>针对以上的原因，出现了很多的日志文件系统，数据在缓冲区修改后，同时会被文件系统记录修改信息，这样即使此时系统掉电，系统重启后会首先从日志记录中恢复数据，保证数据不丢失。当然这些问题不再本文的叙述范围。<br>由于上述原因，在使用适当的关闭过程之前，绝对不要关掉电源，Sync命令倾空(Flushes)缓冲，也即，强迫所有未被写的数据写入磁盘，可用以确定所有的写操作都已完成。在传统的UNIX系统中，有一个叫做update的程序运行于后台，每隔30秒做一次sync操作，因此通常无需手工使用sync命令了。Linux另外有一个后台程序，Bdflush，这个程序执行更频繁的但不是全面的同步操作，以避免有时sync的大量磁盘I/O操作所带来的磁盘的突然冻结。<br>在Linux中，Bdflush是由update启动的。通常没有理由来担心此事，但如果由于某些原因bdflush进程死掉了，内核会对此作出警告，此时你就要手工地启动它了(/sbin/update)。</p>
+<p>缓存(Cache)实际并不是缓冲文件的，而是缓冲块的，块是磁盘I/O操作的最小单元(在Linux中，它们通常是1KB)。这样，目录、超级块、其它文件系统的薄记数据以及非文件系统的磁盘数据都可以被缓冲了。缓冲的效力主要是由它的大小决定的。缓冲太小的话等于没用。它只能容纳一点数据，因此在被重用时，所有缓冲的数据都将被倾空。实际的大小依赖于数据读写的频次、相同数据被访问的频率。只有用实验的方法才能知道。<br>如果缓存有固定的大小，那么缓存太大了也不好，因为这会使得空闲的内存太小而导致进行交换操作(这同样是慢的)。为了最有效地使用实际内存，Linux自动地使用所有空闲的内存作为高速缓冲，当程序需要更多的内存时，它也会自动地减小缓冲的大小。&nbsp;<br>这就是一般情况下Linux内存的一般机制，真正的Linux内存的运行机制远远比这个复杂。</p>
+<p>&nbsp;</p>
+<p>Other：</p>
+<p>swap tendency = mapped ratio / 2 + distress + swappiness</p>
+<p>The mapped ratio value is the percentage of pages in all memory zones thatbelong to User Mode address spaces (sc-&gt;nr_mapped) with respect to the totalnumber of allocatable page frames. A high value of mapped_ratio means that thedynamic memory is mostly used by User Mode processes, while a low value meansthat it is mostly used by the page cache.</p>
+<p>The distress value is a measure of how effectively the PFRA is reclaiming pageframes in this zone; it is based on the scanning priority of the zone in theprevious run of the PFRA, which is stored in the prev_priority field of thezone descriptor. The distress value depends on the zone’s previous priority asfollows:</p>
+<p>Zone prev. priority<br>12…7<br>6<br>5<br>4<br>3<br>2<br>1<br>0</p>
+<p>Distress value<br>0<br>1<br>3<br>6<br>12<br>25<br>50<br>100<br>Finally, the swappiness value is a user-defined constant, which is usually setto 60. The system administrator may tune this value by writing in the/proc/sys/vm/swappiness file or by issuing the proper sysctl( ) system call.</p>
+<p>Pages will be reclaimed from the address spaces of processes only if the zone’sswap tendency is greater than or equal to 100. Thus, if the systemadministrator sets swappiness to 0, then the PFRA never reclaims pages in theUser Mode address spaces unless the zone’s previous priority is zero (anunlikely event); if the administrator sets swappiness to 100, then the PFRAreclaims pages in the User Mode address spaces at every invocation.<br>swappiness，吃参数是得到swap tendency的一个量，而swap tendency是linux内核进行内存进行回收的一个阀值和标量。</p>
+<p><a href="https://blog.csdn.net/ly890700/article/details/73695750">https://blog.csdn.net/ly890700/article/details/73695750</a></p>
+<p>首先是,kswapd进程来定期扫描系统资源,查看内存是否够用,由两个值影响pages_high和page_low,如果现在可使用的区间在page_high&lt;x&lt;page_low,就开始检查从文件系统读入的文件,有无被修改的内存页面,如果有就写入到磁盘,但是,如果内存页面被修改了,有可能不是从文件系统读入的,即找不到回写的位置,如malloc产生的anonymous内存数据就写入swap分区,这部分当进程在次被唤醒,获得了CPU运行时间,在从swap读入。</p>
+<p>swappiness的值的大小对如何使用swap分区是有着很大的联系的。swappiness=0的时候表示最大限度使用物理内存，然后才是swap空间，swappiness＝100的时候表示积极的使用swap分区，并且把内存上的数据及时的搬运到swap空间里面。linux的基本默认设置为60，具体如下：</p>
+<p>cat /proc/sys/vm/swappiness<br>#60</p>
+<p>也就是说，你的内存在使用到100-60=40%的时候，就开始出现有交换分区的使用。大家知道，内存的速度会比磁盘快很多，这样子会加大系统IO，同时造的成大量页的换进换出，严重影响系统的性能，所以我们在操作系统层面，要尽可能使用内存，对该参数进行调整。</p>
+<p>临时调整的方法如下，我们调成10：</p>
+<p>sysctl vm.swappiness=10<br>#vm.swappiness=10</p>
+<p>cat /proc/sys/vm/swappiness</p>
+<p>#10</p>
+<p>这只是临时调整的方法，重启后会回到默认设置的.</p>
+<p>要想永久调整的话，需要在/etc/sysctl.conf修改，加上：</p>
+<p>sudo vim /etc/sysctl.conf</p>
+<p>加上</p>
+<h1 id="Controls-the-maximum-number-of-shared-memory-segments-in-pages"><a href="#Controls-the-maximum-number-of-shared-memory-segments-in-pages" class="headerlink" title="Controls the maximum number of shared memory segments, in pages"></a>Controls the maximum number of shared memory segments, in pages</h1><p>kernel.shmall = 4294967296 #这一个可以不用设置</p>
+<p>vm.swappiness = 10</p>
+<p>&nbsp;生效</p>
+<p>sudo sysctl -p</p>
+<p>这样便完成修改设置！</p>
+<p>&nbsp;</p>
+<p>Ps在服务器内存充裕的情况下尽量用内存，swap缓存设置低一些，使用swap是必要的；</p>
+<p>另外：swap可以扩充的，但是会不会影响线上业务，或者使用sysctl vm.swappiness=10命令时候会不会影响线上业务，一直纠结中。</p>
+<p>&nbsp;</p>
+<p>转自：<a href="https://www.cnblogs.com/EasonJim/p/7777904.html">https://www.cnblogs.com/EasonJim/p/7777904.html</a></p>
+<p>&nbsp;</p>
+<p>&nbsp;&nbsp;用文件增加swap：</p>
+<p>dd if=/dev/zero of=/tmp/swapadd bs=1024 count=2048000&nbsp; &nbsp; ###添加一块2G的swap文件</p>
+<p>mkswap /tmp/swapadd&nbsp; ####格式化文件</p>
+<p>swapon /tmp/swapadd ###增加swap</p>
+<p>free -m</p>
+<p>echo “/tmp/swapadd swap swap defaults 0 0” &gt;&gt; /etc/fstab&nbsp; &nbsp; ###开机自动挂载swap分区</p>
+<p>swapoff swapadd&nbsp; ###&nbsp;使用Swapoff命令收回Swap空间</p>
+<p>rm swapadd&nbsp;&nbsp; &nbsp;###从文件系统中回收此文件</p>
+<hr>
+]]></content>
+  </entry>
+  <entry>
     <title>php 安装redis，protobuf,mcryp扩展</title>
     <url>/2023/11/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/</url>
     <content><![CDATA[<p>&nbsp; 测试机上测试一些数据需要用到redis扩展，偷懒yum安装的php，以前yum install php-pecl-redis.x86_64可以安装扩展，这次找不到安装包，不折腾手动安装下。</p>
@@ -449,173 +616,6 @@
 <p>php.ini添加一条extension=mcrypt.so</p>
 <p>extension = protocolbuffers.so</p>
 <p>extension = mcrypt.so</p>
-<hr>
-]]></content>
-  </entry>
-  <entry>
-    <title>linux有足够内存还使用swap</title>
-    <url>/2023/11/13/linux%E6%9C%89%E8%B6%B3%E5%A4%9F%E5%86%85%E5%AD%98%E8%BF%98%E4%BD%BF%E7%94%A8swap/</url>
-    <content><![CDATA[<p>一台主机内存swap报警上去以查看确实swap快耗尽；</p>
-<p>$free -m</p>
-<p>&nbsp; total&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; used&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; free&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; shared&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;buff/cache&nbsp;&nbsp; available</p>
-<p>Mem: 32012&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 8293&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 243&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 594&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 23475&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 22638</p>
-<p>Swap:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7999&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7315&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 684</p>
-<p>Linux starts swapping before the RAM is filled up. This is done to improve performance and responsiveness:</p>
-<p>Performance is increased because sometimes RAM is better used for disk cache than to store program memory. So it’s better to swap out a program that’s been inactive for a while, and instead keep often-used files in cache.</p>
-<p>Responsiveness is improved by swapping pages out when the system is idle, rather than when the memory is full and some program is running and requesting more RAM to complete a task.</p>
-<p>Swapping does slow the system down, of course — but the alternative to swapping isn’t not swapping, it’s having more RAM or using less RAM.</p>
-<p>翻译：Linux在物理内存用完之前使用swap，这样有助于提高系统性能和响应能力</p>
-<p>1 性能可以提升的原因是：一些内存放磁盘缓存比方内存更合适。所以，最好交换出暂时不使用的内存，而把经常使用的文件放内存里面</p>
-<p>2 提升响应能力通过，当系统空闲的时候swap page out，而不是当内存忙的时候，正在执行程序的时候执行swap</p>
-<p>swaping确实会是系统性能下降，当然，通过swap可以有更多的可用内存</p>
-<p>如何在有内存可用的时候，不使用swap呢？</p>
-<p>This behaviour can be configured by setting the value of&nbsp;/proc/sys/vm/swappiness. The default value is 60, setting it to 0 means “never use swap when there is still RAM left“ and 100 is swapping out memory as soon as possible.</p>
-<p>To change the value temporarily (lost on reboot):</p>
-<p>sudo sysctl vm.swappiness=10<br>1.<br>To change the value permanently: Edit the file&nbsp;/etc/sysctl.conf&nbsp;as root (e.g.&nbsp;sudo nano /etc/sysctl.conf) and change the line&nbsp;vm.swapiness=…&nbsp;to the desired value.</p>
-<p>There has been some debate on whether swapping out with free memory available is good or bad, but the Ubuntu help does indeed recommend a value of 10 for Desktop systems:&nbsp;<a href="https://help.ubuntu.com/community/SwapFaq">https://help.ubuntu.com/community/SwapFaq</a></p>
-<p>centos swappiness配置的路径 &nbsp;/proc/sys/vm/swappiness</p>
-<p>为什么不建议关闭swap</p>
-<p>It is NOT recommended to turn off swap even if you have enough memory. If your server needs more memory and it did not get it, it will crash. However, this can be prevented (to some extent) when you have a swap area.</p>
-<p>Yes, your server performance will degrade when using swap, but at least it will be operational and accessible. Then, you can plan for adding more memory when needed if your server starts using swap.</p>
-<p>I found&nbsp;&nbsp;this page&nbsp;talking about swap. Have a look at 3rd section.</p>
-<p>Instead of turning off swap, you can control the&nbsp;&nbsp;swapiness.</p>
-<p>参考</p>
-<p><a href="http://unix.stackexchange.com/questions/2658/why-use-swap-when-there-is-more-than-enough-ram">http://unix.stackexchange.com/questions/2658/why-use-swap-when-there-is-more-than-enough-ram</a></p>
-<p>swap知识 &nbsp;<a href="https://help.ubuntu.com/community/SwapFaq">https://help.ubuntu.com/community/SwapFaq</a></p>
-<p><a href="http://linux.cloudibee.com/2007/11/linux-performance-tuning-vm-swappiness/">http://linux.cloudibee.com/2007/11/linux-performance-tuning-vm-swappiness/</a></p>
-<p>转载自:&nbsp;<a href="https://blog.csdn.net/wjciayf/article/details/79913381">https://blog.csdn.net/wjciayf/article/details/79913381</a></p>
-<p>关于linux内存分配机制</p>
-<p>在linux的内存分配机制中，优先使用物理内存，当物理内存还有空闲时（还够用），不会释放其占用内存，就算占用内存的程序已经被关闭了，该程序所占用的内存用来做缓存使用，对于开启过的程序、或是读取刚存取过得数据会比较快。</p>
-<p>一．&nbsp;&nbsp;我们先来查看一个内存使用的例子：<br>[oracle@db1 ~]$ free -m<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; total&nbsp; &nbsp;&nbsp; &nbsp; used&nbsp; &nbsp;&nbsp;&nbsp; free&nbsp; &nbsp;&nbsp;&nbsp;shared&nbsp; &nbsp; buffers&nbsp;&nbsp;&nbsp;&nbsp;cached<br>Mem:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;72433&nbsp; &nbsp;&nbsp;&nbsp;67075&nbsp; &nbsp;&nbsp;&nbsp;5357&nbsp; &nbsp;&nbsp; &nbsp;0&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;558&nbsp; &nbsp;&nbsp; &nbsp; 62221<br>-/+ buffers/cache:&nbsp;&nbsp;&nbsp;&nbsp;4295&nbsp; &nbsp;&nbsp; &nbsp;68138<br>Swap:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;72096&nbsp; &nbsp;&nbsp; &nbsp;91&nbsp; &nbsp;&nbsp; &nbsp;72004<br>上述结果显示了67075M的used，但是（-/+ buffers/cache）减去buffers和cache的结果可以看到，所以当前进程实际占用内存是4296M。<br>可以这么理解：在linux的内存分配机制中，优先使用物理内存，当物理内存还有空闲时（还够用），不会释放其占用内存，就算占用内存的程序已经被关闭了，该程序所占用的内存用来做缓存使用，对于开启过的程序、或是读取刚存取过得数据会比较快。<br>如上面的例子：使用了72433M的内存，67075M被占用，但是buuffer和cached部分作为缓存，可以使用命中率的方式提高使用效率，而且这部分缓存是根据指令随时可以释放的，我们可以认为这部分内存没有实际被使用，也可以认为它是空闲的。<br>因此查看目前进程正在实际被使用的内存，是used-(buffers+cache)，也可以认为如果swap没有大量使用，mem还是够用的，只有mem被当前进程实际占用完（没有了buffers和cache），才会使用到swap的。</p>
-<p>二．&nbsp;Swap配置对性能的影响<br>分配太多的Swap空间会浪费磁盘空间，而Swap空间太少，则系统会发生错误。如果系统的物理内存用光了，系统就会跑得很慢，但仍能运行；如果Swap空间用光了，那么系统就会发生错误。例如，Web服务器能根据不同的请求数量衍生出多个服务进程（或线程），如果Swap空间用完，则服务进程无法启动，通常会出现“application is out of memory”的错误，严重时会造成服务进程的死锁。因此Swap空间的分配是很重要的。<br>通常情况下，Swap空间应大于或等于物理内存的大小，最小不应小于64M，通常Swap空间的大小应是物理内存的2-2.5倍。但根据不同的应用，应有不同的配置：如果是小的桌面系统，则只需要较小的Swap空间，而大的服务器系统则视情况不同需要不同大小的Swap空间。特别是数据库服务器和Web服务器，随着访问量的增加，对Swap空间的要求也会增加，一般来说对于4G&nbsp;以下的物理内存，配置2倍的swap，4G&nbsp;以上配置1倍。<br>另外，Swap分区的数量对性能也有很大的影响。因为Swap交换的操作是磁盘IO的操作，如果有多个Swap交换区，Swap空间的分配会以轮流的方式操作于所有的Swap，这样会大大均衡IO的负载，加快Swap交换的速度。如果只有一个交换区，所有的交换操作会使交换区变得很忙，使系统大多数时间处于等待状态，效率很低。用性能监视工具就会发现，此时的CPU并不很忙，而系统却慢。这说明，瓶颈在IO上，依靠提高CPU的速度是解决不了问题的。</p>
-<p>三.&nbsp;&nbsp;Linux&nbsp;内存机制<br>Linux支持虚拟内存(VirtualMmemory)，虚拟内存是指使用磁盘当作RAM的扩展，这样可用的内存的大小就相应地增大了。内核会将暂时不用的内存块的内容写到硬盘上，这样一来，这块内存就可用于其它目的。当需要用到原始的内容时，它们被重新读入内存。这些操作对用户来说是完全透明的;Linux下运行的程序只是看到有大量的内存可供使用而并没有注意到时不时它们的一部分是驻留在硬盘上的。当然，读写硬盘要比直接使用真实内存慢得多(要慢数千倍)，所以程序就不会象一直在内存中运行的那样快。用作虚拟内存的硬盘部分被称为交换空间(Swap Space)。<br>一般，在交换空间中的页面首先被换入内存;如果此时没有足够的物理内存来容纳它们又将被交换出来(到其他的交换空间中)。如果没有足够的虚拟内存来容纳所有这些页面，Linux就会波动而不正常;但经过一段较长的时间Linux会恢复，但此时系统已不可用了。<br>有时，尽管有许多的空闲内存，仍然会有许多的交换空间正被使用。这种情况是有可能发生的，例如如果在某一时刻有进行交换的必要，但后来一个占用很多物理内存的大进程结束并释放内存时。被交换出的数据并不会自动地交换进内存，除非有这个需要时。此时物理内存会在一段时间内保持空闲状态。对此并没有什么可担心的，但是知道了是怎么一回事，也就无所谓了。<br>许多操作系统使用了虚拟内存的方法。因为它们仅在运行时才需要交换空间，以解决不会在同一时间使用交换空间，因此，除了当前正在运行的操作系统的交换空间，其它的就是一种浪费。所以让它们共享一个交换空间将会更有效率。<br>注意：如果会有几个人同时使用这个系统，他们都将消耗内存。然而，如果两个人同时运行一个程序，内存消耗的总量并不是翻倍，因为代码页以及共享的库只存在一份。</p>
-<p>Linux系统常常动不动就使用交换空间，以保持尽可能多的空闲物理内存。即使并没有什么事情需要内存，Linux也会交换出暂时不用的内存页面。这可以避免等待交换所需的时间：当磁盘闲着，就可以提前做好交换。可以将交换空间分散在几个硬盘之上。针对相关磁盘的速度以及对磁盘的访问模式，这样做可以提高性能。</p>
-<p>与访问物理内存相比，磁盘的读写是很慢的。另外，在相应较短的时间内多次读磁盘同样的部分也是常有的事。例如，某人也许首先阅读了一段E-mail消息，然后为了答复又将这段消息读入编辑器中，然后又在将这个消息拷贝到文件夹中时，使得邮件程序又一次读入它。或者考虑一下在一个有着许多用户的系统中&nbsp;ls命令会被使用多少次。通过将信息从磁盘上仅读入一次并将其存于内存中，除了第一次读以外，可以加快所有其它读的速度。这叫作磁盘缓冲(Disk Buffering)，被用作此目的的内存称为高速缓冲(Buffer Cache)。但是，由于内存是一种有限而又不充足的资源，高速缓冲不可能做的很大(它不可能包容要用到的所有数据)。当缓冲充满了数据时，其中最长时间不用的数据将被舍弃以腾出内存空间用于新的数据。</p>
-<p>对写磁盘操作来说磁盘缓冲技术同样有效。一方面，被写入磁盘的数据常常会很快地又被读出(例如，原代码文件被保存到一个文件中，又被编译器读入)，所以将要被写的数据放入缓冲中是个好主意。另一方面，通过将数据放入缓冲中，而不是将其立刻写入磁盘，程序可以加快运行的速度。以后，写的操作可以在后台完成，而不会拖延程序的执行。<br>大多数操作系统都有高速缓冲(尽管可能称呼不同)，但是并不是都遵守上面的原理。有些是直接写(Write-Through)：数据将被立刻写入磁盘(当然，数据也被放入缓存中)。如果写操作是在以后做的，那么该缓存被称为后台写(Write-Back)。后台写比直接写更有效，但也容易出错：如果机器崩溃，或者突然掉电，缓冲中改变过的数据就被丢失了。如果仍未被写入的数据含有重要的薄记信息，这甚至可能意味着文件系统(如果有的话)已不完整。<br>针对以上的原因，出现了很多的日志文件系统，数据在缓冲区修改后，同时会被文件系统记录修改信息，这样即使此时系统掉电，系统重启后会首先从日志记录中恢复数据，保证数据不丢失。当然这些问题不再本文的叙述范围。<br>由于上述原因，在使用适当的关闭过程之前，绝对不要关掉电源，Sync命令倾空(Flushes)缓冲，也即，强迫所有未被写的数据写入磁盘，可用以确定所有的写操作都已完成。在传统的UNIX系统中，有一个叫做update的程序运行于后台，每隔30秒做一次sync操作，因此通常无需手工使用sync命令了。Linux另外有一个后台程序，Bdflush，这个程序执行更频繁的但不是全面的同步操作，以避免有时sync的大量磁盘I/O操作所带来的磁盘的突然冻结。<br>在Linux中，Bdflush是由update启动的。通常没有理由来担心此事，但如果由于某些原因bdflush进程死掉了，内核会对此作出警告，此时你就要手工地启动它了(/sbin/update)。</p>
-<p>缓存(Cache)实际并不是缓冲文件的，而是缓冲块的，块是磁盘I/O操作的最小单元(在Linux中，它们通常是1KB)。这样，目录、超级块、其它文件系统的薄记数据以及非文件系统的磁盘数据都可以被缓冲了。缓冲的效力主要是由它的大小决定的。缓冲太小的话等于没用。它只能容纳一点数据，因此在被重用时，所有缓冲的数据都将被倾空。实际的大小依赖于数据读写的频次、相同数据被访问的频率。只有用实验的方法才能知道。<br>如果缓存有固定的大小，那么缓存太大了也不好，因为这会使得空闲的内存太小而导致进行交换操作(这同样是慢的)。为了最有效地使用实际内存，Linux自动地使用所有空闲的内存作为高速缓冲，当程序需要更多的内存时，它也会自动地减小缓冲的大小。&nbsp;<br>这就是一般情况下Linux内存的一般机制，真正的Linux内存的运行机制远远比这个复杂。</p>
-<p>&nbsp;</p>
-<p>Other：</p>
-<p>swap tendency = mapped ratio / 2 + distress + swappiness</p>
-<p>The mapped ratio value is the percentage of pages in all memory zones thatbelong to User Mode address spaces (sc-&gt;nr_mapped) with respect to the totalnumber of allocatable page frames. A high value of mapped_ratio means that thedynamic memory is mostly used by User Mode processes, while a low value meansthat it is mostly used by the page cache.</p>
-<p>The distress value is a measure of how effectively the PFRA is reclaiming pageframes in this zone; it is based on the scanning priority of the zone in theprevious run of the PFRA, which is stored in the prev_priority field of thezone descriptor. The distress value depends on the zone’s previous priority asfollows:</p>
-<p>Zone prev. priority<br>12…7<br>6<br>5<br>4<br>3<br>2<br>1<br>0</p>
-<p>Distress value<br>0<br>1<br>3<br>6<br>12<br>25<br>50<br>100<br>Finally, the swappiness value is a user-defined constant, which is usually setto 60. The system administrator may tune this value by writing in the/proc/sys/vm/swappiness file or by issuing the proper sysctl( ) system call.</p>
-<p>Pages will be reclaimed from the address spaces of processes only if the zone’sswap tendency is greater than or equal to 100. Thus, if the systemadministrator sets swappiness to 0, then the PFRA never reclaims pages in theUser Mode address spaces unless the zone’s previous priority is zero (anunlikely event); if the administrator sets swappiness to 100, then the PFRAreclaims pages in the User Mode address spaces at every invocation.<br>swappiness，吃参数是得到swap tendency的一个量，而swap tendency是linux内核进行内存进行回收的一个阀值和标量。</p>
-<p><a href="https://blog.csdn.net/ly890700/article/details/73695750">https://blog.csdn.net/ly890700/article/details/73695750</a></p>
-<p>首先是,kswapd进程来定期扫描系统资源,查看内存是否够用,由两个值影响pages_high和page_low,如果现在可使用的区间在page_high&lt;x&lt;page_low,就开始检查从文件系统读入的文件,有无被修改的内存页面,如果有就写入到磁盘,但是,如果内存页面被修改了,有可能不是从文件系统读入的,即找不到回写的位置,如malloc产生的anonymous内存数据就写入swap分区,这部分当进程在次被唤醒,获得了CPU运行时间,在从swap读入。</p>
-<p>swappiness的值的大小对如何使用swap分区是有着很大的联系的。swappiness=0的时候表示最大限度使用物理内存，然后才是swap空间，swappiness＝100的时候表示积极的使用swap分区，并且把内存上的数据及时的搬运到swap空间里面。linux的基本默认设置为60，具体如下：</p>
-<p>cat /proc/sys/vm/swappiness<br>#60</p>
-<p>也就是说，你的内存在使用到100-60=40%的时候，就开始出现有交换分区的使用。大家知道，内存的速度会比磁盘快很多，这样子会加大系统IO，同时造的成大量页的换进换出，严重影响系统的性能，所以我们在操作系统层面，要尽可能使用内存，对该参数进行调整。</p>
-<p>临时调整的方法如下，我们调成10：</p>
-<p>sysctl vm.swappiness=10<br>#vm.swappiness=10</p>
-<p>cat /proc/sys/vm/swappiness</p>
-<p>#10</p>
-<p>这只是临时调整的方法，重启后会回到默认设置的.</p>
-<p>要想永久调整的话，需要在/etc/sysctl.conf修改，加上：</p>
-<p>sudo vim /etc/sysctl.conf</p>
-<p>加上</p>
-<h1 id="Controls-the-maximum-number-of-shared-memory-segments-in-pages"><a href="#Controls-the-maximum-number-of-shared-memory-segments-in-pages" class="headerlink" title="Controls the maximum number of shared memory segments, in pages"></a>Controls the maximum number of shared memory segments, in pages</h1><p>kernel.shmall = 4294967296 #这一个可以不用设置</p>
-<p>vm.swappiness = 10</p>
-<p>&nbsp;生效</p>
-<p>sudo sysctl -p</p>
-<p>这样便完成修改设置！</p>
-<p>&nbsp;</p>
-<p>Ps在服务器内存充裕的情况下尽量用内存，swap缓存设置低一些，使用swap是必要的；</p>
-<p>另外：swap可以扩充的，但是会不会影响线上业务，或者使用sysctl vm.swappiness=10命令时候会不会影响线上业务，一直纠结中。</p>
-<p>&nbsp;</p>
-<p>转自：<a href="https://www.cnblogs.com/EasonJim/p/7777904.html">https://www.cnblogs.com/EasonJim/p/7777904.html</a></p>
-<p>&nbsp;</p>
-<p>&nbsp;&nbsp;用文件增加swap：</p>
-<p>dd if=/dev/zero of=/tmp/swapadd bs=1024 count=2048000&nbsp; &nbsp; ###添加一块2G的swap文件</p>
-<p>mkswap /tmp/swapadd&nbsp; ####格式化文件</p>
-<p>swapon /tmp/swapadd ###增加swap</p>
-<p>free -m</p>
-<p>echo “/tmp/swapadd swap swap defaults 0 0” &gt;&gt; /etc/fstab&nbsp; &nbsp; ###开机自动挂载swap分区</p>
-<p>swapoff swapadd&nbsp; ###&nbsp;使用Swapoff命令收回Swap空间</p>
-<p>rm swapadd&nbsp;&nbsp; &nbsp;###从文件系统中回收此文件</p>
-<hr>
-]]></content>
-  </entry>
-  <entry>
-    <title>coredump 路径格式</title>
-    <url>/2023/11/13/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/</url>
-    <content><![CDATA[<p>Coredump</p>
-<p>业务进程宕机以后开发需要查看dump查找定位问题，所有服务器初始化环境时候统一定制coredump路径；</p>
-<p>1.Core文件简介</p>
-<p>Core文件其实就是内存的映像，当程序崩溃时，存储内存的相应信息，主用用于对程序进行调试。当程序崩溃时便会产生core文件，其实准确的应该说是core dump 文件,默认生成位置与可执行程序位于同一目录下，文件名为core.<em><strong>,其中</strong></em>是某一数字。</p>
-<p>2.开启或关闭Core文件的生成</p>
-<p>关闭或阻止core文件生成：</p>
-<p>$ulimit -c 0</p>
-<p>打开core文件生成：</p>
-<p>$ulimit -c unlimited</p>
-<p>检查core文件的选项是否打开：</p>
-<p>$ulimit -a</p>
-<p>ulimit参数含义如下：&nbsp;</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -a&nbsp;&nbsp;&nbsp;&nbsp; All current limits are reported<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -c&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of core files created<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -d&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of a process data segment<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -e&nbsp;&nbsp;&nbsp;&nbsp; The maximum scheduling priority (“nice”)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -f&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of files written by the shell and its children<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -i&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of pending signals<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -l&nbsp;&nbsp;&nbsp;&nbsp; The maximum size that may be locked into memory<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -m&nbsp;&nbsp;&nbsp;&nbsp; The maximum resident set size (has no effect on Linux)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -n&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of open file descriptors (most systems do not allow this value to be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -p&nbsp;&nbsp;&nbsp;&nbsp; The pipe size in 512-byte blocks (this may not be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -q&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of bytes in POSIX message queues<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -r&nbsp;&nbsp;&nbsp;&nbsp; The maximum real-time scheduling priority<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -s&nbsp;&nbsp;&nbsp;&nbsp; The maximum stack size<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -t&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of cpu time in seconds<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -u&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of processes available to a single user<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -v&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of virtual memory available to the shell<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -x&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of file locks</p>
-<p>&nbsp;</p>
-<p>#ulimit -a</p>
-<p>core file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -c) unlimited</p>
-<p>data seg size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -d) unlimited</p>
-<p>scheduling priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-e) 0</p>
-<p>file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -f) unlimited</p>
-<p>pending signals&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-i) 127974</p>
-<p>max locked memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -l) 64</p>
-<p>max memory size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -m) unlimited</p>
-<p>open files&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-n) 100000</p>
-<p>pipe size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (512 bytes, -p) 8</p>
-<p>POSIX message queues&nbsp;&nbsp;&nbsp;&nbsp; (bytes, -q) 819200</p>
-<p>real-time priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-r) 0</p>
-<p>stack size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -s) 8192</p>
-<p>cpu time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (seconds, -t) unlimited</p>
-<p>max user processes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-u) 655360</p>
-<p>virtual memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -v) unlimited</p>
-<p>file locks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-x) unlimited而我们需要修改的是open files (-n) 1024的值</p>
-<p>于是命令就是limit -n 2048(随各自需要设置)</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>以上配置只对当前会话起作用，下次重新登陆后，还是得重新配置。要想配置永久生效，得在/etc/profile或者/etc/security/limits.conf文件中进行配置。</p>
-<p>首先以root权限登陆，然后打开/etc/security/limits.conf文件，进行配置：</p>
-<p>#vim /etc/security/limits.conf</p>
-<p><domain> &nbsp; &nbsp;<type> &nbsp; &nbsp;<item> &nbsp; &nbsp; &nbsp; &nbsp;<value></value></item></type></domain></p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp;* &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;soft &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;core &nbsp; &nbsp; &nbsp; &nbsp; unlimited</p>
-<p>或者在/etc/profile中作如下配置：</p>
-<p>#vim /etc/profile</p>
-<p>ulimit -S -c unlimited &gt;/dev/null 2&gt;&amp;1</p>
-<p>或者想配置只针对某一用户有效，则修改此用户的<del>/.bashrc或者</del>/.bash_profile文件：</p>
-<p>limit -c unlimited</p>
-<p>ulimit -c 0 是禁止产生core文件，而ulimit -c 1024则限制产生的core文件的大小不能超过1024kb</p>
-<p>3.设置Core Dump的核心转储文件目录和命名规则</p>
-<p>/proc/sys/kernel/core_uses_pid可以控制产生的core文件的文件名中是否添加pid作为扩展，如果添加则文件内容为1，否则为0<br>/proc/sys/kernel/core_pattern可以设置格式化的core文件保存位置或文件名，比如原来文件内容是core-%e<br>可以这样修改:<br>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern<br>将会控制所产生的core文件会存放到/data/common/coredump目录下，产生的文件名为core-进程名-pid-时间戳<br>以下是参数列表:<br>&nbsp;&nbsp;&nbsp; %p - insert pid into filename 添加pid<br>&nbsp;&nbsp;&nbsp; %u - insert current uid into filename 添加当前uid<br>&nbsp;&nbsp;&nbsp; %g - insert current gid into filename 添加当前gid<br>&nbsp;&nbsp;&nbsp; %s - insert signal that caused the coredump into the filename 添加导致产生core的信号<br>&nbsp;&nbsp;&nbsp; %t - insert UNIX time that the coredump occurred into filename 添加core文件生成时的unix时间<br>&nbsp;&nbsp;&nbsp; %h - insert hostname where the coredump happened into filename 添加主机名<br>&nbsp;&nbsp;&nbsp; %e - insert coredumping executable name into filename 添加命令名</p>
-<p>4.core文件的使用</p>
-<p>在core文件所在目录下键入:<br>gdb -c core &nbsp; （-c指定core文件）<br>它会启动GNU的调试器，来调试core文件，并且会显示生成此core文件的程序名，中止此程序的信号等等<br>如果你已经知道是由什么程序生成此core文件的，比如MyServer崩溃了生成core.12345，那么用此指令调试:<br>gdb -c core MyServer</p>
-<p>&nbsp;源：<a href="https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html">https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html</a>&nbsp;</p>
-<p>5.永久生效：<br>当前不重启生效：<br>你可以用下列方式来完成<br>sysctl -w kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
-<p>或</p>
-<p>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern</p>
-<p>这些操作一旦计算机重启，则会丢失，如果你想持久化这些操作，可以在 /etc/sysctl.conf文件中增加：<br>kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
-<p>加好后，如果你想不重启看看效果的话，则用下面的命令：<br>sysctl -p /etc/sysctl.conf</p>
-<h1 id="sysctl-p-etc-sysctl-conf"><a href="#sysctl-p-etc-sysctl-conf" class="headerlink" title="sysctl -p /etc/sysctl.conf"></a>sysctl -p /etc/sysctl.conf</h1><p>net.ipv4.ip_forward = 0</p>
-<p>net.ipv4.conf.default.rp_filter = 1</p>
-<p>net.ipv4.conf.default.accept_source_route = 0</p>
-<p>kernel.core_uses_pid = 1</p>
-<p>net.ipv4.tcp_syncookies = 1</p>
-<p>kernel.msgmnb = 65536</p>
-<p>kernel.msgmax = 65536</p>
-<p>net.ipv6.conf.lo.disable_ipv6 = 1</p>
-<p>net.ipv4.conf.all.promote_secondaries = 1</p>
-<p>net.ipv4.conf.default.promote_secondaries = 1</p>
-<p>net.ipv6.neigh.default.gc_thresh3 = 4096</p>
-<p>net.ipv4.neigh.default.gc_thresh3 = 4096</p>
-<p>kernel.softlockup_panic = 1</p>
-<p>kernel.sysrq = 1</p>
-<p>net.ipv6.conf.all.disable_ipv6 = 1</p>
-<p>net.ipv6.conf.default.disable_ipv6 = 1</p>
-<p>vm.overcommit_memory = 1</p>
-<p>kernel.numa_balancing = 0</p>
-<p>kernel.shmmax = 68719476736</p>
-<p>kernel.printk = 5</p>
-<p>kernel.core_pattern = /data/common/coredump/core-%e-%p-%t</p>
 <hr>
 ]]></content>
   </entry>
