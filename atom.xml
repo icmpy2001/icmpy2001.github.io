@@ -379,6 +379,29 @@
   </entry>
   
   <entry>
+    <title>Rsync同步文件</title>
+    <link href="https://blog.icmpy.net/2023/08/10/Rsync%E5%90%8C%E6%AD%A5%E6%96%87%E4%BB%B6/"/>
+    <id>https://blog.icmpy.net/2023/08/10/Rsync%E5%90%8C%E6%AD%A5%E6%96%87%E4%BB%B6/</id>
+    <published>2023-08-10T08:58:37.000Z</published>
+    <updated>2023-11-14T09:15:52.671Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;Rsync常用的一款同步文件工具。配置也很方便。&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;yum install sync -y或者apt-get install</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>zabbix 清理历史数据</title>
     <link href="https://blog.icmpy.net/2023/07/17/zabbix-%E6%B8%85%E7%90%86%E5%8E%86%E5%8F%B2%E6%95%B0%E6%8D%AE/"/>
     <id>https://blog.icmpy.net/2023/07/17/zabbix-%E6%B8%85%E7%90%86%E5%8E%86%E5%8F%B2%E6%95%B0%E6%8D%AE/</id>
@@ -436,27 +459,6 @@
     <summary type="html">&lt;p&gt; &amp;nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。&lt;/p&gt;
 &lt;p&gt;首先到官网：&lt;/p&gt;
 &lt;p&gt;&amp;nbsp;&lt;a</summary>
-        
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="https://blog.icmpy.net/2023/06/10/hello-world/"/>
-    <id>https://blog.icmpy.net/2023/06/10/hello-world/</id>
-    <published>2023-06-10T05:56:46.000Z</published>
-    <updated>2023-11-14T09:12:47.903Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt;</summary>
         
       
     

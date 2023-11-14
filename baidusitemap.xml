@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://blog.icmpy.net/2023/08/10/Rsync%E5%90%8C%E6%AD%A5%E6%96%87%E4%BB%B6/</loc>
+    <lastmod>2023-11-14</lastmod>
+  </url>
+  <url>
     <loc>https://blog.icmpy.net/2023/07/17/zabbix-%E6%B8%85%E7%90%86%E5%8E%86%E5%8F%B2%E6%95%B0%E6%8D%AE/</loc>
     <lastmod>2023-11-14</lastmod>
   </url>
