@@ -533,8 +533,8 @@
 <p>或</p>
 <p>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern</p>
 <p>这些操作一旦计算机重启，则会丢失，如果你想持久化这些操作，可以在 /etc/sysctl.conf文件中增加：<br>kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
-<p>加好后，如果你想不重启看看效果的话，则用下面的命令：<br>sysctl -p /etc/sysctl.conf</p>
-<h1 id="sysctl-p-etc-sysctl-conf"><a href="#sysctl-p-etc-sysctl-conf" class="headerlink" title="sysctl -p /etc/sysctl.conf"></a>sysctl -p /etc/sysctl.conf</h1><p>net.ipv4.ip_forward = 0</p>
+<p>加好后，如果你想不重启看看效果的话，则用下面的命令：<br>sysctl -p<br>vim /etc/sysctl.conf</p>
+<p>net.ipv4.ip_forward = 0</p>
 <p>net.ipv4.conf.default.rp_filter = 1</p>
 <p>net.ipv4.conf.default.accept_source_route = 0</p>
 <p>kernel.core_uses_pid = 1</p>
