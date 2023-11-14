@@ -5,9 +5,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="ELK安装调试及遇到的问题, 云上的小雨滴">
-    <meta name="description" content="前期准备：
-如果是es非root用户启动es，可以把*改成非root用户，例如 es soft nofile 65535修改 /etc/security/limits.conf
-在文件末尾中增加下面内容# 每个进程可以打开的文件数的限制* ">
+    <meta name="description" content="1.前期准备：如果是es非root用户启动es，可以把*改成非root用户，例如 es soft nofile 65535修改 /etc/security/limits.conf
+在文件末尾中增加下面内容# 每个进程可以打开的文件数的限制*">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -364,9 +363,13 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E7%82%B9%E6%BB%B4/">
+                                <span class="chip bg-color">点滴</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -422,16 +425,14 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>前期准备：</p>
-<p>如果是es非root用户启动es，可以把*改成非root用户，例如 es soft nofile 65535修改 /etc/security/limits.conf</p>
+                <h1 id="1-前期准备："><a href="#1-前期准备：" class="headerlink" title="1.前期准备："></a>1.前期准备：</h1><p>如果是es非root用户启动es，可以把*改成非root用户，例如 es soft nofile 65535修改 /etc/security/limits.conf</p>
 <p>在文件末尾中增加下面内容# 每个进程可以打开的文件数的限制* soft nofile 65536* hard nofile 65536</p>
 <p>修改/etc/security/limits.d/20-nproc.conf</p>
 <p>在文件末尾中增加下面内容# 每个进程可以打开的文件数的限制* soft nofile 65536* hard nofile 65536# 操作系统级别对每个用户创建的进程数的限制* hard nproc 4096# 注： * 带表 Linux 所有用户名称</p>
 <p>修改 /etc/sysctl.conf</p>
 <p>在文件中增加下面内容# 一个进程可以拥有的 VMA(虚拟内存区域)的数量,默认值为 65536</p>
 <p>vm.max_map_count=655360</p>
-<p>ELK组建安装：</p>
-<p>导入官网秘钥</p>
+<h1 id="2-ELK组建安装："><a href="#2-ELK组建安装：" class="headerlink" title="2.ELK组建安装："></a>2.ELK组建安装：</h1><p>导入官网秘钥</p>
 <p>rpm –import   <a target="_blank" rel="noopener" href="https://artifacts.elastic.co/GPG-KEY-elasticsearch">https://artifacts.elastic.co/GPG-KEY-elasticsearch</a></p>
 <p>vim  /etc/yum.repos.d/elasticsearch.repo</p>
 <p>[elasticsearch-7.x]</p>
@@ -580,9 +581,7 @@
 <p>/var/lib/filebeat/registry</p>
 <p>rm -rf /var/lib/filebeat/registry</p>
 <p>重新启动filebeat</p>
-<p>遇到的问题：</p>
-<p>1.安装遇到证书报错:</p>
-<p>Err:20 <a target="_blank" rel="noopener" href="https://packages.sury.org/php">https://packages.sury.org/php</a> buster Release                                  </p>
+<h1 id="3-遇到的问题："><a href="#3-遇到的问题：" class="headerlink" title="3.遇到的问题："></a>3.遇到的问题：</h1><h2 id="3-1-安装遇到证书报错"><a href="#3-1-安装遇到证书报错" class="headerlink" title="3.1.安装遇到证书报错:"></a>3.1.安装遇到证书报错:</h2><p>Err:20 <a target="_blank" rel="noopener" href="https://packages.sury.org/php">https://packages.sury.org/php</a> buster Release                                  </p>
 <p>  Certificate verification failed: The certificate is NOT trusted. The certificate chain uses expired certificate.  Could not handshake: Error in the certificate verification. [IP: 143.244.50.90 443]</p>
 <p>Get:21 <a target="_blank" rel="noopener" href="https://artifacts.elastic.co/packages/7.x/apt">https://artifacts.elastic.co/packages/7.x/apt</a> stable/main amd64 Packages [118 kB]</p>
 <p>Reading package lists… Done    </p>
@@ -592,13 +591,11 @@
 <p>root@test:/home/tools# apt-get install ca-certificates</p>
 <p>sudo apt-get install –reinstall ca-certificates</p>
 <p>sudo apt-get update</p>
-<p>2.Logstash 报错：</p>
-<p> Your settings are invalid. Reason: Path “/data/elk/logstash/dead_letter_queue” must be a writable directory. It is not writable.</p>
+<h2 id="3-2-Logstash-报错："><a href="#3-2-Logstash-报错：" class="headerlink" title="3.2.Logstash 报错："></a>3.2.Logstash 报错：</h2><p> Your settings are invalid. Reason: Path “/data/elk/logstash/dead_letter_queue” must be a writable directory. It is not writable.</p>
 <p>Your settings are invalid. Reason: Path “/data/elk/logstash/dead_letter_queue” must be a writable directory. It is not writable.</p>
 <p>An unexpected error occurred! {:error=&gt;java.nio.file.AccessDeniedException: /data/elk/logstash/.lock, :</p>
 <p>权限问题给权限；</p>
-<p>3.Logstash 报错：</p>
-<p>syslog listener died {:protocol=&gt;:tcp, :address=&gt;”0.0.0.0:5044”, :exceptinotallow=&gt;#&lt;Errno::EADDRINUSE: Address already in use - bind(2) for “0.0.0.0” port 5044&gt;, :backtrace=&gt;[“org/jruby/ext/socket/RubyTCPServer.java:123:in <code>initialize'", "org/jruby/RubyIO.java:876:in </code>new’”, “/usr/share/logstash/vendor/bundle/jruby/2.5.0/gems/logstash-input-syslog-3.6.0/lib/logstash/inputs/syslog.rb:208:in <code>tcp_listener'", "/usr/share/logstash/vendor/bundle/jruby/2.5.0/gems/logstash-input-syslog-3.6.0/lib/logstash/inputs/syslog.rb:172:in </code>server’”, “/usr/share/logstash/vendor/bundle/jruby/2.5.0/gems/logstash-input-syslog-3.6.0/lib/logstash/inputs/syslog.rb:156:in `block in run’”]}</p>
+<h2 id="3-3-Logstash-报错："><a href="#3-3-Logstash-报错：" class="headerlink" title="3.3.Logstash 报错："></a>3.3.Logstash 报错：</h2><p>syslog listener died {:protocol=&gt;:tcp, :address=&gt;”0.0.0.0:5044”, :exceptinotallow=&gt;#&lt;Errno::EADDRINUSE: Address already in use - bind(2) for “0.0.0.0” port 5044&gt;, :backtrace=&gt;[“org/jruby/ext/socket/RubyTCPServer.java:123:in <code>initialize'", "org/jruby/RubyIO.java:876:in </code>new’”, “/usr/share/logstash/vendor/bundle/jruby/2.5.0/gems/logstash-input-syslog-3.6.0/lib/logstash/inputs/syslog.rb:208:in <code>tcp_listener'", "/usr/share/logstash/vendor/bundle/jruby/2.5.0/gems/logstash-input-syslog-3.6.0/lib/logstash/inputs/syslog.rb:172:in </code>server’”, “/usr/share/logstash/vendor/bundle/jruby/2.5.0/gems/logstash-input-syslog-3.6.0/lib/logstash/inputs/syslog.rb:156:in `block in run’”]}</p>
 <p>是因为非ROOT用户启动的程序禁止监听1-1024的端口，要到修改服务启动的用户为ROOT，要到把监听端口修改为1024以上的端口即可。</p>
 <p>vim /etc/systemd/system/logstash.service</p>
 <p>[Service]</p>
@@ -620,7 +617,7 @@
 <p>“start_date_in_millis” : -1</p>
 <p>  }</p>
 <p>}</p>
-<p>4.配置缺失，有时候直接复制的比如input 只复制到nput少了i，或者格式错了等等；</p>
+<h2 id="3-4-配置缺失"><a href="#3-4-配置缺失" class="headerlink" title="3.4.配置缺失"></a>3.4.配置缺失</h2><p>有时候直接复制的比如input 只复制到nput少了i，或者格式错了等等；</p>
 <p>[ERROR][logstash.agent ] Failed to execute action {:actinotallow=&gt;LogStash::PipelineAction::Create/pipeline_id:main, :exceptinotallow=&gt;”LogStash::ConfigurationError”, :message=&gt;”Expected one of [ \t\r\n], "#", "input", "filter", "output" at line 1, column 1 (byte 1)”, :backtrace=&gt;[“/usr/share/logstash/logstash-core/lib/logstash/compiler.rb:32:in <code>compile_imperative'", "org/logstash/execution/AbstractPipelineExt.java:189:in </code>initialize’”, “org/logstash/execution/JavaBasePipelineExt.java:72:in <code>initialize'", "/usr/share/logstash/logstash-core/lib/logstash/java_pipeline.rb:48:in </code>initialize’”, “/usr/share/logstash/logstash-core/lib/logstash/pipeline_action/create.rb:52:in <code>execute'", "/usr/share/logstash/logstash-core/lib/logstash/agent.rb:392:in </code>block in converge_state’”]}</p>
 <p>测试：</p>
 <p>/usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/log.conf  -t</p>
@@ -628,8 +625,9 @@
 <p>OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.</p>
 <p>WARNING: Could not find logstash.yml which is typically located in $LS_HOME/config or /etc/logstash. You can specify the path using –path.settings. Continuing using the defaults</p>
 <p>Could not find log4j2 configuration at path /usr/share/logstash/config/log4j2.properties. Using default config which logs errors to the console</p>
-<p>等等可以看日志找出这些问题；</p>
-<h2 id="本次安装最大问题是乱码问题，记录一下点滴。"><a href="#本次安装最大问题是乱码问题，记录一下点滴。" class="headerlink" title="#####本次安装最大问题是乱码问题，记录一下点滴。"></a>#####本次安装最大问题是乱码问题，记录一下点滴。</h2>
+<p>等等可以看日志找出这些问题；本次安装遇到最大问题是乱码，做一次点滴笔记。</p>
+<hr>
+
                 
             </div>
             <hr/>
@@ -692,7 +690,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/%E7%82%B9%E6%BB%B4/">
+                                    <span class="chip bg-color">点滴</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -769,6 +771,14 @@
                     </div>
                 </div>
 
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E7%82%B9%E6%BB%B4/">
+                        <span class="chip bg-color">点滴</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>

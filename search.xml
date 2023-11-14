@@ -3,16 +3,14 @@
   <entry>
     <title>ELK安装调试及遇到的问题</title>
     <url>/2023/11/14/ELK%E5%AE%89%E8%A3%85%E8%B0%83%E8%AF%95%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>前期准备：</p>
-<p>如果是es非root用户启动es，可以把*改成非root用户，例如 es soft nofile 65535修改 /etc/security/limits.conf</p>
+    <content><![CDATA[<h1 id="1-前期准备："><a href="#1-前期准备：" class="headerlink" title="1.前期准备："></a>1.前期准备：</h1><p>如果是es非root用户启动es，可以把*改成非root用户，例如 es soft nofile 65535修改 /etc/security/limits.conf</p>
 <p>在文件末尾中增加下面内容# 每个进程可以打开的文件数的限制* soft nofile 65536* hard nofile 65536</p>
 <p>修改/etc/security/limits.d/20-nproc.conf</p>
 <p>在文件末尾中增加下面内容# 每个进程可以打开的文件数的限制* soft nofile 65536* hard nofile 65536# 操作系统级别对每个用户创建的进程数的限制* hard nproc 4096# 注： * 带表 Linux 所有用户名称</p>
 <p>修改 /etc/sysctl.conf</p>
 <p>在文件中增加下面内容# 一个进程可以拥有的 VMA(虚拟内存区域)的数量,默认值为 65536</p>
 <p>vm.max_map_count=655360</p>
-<p>ELK组建安装：</p>
-<p>导入官网秘钥</p>
+<h1 id="2-ELK组建安装："><a href="#2-ELK组建安装：" class="headerlink" title="2.ELK组建安装："></a>2.ELK组建安装：</h1><p>导入官网秘钥</p>
 <p>rpm –import   <a href="https://artifacts.elastic.co/GPG-KEY-elasticsearch">https://artifacts.elastic.co/GPG-KEY-elasticsearch</a></p>
 <p>vim  /etc/yum.repos.d/elasticsearch.repo</p>
 <p>[elasticsearch-7.x]</p>
@@ -161,9 +159,7 @@
 <p>/var/lib/filebeat/registry</p>
 <p>rm -rf /var/lib/filebeat/registry</p>
 <p>重新启动filebeat</p>
-<p>遇到的问题：</p>
-<p>1.安装遇到证书报错:</p>
-<p>Err:20 <a href="https://packages.sury.org/php">https://packages.sury.org/php</a> buster Release                                  </p>
+<h1 id="3-遇到的问题："><a href="#3-遇到的问题：" class="headerlink" title="3.遇到的问题："></a>3.遇到的问题：</h1><h2 id="3-1-安装遇到证书报错"><a href="#3-1-安装遇到证书报错" class="headerlink" title="3.1.安装遇到证书报错:"></a>3.1.安装遇到证书报错:</h2><p>Err:20 <a href="https://packages.sury.org/php">https://packages.sury.org/php</a> buster Release                                  </p>
 <p>  Certificate verification failed: The certificate is NOT trusted. The certificate chain uses expired certificate.  Could not handshake: Error in the certificate verification. [IP: 143.244.50.90 443]</p>
 <p>Get:21 <a href="https://artifacts.elastic.co/packages/7.x/apt">https://artifacts.elastic.co/packages/7.x/apt</a> stable/main amd64 Packages [118 kB]</p>
 <p>Reading package lists… Done    </p>
@@ -173,13 +169,11 @@
 <p>root@test:/home/tools# apt-get install ca-certificates</p>
 <p>sudo apt-get install –reinstall ca-certificates</p>
 <p>sudo apt-get update</p>
-<p>2.Logstash 报错：</p>
-<p> Your settings are invalid. Reason: Path “/data/elk/logstash/dead_letter_queue” must be a writable directory. It is not writable.</p>
+<h2 id="3-2-Logstash-报错："><a href="#3-2-Logstash-报错：" class="headerlink" title="3.2.Logstash 报错："></a>3.2.Logstash 报错：</h2><p> Your settings are invalid. Reason: Path “/data/elk/logstash/dead_letter_queue” must be a writable directory. It is not writable.</p>
 <p>Your settings are invalid. Reason: Path “/data/elk/logstash/dead_letter_queue” must be a writable directory. It is not writable.</p>
 <p>An unexpected error occurred! {:error=&gt;java.nio.file.AccessDeniedException: /data/elk/logstash/.lock, :</p>
 <p>权限问题给权限；</p>
-<p>3.Logstash 报错：</p>
-<p>syslog listener died {:protocol=&gt;:tcp, :address=&gt;”0.0.0.0:5044”, :exceptinotallow=&gt;#&lt;Errno::EADDRINUSE: Address already in use - bind(2) for “0.0.0.0” port 5044&gt;, :backtrace=&gt;[“org/jruby/ext/socket/RubyTCPServer.java:123:in <code>initialize'", "org/jruby/RubyIO.java:876:in </code>new’”, “/usr/share/logstash/vendor/bundle/jruby/2.5.0/gems/logstash-input-syslog-3.6.0/lib/logstash/inputs/syslog.rb:208:in <code>tcp_listener'", "/usr/share/logstash/vendor/bundle/jruby/2.5.0/gems/logstash-input-syslog-3.6.0/lib/logstash/inputs/syslog.rb:172:in </code>server’”, “/usr/share/logstash/vendor/bundle/jruby/2.5.0/gems/logstash-input-syslog-3.6.0/lib/logstash/inputs/syslog.rb:156:in `block in run’”]}</p>
+<h2 id="3-3-Logstash-报错："><a href="#3-3-Logstash-报错：" class="headerlink" title="3.3.Logstash 报错："></a>3.3.Logstash 报错：</h2><p>syslog listener died {:protocol=&gt;:tcp, :address=&gt;”0.0.0.0:5044”, :exceptinotallow=&gt;#&lt;Errno::EADDRINUSE: Address already in use - bind(2) for “0.0.0.0” port 5044&gt;, :backtrace=&gt;[“org/jruby/ext/socket/RubyTCPServer.java:123:in <code>initialize'", "org/jruby/RubyIO.java:876:in </code>new’”, “/usr/share/logstash/vendor/bundle/jruby/2.5.0/gems/logstash-input-syslog-3.6.0/lib/logstash/inputs/syslog.rb:208:in <code>tcp_listener'", "/usr/share/logstash/vendor/bundle/jruby/2.5.0/gems/logstash-input-syslog-3.6.0/lib/logstash/inputs/syslog.rb:172:in </code>server’”, “/usr/share/logstash/vendor/bundle/jruby/2.5.0/gems/logstash-input-syslog-3.6.0/lib/logstash/inputs/syslog.rb:156:in `block in run’”]}</p>
 <p>是因为非ROOT用户启动的程序禁止监听1-1024的端口，要到修改服务启动的用户为ROOT，要到把监听端口修改为1024以上的端口即可。</p>
 <p>vim /etc/systemd/system/logstash.service</p>
 <p>[Service]</p>
@@ -201,7 +195,7 @@
 <p>“start_date_in_millis” : -1</p>
 <p>  }</p>
 <p>}</p>
-<p>4.配置缺失，有时候直接复制的比如input 只复制到nput少了i，或者格式错了等等；</p>
+<h2 id="3-4-配置缺失"><a href="#3-4-配置缺失" class="headerlink" title="3.4.配置缺失"></a>3.4.配置缺失</h2><p>有时候直接复制的比如input 只复制到nput少了i，或者格式错了等等；</p>
 <p>[ERROR][logstash.agent ] Failed to execute action {:actinotallow=&gt;LogStash::PipelineAction::Create/pipeline_id:main, :exceptinotallow=&gt;”LogStash::ConfigurationError”, :message=&gt;”Expected one of [ \t\r\n], "#", "input", "filter", "output" at line 1, column 1 (byte 1)”, :backtrace=&gt;[“/usr/share/logstash/logstash-core/lib/logstash/compiler.rb:32:in <code>compile_imperative'", "org/logstash/execution/AbstractPipelineExt.java:189:in </code>initialize’”, “org/logstash/execution/JavaBasePipelineExt.java:72:in <code>initialize'", "/usr/share/logstash/logstash-core/lib/logstash/java_pipeline.rb:48:in </code>initialize’”, “/usr/share/logstash/logstash-core/lib/logstash/pipeline_action/create.rb:52:in <code>execute'", "/usr/share/logstash/logstash-core/lib/logstash/agent.rb:392:in </code>block in converge_state’”]}</p>
 <p>测试：</p>
 <p>/usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/log.conf  -t</p>
@@ -209,8 +203,12 @@
 <p>OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.</p>
 <p>WARNING: Could not find logstash.yml which is typically located in $LS_HOME/config or /etc/logstash. You can specify the path using –path.settings. Continuing using the defaults</p>
 <p>Could not find log4j2 configuration at path /usr/share/logstash/config/log4j2.properties. Using default config which logs errors to the console</p>
-<p>等等可以看日志找出这些问题；</p>
-<h2 id="本次安装最大问题是乱码问题，记录一下点滴。"><a href="#本次安装最大问题是乱码问题，记录一下点滴。" class="headerlink" title="#####本次安装最大问题是乱码问题，记录一下点滴。"></a>#####本次安装最大问题是乱码问题，记录一下点滴。</h2>]]></content>
+<p>等等可以看日志找出这些问题；本次安装遇到最大问题是乱码，做一次点滴笔记。</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
   </entry>
   <entry>
     <title>Rsync同步文件</title>
@@ -1085,38 +1083,6 @@
       </tags>
   </entry>
   <entry>
-    <title>ssh免密登录问题</title>
-    <url>/2023/11/13/ssh%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
-<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
-<p>服务器A需要免密码访问服务器B：</p>
-<ol>
-<li>在A上面生成公钥密钥，执行命令</li>
-</ol>
-<p>&nbsp;</p>
-<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
-<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
-<ol start="2">
-<li>将公钥id_rsa.pub拷贝到B机器上</li>
-</ol>
-<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
-<ol start="3">
-<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
-</ol>
-<p>cd&nbsp;/home/user/.ssh</p>
-<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
-<ol start="4">
-<li>设置 authorized_keys权限</li>
-</ol>
-<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
-<hr>
-]]></content>
-  </entry>
-  <entry>
     <title>php 安装redis，protobuf,mcryp扩展</title>
     <url>/2023/11/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/</url>
     <content><![CDATA[<p>&nbsp; 测试机上测试一些数据需要用到redis扩展，偷懒yum安装的php，以前yum install php-pecl-redis.x86_64可以安装扩展，这次找不到安装包，不折腾手动安装下。</p>
@@ -1236,56 +1202,34 @@
 ]]></content>
   </entry>
   <entry>
-    <title>zabbix 清理历史数据</title>
-    <url>/2023/11/14/zabbix-%E6%B8%85%E7%90%86%E5%8E%86%E5%8F%B2%E6%95%B0%E6%8D%AE/</url>
-    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
-<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
-<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
-<p>root@Testl]$ date +%s -d”20160929”</p>
-<p>1475078400</p>
-<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
-<p>Query OK, 36093 rows affected (43.64 sec)</p>
+    <title>ssh免密登录问题</title>
+    <url>/2023/11/13/ssh%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
+<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
+<p>服务器A需要免密码访问服务器B：</p>
+<ol>
+<li>在A上面生成公钥密钥，执行命令</li>
+</ol>
 <p>&nbsp;</p>
-<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
-<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history;</p>
-<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
-<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history_uint;</p>
-<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
-<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>漫长时间等待以后看下效果：</p>
-<p>原来数据：</p>
-<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
-<p>压缩中：</p>
-<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
-<p>find -size +50M -exec ls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
-<p>最终删两个表以后数据：</p>
-<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
-<p>完了以后，重启mysql，zabbix，nginx试试；</p>
-<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
+<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
+<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
+<ol start="2">
+<li>将公钥id_rsa.pub拷贝到B机器上</li>
+</ol>
+<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
+<ol start="3">
+<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
+</ol>
+<p>cd&nbsp;/home/user/.ssh</p>
+<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
+<ol start="4">
+<li>设置 authorized_keys权限</li>
+</ol>
+<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
 <hr>
 ]]></content>
   </entry>
@@ -1376,6 +1320,60 @@
 <p>tftp_anon_write –&gt; off</p>
 <p>tftp_home_dir –&gt; off</p>
 <h2 id="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"><a href="#vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。" class="headerlink" title="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"></a>vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。</h2>]]></content>
+  </entry>
+  <entry>
+    <title>zabbix 清理历史数据</title>
+    <url>/2023/11/14/zabbix-%E6%B8%85%E7%90%86%E5%8E%86%E5%8F%B2%E6%95%B0%E6%8D%AE/</url>
+    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
+<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
+<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
+<p>root@Testl]$ date +%s -d”20160929”</p>
+<p>1475078400</p>
+<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
+<p>Query OK, 36093 rows affected (43.64 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
+<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history;</p>
+<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
+<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history_uint;</p>
+<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
+<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>漫长时间等待以后看下效果：</p>
+<p>原来数据：</p>
+<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
+<p>压缩中：</p>
+<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
+<p>find -size +50M -exec ls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
+<p>最终删两个表以后数据：</p>
+<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
+<p>完了以后，重启mysql，zabbix，nginx试试；</p>
+<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
+<hr>
+]]></content>
   </entry>
   <entry>
     <title>zabbix3.0.1安装过程的小坑</title>
