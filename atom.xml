@@ -6,7 +6,7 @@
   <link href="https://blog.icmpy.net/atom.xml" rel="self"/>
   
   <link href="https://blog.icmpy.net/"/>
-  <updated>2023-11-14T04:22:30.665Z</updated>
+  <updated>2023-11-14T06:30:27.997Z</updated>
   <id>https://blog.icmpy.net/</id>
   
   <author>
@@ -15,6 +15,120 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>zabbix3.0.1安装过程的小坑</title>
+    <link href="https://blog.icmpy.net/2023/11/14/zabbix3-0-1%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B%E7%9A%84%E5%B0%8F%E5%9D%91/"/>
+    <id>https://blog.icmpy.net/2023/11/14/zabbix3-0-1%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B%E7%9A%84%E5%B0%8F%E5%9D%91/</id>
+    <published>2023-11-14T06:26:00.000Z</published>
+    <updated>2023-11-14T06:30:27.997Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;1.安装&lt;/p&gt;
+&lt;p&gt;首先lamp环境安装完毕，开始安装zabbix；&lt;/p&gt;
+&lt;p&gt;下载完毕zabbix-3.0.1.tar.gz，解压&lt;/p&gt;
+&lt;p&gt;cd &amp;nbsp;zabbix-3.0.1&lt;/p&gt;
+&lt;p&gt;./configure</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>zabbix 清理历史数据</title>
+    <link href="https://blog.icmpy.net/2023/11/14/zabbix-%E6%B8%85%E7%90%86%E5%8E%86%E5%8F%B2%E6%95%B0%E6%8D%AE/"/>
+    <id>https://blog.icmpy.net/2023/11/14/zabbix-%E6%B8%85%E7%90%86%E5%8E%86%E5%8F%B2%E6%95%B0%E6%8D%AE/</id>
+    <published>2023-11-14T06:24:59.000Z</published>
+    <updated>2023-11-14T06:25:26.117Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt; 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>nginx编译ssl模块</title>
+    <link href="https://blog.icmpy.net/2023/11/14/nginx%E7%BC%96%E8%AF%91ssl%E6%A8%A1%E5%9D%97/"/>
+    <id>https://blog.icmpy.net/2023/11/14/nginx%E7%BC%96%E8%AF%91ssl%E6%A8%A1%E5%9D%97/</id>
+    <published>2023-11-14T06:22:27.000Z</published>
+    <updated>2023-11-14T06:33:09.836Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;几个官网在一台服务器上面，其中一台是https的，增加一个官网以，重启nginx以后，https的网站直接报错，大意是ssl 在配置文件中unknow，但是这个https网站已经运行很久了，一时间有点郁闷，掉坑里了。&lt;/p&gt;
+&lt;p&gt;查看nginx信息</summary>
+        
+      
+    
+    
+    
+    
+    <category term="note" scheme="https://blog.icmpy.net/tags/note/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>centos7 改网卡名eth0</title>
+    <link href="https://blog.icmpy.net/2023/11/14/centos7-%E6%94%B9%E7%BD%91%E5%8D%A1%E5%90%8Deth0/"/>
+    <id>https://blog.icmpy.net/2023/11/14/centos7-%E6%94%B9%E7%BD%91%E5%8D%A1%E5%90%8Deth0/</id>
+    <published>2023-11-14T06:21:43.000Z</published>
+    <updated>2023-11-14T06:22:02.588Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;安装完Centos7系统，网卡命名跟之前发生了变化,不是eth0，虽然唯一好确定但是作为centos6.X过来的还是不好记，那就把网卡名字重新命名为eth0吧。&lt;/p&gt;
+&lt;p&gt;1.先编辑网卡的配置文件将里面的NAME DEVICE项修改为eth0，vim</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>centos U盘安装查找U盘设备名</title>
+    <link href="https://blog.icmpy.net/2023/11/14/centos-U%E7%9B%98%E5%AE%89%E8%A3%85%E6%9F%A5%E6%89%BEU%E7%9B%98%E8%AE%BE%E5%A4%87%E5%90%8D/"/>
+    <id>https://blog.icmpy.net/2023/11/14/centos-U%E7%9B%98%E5%AE%89%E8%A3%85%E6%9F%A5%E6%89%BEU%E7%9B%98%E8%AE%BE%E5%A4%87%E5%90%8D/</id>
+    <published>2023-11-14T06:21:07.000Z</published>
+    <updated>2023-11-14T06:21:26.254Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;制作启动盘：UltraISO.exe 打开镜像文件，–启动—写入硬盘镜像—默认—开始大概7分钟后就制作完成。</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>vsftp 锁定用户目录</title>
@@ -45,7 +159,7 @@
     <link href="https://blog.icmpy.net/2023/11/14/hexogit%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99/"/>
     <id>https://blog.icmpy.net/2023/11/14/hexogit%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99/</id>
     <published>2023-11-14T03:50:09.000Z</published>
-    <updated>2023-11-14T06:11:00.790Z</updated>
+    <updated>2023-11-14T06:15:33.253Z</updated>
     
     
       

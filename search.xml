@@ -159,6 +159,51 @@
 <h2 id="这样都可以访问，apache也可以实现，做个小笔记。"><a href="#这样都可以访问，apache也可以实现，做个小笔记。" class="headerlink" title="这样都可以访问，apache也可以实现，做个小笔记。"></a>这样都可以访问，apache也可以实现，做个小笔记。</h2>]]></content>
   </entry>
   <entry>
+    <title>centos U盘安装查找U盘设备名</title>
+    <url>/2023/11/14/centos-U%E7%9B%98%E5%AE%89%E8%A3%85%E6%9F%A5%E6%89%BEU%E7%9B%98%E8%AE%BE%E5%A4%87%E5%90%8D/</url>
+    <content><![CDATA[<p>制作启动盘：UltraISO.exe 打开镜像文件，–启动—写入硬盘镜像—默认—开始大概7分钟后就制作完成。 这样制作以后U盘原数据就没了当心。</p>
+<p>主板del进cmos选择Usb首启动，看到3个选项：安装，测试&amp;安装,trouble修复，移动到第一项Install&nbsp;centos7</p>
+<p>很多时候卡到这边过不去，<br>按tab键编辑路径，将&nbsp;<br>vmlinuz initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 quiet&nbsp;<br>改成&nbsp;<br>vmlinuz initrd=initrd.img&nbsp;linux dd&nbsp;quiet&nbsp;<br>回车&nbsp;<br>然后就能在显示出的列表中 查看你的硬盘信息，很清晰就能知道哪一个是你的U盘（一般显示的几个 格式为NTFS的都是你电脑自身的盘符，另外的一个就是你的U盘，记下你的U盘的盘符名字 我的就是sdb4）&nbsp;</p>
+<p>系统会显示当前块设备：</p>
+<p>Sda1&nbsp; nfs&nbsp;</p>
+<p>Sda2&nbsp; nfs</p>
+<p>Sdb4&nbsp;&nbsp; vfat</p>
+<p>类似这些提示ccontinue 或者r reflush刷下块设备</p>
+<p>起初u盘没刷出来，刷新出来的sdb4<br>重新启动电脑，重复上面的步骤 这一次 将&nbsp;<br>vmlinuz initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 quiet&nbsp;<br>改成&nbsp;<br>vmlinuz initrd=initrd.img&nbsp;inst.stage2=hd:/dev/sdb4（你自己的U盘盘符）&nbsp;quiet&nbsp;<br>回车 等待安装程序启动，进行CentOS的安装</p>
+<hr>
+]]></content>
+  </entry>
+  <entry>
+    <title>centos7 改网卡名eth0</title>
+    <url>/2023/11/14/centos7-%E6%94%B9%E7%BD%91%E5%8D%A1%E5%90%8Deth0/</url>
+    <content><![CDATA[<p>安装完Centos7系统，网卡命名跟之前发生了变化,不是eth0，虽然唯一好确定但是作为centos6.X过来的还是不好记，那就把网卡名字重新命名为eth0吧。</p>
+<p>1.先编辑网卡的配置文件将里面的NAME DEVICE项修改为eth0，vim /etc/sysconfig/network-scripts/ifcfg-enp2s0</p>
+<p>NAME=enp2s0 改为eth0</p>
+<p>DEVICE=enp2s0 改为 eth0</p>
+<p>2.cd /etc/sysconfig/network-scripts/ mv&nbsp;ifcfg-enp2s0 ifcfg-eth0</p>
+<p>3.禁用该可预测命名规则。对于这一点，你可以在启动时传递“net.ifnames=0 biosdevname=0 ”的内核参数。这是通过编辑/etc/default/grub并加入“net.ifnames=0 biosdevname=0 ”到GRUBCMDLINELINUX变量来实现的。</p>
+<p>&nbsp;vim /etc/default/grub&nbsp;添加红色部分；</p>
+<p>GRUB_CMDLINE_LINUX=”crashkernel=auto rd.lvm.lv=cl/root&nbsp;net.ifnames=0 biosdevname=0&nbsp;&nbsp;rd.lvm.lv=cl/swap rhgb quiet” &nbsp;</p>
+<p>4.运行命令grub2-mkconfig -o /boot/grub2/grub.cfg&nbsp;来重新生成GRUB配置并更新内核参数。</p>
+<p>&nbsp;grub2-mkconfig -o /boot/grub2/grub.cfg</p>
+<p>Generating grub configuration file …</p>
+<p>Found linux image: /boot/vmlinuz-3.10.0-514.el7.x86_64</p>
+<p>Found initrd image: /boot/initramfs-3.10.0-514.el7.x86_64.img</p>
+<p>Found linux image: /boot/vmlinuz-0-rescue-50b1d05808e44d898bef511aa2945d76</p>
+<p>Found initrd image: /boot/initramfs-0-rescue-50b1d05808e44d898bef511aa2945d76.img</p>
+<p>done</p>
+<p>5.重启机器改名eth0生效；</p>
+<p>PS:有时候重启以后会自动生成一个不是我们指定的ip，这个时候需要把网卡mac地址加进去 ifcfg-eth0中：HWADDR=30:5a:3a:e0:90:3c</p>
+<p>也可以修改</p>
+<p>cd /etc/udev/rules.d/</p>
+<p>vim&nbsp;70-persistent-net.rules</p>
+<p>注释掉原来的，添加新或者修改：</p>
+<p>SUBSYSTEM==”net”, ACTION==”add”, DRIVERS==”?<em>“, ATTR{address}==”00:0c:29:1f:1a:f5”, KERNEL==”eth</em>“, NAME=”eth0”</p>
+<p>修改为：</p>
+<p>SUBSYSTEM==”net”, ACTION==”add”, DRIVERS==”?<em>“, ATTR{address}==”30:5a:3a:e0:90:3c”, KERNEL==”eth</em>“, NAME=”eth0”</p>
+<h2 id="重启机器试试"><a href="#重启机器试试" class="headerlink" title="重启机器试试~"></a>重启机器试试~</h2>]]></content>
+  </entry>
+  <entry>
     <title>coredump 路径格式</title>
     <url>/2023/11/13/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/</url>
     <content><![CDATA[<p>Coredump</p>
@@ -447,7 +492,7 @@
 <p>也可以做好多优化；这里只说实现web功能</p>
 <p>nginx一般在/etc/nginx/conf.d/ 配置站点conf文件，tengine在/etc/nginx/sites-enabled/配置，看个人喜好。</p>
 <p>vim mybog.conf 基本配置如下：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">server {</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name blog.icmpy.net;</span><br><span class="line">    return 301 blog.icmpy.net$request_uri;</span><br><span class="line">}</span><br><span class="line">server {</span><br><span class="line">   #ssl on;</span><br><span class="line">    listen 443 ssl;</span><br><span class="line">    server_name blog.icmpy.net;</span><br><span class="line">    root /data/myblog; # 根目录为web</span><br><span class="line">    index index.php index index.html index.htm;</span><br><span class="line">    ssl_certificate /etc/nginx/ssl/blog.icmpy.net.pem;</span><br><span class="line">    ssl_certificate_key /etc/nginx/ssl/blog.icmpy.net.key;</span><br><span class="line">   ssl_session_timeout  5m;</span><br><span class="line">    ssl_certificate /etc/nginx/ssl/blog.icmpy.net.pem;</span><br><span class="line">    ssl_certificate_key /etc/nginx/ssl/blog.icmpy.net.key;</span><br><span class="line"></span><br><span class="line">    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;</span><br><span class="line">        ssl_prefer_server_ciphers  on;</span><br><span class="line">    # Log files for Debug</span><br><span class="line">    error_log  /var/log/nginx/blog_error.log;</span><br><span class="line">    access_log /var/log/nginx/blog_access.log;</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">server {</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name blog.icmpy.net;</span><br><span class="line">    return 301 blog.icmpy.net$request_uri;</span><br><span class="line">}</span><br><span class="line">server {</span><br><span class="line">    listen 443 ssl;</span><br><span class="line">    server_name blog.icmpy.net;</span><br><span class="line">    root /data/myblog; # 根目录为web</span><br><span class="line">    index index.php index index.html index.htm;</span><br><span class="line">    ssl_certificate /etc/nginx/ssl/blog.icmpy.net.pem;</span><br><span class="line">    ssl_certificate_key /etc/nginx/ssl/blog.icmpy.net.key;</span><br><span class="line">   ssl_session_timeout  5m;</span><br><span class="line">    ssl_certificate /etc/nginx/ssl/blog.icmpy.net.pem;</span><br><span class="line">    ssl_certificate_key /etc/nginx/ssl/blog.icmpy.net.key;</span><br><span class="line"></span><br><span class="line">    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;</span><br><span class="line">        ssl_prefer_server_ciphers  on;</span><br><span class="line">    # Log files for Debug</span><br><span class="line">    error_log  /var/log/nginx/blog_error.log;</span><br><span class="line">    access_log /var/log/nginx/blog_access.log;</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
 <p>由于做了ssl证书，80做了个跳转到443上面，域名需要到平台做解析，A记录到自己的服务器，如果流量大的话可以做cdn，Cname到平台给的记录值，ssl证书申请，主流云平台都可以免费申请，填写一些资料以后很快就可以签发证书，选择对应的证书上传即可。</p>
 ]]></content>
@@ -705,6 +750,37 @@
 ]]></content>
   </entry>
   <entry>
+    <title>nginx编译ssl模块</title>
+    <url>/2023/11/14/nginx%E7%BC%96%E8%AF%91ssl%E6%A8%A1%E5%9D%97/</url>
+    <content><![CDATA[<p>几个官网在一台服务器上面，其中一台是https的，增加一个官网以，重启nginx以后，https的网站直接报错，大意是ssl 在配置文件中unknow，但是这个https网站已经运行很久了，一时间有点郁闷，掉坑里了。</p>
+<p>查看nginx信息 /usr/local/nginx/sbin/nginx -V显示不支持ssl，那就好办，重新编译下ssl，但是线上业务跑着，难免有点担心，在测试机上跑了一次，正常的，才敢到线上操作，大致如此从网上找的如下：</p>
+<p>进入nginx源码目录：</p>
+<p>cd &nbsp;nginx-1.6.2</p>
+<p>./configure –prefix=/usr/local/nginx –user=www –group=www &nbsp;–with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
+<p>只添加ssl功能模块，有别的需求继续加上；</p>
+<p>运行完以后记得是make，make，make不是make &amp; make install ，install就覆盖安装了，千万搞清楚~</p>
+<p>make以后在当前目录生成odjs目录，下面就是新的nginx；</p>
+<p>剩下就好办，备份原来的nginx，把新生成的nginx替换原来的，</p>
+<p>备份旧的nginx程序</p>
+<p>cp /usr/local/nginx/sbin/nginx/usr/local/nginx/sbin/nginx.bak</p>
+<p>把新的nginx程序覆盖旧的</p>
+<p>cp objs/nginx /usr/local/nginx/sbin/nginx</p>
+<p>测试新的nginx程序是否正确</p>
+<p>/usr/local/nginx/sbin/nginx -t</p>
+<p>nginx: theconfiguration file /usr/local/nginx/conf/nginx.conf syntax is ok</p>
+<p>nginx:configuration file /usr/local/nginx/conf/nginx.conf test issuccessful</p>
+<p>平滑重启nginx</p>
+<p>/usr/local/nginx/sbin/nginx -s reload</p>
+<p>查看ngixn版本极其编译参数</p>
+<p>/usr/local/nginx/sbin/nginx -V</p>
+<p>configure arguments: –prefix=/data/app/nginx –user=www –group=www –with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
+<h6 id="权作一个跳坑记录。"><a href="#权作一个跳坑记录。" class="headerlink" title="权作一个跳坑记录。"></a>权作一个跳坑记录。</h6><hr>
+]]></content>
+      <tags>
+        <tag>note</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>php 安装redis，protobuf,mcryp扩展</title>
     <url>/2023/11/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/</url>
     <content><![CDATA[<p>&nbsp; 测试机上测试一些数据需要用到redis扩展，偷懒yum安装的php，以前yum install php-pecl-redis.x86_64可以安装扩展，这次找不到安装包，不折腾手动安装下。</p>
@@ -942,5 +1018,194 @@
 <p>tftp_anon_write –&gt; off</p>
 <p>tftp_home_dir –&gt; off</p>
 <h2 id="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"><a href="#vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。" class="headerlink" title="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"></a>vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。</h2>]]></content>
+  </entry>
+  <entry>
+    <title>zabbix 清理历史数据</title>
+    <url>/2023/11/14/zabbix-%E6%B8%85%E7%90%86%E5%8E%86%E5%8F%B2%E6%95%B0%E6%8D%AE/</url>
+    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
+<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
+<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
+<p>root@Testl]$ date +%s -d”20160929”</p>
+<p>1475078400</p>
+<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
+<p>Query OK, 36093 rows affected (43.64 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
+<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history;</p>
+<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
+<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history_uint;</p>
+<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
+<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>漫长时间等待以后看下效果：</p>
+<p>原来数据：</p>
+<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
+<p>压缩中：</p>
+<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
+<p>find -size +50M -exec ls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
+<p>最终删两个表以后数据：</p>
+<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
+<p>完了以后，重启mysql，zabbix，nginx试试；</p>
+<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
+<hr>
+]]></content>
+  </entry>
+  <entry>
+    <title>zabbix3.0.1安装过程的小坑</title>
+    <url>/2023/11/14/zabbix3-0-1%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B%E7%9A%84%E5%B0%8F%E5%9D%91/</url>
+    <content><![CDATA[<p>1.安装</p>
+<p>首先lamp环境安装完毕，开始安装zabbix；</p>
+<p>下载完毕zabbix-3.0.1.tar.gz，解压</p>
+<p>cd &nbsp;zabbix-3.0.1</p>
+<p>./configure –prefix=/usr/local/zabbix&nbsp; –enable-server \</p>
+<p>–enable-proxy –enable-agent –enable-ipv6–with-mysql=/usr/local/mysql/bin/mysql_config –with-net-snmp \</p>
+<p>–with-libcurl –with-openipmi–with-unixodbc –with-ldap –with-ssh2 –enable-java –enable-ipv6–enable-proxy</p>
+<p>自行编译但是会报错：</p>
+<p>Unixodbc没找到</p>
+<p>mysql_config</p>
+<p>configure: error: SSH2 library not found</p>
+<p>yum install php-pecl-ssh2.x86_64 libssh2-devel.x86_64</p>
+<p>yum install net-snmp-devel</p>
+<p>yum -y install unixODBC*</p>
+<p>yum install openldap openldap-devel</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; yumlist openldap</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; yumlist openldap-devel</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>checking for SSH2 support… yes</p>
+<p>checking for OPENIPMI support… no</p>
+<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h</p>
+<p>&nbsp;</p>
+<p>&nbsp;<a href="https://centos.pkgs.org/6/centos-x86_64/OpenIPMI-2.0.16-14.el6.x86_64.rpm.html">https://centos.pkgs.org/6/centos-x86_64/OpenIPMI-2.0.16-14.el6.x86_64.rpm.html</a></p>
+<p>rpm -ivh OpenIPMI-2.0.16-14.el6.x86_64.rpm</p>
+<p>&nbsp;<br>vhOpenIPMI-de<br>pum install OpenIPMI-devel</p>
+<p>&nbsp;</p>
+<p>报错checking for OPENIPMI support… no</p>
+<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h</p>
+<p>需要安装OpenIPMI和OpenIPMI-devel</p>
+<p>&nbsp;</p>
+<p>Yum安装OpenIPMI并下载OpenIPMI-devel-2.0.16-14.el6.x86_64.rpm</p>
+<p> yum install OpenIPMI</p>
+<p> rpm -ivhOpenIPMI-devel-2.0.16-14.el6.x86_64.rpm</p>
+<p>报错 error: Failed dependencies:</p>
+<p>pkgconfig(ncurses) is needed byOpenIPMI-devel-2.0.16-14.el6.x86_64</p>
+<p> yum install ncurses-devel</p>
+<p> rpm -ivhOpenIPMI-devel-2.0.16-14.el6.x86_64.rpm</p>
+<p>onfigure: error: Invalid OPENIPMI directory- unable to find ipmiif.h</p>
+<p>需要安装libssh2-devel</p>
+<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h</p>
+<p>需要安装OpenIPMI-devel</p>
+<p>hecking for SSH2 support… yes</p>
+<p>checking for OPENIPMI support… yes</p>
+<p>checking for javac… no</p>
+<p>configure: error: Unable to find”javac” executable in path</p>
+<p>configure: error: Jabber library notfound&nbsp; #yum install iksemel-devel即可，</p>
+<p>&nbsp;configure: error: LIBXML2 library not found&nbsp;&nbsp;&nbsp;</p>
+<p>#yum install libxml2-devel&nbsp;</p>
+<p>&nbsp;configure: error: unixODBC library notfound&nbsp;&nbsp;&nbsp;</p>
+<p>#yum install unixODBC-devel&nbsp;&nbsp;</p>
+<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h&nbsp;&nbsp;&nbsp;</p>
+<p>#yum install OpenIPMI-devel&nbsp;&nbsp;</p>
+<p>configure: error: Unable to find”javac” executable in path&nbsp;&nbsp;&nbsp;</p>
+<p>#yum install java*&nbsp;&nbsp;&nbsp; 具体什么包没找，直接通配算逑，生产环境可去掉–enable-java选项</p>
+<p>&nbsp;configure: error: Curl library not found&nbsp;</p>
+<p>&nbsp;#yum install curl-devel</p>
+<p>&nbsp;</p>
+<p>make &amp;&amp; make install</p>
+<ol start="2">
+<li>导数据库顺序schema-p_w_picpath-data,</li>
+</ol>
+<p>添加系统软连接：</p>
+<p>[<a href="mailto:root@vm_1_11zabbix-3.0.1">root@vm_1_11zabbix-3.0.1</a>]# ln -s /usr/local/zabbix/sbin/* /usr/local/sbin/</p>
+<p>[root@vm_1_11 zabbix-3.0.1]# ln -s /usr/local/zabbix/bin/* /usr/local/bin/</p>
+<p>添加zabbix服务对应的端口：</p>
+<p>[root@vm_1_11 mysql]# vim /etc/services</p>
+<p>在文件末尾添加：</p>
+<h1 id="Zabbix"><a href="#Zabbix" class="headerlink" title="Zabbix"></a>Zabbix</h1><p>zabbix-agent 10050/tcp # Zabbix Agent</p>
+<p>zabbix-agent 10050/udp # Zabbix Agent</p>
+<p>zabbix-trapper 10051/tcp # Zabbix Trapper</p>
+<p>zabbix-trapper 10051/udp # Zabbix Trapper</p>
+<p>修改zabbix配置文件：</p>
+<p>[root@vm_1_11 tools]# vim /usr/local/zabbix/etc/zabbix_server.conf</p>
+<p>修改以下几处：</p>
+<p>DBName=zabbix</p>
+<p>DBUser=zabbix</p>
+<p>DBPassword=zabbix</p>
+<p>AlertScriptsPath==/usr/local/zabbix/share/zabbix/alertscripts &nbsp;#zabbix运行脚本存放目录</p>
+<p>DBPort=3306</p>
+<p>&nbsp;vim /usr/local/zabbix/etc/zabbix_agentd.conf</p>
+<p>Include=/usr/local/zabbix/etc/zabbix_agentd.conf.d/</p>
+<p>UnsafeUserParameters=1 &nbsp;#启用自定义key</p>
+<p>添加开机启动脚本：</p>
+<p>[root@vm_1_11 tools]# cp /usr/local/src/zabbix-3.0.3/misc/init.d/fedora/core/zabbix_server /etc/rc.d/init.d/zabbix_server</p>
+<p>客户端：</p>
+<p>[root@vm_1_11 tools]# cp /usr/local/src/zabbix-3.0.3/misc/init.d/fedora/core/zabbix_agentd /etc/rc.d/init.d/zabbix_agentd</p>
+<p>[root@vm_1_11 tools]# chmod a+x /etc/rc.d/init.d/zabbix_*</p>
+<p>[root@vm_1_11 tools]# chkconfig zabbix_server on</p>
+<p>[root@vm_1_11 tools]# chkconfig zabbix_agentd on</p>
+<p>修改zabbix开机启动脚本中的zabbix安装目录：</p>
+<p>[root@vm_1_11 tools]# vim /etc/rc.d/init.d/zabbix_server</p>
+<p>修改以下内容：</p>
+<p>BASEDIR=/usr/local/zabbix/</p>
+<p>[root@vm_1_11 tools]# vim /etc/rc.d/init.d/zabbix_agentd</p>
+<p>修改以下内容：</p>
+<p>BASEDIR=/usr/local/zabbix/</p>
+<p>复制zabbix的web站点文件到nginx：</p>
+<p>[root@vm_1_11 tools]# cp -r /usr/local/src/zabbix-3.0.3/frontends/php/* /usr/local/nginx/html/zabbix/</p>
+<p>启动：</p>
+<p>[root@vm_1_11 tools]# systemctl daemon-reload</p>
+<p>[root@vm_1_11 tools]# service zabbix_server start</p>
+<p>[root@vm_1_11 tools]# service zabbix_agentd start</p>
+<p>&nbsp;查看进程：ps -eaf|grep zabbix_server</p>
+<p>zabbix_server [7212]: cannot run as root!</p>
+<p>添加zabbix用户；</p>
+<p>在zabbix/setup/php 页面会检测信息可能会报错要都ok才能下一步哦，</p>
+<p>按照报错信息调试vim /etc/php.ini</p>
+<p>查找如下参数并修改为：</p>
+<hr>
+<p>post_max_size = 16M</p>
+<p>max_execution_time = 300</p>
+<p>max_input_time = 300</p>
+<p><img src="/../images/20231114-1.png"></p>
+<p>/etc/php.ini修改以后还是这样，可能php.ini路径修改了，</p>
+<p>本例中就是到</p>
+<p>-rw-r–r– 1 root root 73930 Mar 27 18:19php.ini</p>
+<p>-rw-r–r– 1 root root 73928 Mar 27 18:18php.ini_0327</p>
+<p>[root@VM_54_42_centos etc]# pwd</p>
+<p>/usr/local/php/etc</p>
+<p>vim /usr/local/nginx/html/zabbix/include/locales.inc.php</p>
+<p>修改中文字符；chinese–true</p>
+<p>邮件报警：在zabbix mkdir&nbsp;alertscripts vim send_email.sh</p>
+<p>#!/bin/sh</p>
+<p>#export.UTF-8</p>
+<p>FILE=/var/log/zabbix/mailtmp.txt</p>
+<p>echo “$3” &gt;$FILE</p>
+<p>dos2unix -k $FILE</p>
+<p>/bin/mail -s “$2” $1 &lt; $FILE</p>
+<p>zabbix-管理–示警媒介类型–定制脚本-sendmail脚本，–添加联系人邮件。。</p>
+]]></content>
   </entry>
 </search>
