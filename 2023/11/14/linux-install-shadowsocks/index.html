@@ -5,15 +5,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="linux install shadowsocks, 云上的小雨滴">
-    <meta name="description" content="
-安装Python和pip
-
-sudo apt-get update
+    <meta name="description" content="1. 安装Python和pipsudo apt-get update
 sudo apt-get install python-pip
-
-安装Shadowsocks
-
-sudo pip install shadowsocks3. 配置Shad">
+2. 安装Shadowsockssudo pip install shadowsocks
+3. 配置Sha">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -402,7 +397,7 @@ sudo pip install shadowsocks3. 配置Shad">
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    172
+                    175
                 </div>
                 
 
@@ -432,22 +427,14 @@ sudo pip install shadowsocks3. 配置Shad">
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <ol>
-<li>安装Python和pip</li>
-</ol>
-<p>sudo apt-get update</p>
+                <h1 id="1-安装Python和pip"><a href="#1-安装Python和pip" class="headerlink" title="1. 安装Python和pip"></a>1. 安装Python和pip</h1><p>sudo apt-get update</p>
 <p>sudo apt-get install python-pip</p>
-<ol start="2">
-<li>安装Shadowsocks</li>
-</ol>
-<p>sudo pip install shadowsocks<br>3. 配置Shadowsocks<br>cat &gt;&gt; /etc/shadowsocks.json &lt;&lt;EOF<br>{</p>
+<h1 id="2-安装Shadowsocks"><a href="#2-安装Shadowsocks" class="headerlink" title="2. 安装Shadowsocks"></a>2. 安装Shadowsocks</h1><p>sudo pip install shadowsocks</p>
+<h1 id="3-配置Shadowsocks"><a href="#3-配置Shadowsocks" class="headerlink" title="3. 配置Shadowsocks"></a>3. 配置Shadowsocks</h1><p>cat &gt;&gt; /etc/shadowsocks.json &lt;&lt;EOF<br>{</p>
 <p>“server” : “ server ip”,<br>“server_port” : server port,<br>“local_port” : 1080,<br>“password” : “passwd”,<br>“timeout” : 200,<br>“method” : “aes-256-cfb”<br>}<br>EOF<br>参数的解释:<br>server：远程服务器IP地址<br>server_port：远程服务器端口号<br>local_port：本地端口号，默认为1080<br>password：远程服务器密码，自定义<br>timeout：超时时间，默认为300秒<br>method：加密方式，推荐aes-256-cfb</p>
-<ol start="4">
-<li>启动Shadowsocks</li>
-</ol>
-<p>在命令行中输入：</p>
-<p>ssserver -c /etc/shadowsocks.json<br>5.添加系统服务</p>
-<p>cat &gt;&gt;/etc/systemd/system/shadows.service  &lt;&lt;EOF<br>[Unit]<br>Description=shadows server<br>[Install]<br>WantedBy=multi-user.target<br>[Service]<br>User=root<br>Group=root<br>ExecStart=/usr/bin/ssserver -c /etc/shadowsocks.json start<br>Restart=on-failure<br>EOF</p>
+<h1 id="4-启动Shadowsocks"><a href="#4-启动Shadowsocks" class="headerlink" title="4. 启动Shadowsocks"></a>4. 启动Shadowsocks</h1><p>在命令行中输入：</p>
+<p>ssserver -c /etc/shadowsocks.json</p>
+<h1 id="5-添加系统服务"><a href="#5-添加系统服务" class="headerlink" title="5.添加系统服务"></a>5.添加系统服务</h1><p>cat &gt;&gt;/etc/systemd/system/shadows.service  &lt;&lt;EOF<br>[Unit]<br>Description=shadows server<br>[Install]<br>WantedBy=multi-user.target<br>[Service]<br>User=root<br>Group=root<br>ExecStart=/usr/bin/ssserver -c /etc/shadowsocks.json start<br>Restart=on-failure<br>EOF</p>
 <p>systemctl restart shadows.service<br>systemctl enable shadows.service</p>
 
                 
@@ -847,53 +834,33 @@ sudo pip install shadowsocks3. 配置Shad">
             <br>
             
         </div>
-        <div class="col s12 m4 l4 social-link social-statis"><% if (theme.socialLink.github) { %>
-    <a href="<%= theme.socialLink.github %>" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://icmpy2001.github.io" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
         <i class="fab fa-github"></i>
     </a>
-<% } %>
 
-<% if (theme.socialLink.email) { %>
-    <a href="mailto:<%= theme.socialLink.email %>" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+
+
+    <a href="mailto:cmpy2001@163.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
         <i class="fas fa-envelope-open"></i>
     </a>
-<% } %>
 
-<% if (theme.socialLink.facebook) { %>
-    <a href="<%= theme.socialLink.facebook %>" class="tooltipped" target="_blank" data-tooltip="关注我的Facebook: <%= theme.socialLink.facebook %>" data-position="top" data-delay="50">
-        <i class="fab fa-facebook-f"></i>
-    </a>
-<% } %>
 
-<% if (theme.socialLink.twitter) { %>
-    <a href="<%= theme.socialLink.twitter %>" class="tooltipped" target="_blank" data-tooltip="关注我的Twitter: <%= theme.socialLink.twitter %>" data-position="top" data-delay="50">
-        <i class="fab fa-twitter"></i>
-    </a>
-<% } %>
 
-<% if (theme.socialLink.qq) { %>
-    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=<%= theme.socialLink.qq %>" class="tooltipped" target="_blank" data-tooltip="QQ联系我: <%= theme.socialLink.qq %>" data-position="top" data-delay="50">
-        <i class="fab fa-qq"></i>
-    </a>
-<% } %>
 
-<% if (theme.socialLink.weibo) { %>
-    <a href="<%= theme.socialLink.weibo %>" class="tooltipped" target="_blank" data-tooltip="关注我的微博: <%= theme.socialLink.weibo %>" data-position="top" data-delay="50">
-        <i class="fab fa-weibo"></i>
-    </a>
-<% } %>
 
-<% if (theme.socialLink.zhihu) { %>
-    <a href="<%= theme.socialLink.zhihu %>" class="tooltipped" target="_blank" data-tooltip="关注我的知乎: <%= theme.socialLink.zhihu %>" data-position="top" data-delay="50">
-        <i class="fab fa-zhihu1">知</i>
-    </a>
-<% } %>
 
-<% if (theme.socialLink.rss) { %>
-    <a href="<%- url_for('/atom.xml') %>" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
         <i class="fas fa-rss"></i>
     </a>
-<% } %>
+
 </div>
     </div>
 </footer>

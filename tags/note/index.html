@@ -399,19 +399,10 @@
             <div class="tag-chips">
                 
                 
-                <a href="/tags/%E7%82%B9%E6%BB%B4/" title="点滴: 1">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-default "
-                            data-tagname="点滴" style="background-color: #F9EBEA;">点滴
-                        <span class="tag-length">1</span>
-                    </span>
-                </a>
-                
-                
                 <a href="/tags/%E9%9A%8F%E7%AC%94/" title="随笔: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            data-tagname="随笔" style="background-color: #F5EEF8;">随笔
+                            data-tagname="随笔" style="background-color: #F9EBEA;">随笔
                         <span class="tag-length">1</span>
                     </span>
                 </a>
@@ -420,7 +411,16 @@
                 <a href="/tags/note/" title="note: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-active "
-                            data-tagname="note" style="background-color: #D5F5E3;">note
+                            data-tagname="note" style="background-color: #F5EEF8;">note
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/%E7%82%B9%E6%BB%B4/" title="点滴: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="点滴" style="background-color: #D5F5E3;">点滴
                         <span class="tag-length">1</span>
                     </span>
                 </a>
@@ -566,53 +566,33 @@
             <br>
             
         </div>
-        <div class="col s12 m4 l4 social-link social-statis"><% if (theme.socialLink.github) { %>
-    <a href="<%= theme.socialLink.github %>" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://icmpy2001.github.io" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
         <i class="fab fa-github"></i>
     </a>
-<% } %>
 
-<% if (theme.socialLink.email) { %>
-    <a href="mailto:<%= theme.socialLink.email %>" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+
+
+    <a href="mailto:cmpy2001@163.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
         <i class="fas fa-envelope-open"></i>
     </a>
-<% } %>
 
-<% if (theme.socialLink.facebook) { %>
-    <a href="<%= theme.socialLink.facebook %>" class="tooltipped" target="_blank" data-tooltip="关注我的Facebook: <%= theme.socialLink.facebook %>" data-position="top" data-delay="50">
-        <i class="fab fa-facebook-f"></i>
-    </a>
-<% } %>
 
-<% if (theme.socialLink.twitter) { %>
-    <a href="<%= theme.socialLink.twitter %>" class="tooltipped" target="_blank" data-tooltip="关注我的Twitter: <%= theme.socialLink.twitter %>" data-position="top" data-delay="50">
-        <i class="fab fa-twitter"></i>
-    </a>
-<% } %>
 
-<% if (theme.socialLink.qq) { %>
-    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=<%= theme.socialLink.qq %>" class="tooltipped" target="_blank" data-tooltip="QQ联系我: <%= theme.socialLink.qq %>" data-position="top" data-delay="50">
-        <i class="fab fa-qq"></i>
-    </a>
-<% } %>
 
-<% if (theme.socialLink.weibo) { %>
-    <a href="<%= theme.socialLink.weibo %>" class="tooltipped" target="_blank" data-tooltip="关注我的微博: <%= theme.socialLink.weibo %>" data-position="top" data-delay="50">
-        <i class="fab fa-weibo"></i>
-    </a>
-<% } %>
 
-<% if (theme.socialLink.zhihu) { %>
-    <a href="<%= theme.socialLink.zhihu %>" class="tooltipped" target="_blank" data-tooltip="关注我的知乎: <%= theme.socialLink.zhihu %>" data-position="top" data-delay="50">
-        <i class="fab fa-zhihu1">知</i>
-    </a>
-<% } %>
 
-<% if (theme.socialLink.rss) { %>
-    <a href="<%- url_for('/atom.xml') %>" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
         <i class="fas fa-rss"></i>
     </a>
-<% } %>
+
 </div>
     </div>
 </footer>
