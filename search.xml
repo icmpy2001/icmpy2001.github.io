@@ -367,7 +367,6 @@
 </ol>
 <p>sudo yum install -y gcc-c++ make</p>
 <p>相关库</p>
-<p><a href="javascript:void(0);"><img src="file:///C:\Users\ADMINI~1\AppData\Local\Temp\ksohtml17780\wps1.png" alt="img"></a></p>
 <ol>
 <li>更新系统：</li>
 </ol>
@@ -378,7 +377,6 @@
 <p>scl enable devtoolset-7 bash</p>
 <p>sudo yum install centos-release-scl</p>
 <p>sudo yum install devtoolset-7-gcc devtoolset-7-gcc-c++ devtoolset-7-libstdc++-devel</p>
-<p><a href="javascript:void(0);"><img src="file:///C:\Users\ADMINI~1\AppData\Local\Temp\ksohtml17780\wps2.png" alt="img"></a></p>
 <ol start="3">
 <li>在CentOS上，您可以使用Node Version Manager（NVM）来安装和管理多个Node.js版本。首先，在CentOS上安装NVM。使用以下命令从NVM的GitHub仓库获取安装脚本：</li>
 </ol>
