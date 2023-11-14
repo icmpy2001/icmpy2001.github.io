@@ -6,7 +6,7 @@
   <link href="https://blog.icmpy.net/atom.xml" rel="self"/>
   
   <link href="https://blog.icmpy.net/"/>
-  <updated>2023-11-14T08:55:15.919Z</updated>
+  <updated>2023-11-14T08:42:03.000Z</updated>
   <id>https://blog.icmpy.net/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://blog.icmpy.net/2023/11/14/ELK%E5%AE%89%E8%A3%85%E8%B0%83%E8%AF%95%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/"/>
     <id>https://blog.icmpy.net/2023/11/14/ELK%E5%AE%89%E8%A3%85%E8%B0%83%E8%AF%95%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</id>
     <published>2023-11-14T08:13:28.000Z</published>
-    <updated>2023-11-14T08:55:15.919Z</updated>
+    <updated>2023-11-14T08:42:03.000Z</updated>
     
     
       
@@ -34,8 +34,6 @@
     
     
     
-    
-    <category term="点滴" scheme="https://blog.icmpy.net/tags/%E7%82%B9%E6%BB%B4/"/>
     
   </entry>
   
@@ -109,14 +107,14 @@
     <link href="https://blog.icmpy.net/2023/11/14/hexogit%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99/"/>
     <id>https://blog.icmpy.net/2023/11/14/hexogit%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99/</id>
     <published>2023-11-14T03:50:09.000Z</published>
-    <updated>2023-11-14T06:15:33.253Z</updated>
+    <updated>2023-11-14T10:23:55.916Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h1 id=&quot;1-nodejs安装&quot;&gt;&lt;a href=&quot;#1-nodejs安装&quot; class=&quot;headerlink&quot; title=&quot;1.nodejs安装&quot;&gt;&lt;/a&gt;1.nodejs安装&lt;/h1&gt;&lt;p&gt; 使用Node Version</summary>
+    <summary type="html">&lt;h1 id=&quot;1-nodejs安装&quot;&gt;&lt;a href=&quot;#1-nodejs安装&quot; class=&quot;headerlink&quot; title=&quot;1. nodejs安装&quot;&gt;&lt;/a&gt;1. nodejs安装&lt;/h1&gt;&lt;h2</summary>
         
       
     

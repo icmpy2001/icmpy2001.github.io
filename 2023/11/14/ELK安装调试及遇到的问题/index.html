@@ -363,13 +363,9 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                    <div class="article-tag">
-                        
-                            <a href="/tags/%E7%82%B9%E6%BB%B4/">
-                                <span class="chip bg-color">点滴</span>
-                            </a>
-                        
-                    </div>
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -477,10 +473,16 @@
 <p>xpack.watcher.enabled: false        设置false为禁用观察器。</p>
 <p><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/kibana/current/settings-xpack-kb.html">https://www.elastic.co/guide/en/kibana/current/settings-xpack-kb.html</a></p>
 <p>调试的时候可能需要ES Head插件，curl -X GET “localhost:9200”</p>
-<p>1). 确认Elasticsearch服务的运行状态：可以通过运行curl -X GET “localhost:9200”来检查Elasticsearch服务是否在运行，并检查是否能够从浏览器中访问到ES Head插件的界面。</p>
-<p>2). 检查ES Head插件的配置文件：确保您已经正确配置了ES Head插件，主要包括Elasticsearch服务器的地址和端口号等信息。您可以在ES Head插件的配置文件中查看并修改这些配置。</p>
-<p>3). 检查网络连接和防火墙设置：确保您的网络连接正常，并且没有遇到任何网络问题。如果您的计算机上运行有防火墙，您需要检查防火墙设置，确保允许ES Head插件与Elasticsearch服务器进行通信。</p>
-<p>4). 更新ES Head插件版本：如果您正在使用旧版本的ES Head插件，尝试将插件升级到最新版本，并确保与您正在使用的Elasticsearch服务器兼容。</p>
+<ol>
+<li><p>确认Elasticsearch服务的运行状态：可以通过运行curl -X GET “localhost:9200”来检查Elasticsearch服务是否在运行，并检查是否能够从浏览器中访问到ES Head插件的界面。</p>
+</li>
+<li><p>检查ES Head插件的配置文件：确保您已经正确配置了ES Head插件，主要包括Elasticsearch服务器的地址和端口号等信息。您可以在ES Head插件的配置文件中查看并修改这些配置。</p>
+</li>
+<li><p>检查网络连接和防火墙设置：确保您的网络连接正常，并且没有遇到任何网络问题。如果您的计算机上运行有防火墙，您需要检查防火墙设置，确保允许ES Head插件与Elasticsearch服务器进行通信。</p>
+</li>
+<li><p>更新ES Head插件版本：如果您正在使用旧版本的ES Head插件，尝试将插件升级到最新版本，并确保与您正在使用的Elasticsearch服务器兼容。</p>
+</li>
+</ol>
 <p>cd elasticsearch-head</p>
 <p>///修改Gruntfile.js ， vi Gruntfile.js</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">connect: {</span><br><span class="line">			server: {</span><br><span class="line">				options: {</span><br><span class="line">					port: 9100,</span><br><span class="line">					hostname: "192.168.8.6",	</span><br><span class="line">					base: '.',</span><br><span class="line">					keepalive: true</span><br><span class="line">				}</span><br><span class="line">			}</span><br><span class="line">		}</span><br></pre></td></tr></tbody></table></figure>
@@ -491,10 +493,10 @@
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">init: function(parent) {</span><br><span class="line">			this._super();</span><br><span class="line">			this.prefs = services.Preferences.instance();</span><br><span class="line">			this.base_uri = this.config.base_uri || this.prefs.get("app-base_uri") || "http://192.168.8.6:9200";</span><br><span class="line">			if( this.base_uri.charAt( this.base_uri.length - 1 ) !== "/" ) {</span><br><span class="line">				// XHR request fails if the URL is not ending with a "/"</span><br><span class="line">				this.base_uri += "/";</span><br><span class="line">			}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
 
 <p>启动方式2种：</p>
-<p>1):</p>
+<p>1:</p>
 <p>cd elasticsearch-head</p>
 <p>npm run start</p>
-<p>2):</p>
+<p>2:</p>
 <p>cd elasticsearch-head</p>
 <p>node_modules/grunt/bin/grunt server</p>
 <p>Debian 安装filebeat</p>
@@ -524,7 +526,7 @@
 <p>multiline.negate: false 根据您配置其他多行选项的方式，与指定正则表达式匹配的行将被视为上一行的延续或新多行事件的开始</p>
 <p>multiline.match: after</p>
 <p>千辛万苦终于建立索引有数据出来了，但是乱码…</p>
-<p>[2023-10-08T16:30:50,921][WARN ][logstash.codecs.line     ][main][73bbfd3e8a1ad5e719cadc016524498db78b02b7eb1ac2e3ddc8ca7d9c5e649b] Received an event that has a different character encoding than you configured.<br>{:text=&gt;”\"\x8CT\xAE\xD7c~s\xF5i\xFA\xD5\u001D[3O\xDF\xF5\u001Ei\xD0\xC6\xE8Hv&lt;<br>\x93\xEFϚcnA\x83\x94\xFA\xC6\xEFp\xF9۪4\xF6t:\x9D\xFE<br>\xBE\xE2+\a\x8A\xEF\xBBf]\xDF\xE3n\xF6\xFAA{jI}\xFC\xFDŹ\xDB\xF6<br>\xE1e\xEB\xE2\x95\xE2\xAD=\xC5}OY\x97\x82e]5\xCB\xCF\xE6\xAC\u000F\xED\xB9s\xE4\xA83\xB3\<br>xDF:u\xCE\xDA7\xE5_\xB3*\xAB=\x8B2\x88c\xA2*XsUZ)# \u0014\xD0\u0004\x8CI”, :expected_charset=&gt;”UTF-8”}</p>
+<p>[2023-10-08T16:30:50,921][WARN ][logstash.codecs.line     ][main][73bbfd3e8a1ad5e719cadc016524498db78b02b7eb1ac2e3ddc8ca7d9c5e649b] Received an event that has a different character encoding than you configured. {:text=&gt;”\"\x8CT\xAE\xD7c~s\xF5i\xFA\xD5\u001D[3O\xDF\xF5\u001Ei\xD0\xC6\xE8Hv&lt;\x93\xEFϚcnA\x83\x94\xFA\xC6\xEFp\xF9۪4\xF6t:\x9D\xFE\xBE\xE2+\a\x8A\xEF\xBBf]\xDF\xE3n\xF6\xFAA{jI}\xFC\xFDŹ\xDB\xF6\xE1e\xEB\xE2\x95\xE2\xAD=\xC5}OY\x97\x82e]5\xCB\xCF\xE6\xAC\u000F\xED\xB9s\xE4\xA83\xB3\xDF:u\xCE\xDA7\xE5_\xB3*\xAB=\x8B2\x88c\xA2*XsUZ)# \u0014\xD0\u0004\x8CI”, :expected_charset=&gt;”UTF-8”}</p>
 <p>网络上好多事字符集问题，改过</p>
 <p>Charset =&gt; “GBK”Charset =&gt; “UTF-8”Charset =&gt; “GB2312”</p>
 <p>等等最终还是没能解决，乱码依旧…</p>
@@ -565,7 +567,6 @@
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">filebeat.yml</span><br><span class="line">    #- c:\programdata\elasticsearch\logs\*</span><br><span class="line">  fields:</span><br><span class="line">          type: gs1</span><br><span class="line">          ip: 192.168.8.106</span><br><span class="line">          fields_under_root: true</span><br><span class="line"></span><br><span class="line">          #  multiline.pattern: '^instance_id'</span><br><span class="line">          #  multiline.negate: true</span><br><span class="line">          #  multiline.match: after</span><br><span class="line">          #  multiline.max_lines: 500 </span><br><span class="line"></span><br><span class="line">  #  multiline.pattern: '^[I,]|^[D,]|^[E,]|^[W,]|^[#]'</span><br><span class="line">  #  multiline.max_lines: 100</span><br><span class="line">  #  multiline.timeout: 20s</span><br><span class="line"></span><br><span class="line">    #monitoring.enabled: true</span><br><span class="line">inputs.container.enabled: true</span><br><span class="line">#xpack.monitoring.elasticsearch.username: elastic</span><br><span class="line">#xpack.monitoring.elasticsearch.password: elastic</span><br><span class="line"></span><br><span class="line">filebeat.config.modules:</span><br><span class="line">  # Glob pattern for configuration loading</span><br><span class="line">  path: ${path.config}/modules.d/*.yml</span><br><span class="line"></span><br><span class="line">  # Set to true to enable config reloading</span><br><span class="line">  reload.enabled: false</span><br><span class="line"></span><br><span class="line">  # The Logstash hosts</span><br><span class="line">output.logstash:</span><br><span class="line">    hosts: ["192.168.8.6:5045"]</span><br><span class="line">    ssl.certificate_authorities: ["/etc/ssl/certs/logstash.crt"]</span><br><span class="line">    ssl.certificate: "/etc/ssl/certs/filebeat.crt"</span><br><span class="line">ssl.key: "/etc/ssl/private/filebeat.key"</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
 
 <p>这样总算有正常数据了</p>
-<p><img src="/../images/20231114-2.png"></p>
 <p>Filebeat 重新抓取数据：</p>
 <p>filebeat设置从头读取配置文件</p>
 <p>流程：关闭filebeat –&gt; 删掉registry文件 –&gt; 启动filebeat</p>
@@ -685,11 +686,7 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            
-                                <a href="/tags/%E7%82%B9%E6%BB%B4/">
-                                    <span class="chip bg-color">点滴</span>
-                                </a>
-                            
+                            <span class="chip bg-color">无标签</span>
                         </div>
                     
                 </div>
@@ -766,14 +763,6 @@
                     </div>
                 </div>
 
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E7%82%B9%E6%BB%B4/">
-                        <span class="chip bg-color">点滴</span>
-                    </a>
-                    
-                </div>
                 
             </div>
         </div>
