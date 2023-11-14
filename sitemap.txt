@@ -1,3 +1,4 @@
+https://blog.icmpy.net/2023/11/14/ELK%E5%AE%89%E8%A3%85%E8%B0%83%E8%AF%95%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/
 https://blog.icmpy.net/2023/11/14/hexogit%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99/
 https://blog.icmpy.net/2023/05/12/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/
 https://blog.icmpy.net/2023/04/13/vsftp-%E9%94%81%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95/
@@ -11,7 +12,6 @@ https://blog.icmpy.net/2023/07/17/zabbix-%E6%B8%85%E7%90%86%E5%8E%86%E5%8F%B2%E6
 https://blog.icmpy.net/2023/08/16/zabbix3-0-1%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B%E7%9A%84%E5%B0%8F%E5%9D%91/
 https://blog.icmpy.net/2023/06/10/frp%E6%90%AD%E5%BB%BA/
 https://blog.icmpy.net/2023/07/17/ssh%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98/
-https://blog.icmpy.net/2023/11/14/ELK%E5%AE%89%E8%A3%85%E8%B0%83%E8%AF%95%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/
 https://blog.icmpy.net/2023/11/14/Tengine%E5%AE%89%E8%A3%85/
 https://blog.icmpy.net/2023/11/14/centos7-%E6%94%B9%E7%BD%91%E5%8D%A1%E5%90%8Deth0/
 https://blog.icmpy.net/2023/11/14/centos-U%E7%9B%98%E5%AE%89%E8%A3%85%E6%9F%A5%E6%89%BEU%E7%9B%98%E8%AE%BE%E5%A4%87%E5%90%8D/

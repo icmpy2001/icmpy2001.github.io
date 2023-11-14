@@ -108,7 +108,7 @@
 <p>multiline.negate: false 根据您配置其他多行选项的方式，与指定正则表达式匹配的行将被视为上一行的延续或新多行事件的开始</p>
 <p>multiline.match: after</p>
 <p>千辛万苦终于建立索引有数据出来了，但是乱码…</p>
-<p>[2023-10-08T16:30:50,921][WARN ][logstash.codecs.line     ][main][73bbfd3e8a1ad5e719cadc016524498db78b02b7eb1ac2e3ddc8ca7d9c5e649b] Received an event that has a different character encoding than you configured. {:text=&gt;”\"\x8CT\xAE\xD7c~s\xF5i\xFA\xD5\u001D[3O\xDF\xF5\u001Ei\xD0\xC6\xE8Hv&lt;\x93\xEFϚcnA\x83\x94\xFA\xC6\xEFp\xF9۪4\xF6t:\x9D\xFE\xBE\xE2+\a\x8A\xEF\xBBf]\xDF\xE3n\xF6\xFAA{jI}\xFC\xFDŹ\xDB\xF6\xE1e\xEB\xE2\x95\xE2\xAD=\xC5}OY\x97\x82e]5\xCB\xCF\xE6\xAC\u000F\xED\xB9s\xE4\xA83\xB3\xDF:u\xCE\xDA7\xE5_\xB3*\xAB=\x8B2\x88c\xA2*XsUZ)# \u0014\xD0\u0004\x8CI”, :expected_charset=&gt;”UTF-8”}</p>
+<p>[2023-10-08T16:30:50,921][WARN ][logstash.codecs.line     ][main][73bbfd3e8a1ad5e719cadc016524498db78b02b7eb1ac2e3ddc8ca7d9c5e649b] Received an event that has a different character encoding than you configured. {:text=&gt;”\"\x8CT\xAE\xD7c~s\xF5i\xFA\xD5\<br>u001D[3O\xDF\xF5\u001Ei\xD0\xC6\xE8Hv&lt;\x93\xEFϚcnA\x83\x94\xFA\xC6\xEFp\xF9۪4\xF6t:\x9D\xFE<br>\xBE\xE2+\a\x8A\xEF\xBBf]\xDF\xE3n\xF6\xFAA{jI}\xFC\xFDŹ\xDB\xF6\xE1e\xEB\xE2<br>\x95\xE2\xAD=\xC5}OY\x97\x82e]5\xCB\xCF\xE6\xAC\u000F\xED\xB9s\xE4\xA83\xB3\xDF:u\xCE\<br>xDA7\xE5_\xB3*\xAB=\x8B2\x88c\xA2*XsUZ)# \u0014\xD0\u0004\x8CI”, :expected_charset=&gt;”UTF-8”}</p>
 <p>网络上好多事字符集问题，改过</p>
 <p>Charset =&gt; “GBK”Charset =&gt; “UTF-8”Charset =&gt; “GB2312”</p>
 <p>等等最终还是没能解决，乱码依旧…</p>
