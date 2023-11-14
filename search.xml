@@ -842,35 +842,36 @@
 ]]></content>
   </entry>
   <entry>
-    <title>nginx编译ssl模块</title>
-    <url>/2023/11/14/nginx%E7%BC%96%E8%AF%91ssl%E6%A8%A1%E5%9D%97/</url>
-    <content><![CDATA[<p>几个官网在一台服务器上面，其中一台是https的，增加一个官网以，重启nginx以后，https的网站直接报错，大意是ssl 在配置文件中unknow，但是这个https网站已经运行很久了，一时间有点郁闷，掉坑里了。</p>
-<p>查看nginx信息 /usr/local/nginx/sbin/nginx -V显示不支持ssl，那就好办，重新编译下ssl，但是线上业务跑着，难免有点担心，在测试机上跑了一次，正常的，才敢到线上操作，大致如此从网上找的如下：</p>
-<p>进入nginx源码目录：</p>
-<p>cd &nbsp;nginx-1.6.2</p>
-<p>./configure –prefix=/usr/local/nginx –user=www –group=www &nbsp;–with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
-<p>只添加ssl功能模块，有别的需求继续加上；</p>
-<p>运行完以后记得是make，make，make不是make &amp; make install ，install就覆盖安装了，千万搞清楚~</p>
-<p>make以后在当前目录生成odjs目录，下面就是新的nginx；</p>
-<p>剩下就好办，备份原来的nginx，把新生成的nginx替换原来的，</p>
-<p>备份旧的nginx程序</p>
-<p>cp /usr/local/nginx/sbin/nginx/usr/local/nginx/sbin/nginx.bak</p>
-<p>把新的nginx程序覆盖旧的</p>
-<p>cp objs/nginx /usr/local/nginx/sbin/nginx</p>
-<p>测试新的nginx程序是否正确</p>
-<p>/usr/local/nginx/sbin/nginx -t</p>
-<p>nginx: theconfiguration file /usr/local/nginx/conf/nginx.conf syntax is ok</p>
-<p>nginx:configuration file /usr/local/nginx/conf/nginx.conf test issuccessful</p>
-<p>平滑重启nginx</p>
-<p>/usr/local/nginx/sbin/nginx -s reload</p>
-<p>查看ngixn版本极其编译参数</p>
-<p>/usr/local/nginx/sbin/nginx -V</p>
-<p>configure arguments: –prefix=/data/app/nginx –user=www –group=www –with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
-<h6 id="权作一个跳坑记录。"><a href="#权作一个跳坑记录。" class="headerlink" title="权作一个跳坑记录。"></a>权作一个跳坑记录。</h6><hr>
+    <title>ssh免密登录问题</title>
+    <url>/2023/11/13/ssh%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
+<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
+<p>服务器A需要免密码访问服务器B：</p>
+<ol>
+<li>在A上面生成公钥密钥，执行命令</li>
+</ol>
+<p>&nbsp;</p>
+<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
+<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
+<ol start="2">
+<li>将公钥id_rsa.pub拷贝到B机器上</li>
+</ol>
+<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
+<ol start="3">
+<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
+</ol>
+<p>cd&nbsp;/home/user/.ssh</p>
+<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
+<ol start="4">
+<li>设置 authorized_keys权限</li>
+</ol>
+<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
+<hr>
 ]]></content>
-      <tags>
-        <tag>note</tag>
-      </tags>
   </entry>
   <entry>
     <title>php 安装redis，protobuf,mcryp扩展</title>
@@ -992,38 +993,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>ssh免密登录问题</title>
-    <url>/2023/11/13/ssh%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
-<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
-<p>服务器A需要免密码访问服务器B：</p>
-<ol>
-<li>在A上面生成公钥密钥，执行命令</li>
-</ol>
-<p>&nbsp;</p>
-<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
-<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
-<ol start="2">
-<li>将公钥id_rsa.pub拷贝到B机器上</li>
-</ol>
-<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
-<ol start="3">
-<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
-</ol>
-<p>cd&nbsp;/home/user/.ssh</p>
-<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
-<ol start="4">
-<li>设置 authorized_keys权限</li>
-</ol>
-<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
-<hr>
-]]></content>
-  </entry>
-  <entry>
     <title>vsftp 锁定用户目录</title>
     <url>/2023/11/14/vsftp-%E9%94%81%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95/</url>
     <content><![CDATA[<p>vsftp 安装以后给用户权限和锁定目录；</p>
@@ -1110,6 +1079,37 @@
 <p>tftp_anon_write –&gt; off</p>
 <p>tftp_home_dir –&gt; off</p>
 <h2 id="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"><a href="#vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。" class="headerlink" title="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"></a>vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。</h2>]]></content>
+  </entry>
+  <entry>
+    <title>nginx编译ssl模块</title>
+    <url>/2023/11/14/nginx%E7%BC%96%E8%AF%91ssl%E6%A8%A1%E5%9D%97/</url>
+    <content><![CDATA[<p>几个官网在一台服务器上面，其中一台是https的，增加一个官网以，重启nginx以后，https的网站直接报错，大意是ssl 在配置文件中unknow，但是这个https网站已经运行很久了，一时间有点郁闷，掉坑里了。</p>
+<p>查看nginx信息 /usr/local/nginx/sbin/nginx -V显示不支持ssl，那就好办，重新编译下ssl，但是线上业务跑着，难免有点担心，在测试机上跑了一次，正常的，才敢到线上操作，大致如此从网上找的如下：</p>
+<p>进入nginx源码目录：</p>
+<p>cd &nbsp;nginx-1.6.2</p>
+<p>./configure –prefix=/usr/local/nginx –user=www –group=www &nbsp;–with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
+<p>只添加ssl功能模块，有别的需求继续加上；</p>
+<p>运行完以后记得是make，make，make不是make &amp; make install ，install就覆盖安装了，千万搞清楚~</p>
+<p>make以后在当前目录生成odjs目录，下面就是新的nginx；</p>
+<p>剩下就好办，备份原来的nginx，把新生成的nginx替换原来的，</p>
+<p>备份旧的nginx程序</p>
+<p>cp /usr/local/nginx/sbin/nginx/usr/local/nginx/sbin/nginx.bak</p>
+<p>把新的nginx程序覆盖旧的</p>
+<p>cp objs/nginx /usr/local/nginx/sbin/nginx</p>
+<p>测试新的nginx程序是否正确</p>
+<p>/usr/local/nginx/sbin/nginx -t</p>
+<p>nginx: theconfiguration file /usr/local/nginx/conf/nginx.conf syntax is ok</p>
+<p>nginx:configuration file /usr/local/nginx/conf/nginx.conf test issuccessful</p>
+<p>平滑重启nginx</p>
+<p>/usr/local/nginx/sbin/nginx -s reload</p>
+<p>查看ngixn版本极其编译参数</p>
+<p>/usr/local/nginx/sbin/nginx -V</p>
+<p>configure arguments: –prefix=/data/app/nginx –user=www –group=www –with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
+<h6 id="权作一个跳坑记录。"><a href="#权作一个跳坑记录。" class="headerlink" title="权作一个跳坑记录。"></a>权作一个跳坑记录。</h6><hr>
+]]></content>
+      <tags>
+        <tag>note</tag>
+      </tags>
   </entry>
   <entry>
     <title>zabbix 清理历史数据</title>
