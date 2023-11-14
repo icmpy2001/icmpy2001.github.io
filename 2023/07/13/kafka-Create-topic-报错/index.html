@@ -4,10 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="php 安装redis，protobuf,mcryp扩展, 云上的小雨滴">
-    <meta name="description" content="&amp;nbsp; 测试机上测试一些数据需要用到redis扩展，偷懒yum安装的php，以前yum install php-pecl-redis.x86_64可以安装扩展，这次找不到安装包，不折腾手动安装下。
-1.下载phpredis
-cd /u">
+    <meta name="keywords" content="kafka Create topic 报错, 云上的小雨滴">
+    <meta name="description" content="bin/kafka-console-consumer.sh –bootstrap-server localhost:9092 –topic kk_log报错如下：WARN [Consumer clientId=consumer-1, gro">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -19,7 +17,7 @@ cd /u">
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>php 安装redis，protobuf,mcryp扩展 | 云上的小雨滴</title>
+    <title>kafka Create topic 报错 | 云上的小雨滴</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -337,12 +335,12 @@ cd /u">
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">php 安装redis，protobuf,mcryp扩展</h1>
+                    <h1 class="description center-align post-title">kafka Create topic 报错</h1>
                 </div>
             </div>
         </div>
@@ -378,28 +376,28 @@ cd /u">
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-11-10
+                    2023-07-13
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-11-10
+                    2023-11-14
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    969
+                    409
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    2 分
                 </div>
                 
 
@@ -422,121 +420,16 @@ cd /u">
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>&nbsp; 测试机上测试一些数据需要用到redis扩展，偷懒yum安装的php，以前yum install php-pecl-redis.x86_64可以安装扩展，这次找不到安装包，不折腾手动安装下。</p>
-<p>1.下载phpredis</p>
-<p>cd /usr/local/src</p>
-<p>wget <a target="_blank" rel="noopener" href="https://github.com/nicolasff/phpredis/archive/2.2.4.tar.gz">https://github.com/nicolasff/phpredis/archive/2.2.4.tar.gz</a></p>
-<p>tar -zxvf 2.2.4.tar.gz</p>
-<p>cd phpredis-2.2.4/</p>
-<p>2.用phpize生成configure配置文件</p>
-<p>/usr/bin/phpize&nbsp; #会生成几个新文件，默认安装路径自定义的按照自定义路径；</p>
-<p>./configure –with-php-config=/usr/bin/php-config</p>
-<p>make #编译</p>
-<p>make install #安装</p>
-<p>make test #测试</p>
-<p>3.配置php支持</p>
-<p>vim /usr/local/php/etc/php.ini #编辑配置文件，在最后一行添加以下内容</p>
-<p>extension=”redis.so”</p>
-<ol start="4">
-<li></li>
-</ol>
-<p>重启http加载查看phpinfo信息：</p>
-<p>redis</p>
-<p>Redis Supportenabled</p>
-<p>Redis Version2.2.4</p>
-<p>成功！</p>
-<p>php扩展Protobuf</p>
-<p>下载protobuf扩展包：wget <a target="_blank" rel="noopener" href="https://github.com/allegro/php-protobuf/archive/master.zip%E8%BF%99%E4%B8%AAmaster.zip%E4%BC%9A%E6%8A%A5%E9%94%99%EF%BC%9B">https://github.com/allegro/php-protobuf/archive/master.zip这个master.zip会报错；</a></p>
-<p>master.zip</p>
-<p>cd /home/tools/php-protobuf-master/</p>
-<p>phpize</p>
-<p>可能会报错php-devel</p>
-<p>yum install php-devel</p>
-<p>./configure<br>1.<br>make&nbsp;&amp;&amp;&nbsp;make&nbsp;install<br>1.</p>
-<p>If you ever happen to want to link against installed libraries</p>
-<p>in a given directory, LIBDIR, you must either use libtool, and</p>
-<p>specify the full pathname of the library, or use the `-LLIBDIR’</p>
-<p>flag during linking and do at least one of the following:</p>
-<p>&nbsp;&nbsp; - add LIBDIR to the `LD_LIBRARY_PATH’ environment variable</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp; during execution</p>
-<p>&nbsp;&nbsp; - add LIBDIR to the `LD_RUN_PATH’ environment variable</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp; during linking</p>
-<p>&nbsp;&nbsp; - use the `-Wl,-rpath -Wl,LIBDIR’ linker flag</p>
-<p>&nbsp;&nbsp; - have your system administrator add LIBDIR to `/etc/ld.so.conf’</p>
-<p>&nbsp;</p>
-<p>See any operating system documentation about shared libraries for</p>
-<p>more information, such as the ld(1) and ld.so(8) manual pages.</p>
-<hr>
-<p>&nbsp;</p>
-<p>Build complete.</p>
-<p>Don’t forget to run ‘make test’.</p>
-<p>&nbsp;</p>
-<p>Installing shared extensions:&nbsp;&nbsp;&nbsp;&nbsp; /usr/lib64/php/modules/</p>
-<p>然后再php.ini增加</p>
-<p>extension = protocolbuffers.so</p>
-<p>重启下http就可以了；</p>
-<p>装载protobuff库：</p>
-<p>&nbsp;pear&nbsp;channel-discover&nbsp;pear.pollinimini.net&nbsp;</p>
-<p>pear&nbsp;install&nbsp;drslump/Protobuf-beta&nbsp;</p>
-<p>mcryp扩展：</p>
-<p>yum install libmcrypt libmcrypt-devel mcrypt mhash 如果报错找不到补丁的话手动安装；</p>
-<p>下载Libmcrypt,mhash,mcrypt安装包</p>
-<p>Libmcrypt(libmcrypt-2.5.8.tar.gz)：<a target="_blank" rel="noopener" href="http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91774&amp;release_id=487459">http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91774&amp;release_id=487459</a></p>
-<p>mcrypt(mcrypt-2.6.8.tar.gz ):<a target="_blank" rel="noopener" href="http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91948&amp;release_id=642101">http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91948&amp;release_id=642101</a></p>
-<p>mhash(mhash-0.9.9.9.tar.gz):<a target="_blank" rel="noopener" href="http://sourceforge.net/project/showfiles.php?group_id=4286&amp;package_id=4300&amp;release_id=645636">http://sourceforge.net/project/showfiles.php?group_id=4286&amp;package_id=4300&amp;release_id=645636</a></p>
-<p>2.先安装Libmcrypt</p>
-<p>tar -zxvf libmcrypt-2.5.8.tar.gz</p>
-<p>cd libmcrypt-2.5.8</p>
-<p>./configure</p>
-<p>make</p>
-<p>make install</p>
-<p>说明：libmcript默认安装在/usr/local&nbsp;</p>
-<p>3.再安装mhash</p>
-<p>tar -zxvf mhash-0.9.9.9.tar.gz</p>
-<p>cd mhash-0.9.9.9</p>
-<p>./configure</p>
-<p>make &amp;&amp; make install</p>
-<p>4.最后安装mcrypt</p>
-<p>tar -zxvf mcrypt-2.6.8.tar.gz</p>
-<p>cd mcrypt-2.6.8</p>
-<p>LD_LIBRARY_PATH=/usr/local/lib ./configure</p>
-<p>make &amp;&amp; make install</p>
-<p>说明：由于在配置Mcrypt时，会找不到libmcrypt的链接库，导致无法编译，因为Libmcrypt的链接库在/usr/local/lib文件夹下。</p>
-<p>因次，在配置mcrypt时要加入LD_LIBRARY_PATH=/usr/local/lib导入键接库。</p>
-<p>到&nbsp;<a target="_blank" rel="noopener" href="http://cn.php.net/releases/">http://cn.php.net/releases/</a>&nbsp;网页下找到自己对应php版本，下载后解压</p>
-<p>cd php-5.4.16/ext/mcrypt/</p>
-<p>phpize (执行phpize命令（phpize是用来扩展php扩展模块的，通过phpize可以建立php的外挂模块，如果没有？yum install php-devel)</p>
-<p>phpize&nbsp;</p>
-<p>Configuring for:</p>
-<p>PHP Api Version:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;20100412</p>
-<p>Zend Module Api No:&nbsp; &nbsp; &nbsp; 20100525</p>
-<p>Zend Extension Api No:&nbsp; &nbsp;220100525</p>
-<p>yum 安装php./configure就可以，定制的需要自己的路径如比：./configure –with-php-config=/usr/bin/php-config</p>
-<p>./configure</p>
-<p>make &amp;&amp; make install</p>
-<p>Libraries have been installed in:</p>
-<p>&nbsp; &nbsp;/home/tools/php-5.4.16/ext/mcrypt/modules</p>
-<p>If you ever happen to want to link against installed libraries</p>
-<p>in a given directory, LIBDIR, you must either use libtool, and</p>
-<p>specify the full pathname of the library, or use the `-LLIBDIR’</p>
-<p>flag during linking and do at least one of the following:</p>
-<p>&nbsp; &nbsp;- add LIBDIR to the `LD_LIBRARY_PATH’ environment variable</p>
-<p>&nbsp; &nbsp; &nbsp;during execution</p>
-<p>&nbsp; &nbsp;- add LIBDIR to the `LD_RUN_PATH’ environment variable</p>
-<p>&nbsp; &nbsp; &nbsp;during linking</p>
-<p>&nbsp; &nbsp;- use the `-Wl,-rpath -Wl,LIBDIR’ linker flag</p>
-<p>&nbsp; &nbsp;- have your system administrator add LIBDIR to `/etc/ld.so.conf’</p>
-<p>See any operating system documentation about shared libraries for</p>
-<p>more information, such as the ld(1) and ld.so(8) manual pages.</p>
-<hr>
-<p>Build complete.</p>
-<p>Don’t forget to run ‘make test’.</p>
-<p>Installing shared extensions:&nbsp; &nbsp; &nbsp;/usr/lib64/php/modules/</p>
-<p>php.ini添加一条extension=mcrypt.so</p>
-<p>extension = protocolbuffers.so</p>
-<p>extension = mcrypt.so</p>
-<hr>
-
+                <p>bin/kafka-console-consumer.sh –bootstrap-server localhost:9092 –topic kk_log<br>报错如下：<br>WARN [Consumer clientId=consumer-1, groupId=console-consumer-507] Connection to node -1 could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)</p>
+<p>配置server.confg时候设置的<br>advertised.listeners=PLAINTEXT://10.171.222.26:9092<br>此时需要用配置的IP而非localhost地址：</p>
+<p>nohup bin/zookeeper-server-start.sh config/zookeeper.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>nohup bin/kafka-server-start.sh config/server.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>netstat -ntpl|egrep “(2181|9092)”<br>运行起来再试试<br>bin/kafka-console-consumer.sh –bootstrap-server 10.171.222.26:9092 –topic kk_log<br>应该就可以了。<br>做个小笔记。</p>
+<p>PS zookeeper 报错，宕掉；</p>
+<p>[2016-06-27 12:07:14,065] INFO Closed socket connection for client /127.0.0.1:58824 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn) [2016-<br>[2016-06-27 12:07:17,351] INFO Refusing session request for client /127.0.0.1:58834 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)<br>[2016-06-27 12:07:17,351] INFO Closed socket connection for client /127.0.0.1:58834 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn)<br>[2016-06-27 12:07:19,048] INFO Accepted socket connection from /127.0.0.1:58840 (org.apache.zookeeper.server.NIOServerCnxnFactory)<br>[2016-06-27 12:07:19,048] INFO Refusing session request for client /127.0.0.1:58840 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)</p>
+<p>解决方法</p>
+<p>报错原因：服务器上还有应用在不停的向zookeeper发送请求</p>
+<p>解决方法：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用top -u [username]查看该用户下的所有进程，发现多了一个java进程在运行着；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、kill掉与java相关的进程；</p>
+<p>2、关闭zookeeper，删除zoo.cfg中的dataDir配置的文件夹；</p>
+<h2 id="3、重启zookeeper。"><a href="#3、重启zookeeper。" class="headerlink" title="3、重启zookeeper。"></a>3、重启zookeeper。</h2>
                 
             </div>
             <hr/>
@@ -562,7 +455,7 @@ cd /u">
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://blog.icmpy.net/2023/11/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/">https://blog.icmpy.net/2023/11/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/</a>
+                    <a href="https://blog.icmpy.net/2023/07/13/kafka-Create-topic-%E6%8A%A5%E9%94%99/">https://blog.icmpy.net/2023/07/13/kafka-Create-topic-%E6%8A%A5%E9%94%99/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -647,13 +540,13 @@ cd /u">
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/11/13/linux%E6%9C%89%E8%B6%B3%E5%A4%9F%E5%86%85%E5%AD%98%E8%BF%98%E4%BD%BF%E7%94%A8swap/">
+                <a href="/2023/07/17/ssh%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="linux有足够内存还使用swap">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="ssh免密登录问题">
                         
-                        <span class="card-title">linux有足够内存还使用swap</span>
+                        <span class="card-title">ssh免密登录问题</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -664,7 +557,7 @@ cd /u">
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-11-13
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-07-17
                         </span>
                         <span class="publish-author">
                             
@@ -684,13 +577,13 @@ cd /u">
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/11/10/linux-%E7%A3%81%E7%9B%98%E6%8C%82%E8%BD%BD%E6%89%A9%E5%85%85%E6%A0%BC%E5%BC%8F%E5%8C%96/">
+                <a href="/2023/06/10/frp%E6%90%AD%E5%BB%BA/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="linux 磁盘挂载扩充格式化">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="frp搭建">
                         
-                        <span class="card-title">linux 磁盘挂载扩充格式化</span>
+                        <span class="card-title">frp搭建</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -701,7 +594,7 @@ cd /u">
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-11-10
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-06-10
                             </span>
                         <span class="publish-author">
                             

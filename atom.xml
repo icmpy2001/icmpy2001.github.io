@@ -242,27 +242,6 @@
   </entry>
   
   <entry>
-    <title>kafka Create topic 报错</title>
-    <link href="https://blog.icmpy.net/2023/11/13/kafka-Create-topic-%E6%8A%A5%E9%94%99/"/>
-    <id>https://blog.icmpy.net/2023/11/13/kafka-Create-topic-%E6%8A%A5%E9%94%99/</id>
-    <published>2023-11-13T07:55:23.000Z</published>
-    <updated>2023-11-13T07:55:43.357Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;bin/kafka-console-consumer.sh –bootstrap-server localhost:9092 –topic kk_log&lt;br&gt;报错如下：&lt;br&gt;WARN [Consumer clientId=consumer-1,</summary>
-        
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
     <title>coredump 路径格式</title>
     <link href="https://blog.icmpy.net/2023/11/13/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/"/>
     <id>https://blog.icmpy.net/2023/11/13/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/</id>
@@ -310,29 +289,6 @@
   </entry>
   
   <entry>
-    <title>php 安装redis，protobuf,mcryp扩展</title>
-    <link href="https://blog.icmpy.net/2023/11/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/"/>
-    <id>https://blog.icmpy.net/2023/11/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/</id>
-    <published>2023-11-10T10:00:29.000Z</published>
-    <updated>2023-11-10T10:00:58.483Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;&amp;nbsp; 测试机上测试一些数据需要用到redis扩展，偷懒yum安装的php，以前yum install php-pecl-redis.x86_64可以安装扩展，这次找不到安装包，不折腾手动安装下。&lt;/p&gt;
-&lt;p&gt;1.下载phpredis&lt;/p&gt;
-&lt;p&gt;cd</summary>
-        
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
     <title>linux 磁盘挂载扩充格式化</title>
     <link href="https://blog.icmpy.net/2023/11/10/linux-%E7%A3%81%E7%9B%98%E6%8C%82%E8%BD%BD%E6%89%A9%E5%85%85%E6%A0%BC%E5%BC%8F%E5%8C%96/"/>
     <id>https://blog.icmpy.net/2023/11/10/linux-%E7%A3%81%E7%9B%98%E6%8C%82%E8%BD%BD%E6%89%A9%E5%85%85%E6%A0%BC%E5%BC%8F%E5%8C%96/</id>
@@ -370,6 +326,29 @@
 &lt;p&gt;下载完毕zabbix-3.0.1.tar.gz，解压&lt;/p&gt;
 &lt;p&gt;cd &amp;nbsp;zabbix-3.0.1&lt;/p&gt;
 &lt;p&gt;./configure</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>php 安装redis，protobuf,mcryp扩展</title>
+    <link href="https://blog.icmpy.net/2023/08/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/"/>
+    <id>https://blog.icmpy.net/2023/08/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/</id>
+    <published>2023-08-10T10:00:29.000Z</published>
+    <updated>2023-11-14T09:20:33.375Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&amp;nbsp; 测试机上测试一些数据需要用到redis扩展，偷懒yum安装的php，以前yum install php-pecl-redis.x86_64可以安装扩展，这次找不到安装包，不折腾手动安装下。&lt;/p&gt;
+&lt;p&gt;1.下载phpredis&lt;/p&gt;
+&lt;p&gt;cd</summary>
         
       
     
@@ -436,6 +415,27 @@
         
         
     <summary type="html">&lt;p&gt;一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>kafka Create topic 报错</title>
+    <link href="https://blog.icmpy.net/2023/07/13/kafka-Create-topic-%E6%8A%A5%E9%94%99/"/>
+    <id>https://blog.icmpy.net/2023/07/13/kafka-Create-topic-%E6%8A%A5%E9%94%99/</id>
+    <published>2023-07-13T07:55:23.000Z</published>
+    <updated>2023-11-14T09:20:45.327Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;bin/kafka-console-consumer.sh –bootstrap-server localhost:9092 –topic kk_log&lt;br&gt;报错如下：&lt;br&gt;WARN [Consumer clientId=consumer-1,</summary>
         
       
     
