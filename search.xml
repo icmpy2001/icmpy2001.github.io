@@ -1225,7 +1225,7 @@
   </entry>
   <entry>
     <title>vsftp 锁定用户目录</title>
-    <url>/2024/02/13/vsftp-%E9%94%81%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95/</url>
+    <url>/2023/04/13/vsftp-%E9%94%81%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95/</url>
     <content><![CDATA[<p>vsftp 安装以后给用户权限和锁定目录；</p>
 <p>关闭SELinux：</p>
 <p>修改/etc/selinux/config文件中的SELINUX=”” 为 disabled ，然后重启。</p>

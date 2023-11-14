@@ -6,7 +6,7 @@
   <link href="https://blog.icmpy.net/atom.xml" rel="self"/>
   
   <link href="https://blog.icmpy.net/"/>
-  <updated>2023-11-14T09:24:07.815Z</updated>
+  <updated>2023-11-14T08:55:15.919Z</updated>
   <id>https://blog.icmpy.net/</id>
   
   <author>
@@ -15,30 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>vsftp 锁定用户目录</title>
-    <link href="https://blog.icmpy.net/2024/02/13/vsftp-%E9%94%81%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95/"/>
-    <id>https://blog.icmpy.net/2024/02/13/vsftp-%E9%94%81%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95/</id>
-    <published>2024-02-13T07:21:51.000Z</published>
-    <updated>2023-11-14T09:24:07.815Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;vsftp 安装以后给用户权限和锁定目录；&lt;/p&gt;
-&lt;p&gt;关闭SELinux：&lt;/p&gt;
-&lt;p&gt;修改/etc/selinux/config文件中的SELINUX=”” 为 disabled ，然后重启。&lt;/p&gt;
-&lt;p&gt;如果不想重启系统，使用命令setenforce</summary>
-        
-      
-    
-    
-    
-    
-  </entry>
   
   <entry>
     <title>ELK安装调试及遇到的问题</title>
@@ -442,6 +418,30 @@
     
     
     <category term="随笔" scheme="https://blog.icmpy.net/tags/%E9%9A%8F%E7%AC%94/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>vsftp 锁定用户目录</title>
+    <link href="https://blog.icmpy.net/2023/04/13/vsftp-%E9%94%81%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95/"/>
+    <id>https://blog.icmpy.net/2023/04/13/vsftp-%E9%94%81%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95/</id>
+    <published>2023-04-13T07:21:51.000Z</published>
+    <updated>2023-11-14T09:26:06.960Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;vsftp 安装以后给用户权限和锁定目录；&lt;/p&gt;
+&lt;p&gt;关闭SELinux：&lt;/p&gt;
+&lt;p&gt;修改/etc/selinux/config文件中的SELINUX=”” 为 disabled ，然后重启。&lt;/p&gt;
+&lt;p&gt;如果不想重启系统，使用命令setenforce</summary>
+        
+      
+    
+    
+    
     
   </entry>
   
