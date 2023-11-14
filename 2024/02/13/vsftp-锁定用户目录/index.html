@@ -4,11 +4,13 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="coredump 路径格式, 云上的小雨滴">
-    <meta name="description" content="Coredump
-业务进程宕机以后开发需要查看dump查找定位问题，所有服务器初始化环境时候统一定制coredump路径；
-1.Core文件简介
-Core文件其实就是内存的映像，当程序崩溃时，存储内存的相应信息，主用用于对程序进行调试。当程">
+    <meta name="keywords" content="vsftp 锁定用户目录, 云上的小雨滴">
+    <meta name="description" content="vsftp 安装以后给用户权限和锁定目录；
+关闭SELinux：
+修改/etc/selinux/config文件中的SELINUX=”” 为 disabled ，然后重启。
+如果不想重启系统，使用命令setenforce 0
+添加用户：
+u">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -20,7 +22,7 @@ Core文件其实就是内存的映像，当程序崩溃时，存储内存的相�
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>coredump 路径格式 | 云上的小雨滴</title>
+    <title>vsftp 锁定用户目录 | 云上的小雨滴</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -338,12 +340,12 @@ Core文件其实就是内存的映像，当程序崩溃时，存储内存的相�
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/6.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">coredump 路径格式</h1>
+                    <h1 class="description center-align post-title">vsftp 锁定用户目录</h1>
                 </div>
             </div>
         </div>
@@ -379,28 +381,28 @@ Core文件其实就是内存的映像，当程序崩溃时，存储内存的相�
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-11-13
+                    2024-02-13
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-11-13
+                    2023-11-14
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.8k
+                    2.8k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    9 分
+                    11 分
                 </div>
                 
 
@@ -423,85 +425,90 @@ Core文件其实就是内存的映像，当程序崩溃时，存储内存的相�
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Coredump</p>
-<p>业务进程宕机以后开发需要查看dump查找定位问题，所有服务器初始化环境时候统一定制coredump路径；</p>
-<p>1.Core文件简介</p>
-<p>Core文件其实就是内存的映像，当程序崩溃时，存储内存的相应信息，主用用于对程序进行调试。当程序崩溃时便会产生core文件，其实准确的应该说是core dump 文件,默认生成位置与可执行程序位于同一目录下，文件名为core,其中是某一数字。</p>
-<p>2.开启或关闭Core文件的生成</p>
-<p>关闭或阻止core文件生成：</p>
-<p>$ulimit -c 0</p>
-<p>打开core文件生成：</p>
-<p>$ulimit -c unlimited</p>
-<p>检查core文件的选项是否打开：</p>
-<p>$ulimit -a</p>
-<p>ulimit参数含义如下：&nbsp;</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -a&nbsp;&nbsp;&nbsp;&nbsp; All current limits are reported<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -c&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of core files created<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -d&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of a process data segment<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -e&nbsp;&nbsp;&nbsp;&nbsp; The maximum scheduling priority (“nice”)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -f&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of files written by the shell and its children<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -i&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of pending signals<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -l&nbsp;&nbsp;&nbsp;&nbsp; The maximum size that may be locked into memory<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -m&nbsp;&nbsp;&nbsp;&nbsp; The maximum resident set size (has no effect on Linux)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -n&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of open file descriptors (most systems do not allow this value to be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -p&nbsp;&nbsp;&nbsp;&nbsp; The pipe size in 512-byte blocks (this may not be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -q&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of bytes in POSIX message queues<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -r&nbsp;&nbsp;&nbsp;&nbsp; The maximum real-time scheduling priority<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -s&nbsp;&nbsp;&nbsp;&nbsp; The maximum stack size<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -t&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of cpu time in seconds<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -u&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of processes available to a single user<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -v&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of virtual memory available to the shell<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -x&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of file locks</p>
+                <p>vsftp 安装以后给用户权限和锁定目录；</p>
+<p>关闭SELinux：</p>
+<p>修改/etc/selinux/config文件中的SELINUX=”” 为 disabled ，然后重启。</p>
+<p>如果不想重启系统，使用命令setenforce 0</p>
+<p>添加用户：</p>
+<p>useradd -d /var/www -s /sbin/nologin ftpuser</p>
+<p>主要是修改/etc/vsftpd/vsftpd.conf如下：</p>
+<p>chroot_local_user=NO</p>
+<p>chroot_list_enable=YES</p>
+<p>chroot_list_file=/etc/vsftpd/vsftpd.chroot_list</p>
+<p>vim chroot_list</p>
+<p>添加锁定目录用户</p>
+<p>Ftpuser</p>
+<p>Upload</p>
+<p>当然可以修改路径：</p>
+<p>usermod –d /www/html&nbsp; &nbsp;ftpuser</p>
+<p>**vsftpd.user_list：该文件里的用户账户在默认情况下也不能访问FTP服务器，仅当vsftpd .conf配置文件里启用userlist_enable=NO选项时才允许访问。</p>
+<p>/etc/vsftpd/user_list ，添加上需要阻止的本地用户，一个用户名一行&nbsp;用被阻止的用户</p>
+<p>grep -v “^#” vsftpd.conf&nbsp;</p>
+<p>anonymous_enable=NO</p>
+<p>local_enable=YES</p>
+<p>write_enable=YES</p>
+<p>local_umask=000</p>
+<p>dirmessage_enable=YES</p>
+<p>xferlog_enable=YES</p>
+<p>connect_from_port_20=YES</p>
+<p>xferlog_file=/var/log/xferlog</p>
+<p>xferlog_std_format=YES</p>
+<p>chroot_local_user=NO</p>
+<p>chroot_list_enable=YES</p>
+<p>chroot_list_file=/etc/vsftpd/chroot_list</p>
+<p>listen=YES</p>
+<p>listen_port=21</p>
+<p>pasv_address=192.168.10.123</p>
+<p>pasv_addr_resolve=yes</p>
+<p>pasv_enable=YES</p>
+<p>pasv_min_port=5000</p>
+<p>pasv_max_port=5008</p>
+<p>use_localtime=YES</p>
+<p>listen_ipv6=NO</p>
+<p>allow_writeable_chroot=YES</p>
+<p>pam_service_name=vsftpd</p>
+<p>userlist_enable=YES</p>
+<p>配置相关来源网络：</p>
+<p>登录和对匿名用户的设置</p>
+<p>write_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //是否对登录用户开启写权限。属全局性设置。默认NO<br>local_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //是否允许本地用户登录FTP服务器。默认为NO<br>anonymous_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //设置是否允许匿名用户登录FTP服务器。默认为YES<br>ftp_username=ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //定义匿名用户的账户名称，默认值为ftp。<br>no_anon_password=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //匿名用户登录时是否询问口令。设置为YES，则不询问。默&nbsp;<br>认NO<br>anon_world_readable_only=YES&nbsp;&nbsp; //匿名用户是否允许下载可阅读的文档，默认为YES。<br>&nbsp;&nbsp; anon_upload_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //是否允许匿名用户上传文件。只有在write_enable设置为<br>YES时，该配置项才有效。而且匿名用户对相应的目录必须有写权限。默认为NO。<br>anon_mkdir_write_enable=YES //是否允许匿名用户创建目录。只有在write_enable设置为&nbsp;&nbsp;&nbsp; YES时有效。且匿名用户对上层目录有写入的权限。默认为NO。<br>anon_other_write_enable=NO&nbsp;&nbsp;&nbsp; //若设置为YES，则匿名用户会被允许拥有多于<br>上传和建立目录的权限，还会拥有删除和更名权限。默认值为NO。</p>
+<p>2．设置用户登录后所在的目录&nbsp;<br>local_root=/var/ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 设置本地用户登录后所在的目录。默认配置文件中没有设置该项，此时用户登录FTP服务器后，所在的目录为该用户的主目录，对于root用户，则为/root目录。<br>anon_root=/var/ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置匿名用户登录后所在的目录。若未指定，则默认为/var/ftp目录。</p>
 <p>&nbsp;</p>
-<p>#ulimit -a</p>
-<p>core file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -c) unlimited</p>
-<p>data seg size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -d) unlimited</p>
-<p>scheduling priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-e) 0</p>
-<p>file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -f) unlimited</p>
-<p>pending signals&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-i) 127974</p>
-<p>max locked memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -l) 64</p>
-<p>max memory size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -m) unlimited</p>
-<p>open files&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-n) 100000</p>
-<p>pipe size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (512 bytes, -p) 8</p>
-<p>POSIX message queues&nbsp;&nbsp;&nbsp;&nbsp; (bytes, -q) 819200</p>
-<p>real-time priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-r) 0</p>
-<p>stack size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -s) 8192</p>
-<p>cpu time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (seconds, -t) unlimited</p>
-<p>max user processes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-u) 655360</p>
-<p>virtual memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -v) unlimited</p>
-<p>file locks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-x) unlimited而我们需要修改的是open files (-n) 1024的值</p>
-<p>于是命令就是limit -n 2048(随各自需要设置)</p>
+<p>3．控制用户是否允许切换到上级目录&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 在默认配置下，用户可以使用“cd..”命名切换到上级目录。比如，若用户登录后所在的目录为/var/ftp，则在“ftp&gt;”命令行 下，执行“cd..”命令后，用户将切换到其上级目录/var，若继续执行该命令，则可进入Linux系统的根目录，从而可以对整个Linux的文件系统 进行操作。</p>
+<p>若设置了write_enable=YES，则用户还可对根目录下的文件进行改写操作，会给系统带来极大的安全隐患，因此，必须防止用户切换到Linux的根目录，相关的配置项如下：<br>chroot_list_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 设置是否启用chroot_list_file配置项指定的用户列表文件。设置为YES则除了列在j/etc/vsftpd/chroot_list文件中的的帐号外，所有登录的用户都可以进入ftp根目录之外的目录。默认NO<br>chroot_list_file=/etc/vsftpd/chroot_list&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 用于指定用户列表文件，该文件用于控制哪些用户可以切换到FTP站点根目录的上级目录。<br>chroot_local_user=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 用于指定用户列表文件中的用户，是否允许切换到上级目录。默认NO<br>注意：要对本地用户查看效果，需先设置local_root=/var/ftp</p>
+<p>具体情况有以下几种：<br>1）当chroot_list_enable=YES，chroot_local_user=YES时，在/etc/vsftpd/chroot_list文件中列出的用户，可以切换到上级目录；未在文件中列出的用户，不能切换到站点根目录的上级目录。<br>2）当chroot_list_enable=YES，chroot_local_user=NO时，在/etc/vsftpd/chroot_list文件中列出的用户，不能切换到站点根目录的上级目录；未在文件中列出的用户，可以切换到上级目录。<br>3）当chroot_list_enable=NO，chroot_local_user=YES时，所有用户均不能切换到上级目录。<br>4）当chroot_list_enable=NO，chroot_local_user=NO时，所有用户均可以切换到上级目录。<br>5）当用户不允许切换到上级目录时，登录后FTP站点的根目录“/”是该FTP账户的主目录，即文件的系统的/var/ftp目录。</p>
 <p>&nbsp;</p>
+<p>4．设置访问控制&nbsp;<br>（1）设置允许或不允许访问的主机（见TBP14）<br>tcp_wrappers=YES用来设置vsftpd服务器是否与tcp wrapper相结合，进行主机的访问控制。默认设置为YES，vsftpd服务器会检查/etc/hosts.allow和/etc /hosts.deny中的设置，以决定请求连接的主机是否允许访问该FTP服务器。这两个文件可以起到简易的防火墙功能。<br>比如，若要仅允许192.168.168.1～192.168.168.254的用户，可以访问连接vsftpd服务器，则可在/etc/hosts.allow文件中添加以下内容：<br>vsftpd：192.168.168.0/255.255.255.0 ：allow<br>all：all：deny</p>
+<p>（2）设置允许或不允许访问的用户<br>对用户的访问控制由/etc/vsftpd/user_list和/etc/vsftpd/ftpusers文件来控制实现。相关配置命令如下：<br>userlist_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 决定/etc/vsftpd/user_list文件是否启用生效。YES则生效，NO不生效。<br>userlist_deny=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 决定/etc/vsftpd/user_list文件中的用户是允许访问还是不允许访问。若设置为YES，则/etc/vsftpd/user_list 文件中的用户将不允许访问FTP服务器；若设置为NO，则只有vsftpd.user_list文件中的用户，才能访问FTP服务器。</p>
 <p>&nbsp;</p>
+<p>5．设置访问速度&nbsp;<br>anon_max_rate=0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置匿名用户所能使用的最大传输速度，单位为b/s。若设置为0，则不受速度限制，此为默认值。<br>local_max_rate=0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 设置本地用户所能使用的最大传输速度。默认为0，不受限制。</p>
 <p>&nbsp;</p>
-<p>以上配置只对当前会话起作用，下次重新登陆后，还是得重新配置。要想配置永久生效，得在/etc/profile或者/etc/security/limits.conf文件中进行配置。</p>
-<p>首先以root权限登陆，然后打开/etc/security/limits.conf文件，进行配置：</p>
-<p>#vim /etc/security/limits.conf</p>
-<p><domain> &nbsp; &nbsp;<type> &nbsp; &nbsp;<item> &nbsp; &nbsp; &nbsp; &nbsp;<value></value></item></type></domain></p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp;* &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;soft &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;core &nbsp; &nbsp; &nbsp; &nbsp; unlimited</p>
-<p>或者在/etc/profile中作如下配置：</p>
-<p>#vim /etc/profile</p>
-<p>ulimit -S -c unlimited &gt;/dev/null 2&gt;&amp;1</p>
-<p>或者想配置只针对某一用户有效，则修改此用户的<del>/.bashrc或者</del>/.bash_profile文件：</p>
-<p>limit -c unlimited</p>
-<p>ulimit -c 0 是禁止产生core文件，而ulimit -c 1024则限制产生的core文件的大小不能超过1024kb</p>
-<p>3.设置Core Dump的核心转储文件目录和命名规则</p>
-<p>/proc/sys/kernel/core_uses_pid可以控制产生的core文件的文件名中是否添加pid作为扩展，如果添加则文件内容为1，否则为0<br>/proc/sys/kernel/core_pattern可以设置格式化的core文件保存位置或文件名，比如原来文件内容是core-%e<br>可以这样修改:<br>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern<br>将会控制所产生的core文件会存放到/data/common/coredump目录下，产生的文件名为core-进程名-pid-时间戳<br>以下是参数列表:<br>&nbsp;&nbsp;&nbsp; %p - insert pid into filename 添加pid<br>&nbsp;&nbsp;&nbsp; %u - insert current uid into filename 添加当前uid<br>&nbsp;&nbsp;&nbsp; %g - insert current gid into filename 添加当前gid<br>&nbsp;&nbsp;&nbsp; %s - insert signal that caused the coredump into the filename 添加导致产生core的信号<br>&nbsp;&nbsp;&nbsp; %t - insert UNIX time that the coredump occurred into filename 添加core文件生成时的unix时间<br>&nbsp;&nbsp;&nbsp; %h - insert hostname where the coredump happened into filename 添加主机名<br>&nbsp;&nbsp;&nbsp; %e - insert coredumping executable name into filename 添加命令名</p>
-<p>4.core文件的使用</p>
-<p>在core文件所在目录下键入:<br>gdb -c core &nbsp; （-c指定core文件）<br>它会启动GNU的调试器，来调试core文件，并且会显示生成此core文件的程序名，中止此程序的信号等等<br>如果你已经知道是由什么程序生成此core文件的，比如MyServer崩溃了生成core.12345，那么用此指令调试:<br>gdb -c core MyServer</p>
-<p>&nbsp;源：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html">https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html</a>&nbsp;</p>
-<p>5.永久生效：<br>当前不重启生效：<br>你可以用下列方式来完成<br>sysctl -w kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
-<p>或</p>
-<p>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern</p>
-<p>这些操作一旦计算机重启，则会丢失，如果你想持久化这些操作，可以在 /etc/sysctl.conf文件中增加：<br>kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
-<p>加好后，如果你想不重启看看效果的话，则用下面的命令：<br>sysctl -p /etc/sysctl.conf</p>
-<h1 id="sysctl-p-etc-sysctl-conf"><a href="#sysctl-p-etc-sysctl-conf" class="headerlink" title="sysctl -p /etc/sysctl.conf"></a>sysctl -p /etc/sysctl.conf</h1><p>net.ipv4.ip_forward = 0</p>
-<p>net.ipv4.conf.default.rp_filter = 1</p>
-<p>net.ipv4.conf.default.accept_source_route = 0</p>
-<p>kernel.core_uses_pid = 1</p>
-<p>net.ipv4.tcp_syncookies = 1</p>
-<p>kernel.msgmnb = 65536</p>
-<p>kernel.msgmax = 65536</p>
-<p>net.ipv6.conf.lo.disable_ipv6 = 1</p>
-<p>net.ipv4.conf.all.promote_secondaries = 1</p>
-<p>net.ipv4.conf.default.promote_secondaries = 1</p>
-<p>net.ipv6.neigh.default.gc_thresh3 = 4096</p>
-<p>net.ipv4.neigh.default.gc_thresh3 = 4096</p>
-<p>kernel.softlockup_panic = 1</p>
-<p>kernel.sysrq = 1</p>
-<p>net.ipv6.conf.all.disable_ipv6 = 1</p>
-<p>net.ipv6.conf.default.disable_ipv6 = 1</p>
-<p>vm.overcommit_memory = 1</p>
-<p>kernel.numa_balancing = 0</p>
-<p>kernel.shmmax = 68719476736</p>
-<p>kernel.printk = 5</p>
-<p>kernel.core_pattern = /data/common/coredump/core-%e-%p-%t</p>
-<hr>
-
+<p>6．定义用户配置文件&nbsp;<br>在vsftpd服务器中，不同用户还可使用不同的配置，这要通过用户配置文件来实现。<br>user_config_dir=/etc/vsftpd/userconf //用于设置用户配置文件所在的目录。<br>设置了该配置项后，当用户登录FTP服务器时，系统就会到/etc/vsftpd/userconf目录下读取与当前用户名相同的文件，并根据文件中的配 置命令，对当前用户进行更进一步的配置。比如，利用用户配置文件，可实现对不同用户进行访问的速度进行控制，在各用户配置文件中，定义 local_max_rate配置，以决定该用户允许的访问速度。</p>
+<p>&nbsp;</p>
+<p>7．与连接相关的设置&nbsp;<br>listen=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置vsftpd服务器是否以standalone模式运行。以standalone模式运行是一种较好的方式，此时listen必须设置为YES， 此为默认值，建议不要更改。很多与服务器运行相关的配置命令，需要此运行模式才有效。若设置为NO，则vsftpd不是以独立的服务运行，要受 xinetd服务的管理控制，功能上会受限制。</p>
+<p>max_clients=0<br>//设置vsftpd允许的最大连接数，默认为0，表示不受限制。若设置为150时，则同时允许有150个连接，超出的将拒绝建立连接。只有在以standalone模式运行时才有效。</p>
+<p>max_per_ip=0<br>// 设置每个IP地址允许与FTP服务器同时建立连接的数目。默认为0，不受限制。通常可对此配置进行设置，防止同一个用户建立太多的连接。只有在以standalone模式运行时才有效。</p>
+<p>listen_address=IP地址&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置在指定的IP地址上侦听用户的FTP请求。若不设置，则对服务器所绑定的所有IP地址进行侦听。只有在以standalone模式运行时才有效。 对于只绑定了一个IP地址的服务器，不需要配置该项，默认情况下，配置文件中没有该配置项。若服务器同时绑定了多个IP地址，则应通过该配置项，指定在哪 个IP地址上提供FTP服务，即指定FTP服务器所使用的IP地址。<br>注意：设置此值前后，可以通过netstat -tnl对比端口的监听情况</p>
+<p>accept_timeout=60&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置建立被动（PASV）数据连接的超时时间，单位为秒，默认值为60。<br>connect_timeout=60&nbsp;&nbsp;&nbsp;&nbsp;<br>// PORT方式下建立数据连接的超时时间，单位为秒。<br>data_connection_timeout=300&nbsp;&nbsp;&nbsp;<br>//设置建立FTP数据连接的超时时间，默认为300秒。</p>
+<p>idle_session_timeout＝600&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置多长时间不对FTP服务器进行任何操作，则断开该FTP连接，单位为秒，默认为600秒。即设置发呆的逾时时间，在这个时间内，若没有数据传送或指令的输入，则会强行断开连接。<br>pam_service_name=vsftpd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置在PAM所使用的名称，默认值为vsftpd。</p>
+<p>setproctitle_enable=NO|YES&nbsp;&nbsp;&nbsp;<br>//设置每个与FTP服务器的连接，是否以不同的进程表现出来，默认值为NO，此时只有一个名为vsftpd的进程。若设置为YES，则每个连接都会有一个vsftpd进程，使用“ps -ef|grep ftp”命令可查看到详细的FTP连接信息。安全起见，建议关闭。</p>
+<p>&nbsp;PS:有时候不能上传文件，查看锁定目录权限和allow_writeable_chroot=YES 还可以查看下</p>
+<p>getsebool -a|grep ftp</p>
+<p>输入setsebool -P ftpd_full_access=on打开权限即可：</p>
+<p>getsebool -a|grep ftp查看：</p>
+<p>getsebool -a|grep ftp</p>
+<p>ftpd_anon_write –&gt; off</p>
+<p>ftpd_connect_all_unreserved –&gt; off</p>
+<p>ftpd_connect_db –&gt; off</p>
+<p>ftpd_full_access –&gt; on</p>
+<p>ftpd_use_cifs –&gt; off</p>
+<p>ftpd_use_fusefs –&gt; off</p>
+<p>ftpd_use_nfs –&gt; off</p>
+<p>ftpd_use_passive_mode –&gt; off</p>
+<p>httpd_can_connect_ftp –&gt; off</p>
+<p>httpd_enable_ftp_server –&gt; off</p>
+<p>tftp_anon_write –&gt; off</p>
+<p>tftp_home_dir –&gt; off</p>
+<h2 id="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"><a href="#vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。" class="headerlink" title="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"></a>vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。</h2>
                 
             </div>
             <hr/>
@@ -527,7 +534,7 @@ Core文件其实就是内存的映像，当程序崩溃时，存储内存的相�
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://blog.icmpy.net/2023/11/13/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/">https://blog.icmpy.net/2023/11/13/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/</a>
+                    <a href="https://blog.icmpy.net/2024/02/13/vsftp-%E9%94%81%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95/">https://blog.icmpy.net/2024/02/13/vsftp-%E9%94%81%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -608,54 +615,18 @@ Core文件其实就是内存的映像，当程序崩溃时，存储内存的相�
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2023/11/13/apache%E5%A4%9A%E7%BD%91%E7%AB%99%E5%AF%B9%E5%BA%9480%E7%AB%AF%E5%8F%A3/">
+                <a href="/2024/02/13/vsftp-%E9%94%81%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="apache多网站对应80端口">
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="vsftp 锁定用户目录">
                         
-                        <span class="card-title">apache多网站对应80端口</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-11-13
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-user fa-fw"></i>
-                            云上的小雨滴
-                            
-                        </span>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2023/11/13/linux%E6%9C%89%E8%B6%B3%E5%A4%9F%E5%86%85%E5%AD%98%E8%BF%98%E4%BD%BF%E7%94%A8swap/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="linux有足够内存还使用swap">
-                        
-                        <span class="card-title">linux有足够内存还使用swap</span>
+                        <span class="card-title">vsftp 锁定用户目录</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -666,7 +637,7 @@ Core文件其实就是内存的映像，当程序崩溃时，存储内存的相�
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-11-13
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-02-13
                             </span>
                         <span class="publish-author">
                             
@@ -675,6 +646,52 @@ Core文件其实就是内存的映像，当程序崩溃时，存储内存的相�
                             
                         </span>
                     </div>
+                </div>
+
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2023/11/14/ELK%E5%AE%89%E8%A3%85%E8%B0%83%E8%AF%95%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="ELK安装调试及遇到的问题">
+                        
+                        <span class="card-title">ELK安装调试及遇到的问题</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-11-14
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            云上的小雨滴
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E7%82%B9%E6%BB%B4/">
+                        <span class="chip bg-color">点滴</span>
+                    </a>
+                    
                 </div>
                 
             </div>

@@ -6,7 +6,7 @@
   <link href="https://blog.icmpy.net/atom.xml" rel="self"/>
   
   <link href="https://blog.icmpy.net/"/>
-  <updated>2023-11-14T08:55:15.919Z</updated>
+  <updated>2023-11-14T09:24:07.815Z</updated>
   <id>https://blog.icmpy.net/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>vsftp 锁定用户目录</title>
+    <link href="https://blog.icmpy.net/2024/02/13/vsftp-%E9%94%81%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95/"/>
+    <id>https://blog.icmpy.net/2024/02/13/vsftp-%E9%94%81%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95/</id>
+    <published>2024-02-13T07:21:51.000Z</published>
+    <updated>2023-11-14T09:24:07.815Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;vsftp 安装以后给用户权限和锁定目录；&lt;/p&gt;
+&lt;p&gt;关闭SELinux：&lt;/p&gt;
+&lt;p&gt;修改/etc/selinux/config文件中的SELINUX=”” 为 disabled ，然后重启。&lt;/p&gt;
+&lt;p&gt;如果不想重启系统，使用命令setenforce</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>ELK安装调试及遇到的问题</title>
@@ -62,53 +86,6 @@
   </entry>
   
   <entry>
-    <title>linux install shadowsocks</title>
-    <link href="https://blog.icmpy.net/2023/11/14/linux-install-shadowsocks/"/>
-    <id>https://blog.icmpy.net/2023/11/14/linux-install-shadowsocks/</id>
-    <published>2023-11-14T06:55:27.000Z</published>
-    <updated>2023-11-14T08:58:19.679Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h1 id=&quot;1-安装Python和pip&quot;&gt;&lt;a href=&quot;#1-安装Python和pip&quot; class=&quot;headerlink&quot; title=&quot;1. 安装Python和pip&quot;&gt;&lt;/a&gt;1. 安装Python和pip&lt;/h1&gt;&lt;p&gt;sudo apt-get</summary>
-        
-      
-    
-    
-    
-    
-    <category term="随笔" scheme="https://blog.icmpy.net/tags/%E9%9A%8F%E7%AC%94/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>nginx编译ssl模块</title>
-    <link href="https://blog.icmpy.net/2023/11/14/nginx%E7%BC%96%E8%AF%91ssl%E6%A8%A1%E5%9D%97/"/>
-    <id>https://blog.icmpy.net/2023/11/14/nginx%E7%BC%96%E8%AF%91ssl%E6%A8%A1%E5%9D%97/</id>
-    <published>2023-11-14T06:22:27.000Z</published>
-    <updated>2023-11-14T09:01:14.432Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;几个官网在一台服务器上面，其中一台是https的，增加一个官网以，重启nginx以后，https的网站直接报错，大意是ssl 在配置文件中unknow，但是这个https网站已经运行很久了，一时间有点郁闷，掉坑里了。&lt;/p&gt;
-&lt;p&gt;查看nginx信息</summary>
-        
-      
-    
-    
-    
-    
-    <category term="点滴" scheme="https://blog.icmpy.net/tags/%E7%82%B9%E6%BB%B4/"/>
-    
-  </entry>
-  
-  <entry>
     <title>centos7 改网卡名eth0</title>
     <link href="https://blog.icmpy.net/2023/11/14/centos7-%E6%94%B9%E7%BD%91%E5%8D%A1%E5%90%8Deth0/"/>
     <id>https://blog.icmpy.net/2023/11/14/centos7-%E6%94%B9%E7%BD%91%E5%8D%A1%E5%90%8Deth0/</id>
@@ -143,30 +120,6 @@
         
         
     <summary type="html">&lt;p&gt;制作启动盘：UltraISO.exe 打开镜像文件，–启动—写入硬盘镜像—默认—开始大概7分钟后就制作完成。</summary>
-        
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>vsftp 锁定用户目录</title>
-    <link href="https://blog.icmpy.net/2023/11/14/vsftp-%E9%94%81%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95/"/>
-    <id>https://blog.icmpy.net/2023/11/14/vsftp-%E9%94%81%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95/</id>
-    <published>2023-11-14T04:21:51.000Z</published>
-    <updated>2023-11-14T04:22:30.665Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;vsftp 安装以后给用户权限和锁定目录；&lt;/p&gt;
-&lt;p&gt;关闭SELinux：&lt;/p&gt;
-&lt;p&gt;修改/etc/selinux/config文件中的SELINUX=”” 为 disabled ，然后重启。&lt;/p&gt;
-&lt;p&gt;如果不想重启系统，使用命令setenforce</summary>
         
       
     
@@ -233,30 +186,6 @@
     <summary type="html">&lt;p&gt;一台服务器绑定多个域名，已经装了apache，nginx就不使用了，利用apache主机头名虚拟主机用80端口对应多个网站，万能的网络上面有文档如下：&lt;/p&gt;
 &lt;p&gt;Aapche 如果需要绑定多个域名到一个IP上,是支持的。需要注意以下2点:&lt;/p&gt;
 &lt;p&gt;1 必须要开启</summary>
-        
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>coredump 路径格式</title>
-    <link href="https://blog.icmpy.net/2023/11/13/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/"/>
-    <id>https://blog.icmpy.net/2023/11/13/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/</id>
-    <published>2023-11-13T07:38:29.000Z</published>
-    <updated>2023-11-13T08:21:51.853Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;Coredump&lt;/p&gt;
-&lt;p&gt;业务进程宕机以后开发需要查看dump查找定位问题，所有服务器初始化环境时候统一定制coredump路径；&lt;/p&gt;
-&lt;p&gt;1.Core文件简介&lt;/p&gt;
-&lt;p&gt;Core文件其实就是内存的映像，当程序崩溃时，存储内存的相应信息，主用用于对程序进行调</summary>
         
       
     
@@ -445,6 +374,29 @@
   </entry>
   
   <entry>
+    <title>linux install shadowsocks</title>
+    <link href="https://blog.icmpy.net/2023/06/16/linux-install-shadowsocks/"/>
+    <id>https://blog.icmpy.net/2023/06/16/linux-install-shadowsocks/</id>
+    <published>2023-06-16T05:55:17.000Z</published>
+    <updated>2023-11-14T09:24:36.448Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;1-安装Python和pip&quot;&gt;&lt;a href=&quot;#1-安装Python和pip&quot; class=&quot;headerlink&quot; title=&quot;1. 安装Python和pip&quot;&gt;&lt;/a&gt;1. 安装Python和pip&lt;/h1&gt;&lt;p&gt;sudo apt-get</summary>
+        
+      
+    
+    
+    
+    
+    <category term="随笔" scheme="https://blog.icmpy.net/tags/%E9%9A%8F%E7%AC%94/"/>
+    
+  </entry>
+  
+  <entry>
     <title>frp搭建</title>
     <link href="https://blog.icmpy.net/2023/06/10/frp%E6%90%AD%E5%BB%BA/"/>
     <id>https://blog.icmpy.net/2023/06/10/frp%E6%90%AD%E5%BB%BA/</id>
@@ -464,6 +416,56 @@
     
     
     
+    
+  </entry>
+  
+  <entry>
+    <title>coredump 路径格式</title>
+    <link href="https://blog.icmpy.net/2023/05/12/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/"/>
+    <id>https://blog.icmpy.net/2023/05/12/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/</id>
+    <published>2023-05-12T07:38:29.000Z</published>
+    <updated>2023-11-14T09:25:02.054Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;Coredump&lt;/p&gt;
+&lt;p&gt;业务进程宕机以后开发需要查看dump查找定位问题，所有服务器初始化环境时候统一定制coredump路径；&lt;/p&gt;
+&lt;p&gt;1.Core文件简介&lt;/p&gt;
+&lt;p&gt;Core文件其实就是内存的映像，当程序崩溃时，存储内存的相应信息，主用用于对程序进行调</summary>
+        
+      
+    
+    
+    
+    
+    <category term="随笔" scheme="https://blog.icmpy.net/tags/%E9%9A%8F%E7%AC%94/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>nginx编译ssl模块</title>
+    <link href="https://blog.icmpy.net/2023/03/10/nginx%E7%BC%96%E8%AF%91ssl%E6%A8%A1%E5%9D%97/"/>
+    <id>https://blog.icmpy.net/2023/03/10/nginx%E7%BC%96%E8%AF%91ssl%E6%A8%A1%E5%9D%97/</id>
+    <published>2023-03-10T10:22:27.000Z</published>
+    <updated>2023-11-14T09:23:11.543Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;几个官网在一台服务器上面，其中一台是https的，增加一个官网以，重启nginx以后，https的网站直接报错，大意是ssl 在配置文件中unknow，但是这个https网站已经运行很久了，一时间有点郁闷，掉坑里了。&lt;/p&gt;
+&lt;p&gt;查看nginx信息</summary>
+        
+      
+    
+    
+    
+    
+    <category term="点滴" scheme="https://blog.icmpy.net/tags/%E7%82%B9%E6%BB%B4/"/>
     
   </entry>
   
