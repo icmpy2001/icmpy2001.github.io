@@ -83,6 +83,73 @@
 ]]></content>
   </entry>
   <entry>
+    <title>Tengine 安装</title>
+    <url>/2023/11/14/Tengine%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<p>Tengine安装</p>
+<p>Tengine 是由淘宝网发起的 Web 服务器项目。它在 Nginx 的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。Tengine 的性能和稳定性已经在大型的网站如淘宝网，天猫商城等得到了很好的检验。它的最终目标是打造一个高效、稳定、安全、易用的 Web 平台。</p>
+<p>Tengine 特性：</p>
+<p>支持 HTTP 的 CONNECT 方法，可用于正向代理场景；</p>
+<p>支持异步 OpenSSL，可使用硬件如：QAT 进行 HTTPS 的加速与卸载；</p>
+<p>增强相关运维、监控能力，比如异步打印日志及回滚，本地 DNS 缓存，内存监控等；</p>
+<p>Stream 模块支持 server_name 指令；</p>
+<p>更加强大的负载均衡能力，包括一致性 hash 模块、会话保持模块，还可以对后端的服务器进行主动健康检查，根据服务器状态自动上线下线，以及动态解析 upstream 中出现的域名；</p>
+<p>输入过滤器机制支持。通过使用这种机制 Web 应用防火墙的编写更为方便；</p>
+<p>支持设置 proxy、memcached、fastcgi、scgi、uwsgi 在后端失败时的重试次数；</p>
+<p>动态脚本语言 Lua 支持。扩展功能非常高效简单；</p>
+<p>支持按指定关键字(域名，url等)收集 Tengine 运行状态；</p>
+<p>组合多个 CSS、JavaScript 文件的访问请求变成一个请求；</p>
+<p>自动去除空白字符和注释从而减小页面的体积</p>
+<p>自动根据 CPU 数目设置进程个数和绑定 CPU 亲缘性；</p>
+<p>监控系统的负载和资源占用从而对系统进行保护；</p>
+<p>显示对运维人员更友好的出错信息，便于定位出错机器；；</p>
+<p>更强大的防攻击（访问速度限制）模块；</p>
+<p>更方便的命令行参数，如列出编译的模块列表、支持的指令等；</p>
+<p>支持 Dubbo 协议；</p>
+<p>可以根据访问文件类型设置过期时间；</p>
+<p>下载源码包：</p>
+<p>tengine 源码：<a href="http://tengine.taobao.org/download_cn.html">http://tengine.taobao.org/download_cn.html</a></p>
+<p>pcre 源码：<a href="http://www.pcre.org/">http://www.pcre.org/</a></p>
+<p>openssl 源码：<a href="https://www.openssl.org/source/">https://www.openssl.org/source/</a></p>
+<p>zlib 源码：<a href="http://www.zlib.net/">http://www.zlib.net/</a></p>
+<p>安装包：</p>
+<p>支持lua模块</p>
+<p>wget <a href="http://luajit.org/download/LuaJIT-2.0.4.tar.gz">http://luajit.org/download/LuaJIT-2.0.4.tar.gz</a></p>
+<p>#wget <a href="https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz">https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz</a></p>
+<p>#wget <a href="https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz">https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz</a></p>
+<p>安装LuaJIT</p>
+<p>tar xf LuaJIT-2.0.4.tar.gz</p>
+<p>#cd xf LuaJIT-2.0.4</p>
+<p>#make PREFIX=/usr/local/luajit</p>
+<p>#make install PREFIX=/usr/local/luajit</p>
+<p>#ln -s /usr/local/luajit/lib/libluajit-5.1.so.2 /lib64/libluajit-5.1.so.2</p>
+<p>添加环境变量</p>
+<p>export LUAJIT_LIB=/usr/local/luajit/lib</p>
+<p>export LUAJIT_INC=/usr/local/luajit/include/luajit-2.0</p>
+<p>#source /etc/profile</p>
+<p>安装tingine</p>
+<p>#tar xf v0.3.0.tar.gz</p>
+<p>#tar xf v0.10.13.tar.gz</p>
+<p>#tar xf nginx-1.12.0.tar.gz</p>
+<p>cd tengine-2.2.2</p>
+<p> ./configure –conf-path=/etc/nginx/nginx.conf –user=www-data –group=www-data –prefix=/etc/nginx –sbin-path=/usr/sbin/nginx –with-ipv6  –error-log-path=/var/log/nginx/error.log –http-log-path=/var/log/nginx/access.log  –pid-path=/var/run/nginx.pid –lock-path=/var/lock/nginx.lock –http-client-body-temp-path=/var/cache/nginx/client_temp  –http-proxy-temp-path=/var/cache/nginx/proxy_temp –http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp  –http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp –http-scgi-temp-path=/var/cache/nginx/scgi_temp  –without-select_module –without-http_uwsgi_module –without-http_empty_gif_module –with-http_ssl_module –with-http_addition_module  –with-http_sub_module –with-http_dav_module –with-http_flv_module –with-http_gunzip_module  –with-http_gzip_static_module –with-http_random_index_module  –with-http_secure_link_module –with-http_stub_status_module –with-http_realip_module  –with-http_concat_module=shared –with-http_sysguard_module=shared  –with-http_dyups_module –with-file-aio –add-module=../ngx_devel_kit-0.3.0/  –add-module=../lua-nginx-module-0.10.13/ \</p>
+<p>Make </p>
+<p>Make install</p>
+<p>Make会报错：cc1: all warnings being treated as errors</p>
+<p>make[1]: *** [objs/Makefile:617: objs/src/core/ngx_murmurhash.o] Error 1</p>
+<p>make[1]: Leaving directory ‘/home/tools/install/tengine-2.2.2’</p>
+<p>vim objs/Makefile：</p>
+<p>CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused -Werror -g  -DNDK_SET_VAR</p>
+<p> -Werror -g去掉</p>
+<p>CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused  -DNDK_SET_VAR</p>
+<p>sed -i “s/ -Werror -g / /g” ./objs/Makefile<br>make &amp;&amp; make install<br>echo <code>nginx -v</code></p>
+<p>#不显示版本号<br>sed -i “/server_tokens off;/a server_tag off; \n server_info off;” nginx.conf<br>mkdir -p /var/cache/nginx/scgi_temp<br>chown www-data.root /var/cache/nginx/scgi_temp</p>
+<p>添加系统服务：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat &gt;&gt;/etc/systemd/system/nginx.service &lt;&lt;EOF</span><br><span class="line">[Unit]</span><br><span class="line">Description=The nginx HTTP and reverse proxy server</span><br><span class="line">After=syslog.target network.target remote-fs.target nss-lookup.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">PIDFile=/var/run/nginx.pid</span><br><span class="line">ExecStartPre=/usr/sbin/nginx -t -c /etc/nginx/nginx.conf</span><br><span class="line">ExecStart=/usr/sbin/nginx -c /etc/nginx/nginx.conf</span><br><span class="line">ExecReload=/usr/sbin/nginx -s reload</span><br><span class="line">ExecStop=/usr/sbin/nginx -s stop</span><br><span class="line">ExecQuit=/usr/sbin/nginx -s quit</span><br><span class="line">PrivateTmp=true</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br></pre></td></tr></tbody></table></figure>
+
+<p>后续就是优化配置了。</p>
+]]></content>
+  </entry>
+  <entry>
     <title>zabbix监控业务进程变动</title>
     <url>/2023/11/13/Zabbix_%E7%9B%91%E6%8E%A7%E8%BF%9B%E7%A8%8B%E5%AE%95%E6%9C%BA/</url>
     <content><![CDATA[<p>Zabbix 监控进程宕机</p>
@@ -201,7 +268,7 @@
 <p>SUBSYSTEM==”net”, ACTION==”add”, DRIVERS==”?<em>“, ATTR{address}==”00:0c:29:1f:1a:f5”, KERNEL==”eth</em>“, NAME=”eth0”</p>
 <p>修改为：</p>
 <p>SUBSYSTEM==”net”, ACTION==”add”, DRIVERS==”?<em>“, ATTR{address}==”30:5a:3a:e0:90:3c”, KERNEL==”eth</em>“, NAME=”eth0”</p>
-<h2 id="重启机器试试"><a href="#重启机器试试" class="headerlink" title="重启机器试试~"></a>重启机器试试~</h2>]]></content>
+<h2 id="重启机器试试"><a href="#重启机器试试" class="headerlink" title="#####重启机器试试~"></a>#####重启机器试试~</h2>]]></content>
   </entry>
   <entry>
     <title>coredump 路径格式</title>
@@ -510,6 +577,31 @@
 <p>解决方法：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用top -u [username]查看该用户下的所有进程，发现多了一个java进程在运行着；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、kill掉与java相关的进程；</p>
 <p>2、关闭zookeeper，删除zoo.cfg中的dataDir配置的文件夹；</p>
 <h2 id="3、重启zookeeper。"><a href="#3、重启zookeeper。" class="headerlink" title="3、重启zookeeper。"></a>3、重启zookeeper。</h2>]]></content>
+  </entry>
+  <entry>
+    <title>linux install shadowsocks</title>
+    <url>/2023/11/14/linux-install-shadowsocks/</url>
+    <content><![CDATA[<ol>
+<li>安装Python和pip</li>
+</ol>
+<p>sudo apt-get update</p>
+<p>sudo apt-get install python-pip</p>
+<ol start="2">
+<li>安装Shadowsocks</li>
+</ol>
+<p>sudo pip install shadowsocks<br>3. 配置Shadowsocks<br>cat &gt;&gt; /etc/shadowsocks.json &lt;&lt;EOF<br>{</p>
+<p>“server” : “ server ip”,<br>“server_port” : server port,<br>“local_port” : 1080,<br>“password” : “passwd”,<br>“timeout” : 200,<br>“method” : “aes-256-cfb”<br>}<br>EOF<br>参数的解释:<br>server：远程服务器IP地址<br>server_port：远程服务器端口号<br>local_port：本地端口号，默认为1080<br>password：远程服务器密码，自定义<br>timeout：超时时间，默认为300秒<br>method：加密方式，推荐aes-256-cfb</p>
+<ol start="4">
+<li>启动Shadowsocks</li>
+</ol>
+<p>在命令行中输入：</p>
+<p>ssserver -c /etc/shadowsocks.json<br>5.添加系统服务</p>
+<p>cat &gt;&gt;/etc/systemd/system/shadows.service  &lt;&lt;EOF<br>[Unit]<br>Description=shadows server<br>[Install]<br>WantedBy=multi-user.target<br>[Service]<br>User=root<br>Group=root<br>ExecStart=/usr/bin/ssserver -c /etc/shadowsocks.json start<br>Restart=on-failure<br>EOF</p>
+<p>systemctl restart shadows.service<br>systemctl enable shadows.service</p>
+]]></content>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
   </entry>
   <entry>
     <title>linux 磁盘挂载扩充格式化</title>

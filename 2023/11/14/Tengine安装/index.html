@@ -4,12 +4,9 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="zabbix3.0.1安装过程的小坑, 云上的小雨滴">
-    <meta name="description" content="1.安装
-首先lamp环境安装完毕，开始安装zabbix；
-下载完毕zabbix-3.0.1.tar.gz，解压
-cd &amp;nbsp;zabbix-3.0.1
-./configure –prefix=/usr/local/zabbix&amp;nbs">
+    <meta name="keywords" content="Tengine 安装, 云上的小雨滴">
+    <meta name="description" content="Tengine安装
+Tengine 是由淘宝网发起的 Web 服务器项目。它在 Nginx 的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。Tengine 的性能和稳定性已经在大型的网站如淘宝网，天猫商城等得到了很好的检验。它的">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -21,7 +18,7 @@ cd &amp;nbsp;zabbix-3.0.1
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>zabbix3.0.1安装过程的小坑 | 云上的小雨滴</title>
+    <title>Tengine 安装 | 云上的小雨滴</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -339,12 +336,12 @@ cd &amp;nbsp;zabbix-3.0.1
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">zabbix3.0.1安装过程的小坑</h1>
+                    <h1 class="description center-align post-title">Tengine 安装</h1>
                 </div>
             </div>
         </div>
@@ -404,136 +401,68 @@ cd &amp;nbsp;zabbix-3.0.1
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>1.安装</p>
-<p>首先lamp环境安装完毕，开始安装zabbix；</p>
-<p>下载完毕zabbix-3.0.1.tar.gz，解压</p>
-<p>cd &nbsp;zabbix-3.0.1</p>
-<p>./configure –prefix=/usr/local/zabbix&nbsp; –enable-server \</p>
-<p>–enable-proxy –enable-agent –enable-ipv6–with-mysql=/usr/local/mysql/bin/mysql_config –with-net-snmp \</p>
-<p>–with-libcurl –with-openipmi–with-unixodbc –with-ldap –with-ssh2 –enable-java –enable-ipv6–enable-proxy</p>
-<p>自行编译但是会报错：</p>
-<p>Unixodbc没找到</p>
-<p>mysql_config</p>
-<p>configure: error: SSH2 library not found</p>
-<p>yum install php-pecl-ssh2.x86_64 libssh2-devel.x86_64</p>
-<p>yum install net-snmp-devel</p>
-<p>yum -y install unixODBC*</p>
-<p>yum install openldap openldap-devel</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; yumlist openldap</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; yumlist openldap-devel</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>checking for SSH2 support… yes</p>
-<p>checking for OPENIPMI support… no</p>
-<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h</p>
-<p>&nbsp;</p>
-<p>&nbsp;<a target="_blank" rel="noopener" href="https://centos.pkgs.org/6/centos-x86_64/OpenIPMI-2.0.16-14.el6.x86_64.rpm.html">https://centos.pkgs.org/6/centos-x86_64/OpenIPMI-2.0.16-14.el6.x86_64.rpm.html</a></p>
-<p>rpm -ivh OpenIPMI-2.0.16-14.el6.x86_64.rpm</p>
-<p>&nbsp;<br>vhOpenIPMI-de<br>pum install OpenIPMI-devel</p>
-<p>&nbsp;</p>
-<p>报错checking for OPENIPMI support… no</p>
-<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h</p>
-<p>需要安装OpenIPMI和OpenIPMI-devel</p>
-<p>&nbsp;</p>
-<p>Yum安装OpenIPMI并下载OpenIPMI-devel-2.0.16-14.el6.x86_64.rpm</p>
-<p> yum install OpenIPMI</p>
-<p> rpm -ivhOpenIPMI-devel-2.0.16-14.el6.x86_64.rpm</p>
-<p>报错 error: Failed dependencies:</p>
-<p>pkgconfig(ncurses) is needed byOpenIPMI-devel-2.0.16-14.el6.x86_64</p>
-<p> yum install ncurses-devel</p>
-<p> rpm -ivhOpenIPMI-devel-2.0.16-14.el6.x86_64.rpm</p>
-<p>onfigure: error: Invalid OPENIPMI directory- unable to find ipmiif.h</p>
-<p>需要安装libssh2-devel</p>
-<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h</p>
-<p>需要安装OpenIPMI-devel</p>
-<p>hecking for SSH2 support… yes</p>
-<p>checking for OPENIPMI support… yes</p>
-<p>checking for javac… no</p>
-<p>configure: error: Unable to find”javac” executable in path</p>
-<p>configure: error: Jabber library notfound&nbsp; #yum install iksemel-devel即可，</p>
-<p>&nbsp;configure: error: LIBXML2 library not found&nbsp;&nbsp;&nbsp;</p>
-<p>#yum install libxml2-devel&nbsp;</p>
-<p>&nbsp;configure: error: unixODBC library notfound&nbsp;&nbsp;&nbsp;</p>
-<p>#yum install unixODBC-devel&nbsp;&nbsp;</p>
-<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h&nbsp;&nbsp;&nbsp;</p>
-<p>#yum install OpenIPMI-devel&nbsp;&nbsp;</p>
-<p>configure: error: Unable to find”javac” executable in path&nbsp;&nbsp;&nbsp;</p>
-<p>#yum install java*&nbsp;&nbsp;&nbsp; 具体什么包没找，直接通配算逑，生产环境可去掉–enable-java选项</p>
-<p>&nbsp;configure: error: Curl library not found&nbsp;</p>
-<p>&nbsp;#yum install curl-devel</p>
-<p>&nbsp;</p>
-<p>make &amp;&amp; make install</p>
-<ol start="2">
-<li>导数据库顺序schema-p_w_picpath-data,</li>
-</ol>
-<p>添加系统软连接：</p>
-<p>[<a href="mailto:root@vm_1_11zabbix-3.0.1">root@vm_1_11zabbix-3.0.1</a>]# ln -s /usr/local/zabbix/sbin/* /usr/local/sbin/</p>
-<p>[root@vm_1_11 zabbix-3.0.1]# ln -s /usr/local/zabbix/bin/* /usr/local/bin/</p>
-<p>添加zabbix服务对应的端口：</p>
-<p>[root@vm_1_11 mysql]# vim /etc/services</p>
-<p>在文件末尾添加：</p>
-<h1 id="Zabbix"><a href="#Zabbix" class="headerlink" title="Zabbix"></a>Zabbix</h1><p>zabbix-agent 10050/tcp # Zabbix Agent</p>
-<p>zabbix-agent 10050/udp # Zabbix Agent</p>
-<p>zabbix-trapper 10051/tcp # Zabbix Trapper</p>
-<p>zabbix-trapper 10051/udp # Zabbix Trapper</p>
-<p>修改zabbix配置文件：</p>
-<p>[root@vm_1_11 tools]# vim /usr/local/zabbix/etc/zabbix_server.conf</p>
-<p>修改以下几处：</p>
-<p>DBName=zabbix</p>
-<p>DBUser=zabbix</p>
-<p>DBPassword=zabbix</p>
-<p>AlertScriptsPath==/usr/local/zabbix/share/zabbix/alertscripts &nbsp;#zabbix运行脚本存放目录</p>
-<p>DBPort=3306</p>
-<p>&nbsp;vim /usr/local/zabbix/etc/zabbix_agentd.conf</p>
-<p>Include=/usr/local/zabbix/etc/zabbix_agentd.conf.d/</p>
-<p>UnsafeUserParameters=1 &nbsp;#启用自定义key</p>
-<p>添加开机启动脚本：</p>
-<p>[root@vm_1_11 tools]# cp /usr/local/src/zabbix-3.0.3/misc/init.d/fedora/core/zabbix_server /etc/rc.d/init.d/zabbix_server</p>
-<p>客户端：</p>
-<p>[root@vm_1_11 tools]# cp /usr/local/src/zabbix-3.0.3/misc/init.d/fedora/core/zabbix_agentd /etc/rc.d/init.d/zabbix_agentd</p>
-<p>[root@vm_1_11 tools]# chmod a+x /etc/rc.d/init.d/zabbix_*</p>
-<p>[root@vm_1_11 tools]# chkconfig zabbix_server on</p>
-<p>[root@vm_1_11 tools]# chkconfig zabbix_agentd on</p>
-<p>修改zabbix开机启动脚本中的zabbix安装目录：</p>
-<p>[root@vm_1_11 tools]# vim /etc/rc.d/init.d/zabbix_server</p>
-<p>修改以下内容：</p>
-<p>BASEDIR=/usr/local/zabbix/</p>
-<p>[root@vm_1_11 tools]# vim /etc/rc.d/init.d/zabbix_agentd</p>
-<p>修改以下内容：</p>
-<p>BASEDIR=/usr/local/zabbix/</p>
-<p>复制zabbix的web站点文件到nginx：</p>
-<p>[root@vm_1_11 tools]# cp -r /usr/local/src/zabbix-3.0.3/frontends/php/* /usr/local/nginx/html/zabbix/</p>
-<p>启动：</p>
-<p>[root@vm_1_11 tools]# systemctl daemon-reload</p>
-<p>[root@vm_1_11 tools]# service zabbix_server start</p>
-<p>[root@vm_1_11 tools]# service zabbix_agentd start</p>
-<p>&nbsp;查看进程：ps -eaf|grep zabbix_server</p>
-<p>zabbix_server [7212]: cannot run as root!</p>
-<p>添加zabbix用户；</p>
-<p>在zabbix/setup/php 页面会检测信息可能会报错要都ok才能下一步哦，</p>
-<p>按照报错信息调试vim /etc/php.ini</p>
-<p>查找如下参数并修改为：</p>
-<hr>
-<p>post_max_size = 16M</p>
-<p>max_execution_time = 300</p>
-<p>max_input_time = 300</p>
-<p><img src="/../images/20231114-1.png"></p>
-<p>/etc/php.ini修改以后还是这样，可能php.ini路径修改了，</p>
-<p>本例中就是到</p>
-<p>-rw-r–r– 1 root root 73930 Mar 27 18:19php.ini</p>
-<p>-rw-r–r– 1 root root 73928 Mar 27 18:18php.ini_0327</p>
-<p>[root@VM_54_42_centos etc]# pwd</p>
-<p>/usr/local/php/etc</p>
-<p>vim /usr/local/nginx/html/zabbix/include/locales.inc.php</p>
-<p>修改中文字符；chinese–true</p>
-<p>邮件报警：在zabbix mkdir&nbsp;alertscripts vim send_email.sh</p>
-<p>#!/bin/sh</p>
-<p>#export.UTF-8</p>
-<p>FILE=/var/log/zabbix/mailtmp.txt</p>
-<p>echo “$3” &gt;$FILE</p>
-<p>dos2unix -k $FILE</p>
-<p>/bin/mail -s “$2” $1 &lt; $FILE</p>
-<p>zabbix-管理–示警媒介类型–定制脚本-sendmail脚本，–添加联系人邮件。。</p>
+                <p>Tengine安装</p>
+<p>Tengine 是由淘宝网发起的 Web 服务器项目。它在 Nginx 的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。Tengine 的性能和稳定性已经在大型的网站如淘宝网，天猫商城等得到了很好的检验。它的最终目标是打造一个高效、稳定、安全、易用的 Web 平台。</p>
+<p>Tengine 特性：</p>
+<p>支持 HTTP 的 CONNECT 方法，可用于正向代理场景；</p>
+<p>支持异步 OpenSSL，可使用硬件如：QAT 进行 HTTPS 的加速与卸载；</p>
+<p>增强相关运维、监控能力，比如异步打印日志及回滚，本地 DNS 缓存，内存监控等；</p>
+<p>Stream 模块支持 server_name 指令；</p>
+<p>更加强大的负载均衡能力，包括一致性 hash 模块、会话保持模块，还可以对后端的服务器进行主动健康检查，根据服务器状态自动上线下线，以及动态解析 upstream 中出现的域名；</p>
+<p>输入过滤器机制支持。通过使用这种机制 Web 应用防火墙的编写更为方便；</p>
+<p>支持设置 proxy、memcached、fastcgi、scgi、uwsgi 在后端失败时的重试次数；</p>
+<p>动态脚本语言 Lua 支持。扩展功能非常高效简单；</p>
+<p>支持按指定关键字(域名，url等)收集 Tengine 运行状态；</p>
+<p>组合多个 CSS、JavaScript 文件的访问请求变成一个请求；</p>
+<p>自动去除空白字符和注释从而减小页面的体积</p>
+<p>自动根据 CPU 数目设置进程个数和绑定 CPU 亲缘性；</p>
+<p>监控系统的负载和资源占用从而对系统进行保护；</p>
+<p>显示对运维人员更友好的出错信息，便于定位出错机器；；</p>
+<p>更强大的防攻击（访问速度限制）模块；</p>
+<p>更方便的命令行参数，如列出编译的模块列表、支持的指令等；</p>
+<p>支持 Dubbo 协议；</p>
+<p>可以根据访问文件类型设置过期时间；</p>
+<p>下载源码包：</p>
+<p>tengine 源码：<a target="_blank" rel="noopener" href="http://tengine.taobao.org/download_cn.html">http://tengine.taobao.org/download_cn.html</a></p>
+<p>pcre 源码：<a target="_blank" rel="noopener" href="http://www.pcre.org/">http://www.pcre.org/</a></p>
+<p>openssl 源码：<a target="_blank" rel="noopener" href="https://www.openssl.org/source/">https://www.openssl.org/source/</a></p>
+<p>zlib 源码：<a target="_blank" rel="noopener" href="http://www.zlib.net/">http://www.zlib.net/</a></p>
+<p>安装包：</p>
+<p>支持lua模块</p>
+<p>wget <a target="_blank" rel="noopener" href="http://luajit.org/download/LuaJIT-2.0.4.tar.gz">http://luajit.org/download/LuaJIT-2.0.4.tar.gz</a></p>
+<p>#wget <a target="_blank" rel="noopener" href="https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz">https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz</a></p>
+<p>#wget <a target="_blank" rel="noopener" href="https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz">https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz</a></p>
+<p>安装LuaJIT</p>
+<p>tar xf LuaJIT-2.0.4.tar.gz</p>
+<p>#cd xf LuaJIT-2.0.4</p>
+<p>#make PREFIX=/usr/local/luajit</p>
+<p>#make install PREFIX=/usr/local/luajit</p>
+<p>#ln -s /usr/local/luajit/lib/libluajit-5.1.so.2 /lib64/libluajit-5.1.so.2</p>
+<p>添加环境变量</p>
+<p>export LUAJIT_LIB=/usr/local/luajit/lib</p>
+<p>export LUAJIT_INC=/usr/local/luajit/include/luajit-2.0</p>
+<p>#source /etc/profile</p>
+<p>安装tingine</p>
+<p>#tar xf v0.3.0.tar.gz</p>
+<p>#tar xf v0.10.13.tar.gz</p>
+<p>#tar xf nginx-1.12.0.tar.gz</p>
+<p>cd tengine-2.2.2</p>
+<p> ./configure –conf-path=/etc/nginx/nginx.conf –user=www-data –group=www-data –prefix=/etc/nginx –sbin-path=/usr/sbin/nginx –with-ipv6  –error-log-path=/var/log/nginx/error.log –http-log-path=/var/log/nginx/access.log  –pid-path=/var/run/nginx.pid –lock-path=/var/lock/nginx.lock –http-client-body-temp-path=/var/cache/nginx/client_temp  –http-proxy-temp-path=/var/cache/nginx/proxy_temp –http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp  –http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp –http-scgi-temp-path=/var/cache/nginx/scgi_temp  –without-select_module –without-http_uwsgi_module –without-http_empty_gif_module –with-http_ssl_module –with-http_addition_module  –with-http_sub_module –with-http_dav_module –with-http_flv_module –with-http_gunzip_module  –with-http_gzip_static_module –with-http_random_index_module  –with-http_secure_link_module –with-http_stub_status_module –with-http_realip_module  –with-http_concat_module=shared –with-http_sysguard_module=shared  –with-http_dyups_module –with-file-aio –add-module=../ngx_devel_kit-0.3.0/  –add-module=../lua-nginx-module-0.10.13/ \</p>
+<p>Make </p>
+<p>Make install</p>
+<p>Make会报错：cc1: all warnings being treated as errors</p>
+<p>make[1]: *** [objs/Makefile:617: objs/src/core/ngx_murmurhash.o] Error 1</p>
+<p>make[1]: Leaving directory ‘/home/tools/install/tengine-2.2.2’</p>
+<p>vim objs/Makefile：</p>
+<p>CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused -Werror -g  -DNDK_SET_VAR</p>
+<p> -Werror -g去掉</p>
+<p>CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused  -DNDK_SET_VAR</p>
+<p>sed -i “s/ -Werror -g / /g” ./objs/Makefile<br>make &amp;&amp; make install<br>echo <code>nginx -v</code></p>
+<p>#不显示版本号<br>sed -i “/server_tokens off;/a server_tag off; \n server_info off;” nginx.conf<br>mkdir -p /var/cache/nginx/scgi_temp<br>chown www-data.root /var/cache/nginx/scgi_temp</p>
+<p>添加系统服务：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">cat &gt;&gt;/etc/systemd/system/nginx.service &lt;&lt;EOF</span><br><span class="line">[Unit]</span><br><span class="line">Description=The nginx HTTP and reverse proxy server</span><br><span class="line">After=syslog.target network.target remote-fs.target nss-lookup.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">PIDFile=/var/run/nginx.pid</span><br><span class="line">ExecStartPre=/usr/sbin/nginx -t -c /etc/nginx/nginx.conf</span><br><span class="line">ExecStart=/usr/sbin/nginx -c /etc/nginx/nginx.conf</span><br><span class="line">ExecReload=/usr/sbin/nginx -s reload</span><br><span class="line">ExecStop=/usr/sbin/nginx -s stop</span><br><span class="line">ExecQuit=/usr/sbin/nginx -s quit</span><br><span class="line">PrivateTmp=true</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br></pre></td></tr></tbody></table></figure>
+
+<p>后续就是优化配置了。</p>
 
                 
             </div>
@@ -560,7 +489,7 @@ cd &amp;nbsp;zabbix-3.0.1
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://blog.icmpy.net/2023/11/14/zabbix3-0-1%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B%E7%9A%84%E5%B0%8F%E5%9D%91/">https://blog.icmpy.net/2023/11/14/zabbix3-0-1%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B%E7%9A%84%E5%B0%8F%E5%9D%91/</a>
+                    <a href="https://blog.icmpy.net/2023/11/14/Tengine%E5%AE%89%E8%A3%85/">https://blog.icmpy.net/2023/11/14/Tengine%E5%AE%89%E8%A3%85/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -641,62 +570,18 @@ cd &amp;nbsp;zabbix-3.0.1
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2023/11/14/linux-install-shadowsocks/">
+                <a href="/2023/11/14/Tengine%E5%AE%89%E8%A3%85/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="linux install shadowsocks">
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="Tengine 安装">
                         
-                        <span class="card-title">linux install shadowsocks</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-11-14
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-user fa-fw"></i>
-                            云上的小雨滴
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E9%9A%8F%E7%AC%94/">
-                        <span class="chip bg-color">随笔</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2023/11/14/zabbix-%E6%B8%85%E7%90%86%E5%8E%86%E5%8F%B2%E6%95%B0%E6%8D%AE/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="zabbix 清理历史数据">
-                        
-                        <span class="card-title">zabbix 清理历史数据</span>
+                        <span class="card-title">Tengine 安装</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -716,6 +601,52 @@ cd &amp;nbsp;zabbix-3.0.1
                             
                         </span>
                     </div>
+                </div>
+
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2023/11/14/linux-install-shadowsocks/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="linux install shadowsocks">
+                        
+                        <span class="card-title">linux install shadowsocks</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-11-14
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            云上的小雨滴
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E9%9A%8F%E7%AC%94/">
+                        <span class="chip bg-color">随笔</span>
+                    </a>
+                    
                 </div>
                 
             </div>

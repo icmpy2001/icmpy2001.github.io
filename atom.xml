@@ -6,7 +6,7 @@
   <link href="https://blog.icmpy.net/atom.xml" rel="self"/>
   
   <link href="https://blog.icmpy.net/"/>
-  <updated>2023-11-14T06:30:27.997Z</updated>
+  <updated>2023-11-14T07:12:05.000Z</updated>
   <id>https://blog.icmpy.net/</id>
   
   <author>
@@ -15,6 +15,56 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Tengine 安装</title>
+    <link href="https://blog.icmpy.net/2023/11/14/Tengine%E5%AE%89%E8%A3%85/"/>
+    <id>https://blog.icmpy.net/2023/11/14/Tengine%E5%AE%89%E8%A3%85/</id>
+    <published>2023-11-14T07:06:29.000Z</published>
+    <updated>2023-11-14T07:12:05.000Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;Tengine安装&lt;/p&gt;
+&lt;p&gt;Tengine 是由淘宝网发起的 Web 服务器项目。它在 Nginx 的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。Tengine</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>linux install shadowsocks</title>
+    <link href="https://blog.icmpy.net/2023/11/14/linux-install-shadowsocks/"/>
+    <id>https://blog.icmpy.net/2023/11/14/linux-install-shadowsocks/</id>
+    <published>2023-11-14T06:55:27.000Z</published>
+    <updated>2023-11-14T07:02:43.709Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;ol&gt;
+&lt;li&gt;安装Python和pip&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;sudo apt-get update&lt;/p&gt;
+&lt;p&gt;sudo apt-get install python-pip&lt;/p&gt;
+&lt;ol</summary>
+        
+      
+    
+    
+    
+    
+    <category term="随笔" scheme="https://blog.icmpy.net/tags/%E9%9A%8F%E7%AC%94/"/>
+    
+  </entry>
   
   <entry>
     <title>zabbix3.0.1安装过程的小坑</title>
@@ -92,7 +142,7 @@
     <link href="https://blog.icmpy.net/2023/11/14/centos7-%E6%94%B9%E7%BD%91%E5%8D%A1%E5%90%8Deth0/"/>
     <id>https://blog.icmpy.net/2023/11/14/centos7-%E6%94%B9%E7%BD%91%E5%8D%A1%E5%90%8Deth0/</id>
     <published>2023-11-14T06:21:43.000Z</published>
-    <updated>2023-11-14T06:22:02.588Z</updated>
+    <updated>2023-11-14T06:34:31.676Z</updated>
     
     
       

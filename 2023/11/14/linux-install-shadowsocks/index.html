@@ -4,12 +4,16 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="zabbix3.0.1安装过程的小坑, 云上的小雨滴">
-    <meta name="description" content="1.安装
-首先lamp环境安装完毕，开始安装zabbix；
-下载完毕zabbix-3.0.1.tar.gz，解压
-cd &amp;nbsp;zabbix-3.0.1
-./configure –prefix=/usr/local/zabbix&amp;nbs">
+    <meta name="keywords" content="linux install shadowsocks, 云上的小雨滴">
+    <meta name="description" content="
+安装Python和pip
+
+sudo apt-get update
+sudo apt-get install python-pip
+
+安装Shadowsocks
+
+sudo pip install shadowsocks3. 配置Shad">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -21,7 +25,7 @@ cd &amp;nbsp;zabbix-3.0.1
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>zabbix3.0.1安装过程的小坑 | 云上的小雨滴</title>
+    <title>linux install shadowsocks | 云上的小雨滴</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -339,12 +343,12 @@ cd &amp;nbsp;zabbix-3.0.1
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">zabbix3.0.1安装过程的小坑</h1>
+                    <h1 class="description center-align post-title">linux install shadowsocks</h1>
                 </div>
             </div>
         </div>
@@ -366,9 +370,13 @@ cd &amp;nbsp;zabbix-3.0.1
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E9%9A%8F%E7%AC%94/">
+                                <span class="chip bg-color">随笔</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -404,136 +412,23 @@ cd &amp;nbsp;zabbix-3.0.1
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>1.安装</p>
-<p>首先lamp环境安装完毕，开始安装zabbix；</p>
-<p>下载完毕zabbix-3.0.1.tar.gz，解压</p>
-<p>cd &nbsp;zabbix-3.0.1</p>
-<p>./configure –prefix=/usr/local/zabbix&nbsp; –enable-server \</p>
-<p>–enable-proxy –enable-agent –enable-ipv6–with-mysql=/usr/local/mysql/bin/mysql_config –with-net-snmp \</p>
-<p>–with-libcurl –with-openipmi–with-unixodbc –with-ldap –with-ssh2 –enable-java –enable-ipv6–enable-proxy</p>
-<p>自行编译但是会报错：</p>
-<p>Unixodbc没找到</p>
-<p>mysql_config</p>
-<p>configure: error: SSH2 library not found</p>
-<p>yum install php-pecl-ssh2.x86_64 libssh2-devel.x86_64</p>
-<p>yum install net-snmp-devel</p>
-<p>yum -y install unixODBC*</p>
-<p>yum install openldap openldap-devel</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; yumlist openldap</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; yumlist openldap-devel</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>checking for SSH2 support… yes</p>
-<p>checking for OPENIPMI support… no</p>
-<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h</p>
-<p>&nbsp;</p>
-<p>&nbsp;<a target="_blank" rel="noopener" href="https://centos.pkgs.org/6/centos-x86_64/OpenIPMI-2.0.16-14.el6.x86_64.rpm.html">https://centos.pkgs.org/6/centos-x86_64/OpenIPMI-2.0.16-14.el6.x86_64.rpm.html</a></p>
-<p>rpm -ivh OpenIPMI-2.0.16-14.el6.x86_64.rpm</p>
-<p>&nbsp;<br>vhOpenIPMI-de<br>pum install OpenIPMI-devel</p>
-<p>&nbsp;</p>
-<p>报错checking for OPENIPMI support… no</p>
-<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h</p>
-<p>需要安装OpenIPMI和OpenIPMI-devel</p>
-<p>&nbsp;</p>
-<p>Yum安装OpenIPMI并下载OpenIPMI-devel-2.0.16-14.el6.x86_64.rpm</p>
-<p> yum install OpenIPMI</p>
-<p> rpm -ivhOpenIPMI-devel-2.0.16-14.el6.x86_64.rpm</p>
-<p>报错 error: Failed dependencies:</p>
-<p>pkgconfig(ncurses) is needed byOpenIPMI-devel-2.0.16-14.el6.x86_64</p>
-<p> yum install ncurses-devel</p>
-<p> rpm -ivhOpenIPMI-devel-2.0.16-14.el6.x86_64.rpm</p>
-<p>onfigure: error: Invalid OPENIPMI directory- unable to find ipmiif.h</p>
-<p>需要安装libssh2-devel</p>
-<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h</p>
-<p>需要安装OpenIPMI-devel</p>
-<p>hecking for SSH2 support… yes</p>
-<p>checking for OPENIPMI support… yes</p>
-<p>checking for javac… no</p>
-<p>configure: error: Unable to find”javac” executable in path</p>
-<p>configure: error: Jabber library notfound&nbsp; #yum install iksemel-devel即可，</p>
-<p>&nbsp;configure: error: LIBXML2 library not found&nbsp;&nbsp;&nbsp;</p>
-<p>#yum install libxml2-devel&nbsp;</p>
-<p>&nbsp;configure: error: unixODBC library notfound&nbsp;&nbsp;&nbsp;</p>
-<p>#yum install unixODBC-devel&nbsp;&nbsp;</p>
-<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h&nbsp;&nbsp;&nbsp;</p>
-<p>#yum install OpenIPMI-devel&nbsp;&nbsp;</p>
-<p>configure: error: Unable to find”javac” executable in path&nbsp;&nbsp;&nbsp;</p>
-<p>#yum install java*&nbsp;&nbsp;&nbsp; 具体什么包没找，直接通配算逑，生产环境可去掉–enable-java选项</p>
-<p>&nbsp;configure: error: Curl library not found&nbsp;</p>
-<p>&nbsp;#yum install curl-devel</p>
-<p>&nbsp;</p>
-<p>make &amp;&amp; make install</p>
-<ol start="2">
-<li>导数据库顺序schema-p_w_picpath-data,</li>
+                <ol>
+<li>安装Python和pip</li>
 </ol>
-<p>添加系统软连接：</p>
-<p>[<a href="mailto:root@vm_1_11zabbix-3.0.1">root@vm_1_11zabbix-3.0.1</a>]# ln -s /usr/local/zabbix/sbin/* /usr/local/sbin/</p>
-<p>[root@vm_1_11 zabbix-3.0.1]# ln -s /usr/local/zabbix/bin/* /usr/local/bin/</p>
-<p>添加zabbix服务对应的端口：</p>
-<p>[root@vm_1_11 mysql]# vim /etc/services</p>
-<p>在文件末尾添加：</p>
-<h1 id="Zabbix"><a href="#Zabbix" class="headerlink" title="Zabbix"></a>Zabbix</h1><p>zabbix-agent 10050/tcp # Zabbix Agent</p>
-<p>zabbix-agent 10050/udp # Zabbix Agent</p>
-<p>zabbix-trapper 10051/tcp # Zabbix Trapper</p>
-<p>zabbix-trapper 10051/udp # Zabbix Trapper</p>
-<p>修改zabbix配置文件：</p>
-<p>[root@vm_1_11 tools]# vim /usr/local/zabbix/etc/zabbix_server.conf</p>
-<p>修改以下几处：</p>
-<p>DBName=zabbix</p>
-<p>DBUser=zabbix</p>
-<p>DBPassword=zabbix</p>
-<p>AlertScriptsPath==/usr/local/zabbix/share/zabbix/alertscripts &nbsp;#zabbix运行脚本存放目录</p>
-<p>DBPort=3306</p>
-<p>&nbsp;vim /usr/local/zabbix/etc/zabbix_agentd.conf</p>
-<p>Include=/usr/local/zabbix/etc/zabbix_agentd.conf.d/</p>
-<p>UnsafeUserParameters=1 &nbsp;#启用自定义key</p>
-<p>添加开机启动脚本：</p>
-<p>[root@vm_1_11 tools]# cp /usr/local/src/zabbix-3.0.3/misc/init.d/fedora/core/zabbix_server /etc/rc.d/init.d/zabbix_server</p>
-<p>客户端：</p>
-<p>[root@vm_1_11 tools]# cp /usr/local/src/zabbix-3.0.3/misc/init.d/fedora/core/zabbix_agentd /etc/rc.d/init.d/zabbix_agentd</p>
-<p>[root@vm_1_11 tools]# chmod a+x /etc/rc.d/init.d/zabbix_*</p>
-<p>[root@vm_1_11 tools]# chkconfig zabbix_server on</p>
-<p>[root@vm_1_11 tools]# chkconfig zabbix_agentd on</p>
-<p>修改zabbix开机启动脚本中的zabbix安装目录：</p>
-<p>[root@vm_1_11 tools]# vim /etc/rc.d/init.d/zabbix_server</p>
-<p>修改以下内容：</p>
-<p>BASEDIR=/usr/local/zabbix/</p>
-<p>[root@vm_1_11 tools]# vim /etc/rc.d/init.d/zabbix_agentd</p>
-<p>修改以下内容：</p>
-<p>BASEDIR=/usr/local/zabbix/</p>
-<p>复制zabbix的web站点文件到nginx：</p>
-<p>[root@vm_1_11 tools]# cp -r /usr/local/src/zabbix-3.0.3/frontends/php/* /usr/local/nginx/html/zabbix/</p>
-<p>启动：</p>
-<p>[root@vm_1_11 tools]# systemctl daemon-reload</p>
-<p>[root@vm_1_11 tools]# service zabbix_server start</p>
-<p>[root@vm_1_11 tools]# service zabbix_agentd start</p>
-<p>&nbsp;查看进程：ps -eaf|grep zabbix_server</p>
-<p>zabbix_server [7212]: cannot run as root!</p>
-<p>添加zabbix用户；</p>
-<p>在zabbix/setup/php 页面会检测信息可能会报错要都ok才能下一步哦，</p>
-<p>按照报错信息调试vim /etc/php.ini</p>
-<p>查找如下参数并修改为：</p>
-<hr>
-<p>post_max_size = 16M</p>
-<p>max_execution_time = 300</p>
-<p>max_input_time = 300</p>
-<p><img src="/../images/20231114-1.png"></p>
-<p>/etc/php.ini修改以后还是这样，可能php.ini路径修改了，</p>
-<p>本例中就是到</p>
-<p>-rw-r–r– 1 root root 73930 Mar 27 18:19php.ini</p>
-<p>-rw-r–r– 1 root root 73928 Mar 27 18:18php.ini_0327</p>
-<p>[root@VM_54_42_centos etc]# pwd</p>
-<p>/usr/local/php/etc</p>
-<p>vim /usr/local/nginx/html/zabbix/include/locales.inc.php</p>
-<p>修改中文字符；chinese–true</p>
-<p>邮件报警：在zabbix mkdir&nbsp;alertscripts vim send_email.sh</p>
-<p>#!/bin/sh</p>
-<p>#export.UTF-8</p>
-<p>FILE=/var/log/zabbix/mailtmp.txt</p>
-<p>echo “$3” &gt;$FILE</p>
-<p>dos2unix -k $FILE</p>
-<p>/bin/mail -s “$2” $1 &lt; $FILE</p>
-<p>zabbix-管理–示警媒介类型–定制脚本-sendmail脚本，–添加联系人邮件。。</p>
+<p>sudo apt-get update</p>
+<p>sudo apt-get install python-pip</p>
+<ol start="2">
+<li>安装Shadowsocks</li>
+</ol>
+<p>sudo pip install shadowsocks<br>3. 配置Shadowsocks<br>cat &gt;&gt; /etc/shadowsocks.json &lt;&lt;EOF<br>{</p>
+<p>“server” : “ server ip”,<br>“server_port” : server port,<br>“local_port” : 1080,<br>“password” : “passwd”,<br>“timeout” : 200,<br>“method” : “aes-256-cfb”<br>}<br>EOF<br>参数的解释:<br>server：远程服务器IP地址<br>server_port：远程服务器端口号<br>local_port：本地端口号，默认为1080<br>password：远程服务器密码，自定义<br>timeout：超时时间，默认为300秒<br>method：加密方式，推荐aes-256-cfb</p>
+<ol start="4">
+<li>启动Shadowsocks</li>
+</ol>
+<p>在命令行中输入：</p>
+<p>ssserver -c /etc/shadowsocks.json<br>5.添加系统服务</p>
+<p>cat &gt;&gt;/etc/systemd/system/shadows.service  &lt;&lt;EOF<br>[Unit]<br>Description=shadows server<br>[Install]<br>WantedBy=multi-user.target<br>[Service]<br>User=root<br>Group=root<br>ExecStart=/usr/bin/ssserver -c /etc/shadowsocks.json start<br>Restart=on-failure<br>EOF</p>
+<p>systemctl restart shadows.service<br>systemctl enable shadows.service</p>
 
                 
             </div>
@@ -560,7 +455,7 @@ cd &amp;nbsp;zabbix-3.0.1
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://blog.icmpy.net/2023/11/14/zabbix3-0-1%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B%E7%9A%84%E5%B0%8F%E5%9D%91/">https://blog.icmpy.net/2023/11/14/zabbix3-0-1%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B%E7%9A%84%E5%B0%8F%E5%9D%91/</a>
+                    <a href="https://blog.icmpy.net/2023/11/14/linux-install-shadowsocks/">https://blog.icmpy.net/2023/11/14/linux-install-shadowsocks/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -597,7 +492,11 @@ cd &amp;nbsp;zabbix-3.0.1
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/%E9%9A%8F%E7%AC%94/">
+                                    <span class="chip bg-color">随笔</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -645,13 +544,13 @@ cd &amp;nbsp;zabbix-3.0.1
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/11/14/linux-install-shadowsocks/">
+                <a href="/2023/11/14/Tengine%E5%AE%89%E8%A3%85/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="linux install shadowsocks">
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="Tengine 安装">
                         
-                        <span class="card-title">linux install shadowsocks</span>
+                        <span class="card-title">Tengine 安装</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -673,14 +572,6 @@ cd &amp;nbsp;zabbix-3.0.1
                     </div>
                 </div>
                 
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E9%9A%8F%E7%AC%94/">
-                        <span class="chip bg-color">随笔</span>
-                    </a>
-                    
-                </div>
-                
             </div>
         </div>
         
@@ -690,13 +581,13 @@ cd &amp;nbsp;zabbix-3.0.1
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/11/14/zabbix-%E6%B8%85%E7%90%86%E5%8E%86%E5%8F%B2%E6%95%B0%E6%8D%AE/">
+                <a href="/2023/11/14/zabbix3-0-1%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B%E7%9A%84%E5%B0%8F%E5%9D%91/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="zabbix 清理历史数据">
+                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="zabbix3.0.1安装过程的小坑">
                         
-                        <span class="card-title">zabbix 清理历史数据</span>
+                        <span class="card-title">zabbix3.0.1安装过程的小坑</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
