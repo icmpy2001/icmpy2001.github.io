@@ -1,6 +1,227 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>ELK安装调试及遇到的问题</title>
+    <url>/2023/11/14/ELK%E5%AE%89%E8%A3%85%E8%B0%83%E8%AF%95%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>前期准备：</p>
+<p>如果是es非root用户启动es，可以把*改成非root用户，例如 es soft nofile 65535修改 /etc/security/limits.conf</p>
+<p>在文件末尾中增加下面内容# 每个进程可以打开的文件数的限制* soft nofile 65536* hard nofile 65536</p>
+<p>修改/etc/security/limits.d/20-nproc.conf</p>
+<p>在文件末尾中增加下面内容# 每个进程可以打开的文件数的限制* soft nofile 65536* hard nofile 65536# 操作系统级别对每个用户创建的进程数的限制* hard nproc 4096# 注： * 带表 Linux 所有用户名称</p>
+<p>修改 /etc/sysctl.conf</p>
+<p>在文件中增加下面内容# 一个进程可以拥有的 VMA(虚拟内存区域)的数量,默认值为 65536</p>
+<p>vm.max_map_count=655360</p>
+<p>ELK组建安装：</p>
+<p>导入官网秘钥</p>
+<p>rpm –import   <a href="https://artifacts.elastic.co/GPG-KEY-elasticsearch">https://artifacts.elastic.co/GPG-KEY-elasticsearch</a></p>
+<p>vim  /etc/yum.repos.d/elasticsearch.repo</p>
+<p>[elasticsearch-7.x]</p>
+<p>name=Elasticsearch repository for 7.x packages</p>
+<p>baseurl=<a href="https://artifacts.elastic.co/packages/7.x/yum">https://artifacts.elastic.co/packages/7.x/yum</a></p>
+<p>gpgcheck=1</p>
+<p>gpgkey=<a href="https://artifacts.elastic.co/GPG-KEY-elasticsearch">https://artifacts.elastic.co/GPG-KEY-elasticsearch</a></p>
+<p>enabled=1</p>
+<p>autorefresh=1</p>
+<p>type=rpm-md</p>
+<p>yum install elasticsearch kibana logstash   -y</p>
+<p>systemctl restart elasticsearch</p>
+<p>systemctl enable elasticsearch</p>
+<p>设置各类应用密码</p>
+<p>/usr/share/elasticsearch/bin/elasticsearch-setup-passwords interactive</p>
+<p>elastic 用户为超级管理员</p>
+<p>systemctl restart kibana</p>
+<p>systemctl enable kibana</p>
+<p>systemctl restart logstash.service</p>
+<p>systemctl enable logstash.service</p>
+<p>Vim etc/elasticsearch/elasticsearch.yml</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">path.data: /data/elk/elasticsearch</span><br><span class="line">#path.data: /var/lib/elasticsearch</span><br><span class="line"></span><br><span class="line"># Path to log files:</span><br><span class="line">#</span><br><span class="line">path.logs: /data/elk/elasticsearch/logs</span><br><span class="line">#path.logs: /var/log/elasticsearch</span><br><span class="line"></span><br><span class="line">#置集群的名称</span><br><span class="line">cluster.name: elasticsearch</span><br><span class="line"> # 当前节点的名称</span><br><span class="line">node.name: node-1</span><br><span class="line"></span><br><span class="line"> # 绑定IP地址，外网访问0.0.0.0 否则绑定localhost</span><br><span class="line">network.host: 0.0.0.0</span><br><span class="line">http.port: 9200</span><br><span class="line"> # 允许跨域请求</span><br><span class="line">http.cors.enabled: true</span><br><span class="line">http.cors.allow-origin: "*"</span><br><span class="line">http.cors.allow-headers: Authorization,X-Requested-With,Content-Length,Content-Type</span><br><span class="line"> # 访问需要密码</span><br><span class="line">xpack.security.enabled: true</span><br><span class="line">xpack.security.transport.ssl.enabled: true</span><br><span class="line"></span><br><span class="line"> # 初始化，必须要配置</span><br><span class="line">cluster.initial_master_nodes: ["node-1"]</span><br><span class="line"># ----------------------------------- Memory -----------------------------------</span><br><span class="line">xpack.security.transport.ssl.verification_mode: certificate</span><br><span class="line">xpack.security.transport.ssl.keystore.path: cert/elastic-certificates.p12</span><br><span class="line">xpack.security.transport.ssl.truststore.path: cert/elastic-certificates.p12</span><br><span class="line"># Lock the memory on startup:</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p>vim /etc/kibana/kibana.yml</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">server.port: 5601</span><br><span class="line"> # 绑定IP</span><br><span class="line">server.host: "0.0.0.0"</span><br><span class="line"> # </span><br><span class="line">elasticsearch.hosts: ["http://192.168.8.6:9200"]</span><br><span class="line"></span><br><span class="line"> # 访问密码,这里等下要设置,先配置好</span><br><span class="line">elasticsearch.username: "elastic"</span><br><span class="line">elasticsearch.password: "elastic"</span><br><span class="line">xpack.monitoring.enabled: true</span><br><span class="line"> # 界面使用中文</span><br><span class="line">i18n.locale: "zh-CN"</span><br><span class="line"># Enables you to speci</span><br></pre></td></tr></tbody></table></figure>
+
+<p>vim  /etc/logstash/logstash.yml</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">path.data: /data/elk/logstash</span><br><span class="line">http.host: "0.0.0.0"</span><br><span class="line">#http.port: 5044</span><br><span class="line"></span><br><span class="line"># 访问需要验证, 先配置，等下设置密码</span><br><span class="line">xpack.monitoring.enabled: true</span><br><span class="line">xpack.monitoring.elasticsearch.username: elastic</span><br><span class="line">xpack.monitoring.elasticsearch.password: elastic</span><br><span class="line">xpack.monitoring.elasticsearch.hosts: ["http://192.168.8.6:9200"]</span><br><span class="line"># ------------ Pipeline Settings --------------</span><br><span class="line">#</span><br><span class="line">api.http.port: 9600-9700</span><br><span class="line">#</span><br><span class="line">#</span><br><span class="line">log.level: debug</span><br><span class="line">#log.level: info</span><br><span class="line">path.logs: /data/elk/logstash/logs</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p>Vim pipelines.yml</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">- pipeline.id: main</span><br><span class="line">  path.config: "/etc/logstash/conf.d/*.conf"</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<p>控制web页面使用的功能：</p>
+<p>xpack.apm.enabled: false            设置为false禁用X-Pack性能管理功能。</p>
+<p>xpack.graph.enabled: false          设置为false禁用X-Pack图形功能。</p>
+<p>xpack.ml.enabled: false             设置为false禁用X-Pack机器学习功能。</p>
+<p>xpack.monitoring.enabled: false     设置为false禁用X-Pack监视功能。</p>
+<p>xpack.reporting.enabled: false      设置为false禁用X-Pack报告功能。</p>
+<p>xpack.security.enabled: false       设置为false禁用X-Pack安全功能。（引起报错）</p>
+<p>xpack.watcher.enabled: false        设置false为禁用观察器。</p>
+<p><a href="https://www.elastic.co/guide/en/kibana/current/settings-xpack-kb.html">https://www.elastic.co/guide/en/kibana/current/settings-xpack-kb.html</a></p>
+<p>调试的时候可能需要ES Head插件，curl -X GET “localhost:9200”</p>
+<ol>
+<li><p>确认Elasticsearch服务的运行状态：可以通过运行curl -X GET “localhost:9200”来检查Elasticsearch服务是否在运行，并检查是否能够从浏览器中访问到ES Head插件的界面。</p>
+</li>
+<li><p>检查ES Head插件的配置文件：确保您已经正确配置了ES Head插件，主要包括Elasticsearch服务器的地址和端口号等信息。您可以在ES Head插件的配置文件中查看并修改这些配置。</p>
+</li>
+<li><p>检查网络连接和防火墙设置：确保您的网络连接正常，并且没有遇到任何网络问题。如果您的计算机上运行有防火墙，您需要检查防火墙设置，确保允许ES Head插件与Elasticsearch服务器进行通信。</p>
+</li>
+<li><p>更新ES Head插件版本：如果您正在使用旧版本的ES Head插件，尝试将插件升级到最新版本，并确保与您正在使用的Elasticsearch服务器兼容。</p>
+</li>
+</ol>
+<p>cd elasticsearch-head</p>
+<p>///修改Gruntfile.js ， vi Gruntfile.js</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">connect: {</span><br><span class="line">			server: {</span><br><span class="line">				options: {</span><br><span class="line">					port: 9100,</span><br><span class="line">					hostname: "192.168.8.6",	</span><br><span class="line">					base: '.',</span><br><span class="line">					keepalive: true</span><br><span class="line">				}</span><br><span class="line">			}</span><br><span class="line">		}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>///修改elasticsearch-head默认连接地址，</p>
+<p>cd elasticsearch-head/_site/</p>
+<p>vi app.js</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">init: function(parent) {</span><br><span class="line">			this._super();</span><br><span class="line">			this.prefs = services.Preferences.instance();</span><br><span class="line">			this.base_uri = this.config.base_uri || this.prefs.get("app-base_uri") || "http://192.168.8.6:9200";</span><br><span class="line">			if( this.base_uri.charAt( this.base_uri.length - 1 ) !== "/" ) {</span><br><span class="line">				// XHR request fails if the URL is not ending with a "/"</span><br><span class="line">				this.base_uri += "/";</span><br><span class="line">			}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p>启动方式2种：</p>
+<p>1:</p>
+<p>cd elasticsearch-head</p>
+<p>npm run start</p>
+<p>2:</p>
+<p>cd elasticsearch-head</p>
+<p>node_modules/grunt/bin/grunt server</p>
+<p>Debian 安装filebeat</p>
+<p>获取filebeat安装包密钥</p>
+<p>wget -qO - <a href="https://artifacts.elastic.co/GPG-KEY-elasticsearch">https://artifacts.elastic.co/GPG-KEY-elasticsearch</a> | sudo apt-key add -</p>
+<p>安装apt和https协议转换工具</p>
+<p>apt-get install apt-transport-https</p>
+<p>添加安装源到本地</p>
+<p>echo “deb <a href="https://artifacts.elastic.co/packages/7.x/apt">https://artifacts.elastic.co/packages/7.x/apt</a> stable main” | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list</p>
+<p>更新软件列表并安装filebeat</p>
+<p>sudo apt-get update &amp;&amp; sudo apt-get install filebeat</p>
+<p>查看filebeat版本</p>
+<p>filebeat version</p>
+<p>Filebeat 配置：</p>
+<p>type：指定数据的输入类型，这里是log，即日志，是默认值，还可以指定为stdin，即标准输入。</p>
+<p>enabled: true：启用手工配置filebeat，而不是采用模块方式配置filebeat。启动后才能使用我们指定的模块。否则使用filebeat默认的模块;</p>
+<p>encoding: gbk 中文编码；清单详见characters encoding</p>
+<p>paths：用于指定要监控的日志文件，可以指定一个完整路径的文件，也可以是一个模糊匹配格式，例如：</p>
+<p>，该配置表示将获取/data/nginx/logs目录下的所有以.log结尾的文件，注意这里有个破折号“-”，要在paths配置项基础上进行缩进，不然启动filebeat会报错，另外破折号前面不能有tab缩进，建议通过空格方式缩进。</p>
+<p>，该配置表示将获取/var/log目录的所有子目录中以”.log”结尾的文件，而不会去查找/var/log目录下以”.log”结尾的文件。</p>
+<p>name： 设置filebeat收集的日志中对应主机的名字，如果配置为空，则使用该服务器的主机名。这里设置为IP，便于区分多台主机的日志信息。</p>
+<p>logging.level:debug;filebeat日志级别</p>
+<p>include_lines: [‘request’,’response’] 匹配关键字所在行。</p>
+<p>moitoring.enabled:false;filebeat监控开关，默认为启动；</p>
+<p>multiline.type: pattern 多行模式类型：pattern:正则表达式</p>
+<p>multiline.pattern: ‘^[[:space:]]+(at|.{3})[[:space:]]+\b|^Caused by:’</p>
+<p>multiline.negate: false 根据您配置其他多行选项的方式，与指定正则表达式匹配的行将被视为上一行的延续或新多行事件的开始</p>
+<p>multiline.match: after</p>
+<p>千辛万苦终于建立索引有数据出来了，但是乱码…</p>
+<p>[2023-10-08T16:30:50,921][WARN ][logstash.codecs.line     ][main][73bbfd3e8a1ad5e719cadc016524498db78b02b7eb1ac2e3ddc8ca7d9c5e649b] Received an event that has a different character encoding than you configured. {:text=&gt;”\"\x8CT\xAE\xD7c~s\xF5i\xFA\xD5\u001D[3O\xDF\xF5\u001Ei\xD0\xC6\xE8Hv&lt;\x93\xEFϚcnA\x83\x94\xFA\xC6\xEFp\xF9۪4\xF6t:\x9D\xFE\xBE\xE2+\a\x8A\xEF\xBBf]\xDF\xE3n\xF6\xFAA{jI}\xFC\xFDŹ\xDB\xF6\xE1e\xEB\xE2\x95\xE2\xAD=\xC5}OY\x97\x82e]5\xCB\xCF\xE6\xAC\u000F\xED\xB9s\xE4\xA83\xB3\xDF:u\xCE\xDA7\xE5_\xB3*\xAB=\x8B2\x88c\xA2*XsUZ)# \u0014\xD0\u0004\x8CI”, :expected_charset=&gt;”UTF-8”}</p>
+<p>网络上好多事字符集问题，改过</p>
+<p>Charset =&gt; “GBK”Charset =&gt; “UTF-8”Charset =&gt; “GB2312”</p>
+<p>等等最终还是没能解决，乱码依旧…</p>
+<p>后来来回折腾原来在这样的配置下面是需要配置ssl的，可以参考： <a href="https://boke.wsfnk.com/archives/330.html">https://boke.wsfnk.com/archives/330.html</a></p>
+<p>环境：ELK：192.168.8.6 centos 7.8</p>
+<p>Filebeat:192.168.8.105 192.168.8.106 debian10.</p>
+<p>具体Centos：</p>
+<p>Centos：</p>
+<p>cp  /etc/pki/tls/openssl.cnf  /etc/pki/tls/openssl.cnf_bak</p>
+<p>vi /etc/pki/tls/openssl.cnf</p>
+<p>#在[ v3_ca ]下面填写subjectAltName = IP:192.168.8.6</p>
+<p>[ v3_ca ]</p>
+<p>subjectKeyIdentifier=hash</p>
+<p>subjectAltName = IP:192.168.8.6 log端处于内网，需要外网抓取数据建议ip写成公网出口ip放行端口</p>
+<p>添加以后执行：</p>
+<p>openssl req -subj ‘/CN=192.168.8.6/‘ -x509 -days 3650 -batch -nodes -newkey rsa:2048 -keyout private/logstash.key -out certs/logstash.crt</p>
+<p>会生成/etc/pki/tls/certs/logstash.crt和/etc/pki/tls/private/logstash.key</p>
+<p>同样：filebeat：</p>
+<p>Debian：</p>
+<p>Cd  /etc/ssl&amp;&amp;cp openssl.conf openssl.conf_bak &amp;&amp; vim openssl.cnf</p>
+<p>[ v3_ca ]</p>
+<p>Extensions for a typical CA</p>
+<p>PKIX recommendation.</p>
+<p>subjectKeyIdentifier=hash</p>
+<p>subjectAltName = IP:192.168.8.106</p>
+<p>openssl req -subj ‘/CN=192.168.8.106/‘ -x509 -days 3650 -batch -nodes -newkey rsa:2048 -keyout private/filebeat.key -out certs/filebeat.crt</p>
+<p>/etc/ssl/certs/filebeat.crt  和/etc/ssl/private/filebeat.key</p>
+<p>接下来需要把logstash.crt 放到filebeat所在服务器的/etc/ssl/certs证书目录下面，</p>
+<p>而每个filebeat的证书同样也放到logstash服务器的证书目录下面：</p>
+<p>Cd /etc/pki/tls/certs&amp;&amp; ls</p>
+<p>logstash.crt beat2.crt filebeat-gs1.crt</p>
+<p>如果 filebeat-gs1.crt  filebeat-gs2.crt 会有个抓不到数据，命名不一致区分开就好。</p>
+<p>然后修改/etc/logstash/conf.d/filebeat-logstash.conf</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">input {</span><br><span class="line">     beats {</span><br><span class="line">          port =&gt; 5045</span><br><span class="line">          type =&gt; "gs1"</span><br><span class="line">    ssl =&gt; true</span><br><span class="line">    ssl_certificate_authorities =&gt; ["/etc/pki/tls/certs/filebeat-gs1.crt"]</span><br><span class="line">    ssl_certificate =&gt; "/etc/pki/tls/certs/logstash.crt"</span><br><span class="line">    ssl_key =&gt; "/etc/pki/tls/private/logstash.key"</span><br><span class="line">    ssl_verify_mode =&gt; "force_peer"</span><br><span class="line">          codec =&gt; json {</span><br><span class="line">                  charset =&gt; "UTF-8"</span><br><span class="line">           }</span><br><span class="line">       }</span><br><span class="line">}</span><br><span class="line">input{</span><br><span class="line">     beats {</span><br><span class="line">          port =&gt; 5046</span><br><span class="line">          type =&gt; "gs2"</span><br><span class="line">    ssl =&gt; true</span><br><span class="line">    ssl_certificate_authorities =&gt; ["/etc/pki/tls/certs/beat2.crt"]</span><br><span class="line">    ssl_certificate =&gt; "/etc/pki/tls/certs/logstash.crt"</span><br><span class="line">    ssl_key =&gt; "/etc/pki/tls/private/logstash.key"</span><br><span class="line">    ssl_verify_mode =&gt; "force_peer"</span><br><span class="line">          codec =&gt; json {</span><br><span class="line">                  charset =&gt; "UTF-8"</span><br><span class="line">           }</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">filter {</span><br><span class="line">        grok {</span><br><span class="line">    match =&gt; { "message" =&gt; "%{COMBINEDAPACHELOG}" }</span><br><span class="line">  }</span><br><span class="line">  date {</span><br><span class="line">    match =&gt; [ "timestamp" , "dd/MMM/yyyy:HH:mm:ss Z" ]</span><br><span class="line">  }</span><br><span class="line"> mutate{</span><br><span class="line">        remove_field  =&gt; "beat.hostname"</span><br><span class="line">        #remove_field =&gt; "beat.name"</span><br><span class="line">        remove_field =&gt; "version"</span><br><span class="line">        remove_field =&gt; "_type"</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line">output {</span><br><span class="line">         if [type] ==  "gs1"{</span><br><span class="line">            elasticsearch {</span><br><span class="line">                  index =&gt; "gs1_log_%{+yyyy.MM.dd}"</span><br><span class="line">                   hosts =&gt; "192.168.8.6:9200"</span><br><span class="line">                    codec =&gt; plain {</span><br><span class="line">                        charset =&gt; "UTF-8"</span><br><span class="line">                   }</span><br><span class="line">                   user =&gt; "elastic"</span><br><span class="line">                   password =&gt; "elastic"</span><br><span class="line">                 }</span><br><span class="line">              }</span><br><span class="line">         if  [type] == "gs2"{</span><br><span class="line">            elasticsearch {</span><br><span class="line">                  index =&gt; "gs2_log_%{+yyyy.MM.dd}"</span><br><span class="line">                   hosts =&gt; "192.168.8.6:9200"</span><br><span class="line">                   codec =&gt; plain {</span><br><span class="line">                        charset =&gt; "UTF-8"</span><br><span class="line">                     }</span><br><span class="line">                   user =&gt; "elastic"</span><br><span class="line">                   password =&gt; "elastic"</span><br><span class="line">                 }</span><br><span class="line">              }</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p>logstash配置大致如此，优化另说。</p>
+<p>filebeat.yml配置如下：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">filebeat.yml</span><br><span class="line">    #- c:\programdata\elasticsearch\logs\*</span><br><span class="line">  fields:</span><br><span class="line">          type: gs1</span><br><span class="line">          ip: 192.168.8.106</span><br><span class="line">          fields_under_root: true</span><br><span class="line"></span><br><span class="line">          #  multiline.pattern: '^instance_id'</span><br><span class="line">          #  multiline.negate: true</span><br><span class="line">          #  multiline.match: after</span><br><span class="line">          #  multiline.max_lines: 500 </span><br><span class="line"></span><br><span class="line">  #  multiline.pattern: '^[I,]|^[D,]|^[E,]|^[W,]|^[#]'</span><br><span class="line">  #  multiline.max_lines: 100</span><br><span class="line">  #  multiline.timeout: 20s</span><br><span class="line"></span><br><span class="line">    #monitoring.enabled: true</span><br><span class="line">inputs.container.enabled: true</span><br><span class="line">#xpack.monitoring.elasticsearch.username: elastic</span><br><span class="line">#xpack.monitoring.elasticsearch.password: elastic</span><br><span class="line"></span><br><span class="line">filebeat.config.modules:</span><br><span class="line">  # Glob pattern for configuration loading</span><br><span class="line">  path: ${path.config}/modules.d/*.yml</span><br><span class="line"></span><br><span class="line">  # Set to true to enable config reloading</span><br><span class="line">  reload.enabled: false</span><br><span class="line"></span><br><span class="line">  # The Logstash hosts</span><br><span class="line">output.logstash:</span><br><span class="line">    hosts: ["192.168.8.6:5045"]</span><br><span class="line">    ssl.certificate_authorities: ["/etc/ssl/certs/logstash.crt"]</span><br><span class="line">    ssl.certificate: "/etc/ssl/certs/filebeat.crt"</span><br><span class="line">ssl.key: "/etc/ssl/private/filebeat.key"</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p>这样总算有正常数据了</p>
+<p>Filebeat 重新抓取数据：</p>
+<p>filebeat设置从头读取配置文件</p>
+<p>流程：关闭filebeat –&gt; 删掉registry文件 –&gt; 启动filebeat</p>
+<p>停止filebeat</p>
+<p>删除filebeat日志记录日志位置文件</p>
+<p>rm -rf /var/lib/filebeat/registry</p>
+<p>find / -name registry</p>
+<p>/var/lib/filebeat/registry</p>
+<p>rm -rf /var/lib/filebeat/registry</p>
+<p>重新启动filebeat</p>
+<p>遇到的问题：</p>
+<p>1.安装遇到证书报错:</p>
+<p>Err:20 <a href="https://packages.sury.org/php">https://packages.sury.org/php</a> buster Release                                  </p>
+<p>  Certificate verification failed: The certificate is NOT trusted. The certificate chain uses expired certificate.  Could not handshake: Error in the certificate verification. [IP: 143.244.50.90 443]</p>
+<p>Get:21 <a href="https://artifacts.elastic.co/packages/7.x/apt">https://artifacts.elastic.co/packages/7.x/apt</a> stable/main amd64 Packages [118 kB]</p>
+<p>Reading package lists… Done    </p>
+<p>E: The repository ‘<a href="https://packages.sury.org/php">https://packages.sury.org/php</a> buster Release’ does not have a Release file.</p>
+<p>N: Updating from such a repository can’t be done securely, and is therefore disabled by default.</p>
+<p>N: See apt-secure(8) manpage for repository creation and user configuration details.</p>
+<p>root@test:/home/tools# apt-get install ca-certificates</p>
+<p>sudo apt-get install –reinstall ca-certificates</p>
+<p>sudo apt-get update</p>
+<p>2.Logstash 报错：</p>
+<p> Your settings are invalid. Reason: Path “/data/elk/logstash/dead_letter_queue” must be a writable directory. It is not writable.</p>
+<p>Your settings are invalid. Reason: Path “/data/elk/logstash/dead_letter_queue” must be a writable directory. It is not writable.</p>
+<p>An unexpected error occurred! {:error=&gt;java.nio.file.AccessDeniedException: /data/elk/logstash/.lock, :</p>
+<p>权限问题给权限；</p>
+<p>3.Logstash 报错：</p>
+<p>syslog listener died {:protocol=&gt;:tcp, :address=&gt;”0.0.0.0:5044”, :exceptinotallow=&gt;#&lt;Errno::EADDRINUSE: Address already in use - bind(2) for “0.0.0.0” port 5044&gt;, :backtrace=&gt;[“org/jruby/ext/socket/RubyTCPServer.java:123:in <code>initialize'", "org/jruby/RubyIO.java:876:in </code>new’”, “/usr/share/logstash/vendor/bundle/jruby/2.5.0/gems/logstash-input-syslog-3.6.0/lib/logstash/inputs/syslog.rb:208:in <code>tcp_listener'", "/usr/share/logstash/vendor/bundle/jruby/2.5.0/gems/logstash-input-syslog-3.6.0/lib/logstash/inputs/syslog.rb:172:in </code>server’”, “/usr/share/logstash/vendor/bundle/jruby/2.5.0/gems/logstash-input-syslog-3.6.0/lib/logstash/inputs/syslog.rb:156:in `block in run’”]}</p>
+<p>是因为非ROOT用户启动的程序禁止监听1-1024的端口，要到修改服务启动的用户为ROOT，要到把监听端口修改为1024以上的端口即可。</p>
+<p>vim /etc/systemd/system/logstash.service</p>
+<p>[Service]</p>
+<p>Type=simple</p>
+<p>User=root</p>
+<p>Group=root</p>
+<p>….</p>
+<p>curl –user elastic:changeme ‘<a href="http://127.0.0.1:9200/_xpack/license">http://127.0.0.1:9200/_xpack/license</a>‘</p>
+<p>{</p>
+<p>  “license” : {</p>
+<pre><code>"status" : "active",
+
+"uid" : "ad2ea283-fbdf-483a-9c53-e09f43c14a97",
+
+"type" : "basic",
+
+"issue_date" : "2023-09-19T07:37:00.727Z",
+
+"issue_date_in_millis" : 1695109020727,
+
+"max_nodes" : 1000,
+
+"issued_to" : "elasticsearch",
+
+"issuer" : "elasticsearch",
+
+"start_date_in_millis" : -1
+</code></pre>
+<p>  }</p>
+<p>}</p>
+<p>4.配置缺失，有时候直接复制的比如input 只复制到nput少了i，或者格式错了等等；</p>
+<p>[ERROR][logstash.agent ] Failed to execute action {:actinotallow=&gt;LogStash::PipelineAction::Create/pipeline_id:main, :exceptinotallow=&gt;”LogStash::ConfigurationError”, :message=&gt;”Expected one of [ \t\r\n], "#", "input", "filter", "output" at line 1, column 1 (byte 1)”, :backtrace=&gt;[“/usr/share/logstash/logstash-core/lib/logstash/compiler.rb:32:in <code>compile_imperative'", "org/logstash/execution/AbstractPipelineExt.java:189:in </code>initialize’”, “org/logstash/execution/JavaBasePipelineExt.java:72:in <code>initialize'", "/usr/share/logstash/logstash-core/lib/logstash/java_pipeline.rb:48:in </code>initialize’”, “/usr/share/logstash/logstash-core/lib/logstash/pipeline_action/create.rb:52:in <code>execute'", "/usr/share/logstash/logstash-core/lib/logstash/agent.rb:392:in </code>block in converge_state’”]}</p>
+<p>测试：</p>
+<p>/usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/log.conf  -t</p>
+<p>Using bundled JDK: /usr/share/logstash/jdk</p>
+<p>OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.</p>
+<p>WARNING: Could not find logstash.yml which is typically located in $LS_HOME/config or /etc/logstash. You can specify the path using –path.settings. Continuing using the defaults</p>
+<p>Could not find log4j2 configuration at path /usr/share/logstash/config/log4j2.properties. Using default config which logs errors to the console</p>
+<p>等等可以看日志找出这些问题；</p>
+<h2 id="本次安装最大问题是乱码问题，记录一下点滴。"><a href="#本次安装最大问题是乱码问题，记录一下点滴。" class="headerlink" title="#####本次安装最大问题是乱码问题，记录一下点滴。"></a>#####本次安装最大问题是乱码问题，记录一下点滴。</h2>]]></content>
+  </entry>
+  <entry>
     <title>Rsync同步文件</title>
     <url>/2023/11/10/Rsync%E5%90%8C%E6%AD%A5%E6%96%87%E4%BB%B6/</url>
     <content><![CDATA[<p>Rsync常用的一款同步文件工具。配置也很方便。</p>
@@ -873,6 +1094,38 @@
       </tags>
   </entry>
   <entry>
+    <title>ssh免密登录问题</title>
+    <url>/2023/11/13/ssh%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
+<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
+<p>服务器A需要免密码访问服务器B：</p>
+<ol>
+<li>在A上面生成公钥密钥，执行命令</li>
+</ol>
+<p>&nbsp;</p>
+<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
+<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
+<ol start="2">
+<li>将公钥id_rsa.pub拷贝到B机器上</li>
+</ol>
+<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
+<ol start="3">
+<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
+</ol>
+<p>cd&nbsp;/home/user/.ssh</p>
+<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
+<ol start="4">
+<li>设置 authorized_keys权限</li>
+</ol>
+<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
+<hr>
+]]></content>
+  </entry>
+  <entry>
     <title>php 安装redis，protobuf,mcryp扩展</title>
     <url>/2023/11/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/</url>
     <content><![CDATA[<p>&nbsp; 测试机上测试一些数据需要用到redis扩展，偷懒yum安装的php，以前yum install php-pecl-redis.x86_64可以安装扩展，这次找不到安装包，不折腾手动安装下。</p>
@@ -992,34 +1245,56 @@
 ]]></content>
   </entry>
   <entry>
-    <title>ssh免密登录问题</title>
-    <url>/2023/11/13/ssh%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
-<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
-<p>服务器A需要免密码访问服务器B：</p>
-<ol>
-<li>在A上面生成公钥密钥，执行命令</li>
-</ol>
+    <title>zabbix 清理历史数据</title>
+    <url>/2023/11/14/zabbix-%E6%B8%85%E7%90%86%E5%8E%86%E5%8F%B2%E6%95%B0%E6%8D%AE/</url>
+    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
+<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
+<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
+<p>root@Testl]$ date +%s -d”20160929”</p>
+<p>1475078400</p>
+<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
+<p>Query OK, 36093 rows affected (43.64 sec)</p>
 <p>&nbsp;</p>
-<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
-<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
-<ol start="2">
-<li>将公钥id_rsa.pub拷贝到B机器上</li>
-</ol>
-<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
-<ol start="3">
-<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
-</ol>
-<p>cd&nbsp;/home/user/.ssh</p>
-<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
-<ol start="4">
-<li>设置 authorized_keys权限</li>
-</ol>
-<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
+<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
+<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history;</p>
+<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
+<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history_uint;</p>
+<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
+<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>漫长时间等待以后看下效果：</p>
+<p>原来数据：</p>
+<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
+<p>压缩中：</p>
+<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
+<p>find -size +50M -exec ls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
+<p>最终删两个表以后数据：</p>
+<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
+<p>完了以后，重启mysql，zabbix，nginx试试；</p>
+<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
 <hr>
 ]]></content>
   </entry>
@@ -1110,60 +1385,6 @@
 <p>tftp_anon_write –&gt; off</p>
 <p>tftp_home_dir –&gt; off</p>
 <h2 id="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"><a href="#vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。" class="headerlink" title="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"></a>vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。</h2>]]></content>
-  </entry>
-  <entry>
-    <title>zabbix 清理历史数据</title>
-    <url>/2023/11/14/zabbix-%E6%B8%85%E7%90%86%E5%8E%86%E5%8F%B2%E6%95%B0%E6%8D%AE/</url>
-    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
-<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
-<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
-<p>root@Testl]$ date +%s -d”20160929”</p>
-<p>1475078400</p>
-<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
-<p>Query OK, 36093 rows affected (43.64 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
-<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history;</p>
-<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
-<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history_uint;</p>
-<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
-<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>漫长时间等待以后看下效果：</p>
-<p>原来数据：</p>
-<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
-<p>压缩中：</p>
-<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
-<p>find -size +50M -exec ls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
-<p>最终删两个表以后数据：</p>
-<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
-<p>完了以后，重启mysql，zabbix，nginx试试；</p>
-<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
-<hr>
-]]></content>
   </entry>
   <entry>
     <title>zabbix3.0.1安装过程的小坑</title>

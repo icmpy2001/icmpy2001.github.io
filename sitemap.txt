@@ -1,3 +1,4 @@
+https://blog.icmpy.net/2023/11/14/ELK%E5%AE%89%E8%A3%85%E8%B0%83%E8%AF%95%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/
 https://blog.icmpy.net/2023/11/14/Tengine%E5%AE%89%E8%A3%85/
 https://blog.icmpy.net/2023/11/14/linux-install-shadowsocks/
 https://blog.icmpy.net/2023/11/14/centos7-%E6%94%B9%E7%BD%91%E5%8D%A1%E5%90%8Deth0/
