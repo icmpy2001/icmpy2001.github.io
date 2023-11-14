@@ -6,7 +6,7 @@
   <link href="https://blog.icmpy.top/atom.xml" rel="self"/>
   
   <link href="https://blog.icmpy.top/"/>
-  <updated>2023-11-13T08:34:51.117Z</updated>
+  <updated>2023-11-14T03:51:31.000Z</updated>
   <id>https://blog.icmpy.top/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>hexogit搭建个人网站</title>
+    <link href="https://blog.icmpy.top/2023/11/14/hexogit%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99/"/>
+    <id>https://blog.icmpy.top/2023/11/14/hexogit%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99/</id>
+    <published>2023-11-14T03:50:09.000Z</published>
+    <updated>2023-11-14T03:51:31.000Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;1-nodejs安装&quot;&gt;&lt;a href=&quot;#1-nodejs安装&quot; class=&quot;headerlink&quot; title=&quot;1.nodejs安装&quot;&gt;&lt;/a&gt;1.nodejs安装&lt;/h1&gt;&lt;h2</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>zabbix监控业务进程变动</title>
