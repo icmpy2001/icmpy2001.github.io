@@ -351,34 +351,81 @@
   </entry>
   
   <entry>
-    <title>linux install shadowsocks</title>
-    <link href="https://blog.icmpy.net/2023/06/16/linux-install-shadowsocks/"/>
-    <id>https://blog.icmpy.net/2023/06/16/linux-install-shadowsocks/</id>
-    <published>2023-06-16T05:55:17.000Z</published>
-    <updated>2023-11-14T09:24:36.448Z</updated>
+    <title>nginx编译ssl模块</title>
+    <link href="https://blog.icmpy.net/2023/06/28/nginx%E7%BC%96%E8%AF%91ssl%E6%A8%A1%E5%9D%97/"/>
+    <id>https://blog.icmpy.net/2023/06/28/nginx%E7%BC%96%E8%AF%91ssl%E6%A8%A1%E5%9D%97/</id>
+    <published>2023-06-28T10:22:27.000Z</published>
+    <updated>2023-11-15T10:22:59.369Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h1 id=&quot;1-安装Python和pip&quot;&gt;&lt;a href=&quot;#1-安装Python和pip&quot; class=&quot;headerlink&quot; title=&quot;1. 安装Python和pip&quot;&gt;&lt;/a&gt;1. 安装Python和pip&lt;/h1&gt;&lt;p&gt;sudo apt-get</summary>
+    <summary type="html">&lt;p&gt;几个官网在一台服务器上面，其中一台是https的，增加一个官网以，重启nginx以后，https的网站直接报错，大意是ssl 在配置文件中unknow，但是这个https网站已经运行很久了，一时间有点郁闷，掉坑里了。&lt;/p&gt;
+&lt;p&gt;查看nginx信息</summary>
         
       
     
     
     
     
-    <category term="随笔" scheme="https://blog.icmpy.net/tags/%E9%9A%8F%E7%AC%94/"/>
+    <category term="点滴" scheme="https://blog.icmpy.net/tags/%E7%82%B9%E6%BB%B4/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>apache多网站对应80端口</title>
+    <link href="https://blog.icmpy.net/2023/06/28/apache%E5%A4%9A%E7%BD%91%E7%AB%99%E5%AF%B9%E5%BA%9480%E7%AB%AF%E5%8F%A3/"/>
+    <id>https://blog.icmpy.net/2023/06/28/apache%E5%A4%9A%E7%BD%91%E7%AB%99%E5%AF%B9%E5%BA%9480%E7%AB%AF%E5%8F%A3/</id>
+    <published>2023-06-28T09:56:18.000Z</published>
+    <updated>2023-11-15T10:23:50.081Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;一台服务器绑定多个域名，已经装了apache，nginx就不使用了，利用apache主机头名虚拟主机用80端口对应多个网站，万能的网络上面有文档如下：&lt;/p&gt;
+&lt;p&gt;Aapche 如果需要绑定多个域名到一个IP上,是支持的。需要注意以下2点:&lt;/p&gt;
+&lt;p&gt;1 必须要开启</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>frp搭建</title>
+    <link href="https://blog.icmpy.net/2023/06/27/frp%E6%90%AD%E5%BB%BA/"/>
+    <id>https://blog.icmpy.net/2023/06/27/frp%E6%90%AD%E5%BB%BA/</id>
+    <published>2023-06-27T08:56:46.000Z</published>
+    <updated>2023-11-15T10:23:18.961Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt; &amp;nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。&lt;/p&gt;
+&lt;p&gt;首先到官网：&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;&lt;a</summary>
+        
+      
+    
+    
+    
     
   </entry>
   
   <entry>
     <title>coredump 路径格式</title>
-    <link href="https://blog.icmpy.net/2023/06/12/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/"/>
-    <id>https://blog.icmpy.net/2023/06/12/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/</id>
-    <published>2023-06-12T07:38:29.000Z</published>
-    <updated>2023-11-15T10:18:19.881Z</updated>
+    <link href="https://blog.icmpy.net/2023/06/27/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/"/>
+    <id>https://blog.icmpy.net/2023/06/27/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/</id>
+    <published>2023-06-27T07:38:29.000Z</published>
+    <updated>2023-11-15T10:23:29.994Z</updated>
     
     
       
@@ -400,67 +447,18 @@
   </entry>
   
   <entry>
-    <title>nginx编译ssl模块</title>
-    <link href="https://blog.icmpy.net/2023/06/10/nginx%E7%BC%96%E8%AF%91ssl%E6%A8%A1%E5%9D%97/"/>
-    <id>https://blog.icmpy.net/2023/06/10/nginx%E7%BC%96%E8%AF%91ssl%E6%A8%A1%E5%9D%97/</id>
-    <published>2023-06-10T10:22:27.000Z</published>
-    <updated>2023-11-15T10:19:37.379Z</updated>
+    <title>Hello World</title>
+    <link href="https://blog.icmpy.net/2023/06/25/hello-world/"/>
+    <id>https://blog.icmpy.net/2023/06/25/hello-world/</id>
+    <published>2023-06-25T05:56:46.000Z</published>
+    <updated>2023-11-15T10:22:42.993Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;p&gt;几个官网在一台服务器上面，其中一台是https的，增加一个官网以，重启nginx以后，https的网站直接报错，大意是ssl 在配置文件中unknow，但是这个https网站已经运行很久了，一时间有点郁闷，掉坑里了。&lt;/p&gt;
-&lt;p&gt;查看nginx信息</summary>
-        
-      
-    
-    
-    
-    
-    <category term="点滴" scheme="https://blog.icmpy.net/tags/%E7%82%B9%E6%BB%B4/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>apache多网站对应80端口</title>
-    <link href="https://blog.icmpy.net/2023/06/10/apache%E5%A4%9A%E7%BD%91%E7%AB%99%E5%AF%B9%E5%BA%9480%E7%AB%AF%E5%8F%A3/"/>
-    <id>https://blog.icmpy.net/2023/06/10/apache%E5%A4%9A%E7%BD%91%E7%AB%99%E5%AF%B9%E5%BA%9480%E7%AB%AF%E5%8F%A3/</id>
-    <published>2023-06-10T09:56:18.000Z</published>
-    <updated>2023-11-15T10:17:41.433Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;一台服务器绑定多个域名，已经装了apache，nginx就不使用了，利用apache主机头名虚拟主机用80端口对应多个网站，万能的网络上面有文档如下：&lt;/p&gt;
-&lt;p&gt;Aapche 如果需要绑定多个域名到一个IP上,是支持的。需要注意以下2点:&lt;/p&gt;
-&lt;p&gt;1 必须要开启</summary>
-        
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>frp搭建</title>
-    <link href="https://blog.icmpy.net/2023/06/10/frp%E6%90%AD%E5%BB%BA/"/>
-    <id>https://blog.icmpy.net/2023/06/10/frp%E6%90%AD%E5%BB%BA/</id>
-    <published>2023-06-10T08:56:46.000Z</published>
-    <updated>2023-11-14T09:11:37.944Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt; &amp;nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。&lt;/p&gt;
-&lt;p&gt;首先到官网：&lt;/p&gt;
-&lt;p&gt;&amp;nbsp;&lt;a</summary>
+    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt;</summary>
         
       
     
