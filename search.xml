@@ -1365,6 +1365,9 @@
 <p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
 <hr>
 ]]></content>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
   </entry>
   <entry>
     <title>zabbix3.0.1安装过程的小坑</title>
