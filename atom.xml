@@ -306,6 +306,29 @@
   </entry>
   
   <entry>
+    <title>linux install shadowsocks</title>
+    <link href="https://blog.icmpy.net/2023/07/16/linux-install-shadowsocks/"/>
+    <id>https://blog.icmpy.net/2023/07/16/linux-install-shadowsocks/</id>
+    <published>2023-07-16T05:55:17.000Z</published>
+    <updated>2023-11-15T10:24:41.625Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;1-安装Python和pip&quot;&gt;&lt;a href=&quot;#1-安装Python和pip&quot; class=&quot;headerlink&quot; title=&quot;1. 安装Python和pip&quot;&gt;&lt;/a&gt;1. 安装Python和pip&lt;/h1&gt;&lt;p&gt;sudo apt-get</summary>
+        
+      
+    
+    
+    
+    
+    <category term="随笔" scheme="https://blog.icmpy.net/tags/%E9%9A%8F%E7%AC%94/"/>
+    
+  </entry>
+  
+  <entry>
     <title>kafka Create topic 报错</title>
     <link href="https://blog.icmpy.net/2023/07/13/kafka-Create-topic-%E6%8A%A5%E9%94%99/"/>
     <id>https://blog.icmpy.net/2023/07/13/kafka-Create-topic-%E6%8A%A5%E9%94%99/</id>
@@ -443,27 +466,6 @@
     
     
     <category term="随笔" scheme="https://blog.icmpy.net/tags/%E9%9A%8F%E7%AC%94/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="https://blog.icmpy.net/2023/06/25/hello-world/"/>
-    <id>https://blog.icmpy.net/2023/06/25/hello-world/</id>
-    <published>2023-06-25T05:56:46.000Z</published>
-    <updated>2023-11-15T10:22:42.993Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt;</summary>
-        
-      
-    
-    
-    
     
   </entry>
   

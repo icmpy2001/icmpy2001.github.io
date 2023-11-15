@@ -789,7 +789,7 @@
   </entry>
   <entry>
     <title>linux install shadowsocks</title>
-    <url>/2023/06/16/linux-install-shadowsocks/</url>
+    <url>/2023/07/16/linux-install-shadowsocks/</url>
     <content><![CDATA[<h1 id="1-安装Python和pip"><a href="#1-安装Python和pip" class="headerlink" title="1. 安装Python和pip"></a>1. 安装Python和pip</h1><p>sudo apt-get update</p>
 <p>sudo apt-get install python-pip</p>
 <h1 id="2-安装Shadowsocks"><a href="#2-安装Shadowsocks" class="headerlink" title="2. 安装Shadowsocks"></a>2. 安装Shadowsocks</h1><p>sudo pip install shadowsocks</p>

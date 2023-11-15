@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://blog.icmpy.net/2023/07/16/linux-install-shadowsocks/</loc>
+    <lastmod>2023-11-15</lastmod>
+  </url>
+  <url>
     <loc>https://blog.icmpy.net/2023/06/28/apache%E5%A4%9A%E7%BD%91%E7%AB%99%E5%AF%B9%E5%BA%9480%E7%AB%AF%E5%8F%A3/</loc>
     <lastmod>2023-11-15</lastmod>
   </url>
@@ -34,10 +38,6 @@
   </url>
   <url>
     <loc>https://blog.icmpy.net/2023/11/14/ELK%E5%AE%89%E8%A3%85%E8%B0%83%E8%AF%95%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</loc>
-    <lastmod>2023-11-14</lastmod>
-  </url>
-  <url>
-    <loc>https://blog.icmpy.net/2023/06/16/linux-install-shadowsocks/</loc>
     <lastmod>2023-11-14</lastmod>
   </url>
   <url>
