@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://blog.icmpy.net/categories/index.html</loc>
+    <lastmod>2023-11-16</lastmod>
+  </url>
+  <url>
     <loc>https://blog.icmpy.net/2023/11/14/centos7-%E6%94%B9%E7%BD%91%E5%8D%A1%E5%90%8Deth0/</loc>
     <lastmod>2023-11-16</lastmod>
   </url>

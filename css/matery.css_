@@ -240,20 +240,9 @@ mark {
     margin-bottom: 0;
 }
 
-
-/* 配色方案1*/
 .bg-color {
     background-image: linear-gradient(to right, #4cbf30 0%, #0f9d58 100%);
-    opacity: 0.8;
-     透明度
 }
-
-   /* 配色方案2*/
-/*.bg-color {
-    background-image: linear-gradient(to right, #1f4d71 0%, #71bbb6 100%);
-    opacity: 0.9;
-     透明度
-} */
 
 .text-color {
     color: #0f9d58 !important;
@@ -603,7 +592,7 @@ header .go-back i {
     font-size: 2.5rem;
     font-weight: 400;
 }
-/*
+
 @-webkit-keyframes rainbow {
 
     0%,
@@ -695,7 +684,7 @@ header .go-back i {
         background: -webkit-linear-gradient(135deg, rgba(2233, 30, 99, 0.75) 0%, rgba(233, 30, 99, 0.65) 100%);
     }
 }
-*/
+
 .index-card {
     margin-top: -10px;
     padding-top: 20px;
@@ -2304,8 +2293,4 @@ body.DarkMode .theme-btn:hover {
     font-family:'Font Awesome 5 Free';
     font-weight: 900;
     color: #d9534f;
-}
-/* 隐藏 valine 版本号信息。 */
-.vpower.txt-right {
-             display: none;
 }
