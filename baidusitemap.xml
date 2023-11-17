@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://blog.icmpy.net/2023/07/17/zabbix-%E6%B8%85%E7%90%86%E5%8E%86%E5%8F%B2%E6%95%B0%E6%8D%AE/</loc>
+    <lastmod>2023-11-17</lastmod>
+  </url>
+  <url>
     <loc>https://blog.icmpy.net/2023/11/14/Tengine%E5%AE%89%E8%A3%85/</loc>
     <lastmod>2023-11-17</lastmod>
   </url>
@@ -66,10 +70,6 @@
   </url>
   <url>
     <loc>https://blog.icmpy.net/2023/06/25/hello-world/</loc>
-    <lastmod>2023-11-15</lastmod>
-  </url>
-  <url>
-    <loc>https://blog.icmpy.net/2023/07/17/zabbix-%E6%B8%85%E7%90%86%E5%8E%86%E5%8F%B2%E6%95%B0%E6%8D%AE/</loc>
     <lastmod>2023-11-15</lastmod>
   </url>
   <url>
