@@ -592,6 +592,7 @@
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">filebeat.yml</span><br><span class="line">    #- c:\programdata\elasticsearch\logs\*</span><br><span class="line">  fields:</span><br><span class="line">          type: gs1</span><br><span class="line">          ip: 192.168.8.106</span><br><span class="line">          fields_under_root: true</span><br><span class="line"></span><br><span class="line">          #  multiline.pattern: '^instance_id'</span><br><span class="line">          #  multiline.negate: true</span><br><span class="line">          #  multiline.match: after</span><br><span class="line">          #  multiline.max_lines: 500 </span><br><span class="line"></span><br><span class="line">  #  multiline.pattern: '^[I,]|^[D,]|^[E,]|^[W,]|^[#]'</span><br><span class="line">  #  multiline.max_lines: 100</span><br><span class="line">  #  multiline.timeout: 20s</span><br><span class="line"></span><br><span class="line">    #monitoring.enabled: true</span><br><span class="line">inputs.container.enabled: true</span><br><span class="line">#xpack.monitoring.elasticsearch.username: elastic</span><br><span class="line">#xpack.monitoring.elasticsearch.password: elastic</span><br><span class="line"></span><br><span class="line">filebeat.config.modules:</span><br><span class="line">  # Glob pattern for configuration loading</span><br><span class="line">  path: ${path.config}/modules.d/*.yml</span><br><span class="line"></span><br><span class="line">  # Set to true to enable config reloading</span><br><span class="line">  reload.enabled: false</span><br><span class="line"></span><br><span class="line">  # The Logstash hosts</span><br><span class="line">output.logstash:</span><br><span class="line">    hosts: ["192.168.8.6:5045"]</span><br><span class="line">    ssl.certificate_authorities: ["/etc/ssl/certs/logstash.crt"]</span><br><span class="line">    ssl.certificate: "/etc/ssl/certs/filebeat.crt"</span><br><span class="line">ssl.key: "/etc/ssl/private/filebeat.key"</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
 
 <p>这样总算有正常数据了</p>
+<p><img src="/../images/20231114-2.png"></p>
 <p>Filebeat 重新抓取数据：</p>
 <p>filebeat设置从头读取配置文件</p>
 <p>流程：关闭filebeat –&gt; 删掉registry文件 –&gt; 启动filebeat</p>
@@ -1634,6 +1635,11 @@ $(function () {
 
     <!--腾讯兔小巢-->
     
+    
+    <script type="text/javascript" color="0,0,255"
+        pointColor="0,0,255" opacity='0.7'
+        zIndex="-1" count="99"
+        src="/libs/background/canvas-nest.js"></script>
     
 
     
