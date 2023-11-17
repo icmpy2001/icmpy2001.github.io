@@ -1573,4 +1573,21 @@
         <tag>随笔</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Debian 10挂载加swap</title>
+    <url>/2023/11/17/Debian-10%E6%8C%82%E8%BD%BD%E5%8A%A0swap/</url>
+    <content><![CDATA[<p>以根目录挂载为4G例：<br>dd if=/dev/zero of=/swapfile count=4096 bs=1M</p>
+<p>ls / | grep swapfile<br>chmod 600 /swapfile<br>ls -lh /swapfile<br>-rw——- 1 root root 4.0G Aug 17 12:14 /swapfile<br>通过运行以下命令告诉服务器设置swap文件：<br>mkswap /swapfile<br>swapon /swapfile<br>free -m<br>vi /etc/fstab<br>/swapfile swap swap defaults 0 0<br>保存。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>Debian10 安装ossfs</title>
+    <url>/2023/11/17/Debian10-%E5%AE%89%E8%A3%85ossfs/</url>
+    <content><![CDATA[<p>1.<br>sudo apt-get install automake autotools-dev g++  git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev  make pkg-config<br>2.<br>git clone <a href="https://github.com/aliyun/ossfs.git">https://github.com/aliyun/ossfs.git</a><br>cd ossfs/<br> ./autogen.sh<br>  ./configure<br>Sudo   make<br> Sudo make install<br>3.配置bucket信息和accessKey信息：<br>echo Bucket名称:要是用的AccessKeyId:对应的AccessKeySecret  &gt; /etc/passwd-ossfs<br>示例：<br>mkdir -p /data/ossfs<br>cosfs examplebucket-1250000000 /data/ossfs -ourl=<a href="http://cos.ap-guangzhou.myqcloud.com/">http://cos.ap-guangzhou.myqcloud.com</a> </p>
+<p>ossfs ts-1121-patch-oss  /data/ossfs/ -ourl=<a href="https://oss-cn-hangzhou-internal.aliyuncs.com/">https://oss-cn-hangzhou-internal.aliyuncs.com</a> -oallow_other</p>
+<p>其中：<br><mountpoint> 为本地挂载目录（例如/mnt）。<br><region> 为地域简称， 例如 ap-guangzhou 、 eu-frankfurt 等。更多地域简称信息，请参见 可用地域。<br>-odbglevel 指定日志级别，默认为crit，可选值为crit、error、warn、info、debug。<br>-oallow_other 允许非挂载用户访问挂载文件夹。</region></mountpoint></p>
+<p>创建启动脚本：<br>Vim /etc/init.d/ossfs<br>ossfs demo-patch-oss /data/ossfs/ -ourl=oss-cn-hangzhou-internal.aliyuncs.com -oallow_other<br>Chmod u+x /etc/init.dossfs</p>
+<p>Centos：<br>chkncondif ossf on<br>Debian;<br>update-rc.d  ossfs  defaults</p>
+]]></content>
+  </entry>
 </search>

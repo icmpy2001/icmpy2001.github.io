@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://blog.icmpy.net/2023/11/17/Debian10-%E5%AE%89%E8%A3%85ossfs/</loc>
+    
+    <lastmod>2023-11-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.icmpy.net/2023/11/17/Debian-10%E6%8C%82%E8%BD%BD%E5%8A%A0swap/</loc>
+    
+    <lastmod>2023-11-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.icmpy.net/about/index.html</loc>
     
     <lastmod>2023-11-17</lastmod>
