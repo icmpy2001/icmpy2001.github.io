@@ -18,8 +18,8 @@
   
   <entry>
     <title>ELK安装调试及遇到的问题</title>
-    <link href="https://blog.icmpy.net/2023/11/14/elk%E2%80%98-%E2%80%98an%E2%80%98-%E2%80%98zhuang%E2%80%98-%E2%80%98diao%E2%80%98-%E2%80%98shi%E2%80%98-%E2%80%98ji%E2%80%98-%E2%80%98yu%E2%80%98-%E2%80%98dao%E2%80%98-%E2%80%98de%E2%80%98-%E2%80%98wen%E2%80%98-%E2%80%98ti/"/>
-    <id>https://blog.icmpy.net/2023/11/14/elk%E2%80%98-%E2%80%98an%E2%80%98-%E2%80%98zhuang%E2%80%98-%E2%80%98diao%E2%80%98-%E2%80%98shi%E2%80%98-%E2%80%98ji%E2%80%98-%E2%80%98yu%E2%80%98-%E2%80%98dao%E2%80%98-%E2%80%98de%E2%80%98-%E2%80%98wen%E2%80%98-%E2%80%98ti/</id>
+    <link href="https://blog.icmpy.net/2023/11/14/ELK%E5%AE%89%E8%A3%85%E8%B0%83%E8%AF%95%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+    <id>https://blog.icmpy.net/2023/11/14/ELK%E5%AE%89%E8%A3%85%E8%B0%83%E8%AF%95%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</id>
     <published>2023-11-14T08:13:28.000Z</published>
     <updated>2023-11-14T10:29:00.044Z</updated>
     
@@ -39,8 +39,8 @@
   
   <entry>
     <title>Tengine 安装</title>
-    <link href="https://blog.icmpy.net/2023/11/14/tengine%E2%80%98-%E2%80%98an%E2%80%98-%E2%80%98zhuang/"/>
-    <id>https://blog.icmpy.net/2023/11/14/tengine%E2%80%98-%E2%80%98an%E2%80%98-%E2%80%98zhuang/</id>
+    <link href="https://blog.icmpy.net/2023/11/14/Tengine%E5%AE%89%E8%A3%85/"/>
+    <id>https://blog.icmpy.net/2023/11/14/Tengine%E5%AE%89%E8%A3%85/</id>
     <published>2023-11-14T07:06:29.000Z</published>
     <updated>2023-11-14T07:12:05.000Z</updated>
     
@@ -61,8 +61,8 @@
   
   <entry>
     <title>centos7 改网卡名eth0</title>
-    <link href="https://blog.icmpy.net/2023/11/14/centos7%E2%80%98-%E2%80%98gai%E2%80%98-%E2%80%98wang%E2%80%98-%E2%80%98qia%E2%80%98-%E2%80%98ming%E2%80%98-%E2%80%98eth0/"/>
-    <id>https://blog.icmpy.net/2023/11/14/centos7%E2%80%98-%E2%80%98gai%E2%80%98-%E2%80%98wang%E2%80%98-%E2%80%98qia%E2%80%98-%E2%80%98ming%E2%80%98-%E2%80%98eth0/</id>
+    <link href="https://blog.icmpy.net/2023/11/14/centos7-%E6%94%B9%E7%BD%91%E5%8D%A1%E5%90%8Deth0/"/>
+    <id>https://blog.icmpy.net/2023/11/14/centos7-%E6%94%B9%E7%BD%91%E5%8D%A1%E5%90%8Deth0/</id>
     <published>2023-11-14T06:21:43.000Z</published>
     <updated>2023-11-16T09:21:13.896Z</updated>
     
@@ -85,8 +85,8 @@
   
   <entry>
     <title>centos U盘安装查找U盘设备名</title>
-    <link href="https://blog.icmpy.net/2023/11/14/centos%E2%80%98-%E2%80%98u%E2%80%98-%E2%80%98pan%E2%80%98-%E2%80%98an%E2%80%98-%E2%80%98zhuang%E2%80%98-%E2%80%98cha%E2%80%98-%E2%80%98zhao%E2%80%98-%E2%80%98u%E2%80%98-%E2%80%98pan%E2%80%98-%E2%80%98she%E2%80%98-%E2%80%98bei%E2%80%98-%E2%80%98ming/"/>
-    <id>https://blog.icmpy.net/2023/11/14/centos%E2%80%98-%E2%80%98u%E2%80%98-%E2%80%98pan%E2%80%98-%E2%80%98an%E2%80%98-%E2%80%98zhuang%E2%80%98-%E2%80%98cha%E2%80%98-%E2%80%98zhao%E2%80%98-%E2%80%98u%E2%80%98-%E2%80%98pan%E2%80%98-%E2%80%98she%E2%80%98-%E2%80%98bei%E2%80%98-%E2%80%98ming/</id>
+    <link href="https://blog.icmpy.net/2023/11/14/centos-U%E7%9B%98%E5%AE%89%E8%A3%85%E6%9F%A5%E6%89%BEU%E7%9B%98%E8%AE%BE%E5%A4%87%E5%90%8D/"/>
+    <id>https://blog.icmpy.net/2023/11/14/centos-U%E7%9B%98%E5%AE%89%E8%A3%85%E6%9F%A5%E6%89%BEU%E7%9B%98%E8%AE%BE%E5%A4%87%E5%90%8D/</id>
     <published>2023-11-14T06:21:07.000Z</published>
     <updated>2023-11-14T06:21:26.254Z</updated>
     
@@ -106,8 +106,8 @@
   
   <entry>
     <title>hexogit搭建个人网站</title>
-    <link href="https://blog.icmpy.net/2023/11/14/hexogit%E2%80%98-%E2%80%98da%E2%80%98-%E2%80%98jian%E2%80%98-%E2%80%98ge%E2%80%98-%E2%80%98ren%E2%80%98-%E2%80%98wang%E2%80%98-%E2%80%98zhan/"/>
-    <id>https://blog.icmpy.net/2023/11/14/hexogit%E2%80%98-%E2%80%98da%E2%80%98-%E2%80%98jian%E2%80%98-%E2%80%98ge%E2%80%98-%E2%80%98ren%E2%80%98-%E2%80%98wang%E2%80%98-%E2%80%98zhan/</id>
+    <link href="https://blog.icmpy.net/2023/11/14/hexogit%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99/"/>
+    <id>https://blog.icmpy.net/2023/11/14/hexogit%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99/</id>
     <published>2023-11-14T03:50:09.000Z</published>
     <updated>2023-11-15T03:56:28.703Z</updated>
     
@@ -127,8 +127,8 @@
   
   <entry>
     <title>zabbix监控业务进程变动</title>
-    <link href="https://blog.icmpy.net/2023/11/13/zabbix%E2%80%98-%E2%80%98jian%E2%80%98-%E2%80%98kong%E2%80%98-%E2%80%98jin%E2%80%98-%E2%80%98cheng%E2%80%98-%E2%80%98dang%E2%80%98-%E2%80%98ji/"/>
-    <id>https://blog.icmpy.net/2023/11/13/zabbix%E2%80%98-%E2%80%98jian%E2%80%98-%E2%80%98kong%E2%80%98-%E2%80%98jin%E2%80%98-%E2%80%98cheng%E2%80%98-%E2%80%98dang%E2%80%98-%E2%80%98ji/</id>
+    <link href="https://blog.icmpy.net/2023/11/13/zabbix_%E7%9B%91%E6%8E%A7%E8%BF%9B%E7%A8%8B%E5%AE%95%E6%9C%BA/"/>
+    <id>https://blog.icmpy.net/2023/11/13/zabbix_%E7%9B%91%E6%8E%A7%E8%BF%9B%E7%A8%8B%E5%AE%95%E6%9C%BA/</id>
     <published>2023-11-13T07:57:02.000Z</published>
     <updated>2023-11-17T02:13:06.611Z</updated>
     
@@ -151,8 +151,8 @@
   
   <entry>
     <title>linux有足够内存还使用swap</title>
-    <link href="https://blog.icmpy.net/2023/11/13/linux%E2%80%98-%E2%80%98you%E2%80%98-%E2%80%98zu%E2%80%98-%E2%80%98gou%E2%80%98-%E2%80%98nei%E2%80%98-%E2%80%98cun%E2%80%98-%E2%80%98huan%E2%80%98-%E2%80%98shi%E2%80%98-%E2%80%98yong%E2%80%98-%E2%80%98swap/"/>
-    <id>https://blog.icmpy.net/2023/11/13/linux%E2%80%98-%E2%80%98you%E2%80%98-%E2%80%98zu%E2%80%98-%E2%80%98gou%E2%80%98-%E2%80%98nei%E2%80%98-%E2%80%98cun%E2%80%98-%E2%80%98huan%E2%80%98-%E2%80%98shi%E2%80%98-%E2%80%98yong%E2%80%98-%E2%80%98swap/</id>
+    <link href="https://blog.icmpy.net/2023/11/13/linux%E6%9C%89%E8%B6%B3%E5%A4%9F%E5%86%85%E5%AD%98%E8%BF%98%E4%BD%BF%E7%94%A8swap/"/>
+    <id>https://blog.icmpy.net/2023/11/13/linux%E6%9C%89%E8%B6%B3%E5%A4%9F%E5%86%85%E5%AD%98%E8%BF%98%E4%BD%BF%E7%94%A8swap/</id>
     <published>2023-11-13T07:36:36.000Z</published>
     <updated>2023-11-13T07:37:34.238Z</updated>
     
@@ -174,8 +174,8 @@
   
   <entry>
     <title>linux 磁盘挂载扩充格式化</title>
-    <link href="https://blog.icmpy.net/2023/11/10/linux%E2%80%98-%E2%80%98ci%E2%80%98-%E2%80%98pan%E2%80%98-%E2%80%98gua%E2%80%98-%E2%80%98zai%E2%80%98-%E2%80%98kuo%E2%80%98-%E2%80%98chong%E2%80%98-%E2%80%98ge%E2%80%98-%E2%80%98shi%E2%80%98-%E2%80%98hua/"/>
-    <id>https://blog.icmpy.net/2023/11/10/linux%E2%80%98-%E2%80%98ci%E2%80%98-%E2%80%98pan%E2%80%98-%E2%80%98gua%E2%80%98-%E2%80%98zai%E2%80%98-%E2%80%98kuo%E2%80%98-%E2%80%98chong%E2%80%98-%E2%80%98ge%E2%80%98-%E2%80%98shi%E2%80%98-%E2%80%98hua/</id>
+    <link href="https://blog.icmpy.net/2023/11/10/linux-%E7%A3%81%E7%9B%98%E6%8C%82%E8%BD%BD%E6%89%A9%E5%85%85%E6%A0%BC%E5%BC%8F%E5%8C%96/"/>
+    <id>https://blog.icmpy.net/2023/11/10/linux-%E7%A3%81%E7%9B%98%E6%8C%82%E8%BD%BD%E6%89%A9%E5%85%85%E6%A0%BC%E5%BC%8F%E5%8C%96/</id>
     <published>2023-11-10T09:58:10.000Z</published>
     <updated>2023-11-17T02:13:44.644Z</updated>
     
@@ -197,8 +197,8 @@
   
   <entry>
     <title>zabbix3.0.1安装过程的小坑</title>
-    <link href="https://blog.icmpy.net/2023/08/16/zabbix3%E2%80%98-%E2%80%980%E2%80%98-%E2%80%981%E2%80%98-%E2%80%98an%E2%80%98-%E2%80%98zhuang%E2%80%98-%E2%80%98guo%E2%80%98-%E2%80%98cheng%E2%80%98-%E2%80%98de%E2%80%98-%E2%80%98xiao%E2%80%98-%E2%80%98keng/"/>
-    <id>https://blog.icmpy.net/2023/08/16/zabbix3%E2%80%98-%E2%80%980%E2%80%98-%E2%80%981%E2%80%98-%E2%80%98an%E2%80%98-%E2%80%98zhuang%E2%80%98-%E2%80%98guo%E2%80%98-%E2%80%98cheng%E2%80%98-%E2%80%98de%E2%80%98-%E2%80%98xiao%E2%80%98-%E2%80%98keng/</id>
+    <link href="https://blog.icmpy.net/2023/08/16/zabbix3-0-1%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B%E7%9A%84%E5%B0%8F%E5%9D%91/"/>
+    <id>https://blog.icmpy.net/2023/08/16/zabbix3-0-1%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B%E7%9A%84%E5%B0%8F%E5%9D%91/</id>
     <published>2023-08-16T08:26:00.000Z</published>
     <updated>2023-11-17T02:12:18.556Z</updated>
     
@@ -224,8 +224,8 @@
   
   <entry>
     <title>php 安装redis，protobuf,mcryp扩展</title>
-    <link href="https://blog.icmpy.net/2023/08/10/php%E2%80%98-%E2%80%98an%E2%80%98-%E2%80%98zhuang%E2%80%98-%E2%80%98redis%E2%80%98-%E2%80%98protobuf%E2%80%98-%E2%80%98mcryp%E2%80%98-%E2%80%98kuo%E2%80%98-%E2%80%98zhan/"/>
-    <id>https://blog.icmpy.net/2023/08/10/php%E2%80%98-%E2%80%98an%E2%80%98-%E2%80%98zhuang%E2%80%98-%E2%80%98redis%E2%80%98-%E2%80%98protobuf%E2%80%98-%E2%80%98mcryp%E2%80%98-%E2%80%98kuo%E2%80%98-%E2%80%98zhan/</id>
+    <link href="https://blog.icmpy.net/2023/08/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/"/>
+    <id>https://blog.icmpy.net/2023/08/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/</id>
     <published>2023-08-10T10:00:29.000Z</published>
     <updated>2023-11-14T09:20:33.375Z</updated>
     
@@ -247,8 +247,8 @@
   
   <entry>
     <title>Rsync同步文件</title>
-    <link href="https://blog.icmpy.net/2023/08/10/rsync%E2%80%98-%E2%80%98tong%E2%80%98-%E2%80%98bu%E2%80%98-%E2%80%98wen%E2%80%98-%E2%80%98jian/"/>
-    <id>https://blog.icmpy.net/2023/08/10/rsync%E2%80%98-%E2%80%98tong%E2%80%98-%E2%80%98bu%E2%80%98-%E2%80%98wen%E2%80%98-%E2%80%98jian/</id>
+    <link href="https://blog.icmpy.net/2023/08/10/Rsync%E5%90%8C%E6%AD%A5%E6%96%87%E4%BB%B6/"/>
+    <id>https://blog.icmpy.net/2023/08/10/Rsync%E5%90%8C%E6%AD%A5%E6%96%87%E4%BB%B6/</id>
     <published>2023-08-10T08:58:37.000Z</published>
     <updated>2023-11-16T09:21:28.960Z</updated>
     
@@ -272,8 +272,8 @@
   
   <entry>
     <title>zabbix 清理历史数据</title>
-    <link href="https://blog.icmpy.net/2023/07/17/zabbix%E2%80%98-%E2%80%98qing%E2%80%98-%E2%80%98li%E2%80%98-%E2%80%98li%E2%80%98-%E2%80%98shi%E2%80%98-%E2%80%98shu%E2%80%98-%E2%80%98ju/"/>
-    <id>https://blog.icmpy.net/2023/07/17/zabbix%E2%80%98-%E2%80%98qing%E2%80%98-%E2%80%98li%E2%80%98-%E2%80%98li%E2%80%98-%E2%80%98shi%E2%80%98-%E2%80%98shu%E2%80%98-%E2%80%98ju/</id>
+    <link href="https://blog.icmpy.net/2023/07/17/zabbix-%E6%B8%85%E7%90%86%E5%8E%86%E5%8F%B2%E6%95%B0%E6%8D%AE/"/>
+    <id>https://blog.icmpy.net/2023/07/17/zabbix-%E6%B8%85%E7%90%86%E5%8E%86%E5%8F%B2%E6%95%B0%E6%8D%AE/</id>
     <published>2023-07-17T08:21:59.000Z</published>
     <updated>2023-11-15T07:48:07.006Z</updated>
     
@@ -296,8 +296,8 @@
   
   <entry>
     <title>ssh免密登录问题</title>
-    <link href="https://blog.icmpy.net/2023/07/17/ssh%E2%80%98-%E2%80%98mian%E2%80%98-%E2%80%98mi%E2%80%98-%E2%80%98deng%E2%80%98-%E2%80%98lu%E2%80%98-%E2%80%98wen%E2%80%98-%E2%80%98ti/"/>
-    <id>https://blog.icmpy.net/2023/07/17/ssh%E2%80%98-%E2%80%98mian%E2%80%98-%E2%80%98mi%E2%80%98-%E2%80%98deng%E2%80%98-%E2%80%98lu%E2%80%98-%E2%80%98wen%E2%80%98-%E2%80%98ti/</id>
+    <link href="https://blog.icmpy.net/2023/07/17/ssh%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98/"/>
+    <id>https://blog.icmpy.net/2023/07/17/ssh%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98/</id>
     <published>2023-07-17T07:39:21.000Z</published>
     <updated>2023-11-14T09:11:23.056Z</updated>
     
@@ -317,8 +317,8 @@
   
   <entry>
     <title>linux install shadowsocks</title>
-    <link href="https://blog.icmpy.net/2023/07/16/linux%E2%80%98-%E2%80%98install%E2%80%98-%E2%80%98shadowsocks/"/>
-    <id>https://blog.icmpy.net/2023/07/16/linux%E2%80%98-%E2%80%98install%E2%80%98-%E2%80%98shadowsocks/</id>
+    <link href="https://blog.icmpy.net/2023/07/16/linux-install-shadowsocks/"/>
+    <id>https://blog.icmpy.net/2023/07/16/linux-install-shadowsocks/</id>
     <published>2023-07-16T05:55:17.000Z</published>
     <updated>2023-11-15T10:24:41.625Z</updated>
     
@@ -340,8 +340,8 @@
   
   <entry>
     <title>kafka Create topic 报错</title>
-    <link href="https://blog.icmpy.net/2023/07/13/kafka%E2%80%98-%E2%80%98create%E2%80%98-%E2%80%98topic%E2%80%98-%E2%80%98bao%E2%80%98-%E2%80%98cuo/"/>
-    <id>https://blog.icmpy.net/2023/07/13/kafka%E2%80%98-%E2%80%98create%E2%80%98-%E2%80%98topic%E2%80%98-%E2%80%98bao%E2%80%98-%E2%80%98cuo/</id>
+    <link href="https://blog.icmpy.net/2023/07/13/kafka-Create-topic-%E6%8A%A5%E9%94%99/"/>
+    <id>https://blog.icmpy.net/2023/07/13/kafka-Create-topic-%E6%8A%A5%E9%94%99/</id>
     <published>2023-07-13T07:55:23.000Z</published>
     <updated>2023-11-14T09:20:45.327Z</updated>
     
@@ -361,8 +361,8 @@
   
   <entry>
     <title>vsftp 锁定用户目录</title>
-    <link href="https://blog.icmpy.net/2023/07/11/vsftp%E2%80%98-%E2%80%98suo%E2%80%98-%E2%80%98ding%E2%80%98-%E2%80%98yong%E2%80%98-%E2%80%98hu%E2%80%98-%E2%80%98mu%E2%80%98-%E2%80%98lu/"/>
-    <id>https://blog.icmpy.net/2023/07/11/vsftp%E2%80%98-%E2%80%98suo%E2%80%98-%E2%80%98ding%E2%80%98-%E2%80%98yong%E2%80%98-%E2%80%98hu%E2%80%98-%E2%80%98mu%E2%80%98-%E2%80%98lu/</id>
+    <link href="https://blog.icmpy.net/2023/07/11/vsftp-%E9%94%81%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95/"/>
+    <id>https://blog.icmpy.net/2023/07/11/vsftp-%E9%94%81%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95/</id>
     <published>2023-07-11T07:21:51.000Z</published>
     <updated>2023-11-17T02:12:11.676Z</updated>
     
@@ -387,8 +387,8 @@
   
   <entry>
     <title>nginx编译ssl模块</title>
-    <link href="https://blog.icmpy.net/2023/06/28/nginx%E2%80%98-%E2%80%98bian%E2%80%98-%E2%80%98yi%E2%80%98-%E2%80%98ssl%E2%80%98-%E2%80%98mo%E2%80%98-%E2%80%98kuai/"/>
-    <id>https://blog.icmpy.net/2023/06/28/nginx%E2%80%98-%E2%80%98bian%E2%80%98-%E2%80%98yi%E2%80%98-%E2%80%98ssl%E2%80%98-%E2%80%98mo%E2%80%98-%E2%80%98kuai/</id>
+    <link href="https://blog.icmpy.net/2023/06/28/nginx%E7%BC%96%E8%AF%91ssl%E6%A8%A1%E5%9D%97/"/>
+    <id>https://blog.icmpy.net/2023/06/28/nginx%E7%BC%96%E8%AF%91ssl%E6%A8%A1%E5%9D%97/</id>
     <published>2023-06-28T10:22:27.000Z</published>
     <updated>2023-11-15T10:22:59.369Z</updated>
     
@@ -411,8 +411,8 @@
   
   <entry>
     <title>apache多网站对应80端口</title>
-    <link href="https://blog.icmpy.net/2023/06/28/apache%E2%80%98-%E2%80%98duo%E2%80%98-%E2%80%98wang%E2%80%98-%E2%80%98zhan%E2%80%98-%E2%80%98dui%E2%80%98-%E2%80%98ying%E2%80%98-%E2%80%9880%E2%80%98-%E2%80%98duan%E2%80%98-%E2%80%98kou/"/>
-    <id>https://blog.icmpy.net/2023/06/28/apache%E2%80%98-%E2%80%98duo%E2%80%98-%E2%80%98wang%E2%80%98-%E2%80%98zhan%E2%80%98-%E2%80%98dui%E2%80%98-%E2%80%98ying%E2%80%98-%E2%80%9880%E2%80%98-%E2%80%98duan%E2%80%98-%E2%80%98kou/</id>
+    <link href="https://blog.icmpy.net/2023/06/28/apache%E5%A4%9A%E7%BD%91%E7%AB%99%E5%AF%B9%E5%BA%9480%E7%AB%AF%E5%8F%A3/"/>
+    <id>https://blog.icmpy.net/2023/06/28/apache%E5%A4%9A%E7%BD%91%E7%AB%99%E5%AF%B9%E5%BA%9480%E7%AB%AF%E5%8F%A3/</id>
     <published>2023-06-28T09:56:18.000Z</published>
     <updated>2023-11-15T10:23:50.081Z</updated>
     
@@ -434,8 +434,8 @@
   
   <entry>
     <title>frp搭建</title>
-    <link href="https://blog.icmpy.net/2023/06/27/frp%E2%80%98-%E2%80%98da%E2%80%98-%E2%80%98jian/"/>
-    <id>https://blog.icmpy.net/2023/06/27/frp%E2%80%98-%E2%80%98da%E2%80%98-%E2%80%98jian/</id>
+    <link href="https://blog.icmpy.net/2023/06/27/frp%E6%90%AD%E5%BB%BA/"/>
+    <id>https://blog.icmpy.net/2023/06/27/frp%E6%90%AD%E5%BB%BA/</id>
     <published>2023-06-27T08:56:46.000Z</published>
     <updated>2023-11-16T09:21:59.088Z</updated>
     
@@ -459,8 +459,8 @@
   
   <entry>
     <title>coredump 路径格式</title>
-    <link href="https://blog.icmpy.net/2023/06/27/coredump%E2%80%98-%E2%80%98lu%E2%80%98-%E2%80%98jing%E2%80%98-%E2%80%98ge%E2%80%98-%E2%80%98shi/"/>
-    <id>https://blog.icmpy.net/2023/06/27/coredump%E2%80%98-%E2%80%98lu%E2%80%98-%E2%80%98jing%E2%80%98-%E2%80%98ge%E2%80%98-%E2%80%98shi/</id>
+    <link href="https://blog.icmpy.net/2023/06/27/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/"/>
+    <id>https://blog.icmpy.net/2023/06/27/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/</id>
     <published>2023-06-27T07:38:29.000Z</published>
     <updated>2023-11-15T10:23:29.994Z</updated>
     

@@ -1,8 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Rsync同步文件</title>
+    <url>/2023/08/10/Rsync%E5%90%8C%E6%AD%A5%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<p>Rsync常用的一款同步文件工具。配置也很方便。</p>
+<p>&nbsp;</p>
+<p>yum install sync -y或者apt-get install sync</p>
+<ul>
+<li>服务安装好之后，/etc下没有配置文件，一般情况可以copy示例文件到/etc下</li>
+</ul>
+<p>&nbsp;</p>
+<p>#cp&nbsp;/usr/share/doc/rsync/examples/rsyncd.conf&nbsp;/etc</p>
+<p>&nbsp;</p>
+<p>vim /etc/rsyncd.conf</p>
+<p>uid = common</p>
+<p>gid = common</p>
+<p>use chroot = no</p>
+<p>max connections = 10</p>
+<p>strict modes = yes</p>
+<p>hosts allow = 192.168.2.12&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #可以空格，允许多个</p>
+<p>hosts deny = *</p>
+<p>port = 5699&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;#默认开启端口</p>
+<p>pid file = /var/run/rsyncd.pid</p>
+<p>lock file = /var/run/rsync.lock</p>
+<p>log file = /var/log/rsyncd.log</p>
+<p>[hmt]</p>
+<p>path = /data/www/html/</p>
+<p>comment = hello</p>
+<p>ignore errors</p>
+<p>read only = no</p>
+<p>write only = no</p>
+<p>hosts allow = 192.168.2.12&nbsp;</p>
+<p>list = false</p>
+<p>auth users = hmt</p>
+<p>secrets file = /etc/rsync.password</p>
+<ul>
+<li>建立/etc/rsyncd/rsyncd.secrets文件</li>
+</ul>
+<p>#vim /etc/rsync.password</p>
+<p>#cat /etc/rsyncd/rsyncd.secrets</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;hmt:123456</p>
+<ul>
+<li>为了密码的安全性，我们必须把权限设为600</li>
+</ul>
+<p> chown root:root /etc/rsyncd/rsyncd.secrets</p>
+<p>chmod 600&nbsp;&nbsp;/etc/rsync.password</p>
+<p> chmod 600&nbsp;/etc/rsyncd/rsyncd.secrets</p>
+<p> vim /etc/rsyncd/rsyncd.motd</p>
+<p>&nbsp;</p>
+<p>启动rsync：</p>
+<p>systemctl start rsyncd.service</p>
+<p>&nbsp;lsof -i:5699</p>
+<p>lsof -i:5699</p>
+<p>COMMAND PID USER&nbsp; &nbsp;FD&nbsp; &nbsp;TYPE&nbsp; &nbsp;DEVICE SIZE/OFF NODE NAME</p>
+<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 4u&nbsp; IPv4 22661487&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
+<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 5u&nbsp; IPv6 22661488&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
+<p>至此服务器端安装完毕；</p>
+<p>客户端安装配置：</p>
+<p>&nbsp;</p>
+<p>yum -y install rsync</p>
+<p>&nbsp;客户端需要vim&nbsp;/etc/rsync.password&nbsp;</p>
+<p>cat&nbsp;&nbsp;/etc/rsync.password</p>
+<p>123456</p>
+<p>运行：</p>
+<p>rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
+<p>Password: 这里要输入rsync的密码，是服务器端提供的，在前面的例子中，我们用的是 asdf，输入的密码并不显示出来；输好后就回车；&nbsp;注：&nbsp;这个命令的意思就是说，用rsync 用户登录到服务器上，把/data/www/html&nbsp;数据，同步到本地目录/data/www/html/上。当然本地的目录是可以你自己定义的，比如 dave也是可以的；当你在客户端上，当前操作的目录下没有/tmp/test/这个目录时，系统会自动为你创建一个；当存在/tmp/test/这个目录中，你要注意它的写权限。</p>
+<p>参数说明：</p>
+<p>&nbsp;-a 参数，相当于-rlptgoD，</p>
+<p>&nbsp;&nbsp;&nbsp;-r 是递归 -l 是链接文件，意思是拷贝链接文件；</p>
+<p>&nbsp;&nbsp;&nbsp;-p 表示保持文件原有权限；</p>
+<p>&nbsp;&nbsp;&nbsp;-t 保持文件原有时间；<br>&nbsp;&nbsp;&nbsp;-g 保持文件原有用户组；</p>
+<p>&nbsp;&nbsp;&nbsp;-o 保持文件原有属主；</p>
+<p>&nbsp;&nbsp;&nbsp;-D 相当于块设备文件；</p>
+<p>&nbsp;&nbsp;&nbsp;-z 传输时压缩；</p>
+<p>&nbsp;&nbsp;&nbsp;-P 传输进度；</p>
+<p>&nbsp;&nbsp;&nbsp;-v 传输时的进度等信息，和-P有点关系</p>
+<p>&nbsp;<br>*</p>
+<p>rsync -avzP &nbsp;–delete <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools&nbsp;/tmp/test/</p>
+<p>–delete 选项，表示服务器上的数据要与客户端完全一致，如果 /tmp/test/目录中有服务器上不存在的文件，则删除。最终目的是让/tmp/test/目录上的数据完全与服务器上保持一致；用的时候要小心点，最好不要把已经有重要数所据的目录，当做本地更新目录，否则会把你的数据全部删除；
+&nbsp;</p>
+<p>计划任务同步：</p>
+<p>*/5 * * * * rsync -zvaP <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools /tmp/test/ –password-file=/etc/rsyncd/rsyncd.secrets</p>
+<p>*/5 * * * * rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
+<p>&nbsp;</p>
+]]></content>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Tengine 安装</title>
+    <url>/2023/11/14/Tengine%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<p>Tengine安装</p>
+<p>Tengine 是由淘宝网发起的 Web 服务器项目。它在 Nginx 的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。Tengine 的性能和稳定性已经在大型的网站如淘宝网，天猫商城等得到了很好的检验。它的最终目标是打造一个高效、稳定、安全、易用的 Web 平台。</p>
+<p>Tengine 特性：</p>
+<p>支持 HTTP 的 CONNECT 方法，可用于正向代理场景；</p>
+<p>支持异步 OpenSSL，可使用硬件如：QAT 进行 HTTPS 的加速与卸载；</p>
+<p>增强相关运维、监控能力，比如异步打印日志及回滚，本地 DNS 缓存，内存监控等；</p>
+<p>Stream 模块支持 server_name 指令；</p>
+<p>更加强大的负载均衡能力，包括一致性 hash 模块、会话保持模块，还可以对后端的服务器进行主动健康检查，根据服务器状态自动上线下线，以及动态解析 upstream 中出现的域名；</p>
+<p>输入过滤器机制支持。通过使用这种机制 Web 应用防火墙的编写更为方便；</p>
+<p>支持设置 proxy、memcached、fastcgi、scgi、uwsgi 在后端失败时的重试次数；</p>
+<p>动态脚本语言 Lua 支持。扩展功能非常高效简单；</p>
+<p>支持按指定关键字(域名，url等)收集 Tengine 运行状态；</p>
+<p>组合多个 CSS、JavaScript 文件的访问请求变成一个请求；</p>
+<p>自动去除空白字符和注释从而减小页面的体积</p>
+<p>自动根据 CPU 数目设置进程个数和绑定 CPU 亲缘性；</p>
+<p>监控系统的负载和资源占用从而对系统进行保护；</p>
+<p>显示对运维人员更友好的出错信息，便于定位出错机器；；</p>
+<p>更强大的防攻击（访问速度限制）模块；</p>
+<p>更方便的命令行参数，如列出编译的模块列表、支持的指令等；</p>
+<p>支持 Dubbo 协议；</p>
+<p>可以根据访问文件类型设置过期时间；</p>
+<p>下载源码包：</p>
+<p>tengine 源码：<a href="http://tengine.taobao.org/download_cn.html">http://tengine.taobao.org/download_cn.html</a></p>
+<p>pcre 源码：<a href="http://www.pcre.org/">http://www.pcre.org/</a></p>
+<p>openssl 源码：<a href="https://www.openssl.org/source/">https://www.openssl.org/source/</a></p>
+<p>zlib 源码：<a href="http://www.zlib.net/">http://www.zlib.net/</a></p>
+<p>安装包：</p>
+<p>支持lua模块</p>
+<p>wget <a href="http://luajit.org/download/LuaJIT-2.0.4.tar.gz">http://luajit.org/download/LuaJIT-2.0.4.tar.gz</a></p>
+<p>#wget <a href="https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz">https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz</a></p>
+<p>#wget <a href="https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz">https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz</a></p>
+<p>安装LuaJIT</p>
+<p>tar xf LuaJIT-2.0.4.tar.gz</p>
+<p>#cd xf LuaJIT-2.0.4</p>
+<p>#make PREFIX=/usr/local/luajit</p>
+<p>#make install PREFIX=/usr/local/luajit</p>
+<p>#ln -s /usr/local/luajit/lib/libluajit-5.1.so.2 /lib64/libluajit-5.1.so.2</p>
+<p>添加环境变量</p>
+<p>export LUAJIT_LIB=/usr/local/luajit/lib</p>
+<p>export LUAJIT_INC=/usr/local/luajit/include/luajit-2.0</p>
+<p>#source /etc/profile</p>
+<p>安装tingine</p>
+<p>#tar xf v0.3.0.tar.gz</p>
+<p>#tar xf v0.10.13.tar.gz</p>
+<p>#tar xf nginx-1.12.0.tar.gz</p>
+<p>cd tengine-2.2.2</p>
+<p> ./configure –conf-path=/etc/nginx/nginx.conf –user=www-data –group=www-data –prefix=/etc/nginx –sbin-path=/usr/sbin/nginx –with-ipv6  –error-log-path=/var/log/nginx/error.log –http-log-path=/var/log/nginx/access.log  –pid-path=/var/run/nginx.pid –lock-path=/var/lock/nginx.lock –http-client-body-temp-path=/var/cache/nginx/client_temp  –http-proxy-temp-path=/var/cache/nginx/proxy_temp –http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp  –http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp –http-scgi-temp-path=/var/cache/nginx/scgi_temp  –without-select_module –without-http_uwsgi_module –without-http_empty_gif_module –with-http_ssl_module –with-http_addition_module  –with-http_sub_module –with-http_dav_module –with-http_flv_module –with-http_gunzip_module  –with-http_gzip_static_module –with-http_random_index_module  –with-http_secure_link_module –with-http_stub_status_module –with-http_realip_module  –with-http_concat_module=shared –with-http_sysguard_module=shared  –with-http_dyups_module –with-file-aio –add-module=../ngx_devel_kit-0.3.0/  –add-module=../lua-nginx-module-0.10.13/ \</p>
+<p>Make </p>
+<p>Make install</p>
+<p>Make会报错：cc1: all warnings being treated as errors</p>
+<p>make[1]: *** [objs/Makefile:617: objs/src/core/ngx_murmurhash.o] Error 1</p>
+<p>make[1]: Leaving directory ‘/home/tools/install/tengine-2.2.2’</p>
+<p>vim objs/Makefile：</p>
+<p>CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused -Werror -g  -DNDK_SET_VAR</p>
+<p> -Werror -g去掉</p>
+<p>CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused  -DNDK_SET_VAR</p>
+<p>sed -i “s/ -Werror -g / /g” ./objs/Makefile<br>make &amp;&amp; make install<br>echo <code>nginx -v</code></p>
+<p>#不显示版本号<br>sed -i “/server_tokens off;/a server_tag off; \n server_info off;” nginx.conf<br>mkdir -p /var/cache/nginx/scgi_temp<br>chown www-data.root /var/cache/nginx/scgi_temp</p>
+<p>添加系统服务：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat &gt;&gt;/etc/systemd/system/nginx.service &lt;&lt;EOF</span><br><span class="line">[Unit]</span><br><span class="line">Description=The nginx HTTP and reverse proxy server</span><br><span class="line">After=syslog.target network.target remote-fs.target nss-lookup.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">PIDFile=/var/run/nginx.pid</span><br><span class="line">ExecStartPre=/usr/sbin/nginx -t -c /etc/nginx/nginx.conf</span><br><span class="line">ExecStart=/usr/sbin/nginx -c /etc/nginx/nginx.conf</span><br><span class="line">ExecReload=/usr/sbin/nginx -s reload</span><br><span class="line">ExecStop=/usr/sbin/nginx -s stop</span><br><span class="line">ExecQuit=/usr/sbin/nginx -s quit</span><br><span class="line">PrivateTmp=true</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br></pre></td></tr></tbody></table></figure>
+
+<p>后续就是优化配置了。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>apache多网站对应80端口</title>
+    <url>/2023/06/28/apache%E5%A4%9A%E7%BD%91%E7%AB%99%E5%AF%B9%E5%BA%9480%E7%AB%AF%E5%8F%A3/</url>
+    <content><![CDATA[<p>一台服务器绑定多个域名，已经装了apache，nginx就不使用了，利用apache主机头名虚拟主机用80端口对应多个网站，万能的网络上面有文档如下：</p>
+<p>Aapche 如果需要绑定多个域名到一个IP上,是支持的。需要注意以下2点:</p>
+<p>1 必须要开启 NameVirtualHost开关选项，</p>
+<p>如：NameVirtualHost 220.231.220.231:80</p>
+<p>2 NameVirtualHost 需要指定具体的端口</p>
+<p>例如”:80″,跟&lt;VirtualHost 220.231.32.*:80&gt;对应，否则会报错:</p>
+<p>mixing * ports and non-* ports with a NameVirtualHost address is not supported, proceeding with undefined results。</p>
+<p>翻译过来就是: NameVirtualHost 地址，指定端口和不指定端口混合使用是不支持的，将会产生未逾期的后果。</p>
+<p>未逾期的后果就是: 第2个不起作用，仅当一个站点设置起作用。</p>
+<p>按着做下来：</p>
+<p>IncludeOptional conf.d/*.conf</p>
+<p>ServerSignature Off</p>
+<p>NameVirtualHost 220.231.220.231:80</p>
+<p>&lt;VirtualHost 220.231.220.231:80&gt;&nbsp;&nbsp;</p>
+<p>ServerAdmin&nbsp; &nbsp;<a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a>&nbsp;</p>
+<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
+<p>ServerName <a href="http://www.aaa.net/">www.aaa.net</a></p>
+<p>DocumentRoot&nbsp; /data/www/wress/</p>
+<p>&lt;Directory “/data/www/wress/“&gt;&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp;Options -Indexes&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp;Options FollowSymLinks Indexes</p>
+<p>&nbsp; &nbsp; AllowOverride All&nbsp;&nbsp;</p>
+<p>&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp; Require all granted&nbsp;&nbsp;</p>
+<p>&nbsp;&nbsp;</p>
+<p>ErrorLog logs/<a href="http://www.aaa.net-error_log/">www.aaa.net-error_log</a></p>
+<p>&nbsp;CustomLog logs/<a href="http://www.aaa.net-access_log/">www.aaa.net-access_log</a> common</p>
+<p>&nbsp;</p>
+<p>&lt;VirtualHost 220.231.220.231:80&gt;</p>
+<p>ServerAdmin&nbsp; <a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a></p>
+<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
+<p>ServerName img.aaa.net</p>
+<p>#ServerName 220.231.220.231</p>
+<p>DocumentRoot&nbsp; /data/www/html/</p>
+<p>&lt;Directory “/data/www/html/“&gt;</p>
+<p>&nbsp; &nbsp; Options -Indexes&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp; Options FollowSymLinks Indexes</p>
+<p>&nbsp; &nbsp; AllowOverride All</p>
+<p>&nbsp; &nbsp;Require all granted</p>
+
+
+<p>ErrorLog logs/img.aaa.net-error_log</p>
+<p>CustomLog logs/img.aaa.net-access_log common</p>
+
+
+<h2 id="这样都可以访问，apache也可以实现，做个小笔记。"><a href="#这样都可以访问，apache也可以实现，做个小笔记。" class="headerlink" title="这样都可以访问，apache也可以实现，做个小笔记。"></a>这样都可以访问，apache也可以实现，做个小笔记。</h2>]]></content>
+  </entry>
+  <entry>
     <title>ELK安装调试及遇到的问题</title>
-    <url>/2023/11/14/elk%E2%80%98-%E2%80%98an%E2%80%98-%E2%80%98zhuang%E2%80%98-%E2%80%98diao%E2%80%98-%E2%80%98shi%E2%80%98-%E2%80%98ji%E2%80%98-%E2%80%98yu%E2%80%98-%E2%80%98dao%E2%80%98-%E2%80%98de%E2%80%98-%E2%80%98wen%E2%80%98-%E2%80%98ti/</url>
+    <url>/2023/11/14/ELK%E5%AE%89%E8%A3%85%E8%B0%83%E8%AF%95%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<h1 id="1-前期准备："><a href="#1-前期准备：" class="headerlink" title="1.前期准备："></a>1.前期准备：</h1><p>如果是es非root用户启动es，可以把*改成非root用户，例如 es soft nofile 65535修改 /etc/security/limits.conf</p>
 <p>在文件末尾中增加下面内容# 每个进程可以打开的文件数的限制* soft nofile 65536* hard nofile 65536</p>
 <p>修改/etc/security/limits.d/20-nproc.conf</p>
@@ -208,161 +413,8 @@
 ]]></content>
   </entry>
   <entry>
-    <title>apache多网站对应80端口</title>
-    <url>/2023/06/28/apache%E2%80%98-%E2%80%98duo%E2%80%98-%E2%80%98wang%E2%80%98-%E2%80%98zhan%E2%80%98-%E2%80%98dui%E2%80%98-%E2%80%98ying%E2%80%98-%E2%80%9880%E2%80%98-%E2%80%98duan%E2%80%98-%E2%80%98kou/</url>
-    <content><![CDATA[<p>一台服务器绑定多个域名，已经装了apache，nginx就不使用了，利用apache主机头名虚拟主机用80端口对应多个网站，万能的网络上面有文档如下：</p>
-<p>Aapche 如果需要绑定多个域名到一个IP上,是支持的。需要注意以下2点:</p>
-<p>1 必须要开启 NameVirtualHost开关选项，</p>
-<p>如：NameVirtualHost 220.231.220.231:80</p>
-<p>2 NameVirtualHost 需要指定具体的端口</p>
-<p>例如”:80″,跟&lt;VirtualHost 220.231.32.*:80&gt;对应，否则会报错:</p>
-<p>mixing * ports and non-* ports with a NameVirtualHost address is not supported, proceeding with undefined results。</p>
-<p>翻译过来就是: NameVirtualHost 地址，指定端口和不指定端口混合使用是不支持的，将会产生未逾期的后果。</p>
-<p>未逾期的后果就是: 第2个不起作用，仅当一个站点设置起作用。</p>
-<p>按着做下来：</p>
-<p>IncludeOptional conf.d/*.conf</p>
-<p>ServerSignature Off</p>
-<p>NameVirtualHost 220.231.220.231:80</p>
-<p>&lt;VirtualHost 220.231.220.231:80&gt;&nbsp;&nbsp;</p>
-<p>ServerAdmin&nbsp; &nbsp;<a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a>&nbsp;</p>
-<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
-<p>ServerName <a href="http://www.aaa.net/">www.aaa.net</a></p>
-<p>DocumentRoot&nbsp; /data/www/wress/</p>
-<p>&lt;Directory “/data/www/wress/“&gt;&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp;Options -Indexes&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp;Options FollowSymLinks Indexes</p>
-<p>&nbsp; &nbsp; AllowOverride All&nbsp;&nbsp;</p>
-<p>&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp; Require all granted&nbsp;&nbsp;</p>
-<p>&nbsp;&nbsp;</p>
-<p>ErrorLog logs/<a href="http://www.aaa.net-error_log/">www.aaa.net-error_log</a></p>
-<p>&nbsp;CustomLog logs/<a href="http://www.aaa.net-access_log/">www.aaa.net-access_log</a> common</p>
-<p>&nbsp;</p>
-<p>&lt;VirtualHost 220.231.220.231:80&gt;</p>
-<p>ServerAdmin&nbsp; <a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a></p>
-<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
-<p>ServerName img.aaa.net</p>
-<p>#ServerName 220.231.220.231</p>
-<p>DocumentRoot&nbsp; /data/www/html/</p>
-<p>&lt;Directory “/data/www/html/“&gt;</p>
-<p>&nbsp; &nbsp; Options -Indexes&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp; Options FollowSymLinks Indexes</p>
-<p>&nbsp; &nbsp; AllowOverride All</p>
-<p>&nbsp; &nbsp;Require all granted</p>
-
-
-<p>ErrorLog logs/img.aaa.net-error_log</p>
-<p>CustomLog logs/img.aaa.net-access_log common</p>
-
-
-<h2 id="这样都可以访问，apache也可以实现，做个小笔记。"><a href="#这样都可以访问，apache也可以实现，做个小笔记。" class="headerlink" title="这样都可以访问，apache也可以实现，做个小笔记。"></a>这样都可以访问，apache也可以实现，做个小笔记。</h2>]]></content>
-  </entry>
-  <entry>
-    <title>Rsync同步文件</title>
-    <url>/2023/08/10/rsync%E2%80%98-%E2%80%98tong%E2%80%98-%E2%80%98bu%E2%80%98-%E2%80%98wen%E2%80%98-%E2%80%98jian/</url>
-    <content><![CDATA[<p>Rsync常用的一款同步文件工具。配置也很方便。</p>
-<p>&nbsp;</p>
-<p>yum install sync -y或者apt-get install sync</p>
-<ul>
-<li>服务安装好之后，/etc下没有配置文件，一般情况可以copy示例文件到/etc下</li>
-</ul>
-<p>&nbsp;</p>
-<p>#cp&nbsp;/usr/share/doc/rsync/examples/rsyncd.conf&nbsp;/etc</p>
-<p>&nbsp;</p>
-<p>vim /etc/rsyncd.conf</p>
-<p>uid = common</p>
-<p>gid = common</p>
-<p>use chroot = no</p>
-<p>max connections = 10</p>
-<p>strict modes = yes</p>
-<p>hosts allow = 192.168.2.12&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #可以空格，允许多个</p>
-<p>hosts deny = *</p>
-<p>port = 5699&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;#默认开启端口</p>
-<p>pid file = /var/run/rsyncd.pid</p>
-<p>lock file = /var/run/rsync.lock</p>
-<p>log file = /var/log/rsyncd.log</p>
-<p>[hmt]</p>
-<p>path = /data/www/html/</p>
-<p>comment = hello</p>
-<p>ignore errors</p>
-<p>read only = no</p>
-<p>write only = no</p>
-<p>hosts allow = 192.168.2.12&nbsp;</p>
-<p>list = false</p>
-<p>auth users = hmt</p>
-<p>secrets file = /etc/rsync.password</p>
-<ul>
-<li>建立/etc/rsyncd/rsyncd.secrets文件</li>
-</ul>
-<p>#vim /etc/rsync.password</p>
-<p>#cat /etc/rsyncd/rsyncd.secrets</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;hmt:123456</p>
-<ul>
-<li>为了密码的安全性，我们必须把权限设为600</li>
-</ul>
-<p> chown root:root /etc/rsyncd/rsyncd.secrets</p>
-<p>chmod 600&nbsp;&nbsp;/etc/rsync.password</p>
-<p> chmod 600&nbsp;/etc/rsyncd/rsyncd.secrets</p>
-<p> vim /etc/rsyncd/rsyncd.motd</p>
-<p>&nbsp;</p>
-<p>启动rsync：</p>
-<p>systemctl start rsyncd.service</p>
-<p>&nbsp;lsof -i:5699</p>
-<p>lsof -i:5699</p>
-<p>COMMAND PID USER&nbsp; &nbsp;FD&nbsp; &nbsp;TYPE&nbsp; &nbsp;DEVICE SIZE/OFF NODE NAME</p>
-<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 4u&nbsp; IPv4 22661487&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
-<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 5u&nbsp; IPv6 22661488&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
-<p>至此服务器端安装完毕；</p>
-<p>客户端安装配置：</p>
-<p>&nbsp;</p>
-<p>yum -y install rsync</p>
-<p>&nbsp;客户端需要vim&nbsp;/etc/rsync.password&nbsp;</p>
-<p>cat&nbsp;&nbsp;/etc/rsync.password</p>
-<p>123456</p>
-<p>运行：</p>
-<p>rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
-<p>Password: 这里要输入rsync的密码，是服务器端提供的，在前面的例子中，我们用的是 asdf，输入的密码并不显示出来；输好后就回车；&nbsp;注：&nbsp;这个命令的意思就是说，用rsync 用户登录到服务器上，把/data/www/html&nbsp;数据，同步到本地目录/data/www/html/上。当然本地的目录是可以你自己定义的，比如 dave也是可以的；当你在客户端上，当前操作的目录下没有/tmp/test/这个目录时，系统会自动为你创建一个；当存在/tmp/test/这个目录中，你要注意它的写权限。</p>
-<p>参数说明：</p>
-<p>&nbsp;-a 参数，相当于-rlptgoD，</p>
-<p>&nbsp;&nbsp;&nbsp;-r 是递归 -l 是链接文件，意思是拷贝链接文件；</p>
-<p>&nbsp;&nbsp;&nbsp;-p 表示保持文件原有权限；</p>
-<p>&nbsp;&nbsp;&nbsp;-t 保持文件原有时间；<br>&nbsp;&nbsp;&nbsp;-g 保持文件原有用户组；</p>
-<p>&nbsp;&nbsp;&nbsp;-o 保持文件原有属主；</p>
-<p>&nbsp;&nbsp;&nbsp;-D 相当于块设备文件；</p>
-<p>&nbsp;&nbsp;&nbsp;-z 传输时压缩；</p>
-<p>&nbsp;&nbsp;&nbsp;-P 传输进度；</p>
-<p>&nbsp;&nbsp;&nbsp;-v 传输时的进度等信息，和-P有点关系</p>
-<p>&nbsp;<br>*</p>
-<p>rsync -avzP &nbsp;–delete <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools&nbsp;/tmp/test/</p>
-<p>–delete 选项，表示服务器上的数据要与客户端完全一致，如果 /tmp/test/目录中有服务器上不存在的文件，则删除。最终目的是让/tmp/test/目录上的数据完全与服务器上保持一致；用的时候要小心点，最好不要把已经有重要数所据的目录，当做本地更新目录，否则会把你的数据全部删除；
-&nbsp;</p>
-<p>计划任务同步：</p>
-<p>*/5 * * * * rsync -zvaP <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools /tmp/test/ –password-file=/etc/rsyncd/rsyncd.secrets</p>
-<p>*/5 * * * * rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
-<p>&nbsp;</p>
-]]></content>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>centos U盘安装查找U盘设备名</title>
-    <url>/2023/11/14/centos%E2%80%98-%E2%80%98u%E2%80%98-%E2%80%98pan%E2%80%98-%E2%80%98an%E2%80%98-%E2%80%98zhuang%E2%80%98-%E2%80%98cha%E2%80%98-%E2%80%98zhao%E2%80%98-%E2%80%98u%E2%80%98-%E2%80%98pan%E2%80%98-%E2%80%98she%E2%80%98-%E2%80%98bei%E2%80%98-%E2%80%98ming/</url>
-    <content><![CDATA[<p>制作启动盘：UltraISO.exe 打开镜像文件，–启动—写入硬盘镜像—默认—开始大概7分钟后就制作完成。 这样制作以后U盘原数据就没了当心。</p>
-<p>主板del进cmos选择Usb首启动，看到3个选项：安装，测试&amp;安装,trouble修复，移动到第一项Install&nbsp;centos7</p>
-<p>很多时候卡到这边过不去，<br>按tab键编辑路径，将&nbsp;<br>vmlinuz initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 quiet&nbsp;<br>改成&nbsp;<br>vmlinuz initrd=initrd.img&nbsp;linux dd&nbsp;quiet&nbsp;<br>回车&nbsp;<br>然后就能在显示出的列表中 查看你的硬盘信息，很清晰就能知道哪一个是你的U盘（一般显示的几个 格式为NTFS的都是你电脑自身的盘符，另外的一个就是你的U盘，记下你的U盘的盘符名字 我的就是sdb4）&nbsp;</p>
-<p>系统会显示当前块设备：</p>
-<p>Sda1&nbsp; nfs&nbsp;</p>
-<p>Sda2&nbsp; nfs</p>
-<p>Sdb4&nbsp;&nbsp; vfat</p>
-<p>类似这些提示ccontinue 或者r reflush刷下块设备</p>
-<p>起初u盘没刷出来，刷新出来的sdb4<br>重新启动电脑，重复上面的步骤 这一次 将&nbsp;<br>vmlinuz initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 quiet&nbsp;<br>改成&nbsp;<br>vmlinuz initrd=initrd.img&nbsp;inst.stage2=hd:/dev/sdb4（你自己的U盘盘符）&nbsp;quiet&nbsp;<br>回车 等待安装程序启动，进行CentOS的安装</p>
-<hr>
-]]></content>
-  </entry>
-  <entry>
     <title>centos7 改网卡名eth0</title>
-    <url>/2023/11/14/centos7%E2%80%98-%E2%80%98gai%E2%80%98-%E2%80%98wang%E2%80%98-%E2%80%98qia%E2%80%98-%E2%80%98ming%E2%80%98-%E2%80%98eth0/</url>
+    <url>/2023/11/14/centos7-%E6%94%B9%E7%BD%91%E5%8D%A1%E5%90%8Deth0/</url>
     <content><![CDATA[<p>安装完Centos7系统，网卡命名跟之前发生了变化,不是eth0，虽然唯一好确定但是作为centos6.X过来的还是不好记，那就把网卡名字重新命名为eth0吧。</p>
 <p>1.先编辑网卡的配置文件将里面的NAME DEVICE项修改为eth0，vim /etc/sysconfig/network-scripts/ifcfg-enp2s0</p>
 <p>NAME=enp2s0 改为eth0</p>
@@ -395,7 +447,7 @@
   </entry>
   <entry>
     <title>coredump 路径格式</title>
-    <url>/2023/06/27/coredump%E2%80%98-%E2%80%98lu%E2%80%98-%E2%80%98jing%E2%80%98-%E2%80%98ge%E2%80%98-%E2%80%98shi/</url>
+    <url>/2023/06/27/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/</url>
     <content><![CDATA[<p>Coredump</p>
 <p>业务进程宕机以后开发需要查看dump查找定位问题，所有服务器初始化环境时候统一定制coredump路径；</p>
 <p>1.Core文件简介</p>
@@ -480,75 +532,8 @@
       </tags>
   </entry>
   <entry>
-    <title>Tengine 安装</title>
-    <url>/2023/11/14/tengine%E2%80%98-%E2%80%98an%E2%80%98-%E2%80%98zhuang/</url>
-    <content><![CDATA[<p>Tengine安装</p>
-<p>Tengine 是由淘宝网发起的 Web 服务器项目。它在 Nginx 的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。Tengine 的性能和稳定性已经在大型的网站如淘宝网，天猫商城等得到了很好的检验。它的最终目标是打造一个高效、稳定、安全、易用的 Web 平台。</p>
-<p>Tengine 特性：</p>
-<p>支持 HTTP 的 CONNECT 方法，可用于正向代理场景；</p>
-<p>支持异步 OpenSSL，可使用硬件如：QAT 进行 HTTPS 的加速与卸载；</p>
-<p>增强相关运维、监控能力，比如异步打印日志及回滚，本地 DNS 缓存，内存监控等；</p>
-<p>Stream 模块支持 server_name 指令；</p>
-<p>更加强大的负载均衡能力，包括一致性 hash 模块、会话保持模块，还可以对后端的服务器进行主动健康检查，根据服务器状态自动上线下线，以及动态解析 upstream 中出现的域名；</p>
-<p>输入过滤器机制支持。通过使用这种机制 Web 应用防火墙的编写更为方便；</p>
-<p>支持设置 proxy、memcached、fastcgi、scgi、uwsgi 在后端失败时的重试次数；</p>
-<p>动态脚本语言 Lua 支持。扩展功能非常高效简单；</p>
-<p>支持按指定关键字(域名，url等)收集 Tengine 运行状态；</p>
-<p>组合多个 CSS、JavaScript 文件的访问请求变成一个请求；</p>
-<p>自动去除空白字符和注释从而减小页面的体积</p>
-<p>自动根据 CPU 数目设置进程个数和绑定 CPU 亲缘性；</p>
-<p>监控系统的负载和资源占用从而对系统进行保护；</p>
-<p>显示对运维人员更友好的出错信息，便于定位出错机器；；</p>
-<p>更强大的防攻击（访问速度限制）模块；</p>
-<p>更方便的命令行参数，如列出编译的模块列表、支持的指令等；</p>
-<p>支持 Dubbo 协议；</p>
-<p>可以根据访问文件类型设置过期时间；</p>
-<p>下载源码包：</p>
-<p>tengine 源码：<a href="http://tengine.taobao.org/download_cn.html">http://tengine.taobao.org/download_cn.html</a></p>
-<p>pcre 源码：<a href="http://www.pcre.org/">http://www.pcre.org/</a></p>
-<p>openssl 源码：<a href="https://www.openssl.org/source/">https://www.openssl.org/source/</a></p>
-<p>zlib 源码：<a href="http://www.zlib.net/">http://www.zlib.net/</a></p>
-<p>安装包：</p>
-<p>支持lua模块</p>
-<p>wget <a href="http://luajit.org/download/LuaJIT-2.0.4.tar.gz">http://luajit.org/download/LuaJIT-2.0.4.tar.gz</a></p>
-<p>#wget <a href="https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz">https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz</a></p>
-<p>#wget <a href="https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz">https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz</a></p>
-<p>安装LuaJIT</p>
-<p>tar xf LuaJIT-2.0.4.tar.gz</p>
-<p>#cd xf LuaJIT-2.0.4</p>
-<p>#make PREFIX=/usr/local/luajit</p>
-<p>#make install PREFIX=/usr/local/luajit</p>
-<p>#ln -s /usr/local/luajit/lib/libluajit-5.1.so.2 /lib64/libluajit-5.1.so.2</p>
-<p>添加环境变量</p>
-<p>export LUAJIT_LIB=/usr/local/luajit/lib</p>
-<p>export LUAJIT_INC=/usr/local/luajit/include/luajit-2.0</p>
-<p>#source /etc/profile</p>
-<p>安装tingine</p>
-<p>#tar xf v0.3.0.tar.gz</p>
-<p>#tar xf v0.10.13.tar.gz</p>
-<p>#tar xf nginx-1.12.0.tar.gz</p>
-<p>cd tengine-2.2.2</p>
-<p> ./configure –conf-path=/etc/nginx/nginx.conf –user=www-data –group=www-data –prefix=/etc/nginx –sbin-path=/usr/sbin/nginx –with-ipv6  –error-log-path=/var/log/nginx/error.log –http-log-path=/var/log/nginx/access.log  –pid-path=/var/run/nginx.pid –lock-path=/var/lock/nginx.lock –http-client-body-temp-path=/var/cache/nginx/client_temp  –http-proxy-temp-path=/var/cache/nginx/proxy_temp –http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp  –http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp –http-scgi-temp-path=/var/cache/nginx/scgi_temp  –without-select_module –without-http_uwsgi_module –without-http_empty_gif_module –with-http_ssl_module –with-http_addition_module  –with-http_sub_module –with-http_dav_module –with-http_flv_module –with-http_gunzip_module  –with-http_gzip_static_module –with-http_random_index_module  –with-http_secure_link_module –with-http_stub_status_module –with-http_realip_module  –with-http_concat_module=shared –with-http_sysguard_module=shared  –with-http_dyups_module –with-file-aio –add-module=../ngx_devel_kit-0.3.0/  –add-module=../lua-nginx-module-0.10.13/ \</p>
-<p>Make </p>
-<p>Make install</p>
-<p>Make会报错：cc1: all warnings being treated as errors</p>
-<p>make[1]: *** [objs/Makefile:617: objs/src/core/ngx_murmurhash.o] Error 1</p>
-<p>make[1]: Leaving directory ‘/home/tools/install/tengine-2.2.2’</p>
-<p>vim objs/Makefile：</p>
-<p>CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused -Werror -g  -DNDK_SET_VAR</p>
-<p> -Werror -g去掉</p>
-<p>CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused  -DNDK_SET_VAR</p>
-<p>sed -i “s/ -Werror -g / /g” ./objs/Makefile<br>make &amp;&amp; make install<br>echo <code>nginx -v</code></p>
-<p>#不显示版本号<br>sed -i “/server_tokens off;/a server_tag off; \n server_info off;” nginx.conf<br>mkdir -p /var/cache/nginx/scgi_temp<br>chown www-data.root /var/cache/nginx/scgi_temp</p>
-<p>添加系统服务：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat &gt;&gt;/etc/systemd/system/nginx.service &lt;&lt;EOF</span><br><span class="line">[Unit]</span><br><span class="line">Description=The nginx HTTP and reverse proxy server</span><br><span class="line">After=syslog.target network.target remote-fs.target nss-lookup.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">PIDFile=/var/run/nginx.pid</span><br><span class="line">ExecStartPre=/usr/sbin/nginx -t -c /etc/nginx/nginx.conf</span><br><span class="line">ExecStart=/usr/sbin/nginx -c /etc/nginx/nginx.conf</span><br><span class="line">ExecReload=/usr/sbin/nginx -s reload</span><br><span class="line">ExecStop=/usr/sbin/nginx -s stop</span><br><span class="line">ExecQuit=/usr/sbin/nginx -s quit</span><br><span class="line">PrivateTmp=true</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br></pre></td></tr></tbody></table></figure>
-
-<p>后续就是优化配置了。</p>
-]]></content>
-  </entry>
-  <entry>
     <title>frp搭建</title>
-    <url>/2023/06/27/frp%E2%80%98-%E2%80%98da%E2%80%98-%E2%80%98jian/</url>
+    <url>/2023/06/27/frp%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<p> &nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。</p>
 <p>首先到官网：</p>
 <p>&nbsp;<a href="https://github.com/fatedier/frp/releases">https://github.com/fatedier/frp/releases</a></p>
@@ -629,8 +614,23 @@
       </tags>
   </entry>
   <entry>
+    <title>centos U盘安装查找U盘设备名</title>
+    <url>/2023/11/14/centos-U%E7%9B%98%E5%AE%89%E8%A3%85%E6%9F%A5%E6%89%BEU%E7%9B%98%E8%AE%BE%E5%A4%87%E5%90%8D/</url>
+    <content><![CDATA[<p>制作启动盘：UltraISO.exe 打开镜像文件，–启动—写入硬盘镜像—默认—开始大概7分钟后就制作完成。 这样制作以后U盘原数据就没了当心。</p>
+<p>主板del进cmos选择Usb首启动，看到3个选项：安装，测试&amp;安装,trouble修复，移动到第一项Install&nbsp;centos7</p>
+<p>很多时候卡到这边过不去，<br>按tab键编辑路径，将&nbsp;<br>vmlinuz initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 quiet&nbsp;<br>改成&nbsp;<br>vmlinuz initrd=initrd.img&nbsp;linux dd&nbsp;quiet&nbsp;<br>回车&nbsp;<br>然后就能在显示出的列表中 查看你的硬盘信息，很清晰就能知道哪一个是你的U盘（一般显示的几个 格式为NTFS的都是你电脑自身的盘符，另外的一个就是你的U盘，记下你的U盘的盘符名字 我的就是sdb4）&nbsp;</p>
+<p>系统会显示当前块设备：</p>
+<p>Sda1&nbsp; nfs&nbsp;</p>
+<p>Sda2&nbsp; nfs</p>
+<p>Sdb4&nbsp;&nbsp; vfat</p>
+<p>类似这些提示ccontinue 或者r reflush刷下块设备</p>
+<p>起初u盘没刷出来，刷新出来的sdb4<br>重新启动电脑，重复上面的步骤 这一次 将&nbsp;<br>vmlinuz initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 quiet&nbsp;<br>改成&nbsp;<br>vmlinuz initrd=initrd.img&nbsp;inst.stage2=hd:/dev/sdb4（你自己的U盘盘符）&nbsp;quiet&nbsp;<br>回车 等待安装程序启动，进行CentOS的安装</p>
+<hr>
+]]></content>
+  </entry>
+  <entry>
     <title>Hello World</title>
-    <url>/2023/06/25/hello%E2%80%98-%E2%80%98world/</url>
+    <url>/2023/06/25/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
 
@@ -648,7 +648,7 @@
   </entry>
   <entry>
     <title>hexogit搭建个人网站</title>
-    <url>/2023/11/14/hexogit%E2%80%98-%E2%80%98da%E2%80%98-%E2%80%98jian%E2%80%98-%E2%80%98ge%E2%80%98-%E2%80%98ren%E2%80%98-%E2%80%98wang%E2%80%98-%E2%80%98zhan/</url>
+    <url>/2023/11/14/hexogit%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99/</url>
     <content><![CDATA[<h1 id="1-nodejs安装"><a href="#1-nodejs安装" class="headerlink" title="1. nodejs安装"></a>1. nodejs安装</h1><h2 id="1-1使用Node-Version-Manager（nvm工具）"><a href="#1-1使用Node-Version-Manager（nvm工具）" class="headerlink" title="1.1使用Node Version Manager（nvm工具）"></a>1.1使用Node Version Manager（nvm工具）</h2><p> install stable`是使用Node Version Manager（nvm）安装Node.js的命令。nvm是一个用于管理多个Node.js版本的工具，可以轻松地在同一台机器上安装、切换和管理不同版本的Node.js。</p>
 <p><code>nvm install stable</code>指令表示安装最新的稳定版本的Node.js。执行此命令后，nvm会从Node.js官方仓库下载并自动安装最新的稳定版Node.js。安装过程可能需要一些时间，具体取决于您的网络速度。</p>
 <p>在centOS上安装Node.js，您可以按照以下步骤进行操作：</p>
@@ -761,7 +761,7 @@
   </entry>
   <entry>
     <title>kafka Create topic 报错</title>
-    <url>/2023/07/13/kafka%E2%80%98-%E2%80%98create%E2%80%98-%E2%80%98topic%E2%80%98-%E2%80%98bao%E2%80%98-%E2%80%98cuo/</url>
+    <url>/2023/07/13/kafka-Create-topic-%E6%8A%A5%E9%94%99/</url>
     <content><![CDATA[<p>bin/kafka-console-consumer.sh –bootstrap-server localhost:9092 –topic kk_log<br>报错如下：<br>WARN [Consumer clientId=consumer-1, groupId=console-consumer-507] Connection to node -1 could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)</p>
 <p>配置server.confg时候设置的<br>advertised.listeners=PLAINTEXT://10.171.222.26:9092<br>此时需要用配置的IP而非localhost地址：</p>
 <p>nohup bin/zookeeper-server-start.sh config/zookeeper.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>nohup bin/kafka-server-start.sh config/server.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>netstat -ntpl|egrep “(2181|9092)”<br>运行起来再试试<br>bin/kafka-console-consumer.sh –bootstrap-server 10.171.222.26:9092 –topic kk_log<br>应该就可以了。<br>做个小笔记。</p>
@@ -775,7 +775,7 @@
   </entry>
   <entry>
     <title>linux install shadowsocks</title>
-    <url>/2023/07/16/linux%E2%80%98-%E2%80%98install%E2%80%98-%E2%80%98shadowsocks/</url>
+    <url>/2023/07/16/linux-install-shadowsocks/</url>
     <content><![CDATA[<h1 id="1-安装Python和pip"><a href="#1-安装Python和pip" class="headerlink" title="1. 安装Python和pip"></a>1. 安装Python和pip</h1><p>sudo apt-get update</p>
 <p>sudo apt-get install python-pip</p>
 <h1 id="2-安装Shadowsocks"><a href="#2-安装Shadowsocks" class="headerlink" title="2. 安装Shadowsocks"></a>2. 安装Shadowsocks</h1><p>sudo pip install shadowsocks</p>
@@ -792,7 +792,7 @@
   </entry>
   <entry>
     <title>linux 磁盘挂载扩充格式化</title>
-    <url>/2023/11/10/linux%E2%80%98-%E2%80%98ci%E2%80%98-%E2%80%98pan%E2%80%98-%E2%80%98gua%E2%80%98-%E2%80%98zai%E2%80%98-%E2%80%98kuo%E2%80%98-%E2%80%98chong%E2%80%98-%E2%80%98ge%E2%80%98-%E2%80%98shi%E2%80%98-%E2%80%98hua/</url>
+    <url>/2023/11/10/linux-%E7%A3%81%E7%9B%98%E6%8C%82%E8%BD%BD%E6%89%A9%E5%85%85%E6%A0%BC%E5%BC%8F%E5%8C%96/</url>
     <content><![CDATA[<h1 id="linux服务器硬盘格式化挂载："><a href="#linux服务器硬盘格式化挂载：" class="headerlink" title="linux服务器硬盘格式化挂载："></a>linux服务器硬盘格式化挂载：</h1><p>请根据以下步骤对数据盘进行分区以及格式化，并挂载分区使数据盘可用。</p>
 <h2 id="1-1-查看数据盘信息"><a href="#1-1-查看数据盘信息" class="headerlink" title="1.1 查看数据盘信息"></a>1.1 查看数据盘信息</h2><p>登录Linux云服务器后，可以使用“fdisk -l”命令查看数据盘相关信息。<br>使用“df -h”命令，无法看到未分区和格式化的数据盘。 </p>
 <h2 id="1-2-数据盘分区"><a href="#1-2-数据盘分区" class="headerlink" title="1.2 数据盘分区"></a>1.2 数据盘分区</h2><p>执行以下命令，对数据盘进行分区。</p>
@@ -949,7 +949,7 @@
   </entry>
   <entry>
     <title>linux有足够内存还使用swap</title>
-    <url>/2023/11/13/linux%E2%80%98-%E2%80%98you%E2%80%98-%E2%80%98zu%E2%80%98-%E2%80%98gou%E2%80%98-%E2%80%98nei%E2%80%98-%E2%80%98cun%E2%80%98-%E2%80%98huan%E2%80%98-%E2%80%98shi%E2%80%98-%E2%80%98yong%E2%80%98-%E2%80%98swap/</url>
+    <url>/2023/11/13/linux%E6%9C%89%E8%B6%B3%E5%A4%9F%E5%86%85%E5%AD%98%E8%BF%98%E4%BD%BF%E7%94%A8swap/</url>
     <content><![CDATA[<p>一台主机内存swap报警上去以查看确实swap快耗尽；</p>
 <p>$free -m</p>
 <p>&nbsp; total&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; used&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; free&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; shared&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;buff/cache&nbsp;&nbsp; available</p>
@@ -1033,7 +1033,7 @@
   </entry>
   <entry>
     <title>nginx编译ssl模块</title>
-    <url>/2023/06/28/nginx%E2%80%98-%E2%80%98bian%E2%80%98-%E2%80%98yi%E2%80%98-%E2%80%98ssl%E2%80%98-%E2%80%98mo%E2%80%98-%E2%80%98kuai/</url>
+    <url>/2023/06/28/nginx%E7%BC%96%E8%AF%91ssl%E6%A8%A1%E5%9D%97/</url>
     <content><![CDATA[<p>几个官网在一台服务器上面，其中一台是https的，增加一个官网以，重启nginx以后，https的网站直接报错，大意是ssl 在配置文件中unknow，但是这个https网站已经运行很久了，一时间有点郁闷，掉坑里了。</p>
 <p>查看nginx信息 /usr/local/nginx/sbin/nginx -V显示不支持ssl，那就好办，重新编译下ssl，但是线上业务跑着，难免有点担心，在测试机上跑了一次，正常的，才敢到线上操作，大致如此从网上找的如下：</p>
 <p>进入nginx源码目录：</p>
@@ -1064,7 +1064,7 @@
   </entry>
   <entry>
     <title>php 安装redis，protobuf,mcryp扩展</title>
-    <url>/2023/08/10/php%E2%80%98-%E2%80%98an%E2%80%98-%E2%80%98zhuang%E2%80%98-%E2%80%98redis%E2%80%98-%E2%80%98protobuf%E2%80%98-%E2%80%98mcryp%E2%80%98-%E2%80%98kuo%E2%80%98-%E2%80%98zhan/</url>
+    <url>/2023/08/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/</url>
     <content><![CDATA[<p>&nbsp; 测试机上测试一些数据需要用到redis扩展，偷懒yum安装的php，以前yum install php-pecl-redis.x86_64可以安装扩展，这次找不到安装包，不折腾手动安装下。</p>
 <p>1.下载phpredis</p>
 <p>cd /usr/local/src</p>
@@ -1183,7 +1183,7 @@
   </entry>
   <entry>
     <title>ssh免密登录问题</title>
-    <url>/2023/07/17/ssh%E2%80%98-%E2%80%98mian%E2%80%98-%E2%80%98mi%E2%80%98-%E2%80%98deng%E2%80%98-%E2%80%98lu%E2%80%98-%E2%80%98wen%E2%80%98-%E2%80%98ti/</url>
+    <url>/2023/07/17/ssh%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
 <p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
 <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
@@ -1215,7 +1215,7 @@
   </entry>
   <entry>
     <title>vsftp 锁定用户目录</title>
-    <url>/2023/07/11/vsftp%E2%80%98-%E2%80%98suo%E2%80%98-%E2%80%98ding%E2%80%98-%E2%80%98yong%E2%80%98-%E2%80%98hu%E2%80%98-%E2%80%98mu%E2%80%98-%E2%80%98lu/</url>
+    <url>/2023/07/11/vsftp-%E9%94%81%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95/</url>
     <content><![CDATA[<p>vsftp 安装以后给用户权限和锁定目录；</p>
 <p>关闭SELinux：</p>
 <p>修改/etc/selinux/config文件中的SELINUX=”” 为 disabled ，然后重启。</p>
@@ -1306,7 +1306,7 @@
   </entry>
   <entry>
     <title>zabbix 清理历史数据</title>
-    <url>/2023/07/17/zabbix%E2%80%98-%E2%80%98qing%E2%80%98-%E2%80%98li%E2%80%98-%E2%80%98li%E2%80%98-%E2%80%98shi%E2%80%98-%E2%80%98shu%E2%80%98-%E2%80%98ju/</url>
+    <url>/2023/07/17/zabbix-%E6%B8%85%E7%90%86%E5%8E%86%E5%8F%B2%E6%95%B0%E6%8D%AE/</url>
     <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
 <p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
 <p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
@@ -1363,7 +1363,7 @@
   </entry>
   <entry>
     <title>zabbix3.0.1安装过程的小坑</title>
-    <url>/2023/08/16/zabbix3%E2%80%98-%E2%80%980%E2%80%98-%E2%80%981%E2%80%98-%E2%80%98an%E2%80%98-%E2%80%98zhuang%E2%80%98-%E2%80%98guo%E2%80%98-%E2%80%98cheng%E2%80%98-%E2%80%98de%E2%80%98-%E2%80%98xiao%E2%80%98-%E2%80%98keng/</url>
+    <url>/2023/08/16/zabbix3-0-1%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B%E7%9A%84%E5%B0%8F%E5%9D%91/</url>
     <content><![CDATA[<p>1.安装</p>
 <p>首先lamp环境安装完毕，开始安装zabbix；</p>
 <p>下载完毕zabbix-3.0.1.tar.gz，解压</p>
@@ -1502,7 +1502,7 @@
   </entry>
   <entry>
     <title>zabbix监控业务进程变动</title>
-    <url>/2023/11/13/zabbix%E2%80%98-%E2%80%98jian%E2%80%98-%E2%80%98kong%E2%80%98-%E2%80%98jin%E2%80%98-%E2%80%98cheng%E2%80%98-%E2%80%98dang%E2%80%98-%E2%80%98ji/</url>
+    <url>/2023/11/13/zabbix_%E7%9B%91%E6%8E%A7%E8%BF%9B%E7%A8%8B%E5%AE%95%E6%9C%BA/</url>
     <content><![CDATA[<p>Zabbix 监控进程宕机</p>
 <p>  业务需求后端进程宕机以后能在短时间内迅速拉起，业务影响不大，但是开发需要查看coredump，要求能监控到pid变化；在现有构架下zabbix能监控并报警；</p>
 <p>当然zabbix设置报警设置就不再一一</p>
