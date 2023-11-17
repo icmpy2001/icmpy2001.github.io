@@ -4,12 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="zabbix3.0.1安装过程的小坑, 云上的小雨滴">
-    <meta name="description" content="1.安装
-首先lamp环境安装完毕，开始安装zabbix；
-下载完毕zabbix-3.0.1.tar.gz，解压
-cd &amp;nbsp;zabbix-3.0.1
-./configure –prefix=/usr/local/zabbix&amp;nbs">
+    <meta name="keywords" content="标签: 工具, 云上的小雨滴">
+    <meta name="description" content="云上的小雨滴">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -21,7 +17,7 @@ cd &amp;nbsp;zabbix-3.0.1
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>zabbix3.0.1安装过程的小坑 | 云上的小雨滴</title>
+    <title>标签: 工具 | 云上的小雨滴</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -337,797 +333,187 @@ cd &amp;nbsp;zabbix-3.0.1
 
 </header>
 
-    
-
-
-
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
-    <div class="container" style="right: 0px;left: 0px;">
-        <div class="row">
-            <div class="col s12 m12 l12">
-                <div class="brand">
-                    <h1 class="description center-align post-title">zabbix3.0.1安装过程的小坑</h1>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-<main class="post-container content">
-
-    
+    <div class="bg-cover pd-header about-cover">
+    <div class="container">
     <div class="row">
-    <div id="main-content" class="col s12 m12 l9">
-        <!-- 文章内容详情 -->
-<div id="artDetail">
+    <div class="col s10 offset-s1 m8 offset-m2 l8 offset-l2">
+        <div class="brand">
+            <div class="title center-align">
+                
+                Jary 的小茅屋
+                
+            </div>
+
+            <div class="description center-align">
+                
+                <span id="subtitle"></span>
+                <script src="/libs/typed/typed.js"></script>
+                <script>
+                    var typed = new Typed("#subtitle", {
+                        strings: [ 
+                            
+                                "从来没有真正的绝境, 只有心灵的迷途",
+                            
+                                "Never really desperate, only the lost of the soul",
+                            
+                        ],
+                        startDelay: 300,
+                        typeSpeed: 100,
+                        loop: true,
+                        backSpeed: 50,
+                        showCursor: true
+                    });
+                </script>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $('.bg-cover').css('background-image', 'url(/medias/banner/0.jpg)');
+</script>
+
+
+    </div>
+</div>
+
+<main class="content">
+
+    
+
+<div id="tags" class="container chip-container">
     <div class="card">
-        <div class="card-content article-info">
-            <div class="row tag-cate">
-                <div class="col s7">
-                    
-                    <div class="article-tag">
-                        
-                            <a href="/tags/%E5%B7%A5%E5%85%B7/">
-                                <span class="chip bg-color">工具</span>
-                            </a>
-                        
-                    </div>
-                    
-                </div>
-                <div class="col s5 right-align">
-                    
-                </div>
+        <div class="card-content">
+            <div class="tag-title center-align">
+                <i class="fas fa-tags"></i>&nbsp;&nbsp;文章标签
             </div>
-
-            <div class="post-info">
+            <div class="tag-chips">
                 
-                <div class="post-date info-break-policy">
-                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-08-16
-                </div>
                 
-
+                <a href="/tags/%E9%9A%8F%E7%AC%94/" title="随笔: 5">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="随笔" style="background-color: #F9EBEA;">随笔
+                        <span class="tag-length">5</span>
+                    </span>
+                </a>
                 
-
                 
-                <div class="info-break-policy">
-                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1k
-                </div>
+                <a href="/tags/%E7%82%B9%E6%BB%B4/" title="点滴: 3">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="点滴" style="background-color: #F5EEF8;">点滴
+                        <span class="tag-length">3</span>
+                    </span>
+                </a>
                 
-
                 
-                <div class="info-break-policy">
-                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
-                </div>
+                <a href="/tags/%E5%B7%A5%E5%85%B7/" title="工具: 3">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-active "
+                            data-tagname="工具" style="background-color: #D5F5E3;">工具
+                        <span class="tag-length">3</span>
+                    </span>
+                </a>
                 
-
-                
-                    <div id="busuanzi_container_page_pv" class="info-break-policy">
-                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
-                        <span id="busuanzi_value_page_pv"></span>
-                    </div>
-				
             </div>
         </div>
-        <hr class="clearfix">
-
-        
-        <!-- 是否加载使用自带的 prismjs. -->
-        <link rel="stylesheet" href="/libs/prism/prism.min.css">
-        
-
-        
-
-        <div class="card-content article-card-content">
-            <div id="articleContent">
-                <p>1.安装</p>
-<p>首先lamp环境安装完毕，开始安装zabbix；</p>
-<p>下载完毕zabbix-3.0.1.tar.gz，解压</p>
-<p>cd &nbsp;zabbix-3.0.1</p>
-<p>./configure –prefix=/usr/local/zabbix&nbsp; –enable-server \</p>
-<p>–enable-proxy –enable-agent –enable-ipv6–with-mysql=/usr/local/mysql/bin/mysql_config –with-net-snmp \</p>
-<p>–with-libcurl –with-openipmi–with-unixodbc –with-ldap –with-ssh2 –enable-java –enable-ipv6–enable-proxy</p>
-<p>自行编译但是会报错：</p>
-<p>Unixodbc没找到</p>
-<p>mysql_config</p>
-<p>configure: error: SSH2 library not found</p>
-<p>yum install php-pecl-ssh2.x86_64 libssh2-devel.x86_64</p>
-<p>yum install net-snmp-devel</p>
-<p>yum -y install unixODBC*</p>
-<p>yum install openldap openldap-devel</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; yumlist openldap</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; yumlist openldap-devel</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>checking for SSH2 support… yes</p>
-<p>checking for OPENIPMI support… no</p>
-<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h</p>
-<p>&nbsp;</p>
-<p>&nbsp;<a target="_blank" rel="noopener" href="https://centos.pkgs.org/6/centos-x86_64/OpenIPMI-2.0.16-14.el6.x86_64.rpm.html">https://centos.pkgs.org/6/centos-x86_64/OpenIPMI-2.0.16-14.el6.x86_64.rpm.html</a></p>
-<p>rpm -ivh OpenIPMI-2.0.16-14.el6.x86_64.rpm</p>
-<p>&nbsp;<br>vhOpenIPMI-de<br>pum install OpenIPMI-devel</p>
-<p>&nbsp;</p>
-<p>报错checking for OPENIPMI support… no</p>
-<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h</p>
-<p>需要安装OpenIPMI和OpenIPMI-devel</p>
-<p>&nbsp;</p>
-<p>Yum安装OpenIPMI并下载OpenIPMI-devel-2.0.16-14.el6.x86_64.rpm</p>
-<p> yum install OpenIPMI</p>
-<p> rpm -ivhOpenIPMI-devel-2.0.16-14.el6.x86_64.rpm</p>
-<p>报错 error: Failed dependencies:</p>
-<p>pkgconfig(ncurses) is needed byOpenIPMI-devel-2.0.16-14.el6.x86_64</p>
-<p> yum install ncurses-devel</p>
-<p> rpm -ivhOpenIPMI-devel-2.0.16-14.el6.x86_64.rpm</p>
-<p>onfigure: error: Invalid OPENIPMI directory- unable to find ipmiif.h</p>
-<p>需要安装libssh2-devel</p>
-<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h</p>
-<p>需要安装OpenIPMI-devel</p>
-<p>hecking for SSH2 support… yes</p>
-<p>checking for OPENIPMI support… yes</p>
-<p>checking for javac… no</p>
-<p>configure: error: Unable to find”javac” executable in path</p>
-<p>configure: error: Jabber library notfound&nbsp; #yum install iksemel-devel即可，</p>
-<p>&nbsp;configure: error: LIBXML2 library not found&nbsp;&nbsp;&nbsp;</p>
-<p>#yum install libxml2-devel&nbsp;</p>
-<p>&nbsp;configure: error: unixODBC library notfound&nbsp;&nbsp;&nbsp;</p>
-<p>#yum install unixODBC-devel&nbsp;&nbsp;</p>
-<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h&nbsp;&nbsp;&nbsp;</p>
-<p>#yum install OpenIPMI-devel&nbsp;&nbsp;</p>
-<p>configure: error: Unable to find”javac” executable in path&nbsp;&nbsp;&nbsp;</p>
-<p>#yum install java*&nbsp;&nbsp;&nbsp; 具体什么包没找，直接通配算逑，生产环境可去掉–enable-java选项</p>
-<p>&nbsp;configure: error: Curl library not found&nbsp;</p>
-<p>&nbsp;#yum install curl-devel</p>
-<p>&nbsp;</p>
-<p>make &amp;&amp; make install</p>
-<ol start="2">
-<li>导数据库顺序schema-p_w_picpath-data,</li>
-</ol>
-<p>添加系统软连接：</p>
-<p>[<a href="mailto:root@vm_1_11zabbix-3.0.1">root@vm_1_11zabbix-3.0.1</a>]# ln -s /usr/local/zabbix/sbin/* /usr/local/sbin/</p>
-<p>[root@vm_1_11 zabbix-3.0.1]# ln -s /usr/local/zabbix/bin/* /usr/local/bin/</p>
-<p>添加zabbix服务对应的端口：</p>
-<p>[root@vm_1_11 mysql]# vim /etc/services</p>
-<p>在文件末尾添加：</p>
-<p> Zabbix</p>
-<p>zabbix-agent 10050/tcp # Zabbix Agent</p>
-<p>zabbix-agent 10050/udp # Zabbix Agent</p>
-<p>zabbix-trapper 10051/tcp # Zabbix Trapper</p>
-<p>zabbix-trapper 10051/udp # Zabbix Trapper</p>
-<p>修改zabbix配置文件：</p>
-<p>[root@vm_1_11 tools]# vim /usr/local/zabbix/etc/zabbix_server.conf</p>
-<p>修改以下几处：</p>
-<p>DBName=zabbix</p>
-<p>DBUser=zabbix</p>
-<p>DBPassword=zabbix</p>
-<p>AlertScriptsPath==/usr/local/zabbix/share/zabbix/alertscripts &nbsp;#zabbix运行脚本存放目录</p>
-<p>DBPort=3306</p>
-<p>&nbsp;vim /usr/local/zabbix/etc/zabbix_agentd.conf</p>
-<p>Include=/usr/local/zabbix/etc/zabbix_agentd.conf.d/</p>
-<p>UnsafeUserParameters=1 &nbsp;#启用自定义key</p>
-<p>添加开机启动脚本：</p>
-<p>[root@vm_1_11 tools]# cp /usr/local/src/zabbix-3.0.3/misc/init.d/fedora/core/zabbix_server /etc/rc.d/init.d/zabbix_server</p>
-<p>客户端：</p>
-<p>[root@vm_1_11 tools]# cp /usr/local/src/zabbix-3.0.3/misc/init.d/fedora/core/zabbix_agentd /etc/rc.d/init.d/zabbix_agentd</p>
-<p>[root@vm_1_11 tools]# chmod a+x /etc/rc.d/init.d/zabbix_*</p>
-<p>[root@vm_1_11 tools]# chkconfig zabbix_server on</p>
-<p>[root@vm_1_11 tools]# chkconfig zabbix_agentd on</p>
-<p>修改zabbix开机启动脚本中的zabbix安装目录：</p>
-<p>[root@vm_1_11 tools]# vim /etc/rc.d/init.d/zabbix_server</p>
-<p>修改以下内容：</p>
-<p>BASEDIR=/usr/local/zabbix/</p>
-<p>[root@vm_1_11 tools]# vim /etc/rc.d/init.d/zabbix_agentd</p>
-<p>修改以下内容：</p>
-<p>BASEDIR=/usr/local/zabbix/</p>
-<p>复制zabbix的web站点文件到nginx：</p>
-<p>[root@vm_1_11 tools]# cp -r /usr/local/src/zabbix-3.0.3/frontends/php/* /usr/local/nginx/html/zabbix/</p>
-<p>启动：</p>
-<p>[root@vm_1_11 tools]# systemctl daemon-reload</p>
-<p>[root@vm_1_11 tools]# service zabbix_server start</p>
-<p>[root@vm_1_11 tools]# service zabbix_agentd start</p>
-<p>&nbsp;查看进程：ps -eaf|grep zabbix_server</p>
-<p>zabbix_server [7212]: cannot run as root!</p>
-<p>添加zabbix用户；</p>
-<p>在zabbix/setup/php 页面会检测信息可能会报错要都ok才能下一步哦，</p>
-<p>按照报错信息调试vim /etc/php.ini</p>
-<p>查找如下参数并修改为：</p>
-<hr>
-<p>post_max_size = 16M</p>
-<p>max_execution_time = 300</p>
-<p>max_input_time = 300</p>
-<p><img src="/../images/20231114-1.png"></p>
-<p>/etc/php.ini修改以后还是这样，可能php.ini路径修改了，</p>
-<p>本例中就是到</p>
-<p>-rw-r–r– 1 root root 73930 Mar 27 18:19php.ini</p>
-<p>-rw-r–r– 1 root root 73928 Mar 27 18:18php.ini_0327</p>
-<p>[root@VM_54_42_centos etc]# pwd</p>
-<p>/usr/local/php/etc</p>
-<p>vim /usr/local/nginx/html/zabbix/include/locales.inc.php</p>
-<p>修改中文字符；chinese–true</p>
-<p>邮件报警：在zabbix mkdir&nbsp;alertscripts vim send_email.sh</p>
-<p>#!/bin/sh</p>
-<p>#export.UTF-8</p>
-<p>FILE=/var/log/zabbix/mailtmp.txt</p>
-<p>echo “$3” &gt;$FILE</p>
-<p>dos2unix -k $FILE</p>
-<p>/bin/mail -s “$2” $1 &lt; $FILE</p>
-<p>zabbix-管理–示警媒介类型–定制脚本-sendmail脚本，–添加联系人邮件。。</p>
-
-                
-            </div>
-            <hr/>
-
-            
-
-    <div class="reprint" id="reprint-statement">
-        
-            <div class="reprint__author">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-user">
-                        文章作者:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    <a href="/about" rel="external nofollow noreferrer">云上的小雨滴</a>
-                </span>
-            </div>
-            <div class="reprint__type">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-link">
-                        文章链接:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    <a href="https://blog.icmpy.net/2023/08/16/zabbix3-0-1%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B%E7%9A%84%E5%B0%8F%E5%9D%91/">https://blog.icmpy.net/2023/08/16/zabbix3-0-1%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B%E7%9A%84%E5%B0%8F%E5%9D%91/</a>
-                </span>
-            </div>
-            <div class="reprint__notice">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-copyright">
-                        版权声明:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    本博客所有文章除特別声明外，均采用
-                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
-                    许可协议。转载请注明来源
-                    <a href="/about" target="_blank">云上的小雨滴</a>
-                    !
-                </span>
-            </div>
-        
     </div>
+</div>
 
-    <script async defer>
-      document.addEventListener("copy", function (e) {
-        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
-        M.toast({html: toastHTML})
-      });
+    
 
-      function navToReprintStatement() {
-        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
-      }
-    </script>
-
-
-
-            <div class="tag_share" style="display: block;">
-                <div class="post-meta__tag-list" style="display: inline-block;">
-                    
-                        <div class="article-tag">
+    <article id="articles" class="container articles">
+        <div class="row tags-posts">
+            
+            
+            <div class="article tag-post col s12 m6 l4" data-tags="工具" data-aos="fade-up">
+                <div class="card">
+                    <a href="/2023/11/13/zabbix_%E7%9B%91%E6%8E%A7%E8%BF%9B%E7%A8%8B%E5%AE%95%E6%9C%BA/">
+                        <div class="card-image tag-image">
                             
-                                <a href="/tags/%E5%B7%A5%E5%85%B7/">
-                                    <span class="chip bg-color">工具</span>
-                                </a>
                             
+                            <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="zabbix监控业务进程变动">
+                            
+                            <span class="card-title">zabbix监控业务进程变动</span>
                         </div>
-                    
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-11-13
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-user fa-fw"></i>
+                                云上的小雨滴
+                                
+                            </span>
+                        </div>
+                    </div>
                 </div>
-                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
-                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
-<div id="article-share">
-
-    
-    <div class="social-share" data-sites="google,qq,qzone,wechat,weibo" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="/libs/share/js/social-share.min.js"></script>
-    
-
-    
-
-</div>
-
+            </div>
+            
+            
+            <div class="article tag-post col s12 m6 l4" data-tags="工具" data-aos="fade-up">
+                <div class="card">
+                    <a href="/2023/08/16/zabbix3-0-1%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B%E7%9A%84%E5%B0%8F%E5%9D%91/">
+                        <div class="card-image tag-image">
+                            
+                            
+                            <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="zabbix3.0.1安装过程的小坑">
+                            
+                            <span class="card-title">zabbix3.0.1安装过程的小坑</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-16
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-user fa-fw"></i>
+                                云上的小雨滴
+                                
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="article tag-post col s12 m6 l4" data-tags="工具" data-aos="fade-up">
+                <div class="card">
+                    <a href="/2023/07/11/vsftp-%E9%94%81%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95/">
+                        <div class="card-image tag-image">
+                            
+                            
+                            <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="vsftp 锁定用户目录">
+                            
+                            <span class="card-title">vsftp 锁定用户目录</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-11
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-user fa-fw"></i>
+                                云上的小雨滴
+                                
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
             
         </div>
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-        <style>
-    .valine-card {
-        margin: 1.5rem auto;
-    }
-
-    .valine-card .card-content {
-        padding: 20px 20px 5px 20px;
-    }
-
-    #vcomments textarea {
-        box-sizing: border-box;
-        background: url("/medias/comment_bg.png") 100% 100% no-repeat;
-    }
-
-    #vcomments p {
-        margin: 2px 2px 10px;
-        font-size: 1.05rem;
-        line-height: 1.78rem;
-    }
-
-    #vcomments blockquote p {
-        text-indent: 0.2rem;
-    }
-
-    #vcomments a {
-        padding: 0 2px;
-        color: #4cbf30;
-        font-weight: 500;
-        text-decoration: none;
-    }
-
-    #vcomments img {
-        max-width: 100%;
-        height: auto;
-        cursor: pointer;
-    }
-
-    #vcomments ol li {
-        list-style-type: decimal;
-    }
-
-    #vcomments ol,
-    ul {
-        display: block;
-        padding-left: 2em;
-        word-spacing: 0.05rem;
-    }
-
-    #vcomments ul li,
-    ol li {
-        display: list-item;
-        line-height: 1.8rem;
-        font-size: 1rem;
-    }
-
-    #vcomments ul li {
-        list-style-type: disc;
-    }
-
-    #vcomments ul ul li {
-        list-style-type: circle;
-    }
-
-    #vcomments table, th, td {
-        padding: 12px 13px;
-        border: 1px solid #dfe2e5;
-    }
-
-    #vcomments table, th, td {
-        border: 0;
-    }
-
-    table tr:nth-child(2n), thead {
-        background-color: #fafafa;
-    }
-
-    #vcomments table th {
-        background-color: #f2f2f2;
-        min-width: 80px;
-    }
-
-    #vcomments table td {
-        min-width: 80px;
-    }
-
-    #vcomments h1 {
-        font-size: 1.85rem;
-        font-weight: bold;
-        line-height: 2.2rem;
-    }
-
-    #vcomments h2 {
-        font-size: 1.65rem;
-        font-weight: bold;
-        line-height: 1.9rem;
-    }
-
-    #vcomments h3 {
-        font-size: 1.45rem;
-        font-weight: bold;
-        line-height: 1.7rem;
-    }
-
-    #vcomments h4 {
-        font-size: 1.25rem;
-        font-weight: bold;
-        line-height: 1.5rem;
-    }
-
-    #vcomments h5 {
-        font-size: 1.1rem;
-        font-weight: bold;
-        line-height: 1.4rem;
-    }
-
-    #vcomments h6 {
-        font-size: 1rem;
-        line-height: 1.3rem;
-    }
-
-    #vcomments p {
-        font-size: 1rem;
-        line-height: 1.5rem;
-    }
-
-    #vcomments hr {
-        margin: 12px 0;
-        border: 0;
-        border-top: 1px solid #ccc;
-    }
-
-    #vcomments blockquote {
-        margin: 15px 0;
-        border-left: 5px solid #42b983;
-        padding: 1rem 0.8rem 0.3rem 0.8rem;
-        color: #666;
-        background-color: rgba(66, 185, 131, .1);
-    }
-
-    #vcomments pre {
-        font-family: monospace, monospace;
-        padding: 1.2em;
-        margin: .5em 0;
-        background: #272822;
-        overflow: auto;
-        border-radius: 0.3em;
-        tab-size: 4;
-    }
-
-    #vcomments code {
-        font-family: monospace, monospace;
-        padding: 1px 3px;
-        font-size: 0.92rem;
-        color: #e96900;
-        background-color: #f8f8f8;
-        border-radius: 2px;
-    }
-
-    #vcomments pre code {
-        font-family: monospace, monospace;
-        padding: 0;
-        color: #e8eaf6;
-        background-color: #272822;
-    }
-
-    #vcomments pre[class*="language-"] {
-        padding: 1.2em;
-        margin: .5em 0;
-    }
-
-    #vcomments code[class*="language-"],
-    pre[class*="language-"] {
-        color: #e8eaf6;
-    }
-
-    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
-        position: inherit;
-        margin-left: -1.3rem;
-        margin-right: 0.4rem;
-        margin-top: -1px;
-        vertical-align: middle;
-        left: unset;
-        visibility: visible;
-    }
-
-    #vcomments b,
-    strong {
-        font-weight: bold;
-    }
-
-    #vcomments dfn {
-        font-style: italic;
-    }
-
-    #vcomments small {
-        font-size: 85%;
-    }
-
-    #vcomments cite {
-        font-style: normal;
-    }
-
-    #vcomments mark {
-        background-color: #fcf8e3;
-        padding: .2em;
-    }
-
-    #vcomments table, th, td {
-        padding: 12px 13px;
-        border: 1px solid #dfe2e5;
-    }
-
-    table tr:nth-child(2n), thead {
-        background-color: #fafafa;
-    }
-
-    #vcomments table th {
-        background-color: #f2f2f2;
-        min-width: 80px;
-    }
-
-    #vcomments table td {
-        min-width: 80px;
-    }
-
-    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
-        position: inherit;
-        margin-left: -1.3rem;
-        margin-right: 0.4rem;
-        margin-top: -1px;
-        vertical-align: middle;
-        left: unset;
-        visibility: visible;
-    }
-</style>
-
-<div class="card valine-card" data-aos="fade-up">
-    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
-        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
-        <span>评论</span>
-    </div>
-    <div id="vcomments" class="card-content" style="display: grid">
-    </div>
-</div>
-
-<script src="/libs/valine/av-min.js"></script>
-<script src="/libs/valine/Valine.min.js"></script>
-<script>
-    new Valine({
-        el: '#vcomments',
-        appId: 'Uj7K4Sqg2tpZ8XteQU4jVDWR-MdYXbMMI',
-        appKey: 'iQLYDeRz5KxPHy68bKRtAkho',
-        serverURLs: 'https://commit.blog.icmpy.net',
-        notify: 'false' === 'true',
-        verify: 'false' === 'true',
-        visitor: 'true' === 'true',
-        avatar: 'mm',
-        pageSize: '10',
-        lang: 'zh-cn',
-        placeholder: 'just go go'
-    });
-</script>
-
-<!--酷Q推送-->
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-<article id="prenext-posts" class="prev-next articles">
-    <div class="row article-row">
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
-            <div class="card">
-                <a href="/2023/11/10/linux-%E7%A3%81%E7%9B%98%E6%8C%82%E8%BD%BD%E6%89%A9%E5%85%85%E6%A0%BC%E5%BC%8F%E5%8C%96/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="linux 磁盘挂载扩充格式化">
-                        
-                        <span class="card-title">linux 磁盘挂载扩充格式化</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-11-10
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-user fa-fw"></i>
-                            云上的小雨滴
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E9%9A%8F%E7%AC%94/">
-                        <span class="chip bg-color">随笔</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2023/08/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="php 安装redis，protobuf,mcryp扩展">
-                        
-                        <span class="card-title">php 安装redis，protobuf,mcryp扩展</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-10
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-user fa-fw"></i>
-                            云上的小雨滴
-                            
-                        </span>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-        
-    </div>
-</article>
-
-</div>
-
-
-
-<!-- 代码块功能依赖 -->
-<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
-
-
-  <!-- 是否加载使用自带的 prismjs. -->
-  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
-
-
-<!-- 代码语言 -->
-
-<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
-
-
-<!-- 代码块复制 -->
-
-<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
-
-
-<!-- 代码块收缩 -->
-
-<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
-
-
-
-    </div>
-    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
-        <div class="toc-widget card" style="background-color: white;">
-            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
-            <div id="toc-content"></div>
-        </div>
-    </div>
-</div>
-
-<!-- TOC 悬浮按钮. -->
-
-<div id="floating-toc-btn" class="hide-on-med-and-down">
-    <a class="btn-floating btn-large bg-color">
-        <i class="fas fa-list-ul"></i>
-    </a>
-</div>
-
-
-<script src="/libs/tocbot/tocbot.min.js"></script>
-<script>
-    $(function () {
-        tocbot.init({
-            tocSelector: '#toc-content',
-            contentSelector: '#articleContent',
-            headingsOffset: -($(window).height() * 0.4 - 45),
-            collapseDepth: Number('0'),
-            headingSelector: 'h2, h3, h4'
-        });
-
-        // Set scroll toc fixed.
-        let tocHeight = parseInt($(window).height() * 0.4 - 64);
-        let $tocWidget = $('.toc-widget');
-        $(window).scroll(function () {
-            let scroll = $(window).scrollTop();
-            /* add post toc fixed. */
-            if (scroll > tocHeight) {
-                $tocWidget.addClass('toc-fixed');
-            } else {
-                $tocWidget.removeClass('toc-fixed');
-            }
-        });
-
-        
-        /* 修复文章卡片 div 的宽度. */
-        let fixPostCardWidth = function (srcId, targetId) {
-            let srcDiv = $('#' + srcId);
-            if (srcDiv.length === 0) {
-                return;
-            }
-
-            let w = srcDiv.width();
-            if (w >= 450) {
-                w = w + 21;
-            } else if (w >= 350 && w < 450) {
-                w = w + 18;
-            } else if (w >= 300 && w < 350) {
-                w = w + 16;
-            } else {
-                w = w + 14;
-            }
-            $('#' + targetId).width(w);
-        };
-
-        // 切换TOC目录展开收缩的相关操作.
-        const expandedClass = 'expanded';
-        let $tocAside = $('#toc-aside');
-        let $mainContent = $('#main-content');
-        $('#floating-toc-btn .btn-floating').click(function () {
-            if ($tocAside.hasClass(expandedClass)) {
-                $tocAside.removeClass(expandedClass).hide();
-                $mainContent.removeClass('l9');
-            } else {
-                $tocAside.addClass(expandedClass).show();
-                $mainContent.addClass('l9');
-            }
-            fixPostCardWidth('artDetail', 'prenext-posts');
-        });
-        
-    });
-</script>
-
-    
-
+    </article>
 </main>
 
 
