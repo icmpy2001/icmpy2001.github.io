@@ -4,8 +4,11 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="关于, 云上的小雨滴">
-    <meta name="description" content="云上的小雨滴">
+    <meta name="keywords" content="frp搭建, 云上的小雨滴">
+    <meta name="description" content=" &amp;nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。
+首先到官网：
+&amp;nbsp;https://github.com/fatedier/frp/releases
+下载: frp">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +20,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>关于 | 云上的小雨滴</title>
+    <title>frp搭建 | 云上的小雨滴</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -335,394 +338,765 @@
 <script src="https://cdn.jsdelivr.net/gh/w4j1e/blog@master/js/tqa.js"></script>
 </header>
 
-    <style type="text/css">
-    /* don't remove. */
-    .about-cover {
-        height: 75vh;
-    }
-</style>
-
-<div class="bg-cover pd-header about-cover">
-    <div class="container">
-    <div class="row">
-    <div class="col s10 offset-s1 m8 offset-m2 l8 offset-l2">
-        <div class="brand">
-            <div class="title center-align">
-                
-                Jary 的小茅屋
-                
-            </div>
-
-            <div class="description center-align">
-                
-                    <span id="jinrishici-sentence">正在加载今日诗词....</span>
-                
-            </div>
-        </div>
-    </div>
-</div>
-
-
+    
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
 <script>
-    $('.bg-cover').css('background-image', 'url(/medias/banner/0.jpg)');
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
 </script>
 
 
-    </div>
-</div>
-
-<main class="content">
-
-    <div id="aboutme" class="container about-container">
-        <div class="card">
-            <div class="card-content">
-                <div class="row">
-                    <div class="post-statis col l4 hide-on-med-and-down" data-aos="zoom-in-right">
-                        
-<div class="statis">
-    <span class="count"><a href="/">24</a></span>
-    <span class="name">文章</span>
-</div>
 
 
-
-<div class="statis">
-    <span class="count"><a href="/categories">1</a></span>
-    <span class="name">分类</span>
-</div>
-
-
-
-<div class="statis">
-    <span class="count"><a href="/tags">3</a></span>
-    <span class="name">标签</span>
-</div>
-
-
-                    </div>
-                    <div class="col s12 m12 l4">
-                        <div class="profile center-align">
-                            <div class="avatar">
-                                <img src="/medias/avatar.jpg" alt="云上的小雨滴"
-                                     class="circle responsive-img avatar-img">
-                            </div>
-                            <div class="author">
-                                <div class="post-statis hide-on-large-only" data-aos="zoom-in-right">
-                                    
-<div class="statis">
-    <span class="count"><a href="/">24</a></span>
-    <span class="name">文章</span>
-</div>
-
-
-
-<div class="statis">
-    <span class="count"><a href="/categories">1</a></span>
-    <span class="name">分类</span>
-</div>
-
-
-
-<div class="statis">
-    <span class="count"><a href="/tags">3</a></span>
-    <span class="name">标签</span>
-</div>
-
-
-                                </div>
-                                <div class="title">云上的小雨滴</div>
-                                <div class="career">民工</div>
-                                <div class="social-link hide-on-large-only" data-aos="zoom-in-left">
-                                    
-    <a href="https://icmpy2001.github.io" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
-        <i class="fab fa-github"></i>
-    </a>
-
-
-
-    <a href="mailto:cmpy2001@163.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
-        <i class="fas fa-envelope-open"></i>
-    </a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
-        <i class="fas fa-rss"></i>
-    </a>
-
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col l4 hide-on-med-and-down" data-aos="zoom-in-left">
-                        <div class="social-link">
-                            
-    <a href="https://icmpy2001.github.io" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
-        <i class="fab fa-github"></i>
-    </a>
-
-
-
-    <a href="mailto:cmpy2001@163.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
-        <i class="fas fa-envelope-open"></i>
-    </a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
-        <i class="fas fa-rss"></i>
-    </a>
-
-
-                        </div>
-                    </div>
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">frp搭建</h1>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <div class="introduction center-align" data-aos="fade-up">If you wish to succeed, you should use persistence as your good friend, experience as your reference, prudence as your brother and hope as your sentry.</div>
 
-                <style type="text/css">
-    #posts-chart,
-    #categories-chart,
-    #tags-chart {
-        width: 100%;
-        height: 300px;
-        margin: 0.5rem auto;
-        padding: 0.5rem;
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E9%9A%8F%E7%AC%94/">
+                                <span class="chip bg-color">随笔</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                系统
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2023-06-27
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    699
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    3 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p> &nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。</p>
+<p>首先到官网：</p>
+<p>&nbsp;<a target="_blank" rel="noopener" href="https://github.com/fatedier/frp/releases">https://github.com/fatedier/frp/releases</a></p>
+<p>下载: frp_0.16.0_linux_amd64.tar.gz服务器端</p>
+<p>解压出来ls:</p>
+<p>frpc&nbsp; frpc_full.ini&nbsp; frpc_http.ini&nbsp; frpc.ini&nbsp; frps&nbsp; frps_full.ini&nbsp; frps.ini&nbsp; LICENSE&nbsp; nohup.out</p>
+<p>服务器端只需要两个文件frps和frps.ini,其中frps为可执行文件，frps.ini为配置文件默认配置文件如下：其中bind_addr为本机IP,bind_port为frp对客户端的端口号，auto_token是客户端连接服务器端的口令。</p>
+<p>[common]</p>
+<p>Bind_addr=0.0.0.0</p>
+<p>Bind_port =4443</p>
+<p>Auto_token = frp</p>
+<p>配置好以后可以运行起来./frps -c ./frps.ini</p>
+<p>最好后台运行：nohup ./frps -c ./frps.ini &amp;</p>
+<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:4443</p>
+<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
+<p>&nbsp;需要穿透端口的服务器端开启：</p>
+<p>nohup ./frps -c ./frps.ini &amp;</p>
+<p>同样将客户端解压后有七个文件，只需要frpc和frpc.ini,配置文件如下：</p>
+<p>&nbsp;[common]</p>
+<p>Server_addr = 123.123.123.123</p>
+<p>Server_port = 4443</p>
+<p>Auto-token = frp</p>
+<p>[ssh_1]</p>
+<p>Type = tcp</p>
+<p>Local_ip = 127.0.0.1</p>
+<p>Local_port = 22</p>
+<p>Remote_port = 10085</p>
+<p>注意：server_addr是服务器端的公网IP地址，server_port是frp服务端口号，auto_token是连接服务器的口令，必须和服务器保持一致。[ssh_1]是客户端通过服务器与用户之间的通道名，每个客户端必须不一样，remote_port是服务器端对外提供本机服务的端口号，即用户连接123.123.123.123:10085，相当于连接127.0.0.1:22,即arm板上的ssh服务</p>
+<p>运行客户端：./frpc -c ./frpc.ini</p>
+<p>&nbsp;</p>
+<p>当前的配置</p>
+<p>more frpc.ini</p>
+<p>[common]</p>
+<p>server_addr = dem.abc.com</p>
+<p>server_port = 7000</p>
+<p>[game]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 9001</p>
+<p>remote_port = 6000</p>
+<p>&nbsp;</p>
+<p>[http]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 80</p>
+<p>remote_port = 6001</p>
+<p>&nbsp;</p>
+<p>[mysql]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.235</p>
+<p>local_port = 3306</p>
+<p>remote_port = 13306</p>
+<p>more frpc_http.ini</p>
+<p>[common]</p>
+<p>server_addr = dem.abc.com</p>
+<p>server_port = 7000</p>
+<p>&nbsp;</p>
+<p>[http]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 80</p>
+<p>remote_port = 6001</p>
+<p>这样demo.abc.com 的13306映射到3306,6001映射到80端口等等；</p>
+<p>在客户端开启：最好后台运行启动客户端proxy：</p>
+<p>nohup ./frpc&nbsp; -c ./frpc.ini &amp;</p>
+<p>[I] [control.go:240] [e465e02f8bad1e5b] login to server success, get run id [e465e02f8bad1e5b], server udp port [0]</p>
+<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [http] start proxy success</p>
+<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [mysql] start proxy success</p>
+<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:7000</p>
+<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
+<p>2018/05/17 10:49:11 [I] [main.go:114] PrivilegeMode is enabled, you should pay more attention to security issues</p>
+<p>&nbsp;</p>
+<p>PS：配置很简单，但是记得nohup ./frps -c ./frps.ini &amp; 在要穿透的远程服务器开启，nohup ./frpc&nbsp; -c ./frpc.ini &amp; 在内网开启，记得开放远程服务器穿透端口；</p>
+<hr>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">云上的小雨滴</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://blog.icmpy.net/2023/062739776.html">https://blog.icmpy.net/2023/062739776.html</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">云上的小雨滴</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E9%9A%8F%E7%AC%94/">
+                                    <span class="chip bg-color">随笔</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="google,qq,qzone,wechat,weibo" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+        <style>
+    .valine-card {
+        margin: 1.5rem auto;
+    }
+
+    .valine-card .card-content {
+        padding: 20px 20px 5px 20px;
+    }
+
+    #vcomments textarea {
+        box-sizing: border-box;
+        background: url("/medias/comment_bg.png") 100% 100% no-repeat;
+    }
+
+    #vcomments p {
+        margin: 2px 2px 10px;
+        font-size: 1.05rem;
+        line-height: 1.78rem;
+    }
+
+    #vcomments blockquote p {
+        text-indent: 0.2rem;
+    }
+
+    #vcomments a {
+        padding: 0 2px;
+        color: #4cbf30;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    #vcomments img {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+
+    #vcomments ol li {
+        list-style-type: decimal;
+    }
+
+    #vcomments ol,
+    ul {
+        display: block;
+        padding-left: 2em;
+        word-spacing: 0.05rem;
+    }
+
+    #vcomments ul li,
+    ol li {
+        display: list-item;
+        line-height: 1.8rem;
+        font-size: 1rem;
+    }
+
+    #vcomments ul li {
+        list-style-type: disc;
+    }
+
+    #vcomments ul ul li {
+        list-style-type: circle;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    #vcomments table, th, td {
+        border: 0;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments h1 {
+        font-size: 1.85rem;
+        font-weight: bold;
+        line-height: 2.2rem;
+    }
+
+    #vcomments h2 {
+        font-size: 1.65rem;
+        font-weight: bold;
+        line-height: 1.9rem;
+    }
+
+    #vcomments h3 {
+        font-size: 1.45rem;
+        font-weight: bold;
+        line-height: 1.7rem;
+    }
+
+    #vcomments h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    #vcomments h5 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        line-height: 1.4rem;
+    }
+
+    #vcomments h6 {
+        font-size: 1rem;
+        line-height: 1.3rem;
+    }
+
+    #vcomments p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+
+    #vcomments hr {
+        margin: 12px 0;
+        border: 0;
+        border-top: 1px solid #ccc;
+    }
+
+    #vcomments blockquote {
+        margin: 15px 0;
+        border-left: 5px solid #42b983;
+        padding: 1rem 0.8rem 0.3rem 0.8rem;
+        color: #666;
+        background-color: rgba(66, 185, 131, .1);
+    }
+
+    #vcomments pre {
+        font-family: monospace, monospace;
+        padding: 1.2em;
+        margin: .5em 0;
+        background: #272822;
+        overflow: auto;
+        border-radius: 0.3em;
+        tab-size: 4;
+    }
+
+    #vcomments code {
+        font-family: monospace, monospace;
+        padding: 1px 3px;
+        font-size: 0.92rem;
+        color: #e96900;
+        background-color: #f8f8f8;
+        border-radius: 2px;
+    }
+
+    #vcomments pre code {
+        font-family: monospace, monospace;
+        padding: 0;
+        color: #e8eaf6;
+        background-color: #272822;
+    }
+
+    #vcomments pre[class*="language-"] {
+        padding: 1.2em;
+        margin: .5em 0;
+    }
+
+    #vcomments code[class*="language-"],
+    pre[class*="language-"] {
+        color: #e8eaf6;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+
+    #vcomments b,
+    strong {
+        font-weight: bold;
+    }
+
+    #vcomments dfn {
+        font-style: italic;
+    }
+
+    #vcomments small {
+        font-size: 85%;
+    }
+
+    #vcomments cite {
+        font-style: normal;
+    }
+
+    #vcomments mark {
+        background-color: #fcf8e3;
+        padding: .2em;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
     }
 </style>
 
-<div id="postCharts" class="post-charts">
-    <div class="title center-align" data-aos="zoom-in-up">
-        <i class="far fa-bar-chart"></i>&nbsp;&nbsp;文章统计图
+<div class="card valine-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
     </div>
-    <div class="row">
-        <div class="chart col s12 m6 l4" data-aos="zoom-in-up">
-            <div id="posts-chart"></div>
-        </div>
-
-        <div class="chart col s12 m6 l4" data-aos="zoom-in-up">
-            <div id="categories-chart"></div>
-        </div>
-
-        <div class="chart col s12 m6 l4" data-aos="zoom-in-up">
-            <div id="tags-chart"></div>
-        </div>
+    <div id="vcomments" class="card-content" style="display: grid">
     </div>
 </div>
 
-<script type="text/javascript" src="/libs/echarts/echarts.min.js"></script>
+<script src="/libs/valine/av-min.js"></script>
+<script src="/libs/valine/Valine.min.js"></script>
 <script>
-    let postsChart = echarts.init(document.getElementById('posts-chart'));
-    let categoriesChart = echarts.init(document.getElementById('categories-chart'));
-    let tagsChart = echarts.init(document.getElementById('tags-chart'));
-
-    
-
-    let postsOption = {
-        title: {
-            text: '文章发布统计图',
-            top: -5,
-            x: 'center'
-        },
-        tooltip: {
-            trigger: 'axis'
-        },
-        xAxis: {
-            type: 'category',
-            data: ["2022-11","2022-12","2023-01","2023-02","2023-03","2023-04","2023-05","2023-06","2023-07","2023-08","2023-09","2023-10","2023-11"]
-        },
-        yAxis: {
-            type: 'value',
-        },
-        series: [
-            {
-                name: '文章篇数',
-                type: 'line',
-                color: ['#6772e5'],
-                data: [0,0,0,0,0,0,0,5,5,3,0,0,11],
-                markPoint: {
-                    symbolSize: 45,
-                    color: ['#fa755a','#3ecf8e','#82d3f4'],
-                    data: [{
-                        type: 'max',
-                        itemStyle: {color: ['#3ecf8e']},
-                        name: '最大值'
-                    }, {
-                        type: 'min',
-                        itemStyle: {color: ['#fa755a']},
-                        name: '最小值'
-                    }]
-                },
-                markLine: {
-                    itemStyle: {color: ['#ab47bc']},
-                    data: [
-                        {type: 'average', name: '平均值'}
-                    ]
-                }
-            }
-        ]
-    };
-
-    
-
-    let categoriesOption = {
-        title: {
-            text: '文章分类统计图',
-            top: -4,
-            x: 'center'
-        },
-        tooltip: {
-            trigger: 'item',
-            formatter: "{a} <br/>{b} : {c} ({d}%)"
-        },
-        series: [
-            {
-                name: '分类',
-                type: 'pie',
-                radius: '50%',
-                color: ['#6772e5', '#ff9e0f', '#fa755a', '#3ecf8e', '#82d3f4', '#ab47bc', '#525f7f', '#f51c47', '#26A69A'],
-                data: [{"name":"系统","value":8}],
-                itemStyle: {
-                    emphasis: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                }
-            }
-        ]
-    };
-
-    
-
-    let tagsOption = {
-        title: {
-            text: 'TOP10 标签统计图',
-            top: -5,
-            x: 'center'
-        },
-        tooltip: {},
-        xAxis: [
-            {
-                type: 'category',
-                data: ["随笔","点滴","工具"]
-            }
-        ],
-        yAxis: [
-            {
-                type: 'value'
-            }
-        ],
-        series: [
-            {
-                type: 'bar',
-                color: ['#82d3f4'],
-                barWidth : 18,
-                data: [11,3,3],
-                markPoint: {
-                    symbolSize: 45,
-                    data: [{
-                        type: 'max',
-                        itemStyle: {color: ['#3ecf8e']},
-                        name: '最大值'
-                    }, {
-                        type: 'min',
-                        itemStyle: {color: ['#fa755a']},
-                        name: '最小值'
-                    }],
-                },
-                markLine: {
-                    itemStyle: {color: ['#ab47bc']},
-                    data: [
-                        {type: 'average', name: '平均值'}
-                    ]
-                }
-            }
-        ]
-    };
-
-    // render the charts
-    postsChart.setOption(postsOption);
-    categoriesChart.setOption(categoriesOption);
-    tagsChart.setOption(tagsOption);
-</script>
-
-
-                
-
-                
-
-                
-                
-<div id="myGallery" class="my-gallery">
-    <div class="title center-align" data-aos="zoom-in-up">
-        <i class="far fa-image"></i>&nbsp;&nbsp;相册
-    </div>
-    <div class="row">
-        
-        
-        <div class="photo col s12 m6 l4" data-aos="fade-up">
-            <div class="img-item" data-src="/medias/featureimages/0.jpg">
-                <img src="/medias/featureimages/0.jpg" class="responsive-img">
-            </div>
-        </div>
-        
-        <div class="photo col s12 m6 l4" data-aos="fade-up">
-            <div class="img-item" data-src="/medias/featureimages/1.jpg">
-                <img src="/medias/featureimages/1.jpg" class="responsive-img">
-            </div>
-        </div>
-        
-        <div class="photo col s12 m6 l4" data-aos="fade-up">
-            <div class="img-item" data-src="/medias/featureimages/2.jpg">
-                <img src="/medias/featureimages/2.jpg" class="responsive-img">
-            </div>
-        </div>
-        
-        
-    </div>
-</div>
-
-<script>
-    $(function () {
-        let animateClass = 'animated pulse';
-        $('#myGallery .photo').hover(function () {
-            $(this).addClass(animateClass);
-        }, function () {
-            $(this).removeClass(animateClass);
-        });
+    new Valine({
+        el: '#vcomments',
+        appId: 'Uj7K4Sqg2tpZ8XteQU4jVDWR-MdYXbMMI',
+        appKey: 'iQLYDeRz5KxPHy68bKRtAkho',
+        serverURLs: 'https://commit.blog.icmpy.net',
+        notify: 'false' === 'true',
+        verify: 'false' === 'true',
+        visitor: 'true' === 'true',
+        avatar: 'mm',
+        pageSize: '10',
+        lang: 'zh-cn',
+        placeholder: 'just go go'
     });
 </script>
 
-                
-                
-                
+<!--酷Q推送-->
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2023/062862696.html">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="apache多网站对应80端口">
+                        
+                        <span class="card-title">apache多网站对应80端口</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-06-28
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            云上的小雨滴
+                            
+                        </span>
+                    </div>
+                </div>
                 
             </div>
         </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2023/062743960.html">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="coredump 路径格式">
+                        
+                        <span class="card-title">coredump 路径格式</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-06-27
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            云上的小雨滴
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E9%9A%8F%E7%AC%94/">
+                        <span class="chip bg-color">随笔</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
     </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
 </main>
+
+
 
 
     <footer class="page-footer bg-color">

@@ -1,26 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/2023/06/25/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+    <title>Debian 10挂载加swap</title>
+    <url>/2023/111727163.html</url>
+    <content><![CDATA[<p>以根目录挂载为4G例：<br>dd if=/dev/zero of=/swapfile count=4096 bs=1M</p>
+<p>ls / | grep swapfile<br>chmod 600 /swapfile<br>ls -lh /swapfile<br>-rw——- 1 root root 4.0G Aug 17 12:14 /swapfile<br>通过运行以下命令告诉服务器设置swap文件：<br>mkswap /swapfile<br>swapon /swapfile<br>free -m<br>vi /etc/fstab<br>/swapfile swap swap defaults 0 0<br>保存。</p>
 ]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
   </entry>
   <entry>
     <title>Rsync同步文件</title>
-    <url>/2023/08/10/Rsync%E5%90%8C%E6%AD%A5%E6%96%87%E4%BB%B6/</url>
+    <url>/2023/081064777.html</url>
     <content><![CDATA[<p>Rsync常用的一款同步文件工具。配置也很方便。</p>
 <p>&nbsp;</p>
 <p>yum install sync -y或者apt-get install sync</p>
@@ -107,1027 +102,8 @@
       </tags>
   </entry>
   <entry>
-    <title>frp搭建</title>
-    <url>/2023/06/27/frp%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<p> &nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。</p>
-<p>首先到官网：</p>
-<p>&nbsp;<a href="https://github.com/fatedier/frp/releases">https://github.com/fatedier/frp/releases</a></p>
-<p>下载: frp_0.16.0_linux_amd64.tar.gz服务器端</p>
-<p>解压出来ls:</p>
-<p>frpc&nbsp; frpc_full.ini&nbsp; frpc_http.ini&nbsp; frpc.ini&nbsp; frps&nbsp; frps_full.ini&nbsp; frps.ini&nbsp; LICENSE&nbsp; nohup.out</p>
-<p>服务器端只需要两个文件frps和frps.ini,其中frps为可执行文件，frps.ini为配置文件默认配置文件如下：其中bind_addr为本机IP,bind_port为frp对客户端的端口号，auto_token是客户端连接服务器端的口令。</p>
-<p>[common]</p>
-<p>Bind_addr=0.0.0.0</p>
-<p>Bind_port =4443</p>
-<p>Auto_token = frp</p>
-<p>配置好以后可以运行起来./frps -c ./frps.ini</p>
-<p>最好后台运行：nohup ./frps -c ./frps.ini &amp;</p>
-<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:4443</p>
-<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
-<p>&nbsp;需要穿透端口的服务器端开启：</p>
-<p>nohup ./frps -c ./frps.ini &amp;</p>
-<p>同样将客户端解压后有七个文件，只需要frpc和frpc.ini,配置文件如下：</p>
-<p>&nbsp;[common]</p>
-<p>Server_addr = 123.123.123.123</p>
-<p>Server_port = 4443</p>
-<p>Auto-token = frp</p>
-<p>[ssh_1]</p>
-<p>Type = tcp</p>
-<p>Local_ip = 127.0.0.1</p>
-<p>Local_port = 22</p>
-<p>Remote_port = 10085</p>
-<p>注意：server_addr是服务器端的公网IP地址，server_port是frp服务端口号，auto_token是连接服务器的口令，必须和服务器保持一致。[ssh_1]是客户端通过服务器与用户之间的通道名，每个客户端必须不一样，remote_port是服务器端对外提供本机服务的端口号，即用户连接123.123.123.123:10085，相当于连接127.0.0.1:22,即arm板上的ssh服务</p>
-<p>运行客户端：./frpc -c ./frpc.ini</p>
-<p>&nbsp;</p>
-<p>当前的配置</p>
-<p>more frpc.ini</p>
-<p>[common]</p>
-<p>server_addr = dem.abc.com</p>
-<p>server_port = 7000</p>
-<p>[game]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.232</p>
-<p>local_port = 9001</p>
-<p>remote_port = 6000</p>
-<p>&nbsp;</p>
-<p>[http]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.232</p>
-<p>local_port = 80</p>
-<p>remote_port = 6001</p>
-<p>&nbsp;</p>
-<p>[mysql]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.235</p>
-<p>local_port = 3306</p>
-<p>remote_port = 13306</p>
-<p>more frpc_http.ini</p>
-<p>[common]</p>
-<p>server_addr = dem.abc.com</p>
-<p>server_port = 7000</p>
-<p>&nbsp;</p>
-<p>[http]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.232</p>
-<p>local_port = 80</p>
-<p>remote_port = 6001</p>
-<p>这样demo.abc.com 的13306映射到3306,6001映射到80端口等等；</p>
-<p>在客户端开启：最好后台运行启动客户端proxy：</p>
-<p>nohup ./frpc&nbsp; -c ./frpc.ini &amp;</p>
-<p>[I] [control.go:240] [e465e02f8bad1e5b] login to server success, get run id [e465e02f8bad1e5b], server udp port [0]</p>
-<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [http] start proxy success</p>
-<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [mysql] start proxy success</p>
-<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:7000</p>
-<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
-<p>2018/05/17 10:49:11 [I] [main.go:114] PrivilegeMode is enabled, you should pay more attention to security issues</p>
-<p>&nbsp;</p>
-<p>PS：配置很简单，但是记得nohup ./frps -c ./frps.ini &amp; 在要穿透的远程服务器开启，nohup ./frpc&nbsp; -c ./frpc.ini &amp; 在内网开启，记得开放远程服务器穿透端口；</p>
-<hr>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>php 安装redis，protobuf,mcryp扩展</title>
-    <url>/2023/08/10/php-%E5%AE%89%E8%A3%85redis%EF%BC%8Cprotobuf-mcryp%E6%89%A9%E5%B1%95/</url>
-    <content><![CDATA[<p>&nbsp; 测试机上测试一些数据需要用到redis扩展，偷懒yum安装的php，以前yum install php-pecl-redis.x86_64可以安装扩展，这次找不到安装包，不折腾手动安装下。</p>
-<p>1.下载phpredis</p>
-<p>cd /usr/local/src</p>
-<p>wget <a href="https://github.com/nicolasff/phpredis/archive/2.2.4.tar.gz">https://github.com/nicolasff/phpredis/archive/2.2.4.tar.gz</a></p>
-<p>tar -zxvf 2.2.4.tar.gz</p>
-<p>cd phpredis-2.2.4/</p>
-<p>2.用phpize生成configure配置文件</p>
-<p>/usr/bin/phpize&nbsp; #会生成几个新文件，默认安装路径自定义的按照自定义路径；</p>
-<p>./configure –with-php-config=/usr/bin/php-config</p>
-<p>make #编译</p>
-<p>make install #安装</p>
-<p>make test #测试</p>
-<p>3.配置php支持</p>
-<p>vim /usr/local/php/etc/php.ini #编辑配置文件，在最后一行添加以下内容</p>
-<p>extension=”redis.so”</p>
-<ol start="4">
-<li></li>
-</ol>
-<p>重启http加载查看phpinfo信息：</p>
-<p>redis</p>
-<p>Redis Supportenabled</p>
-<p>Redis Version2.2.4</p>
-<p>成功！</p>
-<p>php扩展Protobuf</p>
-<p>下载protobuf扩展包：wget <a href="https://github.com/allegro/php-protobuf/archive/master.zip%E8%BF%99%E4%B8%AAmaster.zip%E4%BC%9A%E6%8A%A5%E9%94%99%EF%BC%9B">https://github.com/allegro/php-protobuf/archive/master.zip这个master.zip会报错；</a></p>
-<p>master.zip</p>
-<p>cd /home/tools/php-protobuf-master/</p>
-<p>phpize</p>
-<p>可能会报错php-devel</p>
-<p>yum install php-devel</p>
-<p>./configure<br>1.<br>make&nbsp;&amp;&amp;&nbsp;make&nbsp;install<br>1.</p>
-<p>If you ever happen to want to link against installed libraries</p>
-<p>in a given directory, LIBDIR, you must either use libtool, and</p>
-<p>specify the full pathname of the library, or use the `-LLIBDIR’</p>
-<p>flag during linking and do at least one of the following:</p>
-<p>&nbsp;&nbsp; - add LIBDIR to the `LD_LIBRARY_PATH’ environment variable</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp; during execution</p>
-<p>&nbsp;&nbsp; - add LIBDIR to the `LD_RUN_PATH’ environment variable</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp; during linking</p>
-<p>&nbsp;&nbsp; - use the `-Wl,-rpath -Wl,LIBDIR’ linker flag</p>
-<p>&nbsp;&nbsp; - have your system administrator add LIBDIR to `/etc/ld.so.conf’</p>
-<p>&nbsp;</p>
-<p>See any operating system documentation about shared libraries for</p>
-<p>more information, such as the ld(1) and ld.so(8) manual pages.</p>
-<hr>
-<p>&nbsp;</p>
-<p>Build complete.</p>
-<p>Don’t forget to run ‘make test’.</p>
-<p>&nbsp;</p>
-<p>Installing shared extensions:&nbsp;&nbsp;&nbsp;&nbsp; /usr/lib64/php/modules/</p>
-<p>然后再php.ini增加</p>
-<p>extension = protocolbuffers.so</p>
-<p>重启下http就可以了；</p>
-<p>装载protobuff库：</p>
-<p>&nbsp;pear&nbsp;channel-discover&nbsp;pear.pollinimini.net&nbsp;</p>
-<p>pear&nbsp;install&nbsp;drslump/Protobuf-beta&nbsp;</p>
-<p>mcryp扩展：</p>
-<p>yum install libmcrypt libmcrypt-devel mcrypt mhash 如果报错找不到补丁的话手动安装；</p>
-<p>下载Libmcrypt,mhash,mcrypt安装包</p>
-<p>Libmcrypt(libmcrypt-2.5.8.tar.gz)：<a href="http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91774&amp;release_id=487459">http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91774&amp;release_id=487459</a></p>
-<p>mcrypt(mcrypt-2.6.8.tar.gz ):<a href="http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91948&amp;release_id=642101">http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91948&amp;release_id=642101</a></p>
-<p>mhash(mhash-0.9.9.9.tar.gz):<a href="http://sourceforge.net/project/showfiles.php?group_id=4286&amp;package_id=4300&amp;release_id=645636">http://sourceforge.net/project/showfiles.php?group_id=4286&amp;package_id=4300&amp;release_id=645636</a></p>
-<p>2.先安装Libmcrypt</p>
-<p>tar -zxvf libmcrypt-2.5.8.tar.gz</p>
-<p>cd libmcrypt-2.5.8</p>
-<p>./configure</p>
-<p>make</p>
-<p>make install</p>
-<p>说明：libmcript默认安装在/usr/local&nbsp;</p>
-<p>3.再安装mhash</p>
-<p>tar -zxvf mhash-0.9.9.9.tar.gz</p>
-<p>cd mhash-0.9.9.9</p>
-<p>./configure</p>
-<p>make &amp;&amp; make install</p>
-<p>4.最后安装mcrypt</p>
-<p>tar -zxvf mcrypt-2.6.8.tar.gz</p>
-<p>cd mcrypt-2.6.8</p>
-<p>LD_LIBRARY_PATH=/usr/local/lib ./configure</p>
-<p>make &amp;&amp; make install</p>
-<p>说明：由于在配置Mcrypt时，会找不到libmcrypt的链接库，导致无法编译，因为Libmcrypt的链接库在/usr/local/lib文件夹下。</p>
-<p>因次，在配置mcrypt时要加入LD_LIBRARY_PATH=/usr/local/lib导入键接库。</p>
-<p>到&nbsp;<a href="http://cn.php.net/releases/">http://cn.php.net/releases/</a>&nbsp;网页下找到自己对应php版本，下载后解压</p>
-<p>cd php-5.4.16/ext/mcrypt/</p>
-<p>phpize (执行phpize命令（phpize是用来扩展php扩展模块的，通过phpize可以建立php的外挂模块，如果没有？yum install php-devel)</p>
-<p>phpize&nbsp;</p>
-<p>Configuring for:</p>
-<p>PHP Api Version:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;20100412</p>
-<p>Zend Module Api No:&nbsp; &nbsp; &nbsp; 20100525</p>
-<p>Zend Extension Api No:&nbsp; &nbsp;220100525</p>
-<p>yum 安装php./configure就可以，定制的需要自己的路径如比：./configure –with-php-config=/usr/bin/php-config</p>
-<p>./configure</p>
-<p>make &amp;&amp; make install</p>
-<p>Libraries have been installed in:</p>
-<p>&nbsp; &nbsp;/home/tools/php-5.4.16/ext/mcrypt/modules</p>
-<p>If you ever happen to want to link against installed libraries</p>
-<p>in a given directory, LIBDIR, you must either use libtool, and</p>
-<p>specify the full pathname of the library, or use the `-LLIBDIR’</p>
-<p>flag during linking and do at least one of the following:</p>
-<p>&nbsp; &nbsp;- add LIBDIR to the `LD_LIBRARY_PATH’ environment variable</p>
-<p>&nbsp; &nbsp; &nbsp;during execution</p>
-<p>&nbsp; &nbsp;- add LIBDIR to the `LD_RUN_PATH’ environment variable</p>
-<p>&nbsp; &nbsp; &nbsp;during linking</p>
-<p>&nbsp; &nbsp;- use the `-Wl,-rpath -Wl,LIBDIR’ linker flag</p>
-<p>&nbsp; &nbsp;- have your system administrator add LIBDIR to `/etc/ld.so.conf’</p>
-<p>See any operating system documentation about shared libraries for</p>
-<p>more information, such as the ld(1) and ld.so(8) manual pages.</p>
-<hr>
-<p>Build complete.</p>
-<p>Don’t forget to run ‘make test’.</p>
-<p>Installing shared extensions:&nbsp; &nbsp; &nbsp;/usr/lib64/php/modules/</p>
-<p>php.ini添加一条extension=mcrypt.so</p>
-<p>extension = protocolbuffers.so</p>
-<p>extension = mcrypt.so</p>
-<hr>
-]]></content>
-  </entry>
-  <entry>
-    <title>linux 磁盘挂载扩充格式化</title>
-    <url>/2023/11/10/linux-%E7%A3%81%E7%9B%98%E6%8C%82%E8%BD%BD%E6%89%A9%E5%85%85%E6%A0%BC%E5%BC%8F%E5%8C%96/</url>
-    <content><![CDATA[<h1 id="linux服务器硬盘格式化挂载："><a href="#linux服务器硬盘格式化挂载：" class="headerlink" title="linux服务器硬盘格式化挂载："></a>linux服务器硬盘格式化挂载：</h1><p>请根据以下步骤对数据盘进行分区以及格式化，并挂载分区使数据盘可用。</p>
-<h2 id="1-1-查看数据盘信息"><a href="#1-1-查看数据盘信息" class="headerlink" title="1.1 查看数据盘信息"></a>1.1 查看数据盘信息</h2><p>登录Linux云服务器后，可以使用“fdisk -l”命令查看数据盘相关信息。<br>使用“df -h”命令，无法看到未分区和格式化的数据盘。 </p>
-<h2 id="1-2-数据盘分区"><a href="#1-2-数据盘分区" class="headerlink" title="1.2 数据盘分区"></a>1.2 数据盘分区</h2><p>执行以下命令，对数据盘进行分区。</p>
-<p>fdisk /dev/xvdb</p>
-<p>按照界面的提示，依次输入“n”(新建分区)、“p”(新建扩展分区)、“1”(使用第1个主分区)，两次回车(使用默认配置)，输入“wq”(保存分区表)，开始分区。<br>这里是以创建1个分区为例，开发者也可以根据自己的需求创建多个分区。</p>
-<h2 id="1-3-查看新分区"><a href="#1-3-查看新分区" class="headerlink" title="1.3 查看新分区"></a>1.3 查看新分区</h2><p>使用“fdisk -l”命令，即可查看到，新的分区xvdb1已经创建完成。</p>
-<h2 id="1-4-格式化新分区"><a href="#1-4-格式化新分区" class="headerlink" title="1.4 格式化新分区"></a>1.4 格式化新分区</h2><p>在进行分区格式化时，开发者可以自行决定文件系统的格式，如ext2、ext3等。<br>这里以“ext3”为例：<br>使用下面的命令对新分区进行格式化。 </p>
-<p>mkfs.ext3 /dev/xvdb1</p>
-<h2 id="1-5-挂载新分区"><a href="#1-5-挂载新分区" class="headerlink" title="1.5 挂载新分区"></a>1.5 挂载新分区</h2><p>使用命令“mkdir /mydata”创建mydata目录，再通过“mount /dev/xvdb1 /mydata”命令手动挂载新分区后，用“df -h”命令查看，出现以下信息说明挂载成功，即可以查看到数据盘了。</p>
-<h2 id="1-6-添加分区信息"><a href="#1-6-添加分区信息" class="headerlink" title="1.6 添加分区信息"></a>1.6 添加分区信息</h2><p>如果希望云服务器在重启或开机时能自动挂载数据盘，必须将分区信息添加到/etc/fstab中。如果没有添加，则云服务器重启或开机后，都不能自动挂载数据盘。<br>使用“echo ‘/dev/xvdb1 /mydata ext3 defaults 0 0’ &gt;&gt; /etc/fstab”命令添加分区信息后，使用“cat /etc/fstab”命令查看，出现以下信息表示添加分区信息成功。</p>
-<h1 id="2-腾讯云服务器硬盘扩充，新空间增加到已有分区空间中："><a href="#2-腾讯云服务器硬盘扩充，新空间增加到已有分区空间中：" class="headerlink" title="2.腾讯云服务器硬盘扩充，新空间增加到已有分区空间中："></a>2.腾讯云服务器硬盘扩充，新空间增加到已有分区空间中：</h1><p>  线上业务服务器1T硬盘，日志量太大，需要扩充到2T硬盘，关机购买硬盘以后启动开始在原有盘上面开始扩充：</p>
-<h2 id="2-1-查看数据盘信息"><a href="#2-1-查看数据盘信息" class="headerlink" title="2.1 查看数据盘信息"></a>2.1 查看数据盘信息</h2><h2 id="root-VM-0-17-centos-fdisk-l"><a href="#root-VM-0-17-centos-fdisk-l" class="headerlink" title="[root@VM_0_17_centos ~]# fdisk -l"></a>[root@VM_0_17_centos ~]# fdisk -l</h2><p> Disk /dev/vda: 53.7 GB, 53687091200 bytes, 104857600 sectors</p>
-<p>Units = sectors of 1 * 512 = 512 bytes</p>
-<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
-<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
-<p>Disk label type: dos</p>
-<p>Disk identifier: 0x000c7a75</p>
-<p>   Device Boot      Start         End      Blocks   Id  System</p>
-<p>/dev/vda1   *        2048   104857599    52427776   83  Linux</p>
-<p>Disk /dev/vdb: 2147.5 GB, 2147483648000 bytes, 4194304000 sectors</p>
-<p>Units = sectors of 1 * 512 = 512 bytes</p>
-<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
-<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
-<p>Disk label type: dos</p>
-<p>Disk identifier: 0x947d4eff</p>
-<p>   Device Boot      Start         End      Blocks   Id  System</p>
-<p>/dev/vdb1            2048  2097151999  1048574976   83  Linux</p>
-<h2 id="2-2查看原来1T磁盘："><a href="#2-2查看原来1T磁盘：" class="headerlink" title="2.2查看原来1T磁盘："></a>2.2查看原来1T磁盘：</h2><p>df -h</p>
-<p>Filesystem      Size  Used Avail Use% Mounted on</p>
-<p>/dev/vda1        50G  4.1G   43G   9% /</p>
-<p>devtmpfs         16G     0   16G   0% /dev</p>
-<p>tmpfs            16G   24K   16G   1% /dev/shm</p>
-<p>tmpfs            16G  300K   16G   1% /run</p>
-<p>tmpfs            16G     0   16G   0% /sys/fs/cgroup</p>
-<p>/dev/vdb1       985G  150G  785G  17% /data</p>
-<p>tmpfs           3.2G     0  3.2G   0% /run/user/0</p>
-<h2 id="2-3卸载原硬盘："><a href="#2-3卸载原硬盘：" class="headerlink" title="2.3卸载原硬盘："></a>2.3卸载原硬盘：</h2><p>umount /data/</p>
-<p>[root@VM_0_17_centos ~]# df -h</p>
-<p>Filesystem      Size  Used Avail Use% Mounted on</p>
-<p>/dev/vda1        50G  4.1G   43G   9% /</p>
-<p>devtmpfs         16G     0   16G   0% /dev</p>
-<p>tmpfs            16G   24K   16G   1% /dev/shm</p>
-<p>tmpfs            16G  300K   16G   1% /run</p>
-<p>tmpfs            16G     0   16G   0% /sys/fs/cgroup</p>
-<p>tmpfs           3.2G     0  3.2G   0% /run/user/0</p>
-<h2 id="2-4确认卸载："><a href="#2-4确认卸载：" class="headerlink" title="2.4确认卸载："></a>2.4确认卸载：</h2><p>[root@VM_0_17_centos ~]# fdisk -l</p>
-<p>Disk /dev/vda: 53.7 GB, 53687091200 bytes, 104857600 sectors</p>
-<p>Units = sectors of 1 * 512 = 512 bytes</p>
-<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
-<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
-<p>Disk label type: dos</p>
-<p>Disk identifier: 0x000c7a75</p>
-<p>   Device Boot      Start         End      Blocks   Id  System</p>
-<p>/dev/vda1   *        2048   104857599    52427776   83  Linux</p>
-<p>Disk /dev/vdb: 2147.5 GB, 2147483648000 bytes, 4194304000 sectors</p>
-<p>Units = sectors of 1 * 512 = 512 bytes</p>
-<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
-<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
-<p>Disk label type: dos</p>
-<p>Disk identifier: 0x947d4eff</p>
-<p>   Device Boot      Start         End      Blocks   Id  System</p>
-<p>/dev/vdb1            2048  2097151999  1048574976   83  Linux</p>
-<h2 id="2-5-开始格盘："><a href="#2-5-开始格盘：" class="headerlink" title="2.5 开始格盘："></a>2.5 开始格盘：</h2><p> 按照界面的提示，一次输入”p”(查看已有分区信息), ”d”(删除需要扩容的分区)、“n”(新建分区)、“p”(新建主分区)、“1”(使用第1个主分区，必须保持与需要扩容的分区一样)，两次回车(使用默认配置)，输入“w”(保存分区表)，开始分区。<br>这里是以创建1个分区为例，用户也可以根据自己的需求扩容多个分区。</p>
-<p>[root@VM_0_17_centos ~]# fdisk  /dev/vdb</p>
-<p>Welcome to fdisk (util-linux 2.23.2).</p>
-<p>Changes will remain in memory only, until you decide to write them.</p>
-<p>Be careful before using the write command.</p>
-<p> Command (m for help): p</p>
-<p>Disk /dev/vdb: 2147.5 GB, 2147483648000 bytes, 4194304000 sectors</p>
-<p>Units = sectors of 1 * 512 = 512 bytes</p>
-<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
-<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
-<p>Disk label type: dos</p>
-<p>Disk identifier: 0x947d4eff</p>
-<p>   Device Boot      Start         End      Blocks   Id  System</p>
-<p>/dev/vdb1            2048  2097151999  1048574976   83  Linux</p>
-<p>Command (m for help): d</p>
-<p>Selected partition 1</p>
-<p>Partition 1 is deleted</p>
-<p>Command (m for help): n</p>
-<p>Partition type:</p>
-<p>   p   primary (0 primary, 0 extended, 4 free)</p>
-<p>   e   extended</p>
-<p>Select (default p): p</p>
-<p>Partition number (1-4, default 1): 1</p>
-<p>First sector (2048-4194303999, default 2048):</p>
-<p>Using default value 2048</p>
-<p>Last sector, +sectors or +size{K,M,G} (2048-4194303999, default 4194303999):</p>
-<p>Using default value 4194303999</p>
-<p>Partition 1 of type Linux and of size 2 TiB is set</p>
-<p>Command (m for help): w</p>
-<p>The partition table has been altered!</p>
-<p>Calling ioctl() to re-read partition table.</p>
-<p>Syncing disks.</p>
-<p>[root@VM_0_17_centos ~]# fdisk -l</p>
-<p>Disk /dev/vda: 53.7 GB, 53687091200 bytes, 104857600 sectors</p>
-<p>Units = sectors of 1 * 512 = 512 bytes</p>
-<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
-<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
-<p>Disk label type: dos</p>
-<p>Disk identifier: 0x000c7a75</p>
-<p>   Device Boot      Start         End      Blocks   Id  System</p>
-<p>/dev/vda1   *        2048   104857599    52427776   83  Linux</p>
-<p>Disk /dev/vdb: 2147.5 GB, 2147483648000 bytes, 4194304000 sectors</p>
-<p>Units = sectors of 1 * 512 = 512 bytes</p>
-<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
-<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
-<p>Disk label type: dos</p>
-<p>Disk identifier: 0x947d4eff</p>
-<pre><code>Device Boot      Start         End      Blocks   Id  System
-</code></pre>
-<p>/dev/vdb1            2048  4194303999  2097150976   83  Linux</p>
-<h2 id="2-6确认磁盘"><a href="#2-6确认磁盘" class="headerlink" title="2.6确认磁盘"></a>2.6确认磁盘</h2><p>使用“fdisk –l /dev/vdb1”命令，即可查看到，新的分区vdb1已经创建并扩容完成：</p>
-<p>[root@VM_0_17_centos ~]# fdisk -l /dev/vdb1</p>
-<p> Disk /dev/vdb1: 2147.5 GB, 2147482599424 bytes, 4194301952 sectors</p>
-<p>Units = sectors of 1 * 512 = 512 bytes</p>
-<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
-<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
-<h2 id="2-7-再使用e2fsck-f-dev-xvdc1检查扩容的分区是否ok"><a href="#2-7-再使用e2fsck-f-dev-xvdc1检查扩容的分区是否ok" class="headerlink" title="2.7 再使用e2fsck -f /dev/xvdc1检查扩容的分区是否ok"></a>2.7 再使用e2fsck -f /dev/xvdc1检查扩容的分区是否ok</h2><p>[root@VM_0_17_centos /]# e2fsck -f /dev/vd</p>
-<p>vda   vda1  vdb   vdb1 </p>
-<p>[root@VM_0_17_centos /]# e2fsck -f /dev/vdb1</p>
-<p>e2fsck 1.42.9 (28-Dec-2013)</p>
-<p>/dev/vdb1 is mounted.</p>
-<p>e2fsck: Cannot continue, aborting.</p>
-<p>似乎看到一个报错，不过后面查看扩充成功了，是不是成功了半信半疑的。。</p>
-<h2 id="2-8-使用resize2fs-dev-xvdc1命令扩容分区："><a href="#2-8-使用resize2fs-dev-xvdc1命令扩容分区：" class="headerlink" title="2.8 使用resize2fs /dev/xvdc1命令扩容分区："></a>2.8 使用resize2fs /dev/xvdc1命令扩容分区：</h2><p>resize2fs /dev/vdb</p>
-<p>vdb   vdb1 </p>
-<p>[root@VM_0_17_centos /]# resize2fs /dev/vdb1</p>
-<p>resize2fs 1.42.9 (28-Dec-2013)</p>
-<p>Filesystem at /dev/vdb1 is mounted on /data; on-line resizing required</p>
-<p>old_desc_blocks = 125, new_desc_blocks = 250</p>
-<p>The filesystem on /dev/vdb1 is now 524287744 blocks long.</p>
-<p>df -h</p>
-<p>Filesystem      Size  Used Avail Use% Mounted on</p>
-<p>/dev/vda1        50G  4.1G   43G   9% /</p>
-<p>devtmpfs         16G     0   16G   0% /dev</p>
-<p>tmpfs            16G   24K   16G   1% /dev/shm</p>
-<p>tmpfs            16G  300K   16G   1% /run</p>
-<p>tmpfs            16G     0   16G   0% /sys/fs/cgroup</p>
-<p>/dev/vdb1       2.0T  150G  1.7T   8% /data</p>
-<p>tmpfs           3.2G     0  3.2G   0% /run/user/0</p>
-<h2 id="2-9-挂载-data盘，写入-etc-fstab"><a href="#2-9-挂载-data盘，写入-etc-fstab" class="headerlink" title="2.9  挂载/data盘，写入/etc/fstab"></a>2.9  挂载/data盘，写入/etc/fstab</h2><p> 不过做扩充时候是自动写进去的，重启过正常，数据没丢。。</p>
-<p>cat /etc/fstab</p>
-<p>/dev/vda1            /                    ext3       noatime,acl,user_xattr 1 1</p>
-<p>proc                 /proc                proc       defaults              0 0</p>
-<p>sysfs                /sys                 sysfs      noauto                0 0</p>
-<p>debugfs              /sys/kernel/debug    debugfs    noauto                0 0</p>
-<p>devpts               /dev/pts             devpts     mode=0620,gid=5       0 0</p>
-<p>/dev/disk/bd/virtio-diskt1            /data                    ext4       defaults,nofail 0 1</p>
-]]></content>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>linux有足够内存还使用swap</title>
-    <url>/2023/11/13/linux%E6%9C%89%E8%B6%B3%E5%A4%9F%E5%86%85%E5%AD%98%E8%BF%98%E4%BD%BF%E7%94%A8swap/</url>
-    <content><![CDATA[<p>一台主机内存swap报警上去以查看确实swap快耗尽；</p>
-<p>$free -m</p>
-<p>&nbsp; total&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; used&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; free&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; shared&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;buff/cache&nbsp;&nbsp; available</p>
-<p>Mem: 32012&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 8293&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 243&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 594&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 23475&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 22638</p>
-<p>Swap:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7999&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7315&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 684</p>
-<p>Linux starts swapping before the RAM is filled up. This is done to improve performance and responsiveness:</p>
-<p>Performance is increased because sometimes RAM is better used for disk cache than to store program memory. So it’s better to swap out a program that’s been inactive for a while, and instead keep often-used files in cache.</p>
-<p>Responsiveness is improved by swapping pages out when the system is idle, rather than when the memory is full and some program is running and requesting more RAM to complete a task.</p>
-<p>Swapping does slow the system down, of course — but the alternative to swapping isn’t not swapping, it’s having more RAM or using less RAM.</p>
-<p>翻译：Linux在物理内存用完之前使用swap，这样有助于提高系统性能和响应能力</p>
-<p>1 性能可以提升的原因是：一些内存放磁盘缓存比方内存更合适。所以，最好交换出暂时不使用的内存，而把经常使用的文件放内存里面</p>
-<p>2 提升响应能力通过，当系统空闲的时候swap page out，而不是当内存忙的时候，正在执行程序的时候执行swap</p>
-<p>swaping确实会是系统性能下降，当然，通过swap可以有更多的可用内存</p>
-<p>如何在有内存可用的时候，不使用swap呢？</p>
-<p>This behaviour can be configured by setting the value of&nbsp;/proc/sys/vm/swappiness. The default value is 60, setting it to 0 means “never use swap when there is still RAM left“ and 100 is swapping out memory as soon as possible.</p>
-<p>To change the value temporarily (lost on reboot):</p>
-<p>sudo sysctl vm.swappiness=10<br>1.<br>To change the value permanently: Edit the file&nbsp;/etc/sysctl.conf&nbsp;as root (e.g.&nbsp;sudo nano /etc/sysctl.conf) and change the line&nbsp;vm.swapiness=…&nbsp;to the desired value.</p>
-<p>There has been some debate on whether swapping out with free memory available is good or bad, but the Ubuntu help does indeed recommend a value of 10 for Desktop systems:&nbsp;<a href="https://help.ubuntu.com/community/SwapFaq">https://help.ubuntu.com/community/SwapFaq</a></p>
-<p>centos swappiness配置的路径 &nbsp;/proc/sys/vm/swappiness</p>
-<p>为什么不建议关闭swap</p>
-<p>It is NOT recommended to turn off swap even if you have enough memory. If your server needs more memory and it did not get it, it will crash. However, this can be prevented (to some extent) when you have a swap area.</p>
-<p>Yes, your server performance will degrade when using swap, but at least it will be operational and accessible. Then, you can plan for adding more memory when needed if your server starts using swap.</p>
-<p>I found&nbsp;&nbsp;this page&nbsp;talking about swap. Have a look at 3rd section.</p>
-<p>Instead of turning off swap, you can control the&nbsp;&nbsp;swapiness.</p>
-<p>参考</p>
-<p><a href="http://unix.stackexchange.com/questions/2658/why-use-swap-when-there-is-more-than-enough-ram">http://unix.stackexchange.com/questions/2658/why-use-swap-when-there-is-more-than-enough-ram</a></p>
-<p>swap知识 &nbsp;<a href="https://help.ubuntu.com/community/SwapFaq">https://help.ubuntu.com/community/SwapFaq</a></p>
-<p><a href="http://linux.cloudibee.com/2007/11/linux-performance-tuning-vm-swappiness/">http://linux.cloudibee.com/2007/11/linux-performance-tuning-vm-swappiness/</a></p>
-<p>转载自:&nbsp;<a href="https://blog.csdn.net/wjciayf/article/details/79913381">https://blog.csdn.net/wjciayf/article/details/79913381</a></p>
-<p>关于linux内存分配机制</p>
-<p>在linux的内存分配机制中，优先使用物理内存，当物理内存还有空闲时（还够用），不会释放其占用内存，就算占用内存的程序已经被关闭了，该程序所占用的内存用来做缓存使用，对于开启过的程序、或是读取刚存取过得数据会比较快。</p>
-<p>一．&nbsp;&nbsp;我们先来查看一个内存使用的例子：<br>[oracle@db1 ~]$ free -m<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; total&nbsp; &nbsp;&nbsp; &nbsp; used&nbsp; &nbsp;&nbsp;&nbsp; free&nbsp; &nbsp;&nbsp;&nbsp;shared&nbsp; &nbsp; buffers&nbsp;&nbsp;&nbsp;&nbsp;cached<br>Mem:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;72433&nbsp; &nbsp;&nbsp;&nbsp;67075&nbsp; &nbsp;&nbsp;&nbsp;5357&nbsp; &nbsp;&nbsp; &nbsp;0&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;558&nbsp; &nbsp;&nbsp; &nbsp; 62221<br>-/+ buffers/cache:&nbsp;&nbsp;&nbsp;&nbsp;4295&nbsp; &nbsp;&nbsp; &nbsp;68138<br>Swap:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;72096&nbsp; &nbsp;&nbsp; &nbsp;91&nbsp; &nbsp;&nbsp; &nbsp;72004<br>上述结果显示了67075M的used，但是（-/+ buffers/cache）减去buffers和cache的结果可以看到，所以当前进程实际占用内存是4296M。<br>可以这么理解：在linux的内存分配机制中，优先使用物理内存，当物理内存还有空闲时（还够用），不会释放其占用内存，就算占用内存的程序已经被关闭了，该程序所占用的内存用来做缓存使用，对于开启过的程序、或是读取刚存取过得数据会比较快。<br>如上面的例子：使用了72433M的内存，67075M被占用，但是buuffer和cached部分作为缓存，可以使用命中率的方式提高使用效率，而且这部分缓存是根据指令随时可以释放的，我们可以认为这部分内存没有实际被使用，也可以认为它是空闲的。<br>因此查看目前进程正在实际被使用的内存，是used-(buffers+cache)，也可以认为如果swap没有大量使用，mem还是够用的，只有mem被当前进程实际占用完（没有了buffers和cache），才会使用到swap的。</p>
-<p>二．&nbsp;Swap配置对性能的影响<br>分配太多的Swap空间会浪费磁盘空间，而Swap空间太少，则系统会发生错误。如果系统的物理内存用光了，系统就会跑得很慢，但仍能运行；如果Swap空间用光了，那么系统就会发生错误。例如，Web服务器能根据不同的请求数量衍生出多个服务进程（或线程），如果Swap空间用完，则服务进程无法启动，通常会出现“application is out of memory”的错误，严重时会造成服务进程的死锁。因此Swap空间的分配是很重要的。<br>通常情况下，Swap空间应大于或等于物理内存的大小，最小不应小于64M，通常Swap空间的大小应是物理内存的2-2.5倍。但根据不同的应用，应有不同的配置：如果是小的桌面系统，则只需要较小的Swap空间，而大的服务器系统则视情况不同需要不同大小的Swap空间。特别是数据库服务器和Web服务器，随着访问量的增加，对Swap空间的要求也会增加，一般来说对于4G&nbsp;以下的物理内存，配置2倍的swap，4G&nbsp;以上配置1倍。<br>另外，Swap分区的数量对性能也有很大的影响。因为Swap交换的操作是磁盘IO的操作，如果有多个Swap交换区，Swap空间的分配会以轮流的方式操作于所有的Swap，这样会大大均衡IO的负载，加快Swap交换的速度。如果只有一个交换区，所有的交换操作会使交换区变得很忙，使系统大多数时间处于等待状态，效率很低。用性能监视工具就会发现，此时的CPU并不很忙，而系统却慢。这说明，瓶颈在IO上，依靠提高CPU的速度是解决不了问题的。</p>
-<p>三.&nbsp;&nbsp;Linux&nbsp;内存机制<br>Linux支持虚拟内存(VirtualMmemory)，虚拟内存是指使用磁盘当作RAM的扩展，这样可用的内存的大小就相应地增大了。内核会将暂时不用的内存块的内容写到硬盘上，这样一来，这块内存就可用于其它目的。当需要用到原始的内容时，它们被重新读入内存。这些操作对用户来说是完全透明的;Linux下运行的程序只是看到有大量的内存可供使用而并没有注意到时不时它们的一部分是驻留在硬盘上的。当然，读写硬盘要比直接使用真实内存慢得多(要慢数千倍)，所以程序就不会象一直在内存中运行的那样快。用作虚拟内存的硬盘部分被称为交换空间(Swap Space)。<br>一般，在交换空间中的页面首先被换入内存;如果此时没有足够的物理内存来容纳它们又将被交换出来(到其他的交换空间中)。如果没有足够的虚拟内存来容纳所有这些页面，Linux就会波动而不正常;但经过一段较长的时间Linux会恢复，但此时系统已不可用了。<br>有时，尽管有许多的空闲内存，仍然会有许多的交换空间正被使用。这种情况是有可能发生的，例如如果在某一时刻有进行交换的必要，但后来一个占用很多物理内存的大进程结束并释放内存时。被交换出的数据并不会自动地交换进内存，除非有这个需要时。此时物理内存会在一段时间内保持空闲状态。对此并没有什么可担心的，但是知道了是怎么一回事，也就无所谓了。<br>许多操作系统使用了虚拟内存的方法。因为它们仅在运行时才需要交换空间，以解决不会在同一时间使用交换空间，因此，除了当前正在运行的操作系统的交换空间，其它的就是一种浪费。所以让它们共享一个交换空间将会更有效率。<br>注意：如果会有几个人同时使用这个系统，他们都将消耗内存。然而，如果两个人同时运行一个程序，内存消耗的总量并不是翻倍，因为代码页以及共享的库只存在一份。</p>
-<p>Linux系统常常动不动就使用交换空间，以保持尽可能多的空闲物理内存。即使并没有什么事情需要内存，Linux也会交换出暂时不用的内存页面。这可以避免等待交换所需的时间：当磁盘闲着，就可以提前做好交换。可以将交换空间分散在几个硬盘之上。针对相关磁盘的速度以及对磁盘的访问模式，这样做可以提高性能。</p>
-<p>与访问物理内存相比，磁盘的读写是很慢的。另外，在相应较短的时间内多次读磁盘同样的部分也是常有的事。例如，某人也许首先阅读了一段E-mail消息，然后为了答复又将这段消息读入编辑器中，然后又在将这个消息拷贝到文件夹中时，使得邮件程序又一次读入它。或者考虑一下在一个有着许多用户的系统中&nbsp;ls命令会被使用多少次。通过将信息从磁盘上仅读入一次并将其存于内存中，除了第一次读以外，可以加快所有其它读的速度。这叫作磁盘缓冲(Disk Buffering)，被用作此目的的内存称为高速缓冲(Buffer Cache)。但是，由于内存是一种有限而又不充足的资源，高速缓冲不可能做的很大(它不可能包容要用到的所有数据)。当缓冲充满了数据时，其中最长时间不用的数据将被舍弃以腾出内存空间用于新的数据。</p>
-<p>对写磁盘操作来说磁盘缓冲技术同样有效。一方面，被写入磁盘的数据常常会很快地又被读出(例如，原代码文件被保存到一个文件中，又被编译器读入)，所以将要被写的数据放入缓冲中是个好主意。另一方面，通过将数据放入缓冲中，而不是将其立刻写入磁盘，程序可以加快运行的速度。以后，写的操作可以在后台完成，而不会拖延程序的执行。<br>大多数操作系统都有高速缓冲(尽管可能称呼不同)，但是并不是都遵守上面的原理。有些是直接写(Write-Through)：数据将被立刻写入磁盘(当然，数据也被放入缓存中)。如果写操作是在以后做的，那么该缓存被称为后台写(Write-Back)。后台写比直接写更有效，但也容易出错：如果机器崩溃，或者突然掉电，缓冲中改变过的数据就被丢失了。如果仍未被写入的数据含有重要的薄记信息，这甚至可能意味着文件系统(如果有的话)已不完整。<br>针对以上的原因，出现了很多的日志文件系统，数据在缓冲区修改后，同时会被文件系统记录修改信息，这样即使此时系统掉电，系统重启后会首先从日志记录中恢复数据，保证数据不丢失。当然这些问题不再本文的叙述范围。<br>由于上述原因，在使用适当的关闭过程之前，绝对不要关掉电源，Sync命令倾空(Flushes)缓冲，也即，强迫所有未被写的数据写入磁盘，可用以确定所有的写操作都已完成。在传统的UNIX系统中，有一个叫做update的程序运行于后台，每隔30秒做一次sync操作，因此通常无需手工使用sync命令了。Linux另外有一个后台程序，Bdflush，这个程序执行更频繁的但不是全面的同步操作，以避免有时sync的大量磁盘I/O操作所带来的磁盘的突然冻结。<br>在Linux中，Bdflush是由update启动的。通常没有理由来担心此事，但如果由于某些原因bdflush进程死掉了，内核会对此作出警告，此时你就要手工地启动它了(/sbin/update)。</p>
-<p>缓存(Cache)实际并不是缓冲文件的，而是缓冲块的，块是磁盘I/O操作的最小单元(在Linux中，它们通常是1KB)。这样，目录、超级块、其它文件系统的薄记数据以及非文件系统的磁盘数据都可以被缓冲了。缓冲的效力主要是由它的大小决定的。缓冲太小的话等于没用。它只能容纳一点数据，因此在被重用时，所有缓冲的数据都将被倾空。实际的大小依赖于数据读写的频次、相同数据被访问的频率。只有用实验的方法才能知道。<br>如果缓存有固定的大小，那么缓存太大了也不好，因为这会使得空闲的内存太小而导致进行交换操作(这同样是慢的)。为了最有效地使用实际内存，Linux自动地使用所有空闲的内存作为高速缓冲，当程序需要更多的内存时，它也会自动地减小缓冲的大小。&nbsp;<br>这就是一般情况下Linux内存的一般机制，真正的Linux内存的运行机制远远比这个复杂。</p>
-<p>&nbsp;</p>
-<p>Other：</p>
-<p>swap tendency = mapped ratio / 2 + distress + swappiness</p>
-<p>The mapped ratio value is the percentage of pages in all memory zones thatbelong to User Mode address spaces (sc-&gt;nr_mapped) with respect to the totalnumber of allocatable page frames. A high value of mapped_ratio means that thedynamic memory is mostly used by User Mode processes, while a low value meansthat it is mostly used by the page cache.</p>
-<p>The distress value is a measure of how effectively the PFRA is reclaiming pageframes in this zone; it is based on the scanning priority of the zone in theprevious run of the PFRA, which is stored in the prev_priority field of thezone descriptor. The distress value depends on the zone’s previous priority asfollows:</p>
-<p>Zone prev. priority<br>12…7<br>6<br>5<br>4<br>3<br>2<br>1<br>0</p>
-<p>Distress value<br>0<br>1<br>3<br>6<br>12<br>25<br>50<br>100<br>Finally, the swappiness value is a user-defined constant, which is usually setto 60. The system administrator may tune this value by writing in the/proc/sys/vm/swappiness file or by issuing the proper sysctl( ) system call.</p>
-<p>Pages will be reclaimed from the address spaces of processes only if the zone’sswap tendency is greater than or equal to 100. Thus, if the systemadministrator sets swappiness to 0, then the PFRA never reclaims pages in theUser Mode address spaces unless the zone’s previous priority is zero (anunlikely event); if the administrator sets swappiness to 100, then the PFRAreclaims pages in the User Mode address spaces at every invocation.<br>swappiness，吃参数是得到swap tendency的一个量，而swap tendency是linux内核进行内存进行回收的一个阀值和标量。</p>
-<p><a href="https://blog.csdn.net/ly890700/article/details/73695750">https://blog.csdn.net/ly890700/article/details/73695750</a></p>
-<p>首先是,kswapd进程来定期扫描系统资源,查看内存是否够用,由两个值影响pages_high和page_low,如果现在可使用的区间在page_high&lt;x&lt;page_low,就开始检查从文件系统读入的文件,有无被修改的内存页面,如果有就写入到磁盘,但是,如果内存页面被修改了,有可能不是从文件系统读入的,即找不到回写的位置,如malloc产生的anonymous内存数据就写入swap分区,这部分当进程在次被唤醒,获得了CPU运行时间,在从swap读入。</p>
-<p>swappiness的值的大小对如何使用swap分区是有着很大的联系的。swappiness=0的时候表示最大限度使用物理内存，然后才是swap空间，swappiness＝100的时候表示积极的使用swap分区，并且把内存上的数据及时的搬运到swap空间里面。linux的基本默认设置为60，具体如下：</p>
-<p>cat /proc/sys/vm/swappiness<br>#60</p>
-<p>也就是说，你的内存在使用到100-60=40%的时候，就开始出现有交换分区的使用。大家知道，内存的速度会比磁盘快很多，这样子会加大系统IO，同时造的成大量页的换进换出，严重影响系统的性能，所以我们在操作系统层面，要尽可能使用内存，对该参数进行调整。</p>
-<p>临时调整的方法如下，我们调成10：</p>
-<p>sysctl vm.swappiness=10<br>#vm.swappiness=10</p>
-<p>cat /proc/sys/vm/swappiness</p>
-<p>#10</p>
-<p>这只是临时调整的方法，重启后会回到默认设置的.</p>
-<p>要想永久调整的话，需要在/etc/sysctl.conf修改，加上：</p>
-<p>sudo vim /etc/sysctl.conf</p>
-<p>加上</p>
-<h1 id="Controls-the-maximum-number-of-shared-memory-segments-in-pages"><a href="#Controls-the-maximum-number-of-shared-memory-segments-in-pages" class="headerlink" title="Controls the maximum number of shared memory segments, in pages"></a>Controls the maximum number of shared memory segments, in pages</h1><p>kernel.shmall = 4294967296 #这一个可以不用设置</p>
-<p>vm.swappiness = 10</p>
-<p>&nbsp;生效</p>
-<p>sudo sysctl -p</p>
-<p>这样便完成修改设置！</p>
-<p>&nbsp;</p>
-<p>Ps在服务器内存充裕的情况下尽量用内存，swap缓存设置低一些，使用swap是必要的；</p>
-<p>另外：swap可以扩充的，但是会不会影响线上业务，或者使用sysctl vm.swappiness=10命令时候会不会影响线上业务，一直纠结中。</p>
-<p>&nbsp;</p>
-<p>转自：<a href="https://www.cnblogs.com/EasonJim/p/7777904.html">https://www.cnblogs.com/EasonJim/p/7777904.html</a></p>
-<p>&nbsp;</p>
-<p>&nbsp;&nbsp;用文件增加swap：</p>
-<p>dd if=/dev/zero of=/tmp/swapadd bs=1024 count=2048000&nbsp; &nbsp; ###添加一块2G的swap文件</p>
-<p>mkswap /tmp/swapadd&nbsp; ####格式化文件</p>
-<p>swapon /tmp/swapadd ###增加swap</p>
-<p>free -m</p>
-<p>echo “/tmp/swapadd swap swap defaults 0 0” &gt;&gt; /etc/fstab&nbsp; &nbsp; ###开机自动挂载swap分区</p>
-<p>swapoff swapadd&nbsp; ###&nbsp;使用Swapoff命令收回Swap空间</p>
-<p>rm swapadd&nbsp;&nbsp; &nbsp;###从文件系统中回收此文件</p>
-<hr>
-]]></content>
-  </entry>
-  <entry>
-    <title>coredump 路径格式</title>
-    <url>/2023/06/27/coredump-%E8%B7%AF%E5%BE%84%E6%A0%BC%E5%BC%8F/</url>
-    <content><![CDATA[<p>Coredump</p>
-<p>业务进程宕机以后开发需要查看dump查找定位问题，所有服务器初始化环境时候统一定制coredump路径；</p>
-<p>1.Core文件简介</p>
-<p>Core文件其实就是内存的映像，当程序崩溃时，存储内存的相应信息，主用用于对程序进行调试。当程序崩溃时便会产生core文件，其实准确的应该说是core dump 文件,默认生成位置与可执行程序位于同一目录下，文件名为core,其中是某一数字。</p>
-<p>2.开启或关闭Core文件的生成</p>
-<p>关闭或阻止core文件生成：</p>
-<p>$ulimit -c 0</p>
-<p>打开core文件生成：</p>
-<p>$ulimit -c unlimited</p>
-<p>检查core文件的选项是否打开：</p>
-<p>$ulimit -a</p>
-<p>ulimit参数含义如下：&nbsp;</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -a&nbsp;&nbsp;&nbsp;&nbsp; All current limits are reported<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -c&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of core files created<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -d&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of a process data segment<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -e&nbsp;&nbsp;&nbsp;&nbsp; The maximum scheduling priority (“nice”)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -f&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of files written by the shell and its children<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -i&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of pending signals<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -l&nbsp;&nbsp;&nbsp;&nbsp; The maximum size that may be locked into memory<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -m&nbsp;&nbsp;&nbsp;&nbsp; The maximum resident set size (has no effect on Linux)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -n&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of open file descriptors (most systems do not allow this value to be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -p&nbsp;&nbsp;&nbsp;&nbsp; The pipe size in 512-byte blocks (this may not be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -q&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of bytes in POSIX message queues<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -r&nbsp;&nbsp;&nbsp;&nbsp; The maximum real-time scheduling priority<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -s&nbsp;&nbsp;&nbsp;&nbsp; The maximum stack size<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -t&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of cpu time in seconds<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -u&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of processes available to a single user<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -v&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of virtual memory available to the shell<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -x&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of file locks</p>
-<p>&nbsp;</p>
-<p>#ulimit -a</p>
-<p>core file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -c) unlimited</p>
-<p>data seg size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -d) unlimited</p>
-<p>scheduling priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-e) 0</p>
-<p>file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -f) unlimited</p>
-<p>pending signals&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-i) 127974</p>
-<p>max locked memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -l) 64</p>
-<p>max memory size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -m) unlimited</p>
-<p>open files&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-n) 100000</p>
-<p>pipe size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (512 bytes, -p) 8</p>
-<p>POSIX message queues&nbsp;&nbsp;&nbsp;&nbsp; (bytes, -q) 819200</p>
-<p>real-time priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-r) 0</p>
-<p>stack size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -s) 8192</p>
-<p>cpu time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (seconds, -t) unlimited</p>
-<p>max user processes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-u) 655360</p>
-<p>virtual memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -v) unlimited</p>
-<p>file locks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-x) unlimited而我们需要修改的是open files (-n) 1024的值</p>
-<p>于是命令就是limit -n 2048(随各自需要设置)</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>以上配置只对当前会话起作用，下次重新登陆后，还是得重新配置。要想配置永久生效，得在/etc/profile或者/etc/security/limits.conf文件中进行配置。</p>
-<p>首先以root权限登陆，然后打开/etc/security/limits.conf文件，进行配置：</p>
-<p>#vim /etc/security/limits.conf</p>
-<p><domain> &nbsp; &nbsp;<type> &nbsp; &nbsp;<item> &nbsp; &nbsp; &nbsp; &nbsp;<value></value></item></type></domain></p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp;* &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;soft &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;core &nbsp; &nbsp; &nbsp; &nbsp; unlimited</p>
-<p>或者在/etc/profile中作如下配置：</p>
-<p>#vim /etc/profile</p>
-<p>ulimit -S -c unlimited &gt;/dev/null 2&gt;&amp;1</p>
-<p>或者想配置只针对某一用户有效，则修改此用户的<del>/.bashrc或者</del>/.bash_profile文件：</p>
-<p>limit -c unlimited</p>
-<p>ulimit -c 0 是禁止产生core文件，而ulimit -c 1024则限制产生的core文件的大小不能超过1024kb</p>
-<p>3.设置Core Dump的核心转储文件目录和命名规则</p>
-<p>/proc/sys/kernel/core_uses_pid可以控制产生的core文件的文件名中是否添加pid作为扩展，如果添加则文件内容为1，否则为0<br>/proc/sys/kernel/core_pattern可以设置格式化的core文件保存位置或文件名，比如原来文件内容是core-%e<br>可以这样修改:<br>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern<br>将会控制所产生的core文件会存放到/data/common/coredump目录下，产生的文件名为core-进程名-pid-时间戳<br>以下是参数列表:<br>&nbsp;&nbsp;&nbsp; %p - insert pid into filename 添加pid<br>&nbsp;&nbsp;&nbsp; %u - insert current uid into filename 添加当前uid<br>&nbsp;&nbsp;&nbsp; %g - insert current gid into filename 添加当前gid<br>&nbsp;&nbsp;&nbsp; %s - insert signal that caused the coredump into the filename 添加导致产生core的信号<br>&nbsp;&nbsp;&nbsp; %t - insert UNIX time that the coredump occurred into filename 添加core文件生成时的unix时间<br>&nbsp;&nbsp;&nbsp; %h - insert hostname where the coredump happened into filename 添加主机名<br>&nbsp;&nbsp;&nbsp; %e - insert coredumping executable name into filename 添加命令名</p>
-<p>4.core文件的使用</p>
-<p>在core文件所在目录下键入:<br>gdb -c core &nbsp; （-c指定core文件）<br>它会启动GNU的调试器，来调试core文件，并且会显示生成此core文件的程序名，中止此程序的信号等等<br>如果你已经知道是由什么程序生成此core文件的，比如MyServer崩溃了生成core.12345，那么用此指令调试:<br>gdb -c core MyServer</p>
-<p>&nbsp;源：<a href="https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html">https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html</a>&nbsp;</p>
-<p>5.永久生效：<br>当前不重启生效：<br>你可以用下列方式来完成<br>sysctl -w kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
-<p>或</p>
-<p>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern</p>
-<p>这些操作一旦计算机重启，则会丢失，如果你想持久化这些操作，可以在 /etc/sysctl.conf文件中增加：<br>kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
-<p>加好后，如果你想不重启看看效果的话，则用下面的命令：<br>sysctl -p<br>vim /etc/sysctl.conf</p>
-<p>net.ipv4.ip_forward = 0</p>
-<p>net.ipv4.conf.default.rp_filter = 1</p>
-<p>net.ipv4.conf.default.accept_source_route = 0</p>
-<p>kernel.core_uses_pid = 1</p>
-<p>net.ipv4.tcp_syncookies = 1</p>
-<p>kernel.msgmnb = 65536</p>
-<p>kernel.msgmax = 65536</p>
-<p>net.ipv6.conf.lo.disable_ipv6 = 1</p>
-<p>net.ipv4.conf.all.promote_secondaries = 1</p>
-<p>net.ipv4.conf.default.promote_secondaries = 1</p>
-<p>net.ipv6.neigh.default.gc_thresh3 = 4096</p>
-<p>net.ipv4.neigh.default.gc_thresh3 = 4096</p>
-<p>kernel.softlockup_panic = 1</p>
-<p>kernel.sysrq = 1</p>
-<p>net.ipv6.conf.all.disable_ipv6 = 1</p>
-<p>net.ipv6.conf.default.disable_ipv6 = 1</p>
-<p>vm.overcommit_memory = 1</p>
-<p>kernel.numa_balancing = 0</p>
-<p>kernel.shmmax = 68719476736</p>
-<p>kernel.printk = 5</p>
-<p>kernel.core_pattern = /data/common/coredump/core-%e-%p-%t</p>
-<hr>
-]]></content>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ssh免密登录问题</title>
-    <url>/2023/07/17/ssh%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
-<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
-<p>服务器A需要免密码访问服务器B：</p>
-<ol>
-<li>在A上面生成公钥密钥，执行命令</li>
-</ol>
-<p>&nbsp;</p>
-<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
-<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
-<ol start="2">
-<li>将公钥id_rsa.pub拷贝到B机器上</li>
-</ol>
-<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
-<ol start="3">
-<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
-</ol>
-<p>cd&nbsp;/home/user/.ssh</p>
-<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
-<ol start="4">
-<li>设置 authorized_keys权限</li>
-</ol>
-<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
-<hr>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>kafka Create topic 报错</title>
-    <url>/2023/07/13/kafka-Create-topic-%E6%8A%A5%E9%94%99/</url>
-    <content><![CDATA[<p>bin/kafka-console-consumer.sh –bootstrap-server localhost:9092 –topic kk_log<br>报错如下：<br>WARN [Consumer clientId=consumer-1, groupId=console-consumer-507] Connection to node -1 could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)</p>
-<p>配置server.confg时候设置的<br>advertised.listeners=PLAINTEXT://10.171.222.26:9092<br>此时需要用配置的IP而非localhost地址：</p>
-<p>nohup bin/zookeeper-server-start.sh config/zookeeper.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>nohup bin/kafka-server-start.sh config/server.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>netstat -ntpl|egrep “(2181|9092)”<br>运行起来再试试<br>bin/kafka-console-consumer.sh –bootstrap-server 10.171.222.26:9092 –topic kk_log<br>应该就可以了。<br>做个小笔记。</p>
-<p>PS zookeeper 报错，宕掉；</p>
-<p>[2016-06-27 12:07:14,065] INFO Closed socket connection for client /127.0.0.1:58824 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn) [2016-<br>[2016-06-27 12:07:17,351] INFO Refusing session request for client /127.0.0.1:58834 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)<br>[2016-06-27 12:07:17,351] INFO Closed socket connection for client /127.0.0.1:58834 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn)<br>[2016-06-27 12:07:19,048] INFO Accepted socket connection from /127.0.0.1:58840 (org.apache.zookeeper.server.NIOServerCnxnFactory)<br>[2016-06-27 12:07:19,048] INFO Refusing session request for client /127.0.0.1:58840 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)</p>
-<p>解决方法</p>
-<p>报错原因：服务器上还有应用在不停的向zookeeper发送请求</p>
-<p>解决方法：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用top -u [username]查看该用户下的所有进程，发现多了一个java进程在运行着；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、kill掉与java相关的进程；</p>
-<p>2、关闭zookeeper，删除zoo.cfg中的dataDir配置的文件夹；</p>
-<h2 id="3、重启zookeeper。"><a href="#3、重启zookeeper。" class="headerlink" title="3、重启zookeeper。"></a>3、重启zookeeper。</h2>]]></content>
-  </entry>
-  <entry>
-    <title>apache多网站对应80端口</title>
-    <url>/2023/06/28/apache%E5%A4%9A%E7%BD%91%E7%AB%99%E5%AF%B9%E5%BA%9480%E7%AB%AF%E5%8F%A3/</url>
-    <content><![CDATA[<p>一台服务器绑定多个域名，已经装了apache，nginx就不使用了，利用apache主机头名虚拟主机用80端口对应多个网站，万能的网络上面有文档如下：</p>
-<p>Aapche 如果需要绑定多个域名到一个IP上,是支持的。需要注意以下2点:</p>
-<p>1 必须要开启 NameVirtualHost开关选项，</p>
-<p>如：NameVirtualHost 220.231.220.231:80</p>
-<p>2 NameVirtualHost 需要指定具体的端口</p>
-<p>例如”:80″,跟&lt;VirtualHost 220.231.32.*:80&gt;对应，否则会报错:</p>
-<p>mixing * ports and non-* ports with a NameVirtualHost address is not supported, proceeding with undefined results。</p>
-<p>翻译过来就是: NameVirtualHost 地址，指定端口和不指定端口混合使用是不支持的，将会产生未逾期的后果。</p>
-<p>未逾期的后果就是: 第2个不起作用，仅当一个站点设置起作用。</p>
-<p>按着做下来：</p>
-<p>IncludeOptional conf.d/*.conf</p>
-<p>ServerSignature Off</p>
-<p>NameVirtualHost 220.231.220.231:80</p>
-<p>&lt;VirtualHost 220.231.220.231:80&gt;&nbsp;&nbsp;</p>
-<p>ServerAdmin&nbsp; &nbsp;<a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a>&nbsp;</p>
-<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
-<p>ServerName <a href="http://www.aaa.net/">www.aaa.net</a></p>
-<p>DocumentRoot&nbsp; /data/www/wress/</p>
-<p>&lt;Directory “/data/www/wress/“&gt;&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp;Options -Indexes&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp;Options FollowSymLinks Indexes</p>
-<p>&nbsp; &nbsp; AllowOverride All&nbsp;&nbsp;</p>
-<p>&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp; Require all granted&nbsp;&nbsp;</p>
-<p>&nbsp;&nbsp;</p>
-<p>ErrorLog logs/<a href="http://www.aaa.net-error_log/">www.aaa.net-error_log</a></p>
-<p>&nbsp;CustomLog logs/<a href="http://www.aaa.net-access_log/">www.aaa.net-access_log</a> common</p>
-<p>&nbsp;</p>
-<p>&lt;VirtualHost 220.231.220.231:80&gt;</p>
-<p>ServerAdmin&nbsp; <a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a></p>
-<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
-<p>ServerName img.aaa.net</p>
-<p>#ServerName 220.231.220.231</p>
-<p>DocumentRoot&nbsp; /data/www/html/</p>
-<p>&lt;Directory “/data/www/html/“&gt;</p>
-<p>&nbsp; &nbsp; Options -Indexes&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp; Options FollowSymLinks Indexes</p>
-<p>&nbsp; &nbsp; AllowOverride All</p>
-<p>&nbsp; &nbsp;Require all granted</p>
-
-
-<p>ErrorLog logs/img.aaa.net-error_log</p>
-<p>CustomLog logs/img.aaa.net-access_log common</p>
-
-
-<h2 id="这样都可以访问，apache也可以实现，做个小笔记。"><a href="#这样都可以访问，apache也可以实现，做个小笔记。" class="headerlink" title="这样都可以访问，apache也可以实现，做个小笔记。"></a>这样都可以访问，apache也可以实现，做个小笔记。</h2>]]></content>
-  </entry>
-  <entry>
-    <title>vsftp 锁定用户目录</title>
-    <url>/2023/07/11/vsftp-%E9%94%81%E5%AE%9A%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95/</url>
-    <content><![CDATA[<p>vsftp 安装以后给用户权限和锁定目录；</p>
-<p>关闭SELinux：</p>
-<p>修改/etc/selinux/config文件中的SELINUX=”” 为 disabled ，然后重启。</p>
-<p>如果不想重启系统，使用命令setenforce 0</p>
-<p>添加用户：</p>
-<p>useradd -d /var/www -s /sbin/nologin ftpuser</p>
-<p>主要是修改/etc/vsftpd/vsftpd.conf如下：</p>
-<p>chroot_local_user=NO</p>
-<p>chroot_list_enable=YES</p>
-<p>chroot_list_file=/etc/vsftpd/vsftpd.chroot_list</p>
-<p>vim chroot_list</p>
-<p>添加锁定目录用户</p>
-<p>Ftpuser</p>
-<p>Upload</p>
-<p>当然可以修改路径：</p>
-<p>usermod –d /www/html&nbsp; &nbsp;ftpuser</p>
-<p>**vsftpd.user_list：该文件里的用户账户在默认情况下也不能访问FTP服务器，仅当vsftpd .conf配置文件里启用userlist_enable=NO选项时才允许访问。</p>
-<p>/etc/vsftpd/user_list ，添加上需要阻止的本地用户，一个用户名一行&nbsp;用被阻止的用户</p>
-<p>grep -v “^#” vsftpd.conf&nbsp;</p>
-<p>anonymous_enable=NO</p>
-<p>local_enable=YES</p>
-<p>write_enable=YES</p>
-<p>local_umask=000</p>
-<p>dirmessage_enable=YES</p>
-<p>xferlog_enable=YES</p>
-<p>connect_from_port_20=YES</p>
-<p>xferlog_file=/var/log/xferlog</p>
-<p>xferlog_std_format=YES</p>
-<p>chroot_local_user=NO</p>
-<p>chroot_list_enable=YES</p>
-<p>chroot_list_file=/etc/vsftpd/chroot_list</p>
-<p>listen=YES</p>
-<p>listen_port=21</p>
-<p>pasv_address=192.168.10.123</p>
-<p>pasv_addr_resolve=yes</p>
-<p>pasv_enable=YES</p>
-<p>pasv_min_port=5000</p>
-<p>pasv_max_port=5008</p>
-<p>use_localtime=YES</p>
-<p>listen_ipv6=NO</p>
-<p>allow_writeable_chroot=YES</p>
-<p>pam_service_name=vsftpd</p>
-<p>userlist_enable=YES</p>
-<p>配置相关来源网络：</p>
-<p>登录和对匿名用户的设置</p>
-<p>write_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //是否对登录用户开启写权限。属全局性设置。默认NO<br>local_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //是否允许本地用户登录FTP服务器。默认为NO<br>anonymous_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //设置是否允许匿名用户登录FTP服务器。默认为YES<br>ftp_username=ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //定义匿名用户的账户名称，默认值为ftp。<br>no_anon_password=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //匿名用户登录时是否询问口令。设置为YES，则不询问。默&nbsp;<br>认NO<br>anon_world_readable_only=YES&nbsp;&nbsp; //匿名用户是否允许下载可阅读的文档，默认为YES。<br>&nbsp;&nbsp; anon_upload_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //是否允许匿名用户上传文件。只有在write_enable设置为<br>YES时，该配置项才有效。而且匿名用户对相应的目录必须有写权限。默认为NO。<br>anon_mkdir_write_enable=YES //是否允许匿名用户创建目录。只有在write_enable设置为&nbsp;&nbsp;&nbsp; YES时有效。且匿名用户对上层目录有写入的权限。默认为NO。<br>anon_other_write_enable=NO&nbsp;&nbsp;&nbsp; //若设置为YES，则匿名用户会被允许拥有多于<br>上传和建立目录的权限，还会拥有删除和更名权限。默认值为NO。</p>
-<p>2．设置用户登录后所在的目录&nbsp;<br>local_root=/var/ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 设置本地用户登录后所在的目录。默认配置文件中没有设置该项，此时用户登录FTP服务器后，所在的目录为该用户的主目录，对于root用户，则为/root目录。<br>anon_root=/var/ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置匿名用户登录后所在的目录。若未指定，则默认为/var/ftp目录。</p>
-<p>&nbsp;</p>
-<p>3．控制用户是否允许切换到上级目录&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 在默认配置下，用户可以使用“cd..”命名切换到上级目录。比如，若用户登录后所在的目录为/var/ftp，则在“ftp&gt;”命令行 下，执行“cd..”命令后，用户将切换到其上级目录/var，若继续执行该命令，则可进入Linux系统的根目录，从而可以对整个Linux的文件系统 进行操作。</p>
-<p>若设置了write_enable=YES，则用户还可对根目录下的文件进行改写操作，会给系统带来极大的安全隐患，因此，必须防止用户切换到Linux的根目录，相关的配置项如下：<br>chroot_list_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 设置是否启用chroot_list_file配置项指定的用户列表文件。设置为YES则除了列在j/etc/vsftpd/chroot_list文件中的的帐号外，所有登录的用户都可以进入ftp根目录之外的目录。默认NO<br>chroot_list_file=/etc/vsftpd/chroot_list&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 用于指定用户列表文件，该文件用于控制哪些用户可以切换到FTP站点根目录的上级目录。<br>chroot_local_user=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 用于指定用户列表文件中的用户，是否允许切换到上级目录。默认NO<br>注意：要对本地用户查看效果，需先设置local_root=/var/ftp</p>
-<p>具体情况有以下几种：<br>1）当chroot_list_enable=YES，chroot_local_user=YES时，在/etc/vsftpd/chroot_list文件中列出的用户，可以切换到上级目录；未在文件中列出的用户，不能切换到站点根目录的上级目录。<br>2）当chroot_list_enable=YES，chroot_local_user=NO时，在/etc/vsftpd/chroot_list文件中列出的用户，不能切换到站点根目录的上级目录；未在文件中列出的用户，可以切换到上级目录。<br>3）当chroot_list_enable=NO，chroot_local_user=YES时，所有用户均不能切换到上级目录。<br>4）当chroot_list_enable=NO，chroot_local_user=NO时，所有用户均可以切换到上级目录。<br>5）当用户不允许切换到上级目录时，登录后FTP站点的根目录“/”是该FTP账户的主目录，即文件的系统的/var/ftp目录。</p>
-<p>&nbsp;</p>
-<p>4．设置访问控制&nbsp;<br>（1）设置允许或不允许访问的主机（见TBP14）<br>tcp_wrappers=YES用来设置vsftpd服务器是否与tcp wrapper相结合，进行主机的访问控制。默认设置为YES，vsftpd服务器会检查/etc/hosts.allow和/etc /hosts.deny中的设置，以决定请求连接的主机是否允许访问该FTP服务器。这两个文件可以起到简易的防火墙功能。<br>比如，若要仅允许192.168.168.1～192.168.168.254的用户，可以访问连接vsftpd服务器，则可在/etc/hosts.allow文件中添加以下内容：<br>vsftpd：192.168.168.0/255.255.255.0 ：allow<br>all：all：deny</p>
-<p>（2）设置允许或不允许访问的用户<br>对用户的访问控制由/etc/vsftpd/user_list和/etc/vsftpd/ftpusers文件来控制实现。相关配置命令如下：<br>userlist_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 决定/etc/vsftpd/user_list文件是否启用生效。YES则生效，NO不生效。<br>userlist_deny=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 决定/etc/vsftpd/user_list文件中的用户是允许访问还是不允许访问。若设置为YES，则/etc/vsftpd/user_list 文件中的用户将不允许访问FTP服务器；若设置为NO，则只有vsftpd.user_list文件中的用户，才能访问FTP服务器。</p>
-<p>&nbsp;</p>
-<p>5．设置访问速度&nbsp;<br>anon_max_rate=0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置匿名用户所能使用的最大传输速度，单位为b/s。若设置为0，则不受速度限制，此为默认值。<br>local_max_rate=0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 设置本地用户所能使用的最大传输速度。默认为0，不受限制。</p>
-<p>&nbsp;</p>
-<p>6．定义用户配置文件&nbsp;<br>在vsftpd服务器中，不同用户还可使用不同的配置，这要通过用户配置文件来实现。<br>user_config_dir=/etc/vsftpd/userconf //用于设置用户配置文件所在的目录。<br>设置了该配置项后，当用户登录FTP服务器时，系统就会到/etc/vsftpd/userconf目录下读取与当前用户名相同的文件，并根据文件中的配 置命令，对当前用户进行更进一步的配置。比如，利用用户配置文件，可实现对不同用户进行访问的速度进行控制，在各用户配置文件中，定义 local_max_rate配置，以决定该用户允许的访问速度。</p>
-<p>&nbsp;</p>
-<p>7．与连接相关的设置&nbsp;<br>listen=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置vsftpd服务器是否以standalone模式运行。以standalone模式运行是一种较好的方式，此时listen必须设置为YES， 此为默认值，建议不要更改。很多与服务器运行相关的配置命令，需要此运行模式才有效。若设置为NO，则vsftpd不是以独立的服务运行，要受 xinetd服务的管理控制，功能上会受限制。</p>
-<p>max_clients=0<br>//设置vsftpd允许的最大连接数，默认为0，表示不受限制。若设置为150时，则同时允许有150个连接，超出的将拒绝建立连接。只有在以standalone模式运行时才有效。</p>
-<p>max_per_ip=0<br>// 设置每个IP地址允许与FTP服务器同时建立连接的数目。默认为0，不受限制。通常可对此配置进行设置，防止同一个用户建立太多的连接。只有在以standalone模式运行时才有效。</p>
-<p>listen_address=IP地址&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置在指定的IP地址上侦听用户的FTP请求。若不设置，则对服务器所绑定的所有IP地址进行侦听。只有在以standalone模式运行时才有效。 对于只绑定了一个IP地址的服务器，不需要配置该项，默认情况下，配置文件中没有该配置项。若服务器同时绑定了多个IP地址，则应通过该配置项，指定在哪 个IP地址上提供FTP服务，即指定FTP服务器所使用的IP地址。<br>注意：设置此值前后，可以通过netstat -tnl对比端口的监听情况</p>
-<p>accept_timeout=60&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置建立被动（PASV）数据连接的超时时间，单位为秒，默认值为60。<br>connect_timeout=60&nbsp;&nbsp;&nbsp;&nbsp;<br>// PORT方式下建立数据连接的超时时间，单位为秒。<br>data_connection_timeout=300&nbsp;&nbsp;&nbsp;<br>//设置建立FTP数据连接的超时时间，默认为300秒。</p>
-<p>idle_session_timeout＝600&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置多长时间不对FTP服务器进行任何操作，则断开该FTP连接，单位为秒，默认为600秒。即设置发呆的逾时时间，在这个时间内，若没有数据传送或指令的输入，则会强行断开连接。<br>pam_service_name=vsftpd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置在PAM所使用的名称，默认值为vsftpd。</p>
-<p>setproctitle_enable=NO|YES&nbsp;&nbsp;&nbsp;<br>//设置每个与FTP服务器的连接，是否以不同的进程表现出来，默认值为NO，此时只有一个名为vsftpd的进程。若设置为YES，则每个连接都会有一个vsftpd进程，使用“ps -ef|grep ftp”命令可查看到详细的FTP连接信息。安全起见，建议关闭。</p>
-<p>&nbsp;PS:有时候不能上传文件，查看锁定目录权限和allow_writeable_chroot=YES 还可以查看下</p>
-<p>getsebool -a|grep ftp</p>
-<p>输入setsebool -P ftpd_full_access=on打开权限即可：</p>
-<p>getsebool -a|grep ftp查看：</p>
-<p>getsebool -a|grep ftp</p>
-<p>ftpd_anon_write –&gt; off</p>
-<p>ftpd_connect_all_unreserved –&gt; off</p>
-<p>ftpd_connect_db –&gt; off</p>
-<p>ftpd_full_access –&gt; on</p>
-<p>ftpd_use_cifs –&gt; off</p>
-<p>ftpd_use_fusefs –&gt; off</p>
-<p>ftpd_use_nfs –&gt; off</p>
-<p>ftpd_use_passive_mode –&gt; off</p>
-<p>httpd_can_connect_ftp –&gt; off</p>
-<p>httpd_enable_ftp_server –&gt; off</p>
-<p>tftp_anon_write –&gt; off</p>
-<p>tftp_home_dir –&gt; off</p>
-<h2 id="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"><a href="#vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。" class="headerlink" title="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"></a>vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。</h2>]]></content>
-      <tags>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>centos U盘安装查找U盘设备名</title>
-    <url>/2023/11/14/centos-U%E7%9B%98%E5%AE%89%E8%A3%85%E6%9F%A5%E6%89%BEU%E7%9B%98%E8%AE%BE%E5%A4%87%E5%90%8D/</url>
-    <content><![CDATA[<p>制作启动盘：UltraISO.exe 打开镜像文件，–启动—写入硬盘镜像—默认—开始大概7分钟后就制作完成。 这样制作以后U盘原数据就没了当心。</p>
-<p>主板del进cmos选择Usb首启动，看到3个选项：安装，测试&amp;安装,trouble修复，移动到第一项Install&nbsp;centos7</p>
-<p>很多时候卡到这边过不去，<br>按tab键编辑路径，将&nbsp;<br>vmlinuz initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 quiet&nbsp;<br>改成&nbsp;<br>vmlinuz initrd=initrd.img&nbsp;linux dd&nbsp;quiet&nbsp;<br>回车&nbsp;<br>然后就能在显示出的列表中 查看你的硬盘信息，很清晰就能知道哪一个是你的U盘（一般显示的几个 格式为NTFS的都是你电脑自身的盘符，另外的一个就是你的U盘，记下你的U盘的盘符名字 我的就是sdb4）&nbsp;</p>
-<p>系统会显示当前块设备：</p>
-<p>Sda1&nbsp; nfs&nbsp;</p>
-<p>Sda2&nbsp; nfs</p>
-<p>Sdb4&nbsp;&nbsp; vfat</p>
-<p>类似这些提示ccontinue 或者r reflush刷下块设备</p>
-<p>起初u盘没刷出来，刷新出来的sdb4<br>重新启动电脑，重复上面的步骤 这一次 将&nbsp;<br>vmlinuz initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 quiet&nbsp;<br>改成&nbsp;<br>vmlinuz initrd=initrd.img&nbsp;inst.stage2=hd:/dev/sdb4（你自己的U盘盘符）&nbsp;quiet&nbsp;<br>回车 等待安装程序启动，进行CentOS的安装</p>
-<hr>
-]]></content>
-  </entry>
-  <entry>
-    <title>centos7 改网卡名eth0</title>
-    <url>/2023/11/14/centos7-%E6%94%B9%E7%BD%91%E5%8D%A1%E5%90%8Deth0/</url>
-    <content><![CDATA[<p>安装完Centos7系统，网卡命名跟之前发生了变化,不是eth0，虽然唯一好确定但是作为centos6.X过来的还是不好记，那就把网卡名字重新命名为eth0吧。</p>
-<p>1.先编辑网卡的配置文件将里面的NAME DEVICE项修改为eth0，vim /etc/sysconfig/network-scripts/ifcfg-enp2s0</p>
-<p>NAME=enp2s0 改为eth0</p>
-<p>DEVICE=enp2s0 改为 eth0</p>
-<p>2.cd /etc/sysconfig/network-scripts/ mv&nbsp;ifcfg-enp2s0 ifcfg-eth0</p>
-<p>3.禁用该可预测命名规则。对于这一点，你可以在启动时传递“net.ifnames=0 biosdevname=0 ”的内核参数。这是通过编辑/etc/default/grub并加入“net.ifnames=0 biosdevname=0 ”到GRUBCMDLINELINUX变量来实现的。</p>
-<p>&nbsp;vim /etc/default/grub&nbsp;添加红色部分；</p>
-<p>GRUB_CMDLINE_LINUX=”crashkernel=auto rd.lvm.lv=cl/root&nbsp;net.ifnames=0 biosdevname=0&nbsp;&nbsp;rd.lvm.lv=cl/swap rhgb quiet” &nbsp;</p>
-<p>4.运行命令grub2-mkconfig -o /boot/grub2/grub.cfg&nbsp;来重新生成GRUB配置并更新内核参数。</p>
-<p>&nbsp;grub2-mkconfig -o /boot/grub2/grub.cfg</p>
-<p>Generating grub configuration file …</p>
-<p>Found linux image: /boot/vmlinuz-3.10.0-514.el7.x86_64</p>
-<p>Found initrd image: /boot/initramfs-3.10.0-514.el7.x86_64.img</p>
-<p>Found linux image: /boot/vmlinuz-0-rescue-50b1d05808e44d898bef511aa2945d76</p>
-<p>Found initrd image: /boot/initramfs-0-rescue-50b1d05808e44d898bef511aa2945d76.img</p>
-<p>done</p>
-<p>5.重启机器改名eth0生效；</p>
-<p>PS:有时候重启以后会自动生成一个不是我们指定的ip，这个时候需要把网卡mac地址加进去 ifcfg-eth0中：HWADDR=30:5a:3a:e0:90:3c</p>
-<p>也可以修改</p>
-<p>cd /etc/udev/rules.d/</p>
-<p>vim&nbsp;70-persistent-net.rules</p>
-<p>注释掉原来的，添加新或者修改：</p>
-<p>SUBSYSTEM==”net”, ACTION==”add”, DRIVERS==”?<em>“, ATTR{address}==”00:0c:29:1f:1a:f5”, KERNEL==”eth</em>“, NAME=”eth0”</p>
-<p>修改为：</p>
-<p>SUBSYSTEM==”net”, ACTION==”add”, DRIVERS==”?<em>“, ATTR{address}==”30:5a:3a:e0:90:3c”, KERNEL==”eth</em>“, NAME=”eth0”</p>
-<h2 id="重启机器试试"><a href="#重启机器试试" class="headerlink" title="重启机器试试~"></a>重启机器试试~</h2>]]></content>
-      <tags>
-        <tag>点滴</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>nginx编译ssl模块</title>
-    <url>/2023/06/28/nginx%E7%BC%96%E8%AF%91ssl%E6%A8%A1%E5%9D%97/</url>
-    <content><![CDATA[<p>几个官网在一台服务器上面，其中一台是https的，增加一个官网以，重启nginx以后，https的网站直接报错，大意是ssl 在配置文件中unknow，但是这个https网站已经运行很久了，一时间有点郁闷，掉坑里了。</p>
-<p>查看nginx信息 /usr/local/nginx/sbin/nginx -V显示不支持ssl，那就好办，重新编译下ssl，但是线上业务跑着，难免有点担心，在测试机上跑了一次，正常的，才敢到线上操作，大致如此从网上找的如下：</p>
-<p>进入nginx源码目录：</p>
-<p>cd &nbsp;nginx-1.6.2</p>
-<p>./configure –prefix=/usr/local/nginx –user=www –group=www &nbsp;–with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
-<p>只添加ssl功能模块，有别的需求继续加上；</p>
-<p>运行完以后记得是make，make，make不是make &amp; make install ，install就覆盖安装了，千万搞清楚~</p>
-<p>make以后在当前目录生成odjs目录，下面就是新的nginx；</p>
-<p>剩下就好办，备份原来的nginx，把新生成的nginx替换原来的，</p>
-<p>备份旧的nginx程序</p>
-<p>cp /usr/local/nginx/sbin/nginx/usr/local/nginx/sbin/nginx.bak</p>
-<p>把新的nginx程序覆盖旧的</p>
-<p>cp objs/nginx /usr/local/nginx/sbin/nginx</p>
-<p>测试新的nginx程序是否正确</p>
-<p>/usr/local/nginx/sbin/nginx -t</p>
-<p>nginx: theconfiguration file /usr/local/nginx/conf/nginx.conf syntax is ok</p>
-<p>nginx:configuration file /usr/local/nginx/conf/nginx.conf test issuccessful</p>
-<p>平滑重启nginx</p>
-<p>/usr/local/nginx/sbin/nginx -s reload</p>
-<p>查看ngixn版本极其编译参数</p>
-<p>/usr/local/nginx/sbin/nginx -V</p>
-<p>configure arguments: –prefix=/data/app/nginx –user=www –group=www –with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
-<h6 id="权作一个跳坑记录。"><a href="#权作一个跳坑记录。" class="headerlink" title="权作一个跳坑记录。"></a>权作一个跳坑记录。</h6><hr>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>zabbix 清理历史数据</title>
-    <url>/2023/07/17/zabbix-%E6%B8%85%E7%90%86%E5%8E%86%E5%8F%B2%E6%95%B0%E6%8D%AE/</url>
-    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
-<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
-<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
-<p>root@Testl]$ date +%s -d”20160929”</p>
-<p>1475078400</p>
-<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
-<p>Query OK, 36093 rows affected (43.64 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
-<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history;</p>
-<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
-<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history_uint;</p>
-<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
-<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>漫长时间等待以后看下效果：</p>
-<p>原来数据：</p>
-<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
-<p>压缩中：</p>
-<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
-<p>find -size +50M -exec ls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
-<p>最终删两个表以后数据：</p>
-<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
-<p>完了以后，重启mysql，zabbix，nginx试试；</p>
-<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
-<hr>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>zabbix3.0.1安装过程的小坑</title>
-    <url>/2023/08/16/zabbix3-0-1%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B%E7%9A%84%E5%B0%8F%E5%9D%91/</url>
-    <content><![CDATA[<p>1.安装</p>
-<p>首先lamp环境安装完毕，开始安装zabbix；</p>
-<p>下载完毕zabbix-3.0.1.tar.gz，解压</p>
-<p>cd &nbsp;zabbix-3.0.1</p>
-<p>./configure –prefix=/usr/local/zabbix&nbsp; –enable-server \</p>
-<p>–enable-proxy –enable-agent –enable-ipv6–with-mysql=/usr/local/mysql/bin/mysql_config –with-net-snmp \</p>
-<p>–with-libcurl –with-openipmi–with-unixodbc –with-ldap –with-ssh2 –enable-java –enable-ipv6–enable-proxy</p>
-<p>自行编译但是会报错：</p>
-<p>Unixodbc没找到</p>
-<p>mysql_config</p>
-<p>configure: error: SSH2 library not found</p>
-<p>yum install php-pecl-ssh2.x86_64 libssh2-devel.x86_64</p>
-<p>yum install net-snmp-devel</p>
-<p>yum -y install unixODBC*</p>
-<p>yum install openldap openldap-devel</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; yumlist openldap</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; yumlist openldap-devel</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>checking for SSH2 support… yes</p>
-<p>checking for OPENIPMI support… no</p>
-<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h</p>
-<p>&nbsp;</p>
-<p>&nbsp;<a href="https://centos.pkgs.org/6/centos-x86_64/OpenIPMI-2.0.16-14.el6.x86_64.rpm.html">https://centos.pkgs.org/6/centos-x86_64/OpenIPMI-2.0.16-14.el6.x86_64.rpm.html</a></p>
-<p>rpm -ivh OpenIPMI-2.0.16-14.el6.x86_64.rpm</p>
-<p>&nbsp;<br>vhOpenIPMI-de<br>pum install OpenIPMI-devel</p>
-<p>&nbsp;</p>
-<p>报错checking for OPENIPMI support… no</p>
-<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h</p>
-<p>需要安装OpenIPMI和OpenIPMI-devel</p>
-<p>&nbsp;</p>
-<p>Yum安装OpenIPMI并下载OpenIPMI-devel-2.0.16-14.el6.x86_64.rpm</p>
-<p> yum install OpenIPMI</p>
-<p> rpm -ivhOpenIPMI-devel-2.0.16-14.el6.x86_64.rpm</p>
-<p>报错 error: Failed dependencies:</p>
-<p>pkgconfig(ncurses) is needed byOpenIPMI-devel-2.0.16-14.el6.x86_64</p>
-<p> yum install ncurses-devel</p>
-<p> rpm -ivhOpenIPMI-devel-2.0.16-14.el6.x86_64.rpm</p>
-<p>onfigure: error: Invalid OPENIPMI directory- unable to find ipmiif.h</p>
-<p>需要安装libssh2-devel</p>
-<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h</p>
-<p>需要安装OpenIPMI-devel</p>
-<p>hecking for SSH2 support… yes</p>
-<p>checking for OPENIPMI support… yes</p>
-<p>checking for javac… no</p>
-<p>configure: error: Unable to find”javac” executable in path</p>
-<p>configure: error: Jabber library notfound&nbsp; #yum install iksemel-devel即可，</p>
-<p>&nbsp;configure: error: LIBXML2 library not found&nbsp;&nbsp;&nbsp;</p>
-<p>#yum install libxml2-devel&nbsp;</p>
-<p>&nbsp;configure: error: unixODBC library notfound&nbsp;&nbsp;&nbsp;</p>
-<p>#yum install unixODBC-devel&nbsp;&nbsp;</p>
-<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h&nbsp;&nbsp;&nbsp;</p>
-<p>#yum install OpenIPMI-devel&nbsp;&nbsp;</p>
-<p>configure: error: Unable to find”javac” executable in path&nbsp;&nbsp;&nbsp;</p>
-<p>#yum install java*&nbsp;&nbsp;&nbsp; 具体什么包没找，直接通配算逑，生产环境可去掉–enable-java选项</p>
-<p>&nbsp;configure: error: Curl library not found&nbsp;</p>
-<p>&nbsp;#yum install curl-devel</p>
-<p>&nbsp;</p>
-<p>make &amp;&amp; make install</p>
-<ol start="2">
-<li>导数据库顺序schema-p_w_picpath-data,</li>
-</ol>
-<p>添加系统软连接：</p>
-<p>[<a href="mailto:root@vm_1_11zabbix-3.0.1">root@vm_1_11zabbix-3.0.1</a>]# ln -s /usr/local/zabbix/sbin/* /usr/local/sbin/</p>
-<p>[root@vm_1_11 zabbix-3.0.1]# ln -s /usr/local/zabbix/bin/* /usr/local/bin/</p>
-<p>添加zabbix服务对应的端口：</p>
-<p>[root@vm_1_11 mysql]# vim /etc/services</p>
-<p>在文件末尾添加：</p>
-<p> Zabbix</p>
-<p>zabbix-agent 10050/tcp # Zabbix Agent</p>
-<p>zabbix-agent 10050/udp # Zabbix Agent</p>
-<p>zabbix-trapper 10051/tcp # Zabbix Trapper</p>
-<p>zabbix-trapper 10051/udp # Zabbix Trapper</p>
-<p>修改zabbix配置文件：</p>
-<p>[root@vm_1_11 tools]# vim /usr/local/zabbix/etc/zabbix_server.conf</p>
-<p>修改以下几处：</p>
-<p>DBName=zabbix</p>
-<p>DBUser=zabbix</p>
-<p>DBPassword=zabbix</p>
-<p>AlertScriptsPath==/usr/local/zabbix/share/zabbix/alertscripts &nbsp;#zabbix运行脚本存放目录</p>
-<p>DBPort=3306</p>
-<p>&nbsp;vim /usr/local/zabbix/etc/zabbix_agentd.conf</p>
-<p>Include=/usr/local/zabbix/etc/zabbix_agentd.conf.d/</p>
-<p>UnsafeUserParameters=1 &nbsp;#启用自定义key</p>
-<p>添加开机启动脚本：</p>
-<p>[root@vm_1_11 tools]# cp /usr/local/src/zabbix-3.0.3/misc/init.d/fedora/core/zabbix_server /etc/rc.d/init.d/zabbix_server</p>
-<p>客户端：</p>
-<p>[root@vm_1_11 tools]# cp /usr/local/src/zabbix-3.0.3/misc/init.d/fedora/core/zabbix_agentd /etc/rc.d/init.d/zabbix_agentd</p>
-<p>[root@vm_1_11 tools]# chmod a+x /etc/rc.d/init.d/zabbix_*</p>
-<p>[root@vm_1_11 tools]# chkconfig zabbix_server on</p>
-<p>[root@vm_1_11 tools]# chkconfig zabbix_agentd on</p>
-<p>修改zabbix开机启动脚本中的zabbix安装目录：</p>
-<p>[root@vm_1_11 tools]# vim /etc/rc.d/init.d/zabbix_server</p>
-<p>修改以下内容：</p>
-<p>BASEDIR=/usr/local/zabbix/</p>
-<p>[root@vm_1_11 tools]# vim /etc/rc.d/init.d/zabbix_agentd</p>
-<p>修改以下内容：</p>
-<p>BASEDIR=/usr/local/zabbix/</p>
-<p>复制zabbix的web站点文件到nginx：</p>
-<p>[root@vm_1_11 tools]# cp -r /usr/local/src/zabbix-3.0.3/frontends/php/* /usr/local/nginx/html/zabbix/</p>
-<p>启动：</p>
-<p>[root@vm_1_11 tools]# systemctl daemon-reload</p>
-<p>[root@vm_1_11 tools]# service zabbix_server start</p>
-<p>[root@vm_1_11 tools]# service zabbix_agentd start</p>
-<p>&nbsp;查看进程：ps -eaf|grep zabbix_server</p>
-<p>zabbix_server [7212]: cannot run as root!</p>
-<p>添加zabbix用户；</p>
-<p>在zabbix/setup/php 页面会检测信息可能会报错要都ok才能下一步哦，</p>
-<p>按照报错信息调试vim /etc/php.ini</p>
-<p>查找如下参数并修改为：</p>
-<hr>
-<p>post_max_size = 16M</p>
-<p>max_execution_time = 300</p>
-<p>max_input_time = 300</p>
-<p><img src="/../images/20231114-1.png"></p>
-<p>/etc/php.ini修改以后还是这样，可能php.ini路径修改了，</p>
-<p>本例中就是到</p>
-<p>-rw-r–r– 1 root root 73930 Mar 27 18:19php.ini</p>
-<p>-rw-r–r– 1 root root 73928 Mar 27 18:18php.ini_0327</p>
-<p>[root@VM_54_42_centos etc]# pwd</p>
-<p>/usr/local/php/etc</p>
-<p>vim /usr/local/nginx/html/zabbix/include/locales.inc.php</p>
-<p>修改中文字符；chinese–true</p>
-<p>邮件报警：在zabbix mkdir&nbsp;alertscripts vim send_email.sh</p>
-<p>#!/bin/sh</p>
-<p>#export.UTF-8</p>
-<p>FILE=/var/log/zabbix/mailtmp.txt</p>
-<p>echo “$3” &gt;$FILE</p>
-<p>dos2unix -k $FILE</p>
-<p>/bin/mail -s “$2” $1 &lt; $FILE</p>
-<p>zabbix-管理–示警媒介类型–定制脚本-sendmail脚本，–添加联系人邮件。。</p>
-]]></content>
-      <tags>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>linux install shadowsocks</title>
-    <url>/2023/07/16/linux-install-shadowsocks/</url>
-    <content><![CDATA[<h1 id="1-安装Python和pip"><a href="#1-安装Python和pip" class="headerlink" title="1. 安装Python和pip"></a>1. 安装Python和pip</h1><p>sudo apt-get update</p>
-<p>sudo apt-get install python-pip</p>
-<h1 id="2-安装Shadowsocks"><a href="#2-安装Shadowsocks" class="headerlink" title="2. 安装Shadowsocks"></a>2. 安装Shadowsocks</h1><p>sudo pip install shadowsocks</p>
-<h1 id="3-配置Shadowsocks"><a href="#3-配置Shadowsocks" class="headerlink" title="3. 配置Shadowsocks"></a>3. 配置Shadowsocks</h1><p>cat &gt;&gt; /etc/shadowsocks.json &lt;&lt;EOF<br>{</p>
-<p>“server” : “ server ip”,<br>“server_port” : server port,<br>“local_port” : 1080,<br>“password” : “passwd”,<br>“timeout” : 200,<br>“method” : “aes-256-cfb”<br>}<br>EOF<br>参数的解释:<br>server：远程服务器IP地址<br>server_port：远程服务器端口号<br>local_port：本地端口号，默认为1080<br>password：远程服务器密码，自定义<br>timeout：超时时间，默认为300秒<br>method：加密方式，推荐aes-256-cfb</p>
-<h1 id="4-启动Shadowsocks"><a href="#4-启动Shadowsocks" class="headerlink" title="4. 启动Shadowsocks"></a>4. 启动Shadowsocks</h1><p>在命令行中输入：</p>
-<p>ssserver -c /etc/shadowsocks.json</p>
-<h1 id="5-添加系统服务"><a href="#5-添加系统服务" class="headerlink" title="5.添加系统服务"></a>5.添加系统服务</h1><p>cat &gt;&gt;/etc/systemd/system/shadows.service  &lt;&lt;EOF<br>[Unit]<br>Description=shadows server<br>[Install]<br>WantedBy=multi-user.target<br>[Service]<br>User=root<br>Group=root<br>ExecStart=/usr/bin/ssserver -c /etc/shadowsocks.json start<br>Restart=on-failure<br>EOF</p>
-<p>systemctl restart shadows.service<br>systemctl enable shadows.service</p>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Tengine 安装</title>
-    <url>/2023/11/14/Tengine%E5%AE%89%E8%A3%85/</url>
+    <url>/2023/111458217.html</url>
     <content><![CDATA[<p>Tengine安装</p>
 <p>Tengine 是由淘宝网发起的 Web 服务器项目。它在 Nginx 的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。Tengine 的性能和稳定性已经在大型的网站如淘宝网，天猫商城等得到了很好的检验。它的最终目标是打造一个高效、稳定、安全、易用的 Web 平台。</p>
 <p>Tengine 特性：</p>
@@ -1199,8 +175,24 @@
       </tags>
   </entry>
   <entry>
+    <title>Debian10 安装ossfs</title>
+    <url>/2023/111750151.html</url>
+    <content><![CDATA[<p>1.<br>sudo apt-get install automake autotools-dev g++  git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev  make pkg-config<br>2.<br>git clone <a href="https://github.com/aliyun/ossfs.git">https://github.com/aliyun/ossfs.git</a><br>cd ossfs/<br> ./autogen.sh<br>  ./configure<br>Sudo   make<br> Sudo make install<br>3.配置bucket信息和accessKey信息：<br>echo Bucket名称:要是用的AccessKeyId:对应的AccessKeySecret  &gt; /etc/passwd-ossfs<br>示例：<br>mkdir -p /data/ossfs<br>cosfs examplebucket-1250000000 /data/ossfs -ourl=<a href="http://cos.ap-guangzhou.myqcloud.com/">http://cos.ap-guangzhou.myqcloud.com</a> </p>
+<p>ossfs ts-1121-patch-oss  /data/ossfs/ -ourl=<a href="https://oss-cn-hangzhou-internal.aliyuncs.com/">https://oss-cn-hangzhou-internal.aliyuncs.com</a> -oallow_other</p>
+<p>其中：<br><mountpoint> 为本地挂载目录（例如/mnt）。<br><region> 为地域简称， 例如 ap-guangzhou 、 eu-frankfurt 等。更多地域简称信息，请参见 可用地域。<br>-odbglevel 指定日志级别，默认为crit，可选值为crit、error、warn、info、debug。<br>-oallow_other 允许非挂载用户访问挂载文件夹。</region></mountpoint></p>
+<p>创建启动脚本：<br>Vim /etc/init.d/ossfs<br>ossfs demo-patch-oss /data/ossfs/ -ourl=oss-cn-hangzhou-internal.aliyuncs.com -oallow_other<br>Chmod u+x /etc/init.dossfs</p>
+<p>Centos：<br>chkncondif ossf on<br>Debian;<br>update-rc.d  ossfs  defaults</p>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ELK安装调试及遇到的问题</title>
-    <url>/2023/11/14/ELK%E5%AE%89%E8%A3%85%E8%B0%83%E8%AF%95%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <url>/2023/111459226.html</url>
     <content><![CDATA[<h1 id="1-前期准备："><a href="#1-前期准备：" class="headerlink" title="1.前期准备："></a>1.前期准备：</h1><p>如果是es非root用户启动es，可以把*改成非root用户，例如 es soft nofile 65535修改 /etc/security/limits.conf</p>
 <p>在文件末尾中增加下面内容# 每个进程可以打开的文件数的限制* soft nofile 65536* hard nofile 65536</p>
 <p>修改/etc/security/limits.d/20-nproc.conf</p>
@@ -1413,8 +405,280 @@
       </tags>
   </entry>
   <entry>
+    <title>centos7 改网卡名eth0</title>
+    <url>/2023/111420634.html</url>
+    <content><![CDATA[<p>安装完Centos7系统，网卡命名跟之前发生了变化,不是eth0，虽然唯一好确定但是作为centos6.X过来的还是不好记，那就把网卡名字重新命名为eth0吧。</p>
+<p>1.先编辑网卡的配置文件将里面的NAME DEVICE项修改为eth0，vim /etc/sysconfig/network-scripts/ifcfg-enp2s0</p>
+<p>NAME=enp2s0 改为eth0</p>
+<p>DEVICE=enp2s0 改为 eth0</p>
+<p>2.cd /etc/sysconfig/network-scripts/ mv&nbsp;ifcfg-enp2s0 ifcfg-eth0</p>
+<p>3.禁用该可预测命名规则。对于这一点，你可以在启动时传递“net.ifnames=0 biosdevname=0 ”的内核参数。这是通过编辑/etc/default/grub并加入“net.ifnames=0 biosdevname=0 ”到GRUBCMDLINELINUX变量来实现的。</p>
+<p>&nbsp;vim /etc/default/grub&nbsp;添加红色部分；</p>
+<p>GRUB_CMDLINE_LINUX=”crashkernel=auto rd.lvm.lv=cl/root&nbsp;net.ifnames=0 biosdevname=0&nbsp;&nbsp;rd.lvm.lv=cl/swap rhgb quiet” &nbsp;</p>
+<p>4.运行命令grub2-mkconfig -o /boot/grub2/grub.cfg&nbsp;来重新生成GRUB配置并更新内核参数。</p>
+<p>&nbsp;grub2-mkconfig -o /boot/grub2/grub.cfg</p>
+<p>Generating grub configuration file …</p>
+<p>Found linux image: /boot/vmlinuz-3.10.0-514.el7.x86_64</p>
+<p>Found initrd image: /boot/initramfs-3.10.0-514.el7.x86_64.img</p>
+<p>Found linux image: /boot/vmlinuz-0-rescue-50b1d05808e44d898bef511aa2945d76</p>
+<p>Found initrd image: /boot/initramfs-0-rescue-50b1d05808e44d898bef511aa2945d76.img</p>
+<p>done</p>
+<p>5.重启机器改名eth0生效；</p>
+<p>PS:有时候重启以后会自动生成一个不是我们指定的ip，这个时候需要把网卡mac地址加进去 ifcfg-eth0中：HWADDR=30:5a:3a:e0:90:3c</p>
+<p>也可以修改</p>
+<p>cd /etc/udev/rules.d/</p>
+<p>vim&nbsp;70-persistent-net.rules</p>
+<p>注释掉原来的，添加新或者修改：</p>
+<p>SUBSYSTEM==”net”, ACTION==”add”, DRIVERS==”?<em>“, ATTR{address}==”00:0c:29:1f:1a:f5”, KERNEL==”eth</em>“, NAME=”eth0”</p>
+<p>修改为：</p>
+<p>SUBSYSTEM==”net”, ACTION==”add”, DRIVERS==”?<em>“, ATTR{address}==”30:5a:3a:e0:90:3c”, KERNEL==”eth</em>“, NAME=”eth0”</p>
+<h2 id="重启机器试试"><a href="#重启机器试试" class="headerlink" title="重启机器试试~"></a>重启机器试试~</h2>]]></content>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>apache多网站对应80端口</title>
+    <url>/2023/062862696.html</url>
+    <content><![CDATA[<p>一台服务器绑定多个域名，已经装了apache，nginx就不使用了，利用apache主机头名虚拟主机用80端口对应多个网站，万能的网络上面有文档如下：</p>
+<p>Aapche 如果需要绑定多个域名到一个IP上,是支持的。需要注意以下2点:</p>
+<p>1 必须要开启 NameVirtualHost开关选项，</p>
+<p>如：NameVirtualHost 220.231.220.231:80</p>
+<p>2 NameVirtualHost 需要指定具体的端口</p>
+<p>例如”:80″,跟&lt;VirtualHost 220.231.32.*:80&gt;对应，否则会报错:</p>
+<p>mixing * ports and non-* ports with a NameVirtualHost address is not supported, proceeding with undefined results。</p>
+<p>翻译过来就是: NameVirtualHost 地址，指定端口和不指定端口混合使用是不支持的，将会产生未逾期的后果。</p>
+<p>未逾期的后果就是: 第2个不起作用，仅当一个站点设置起作用。</p>
+<p>按着做下来：</p>
+<p>IncludeOptional conf.d/*.conf</p>
+<p>ServerSignature Off</p>
+<p>NameVirtualHost 220.231.220.231:80</p>
+<p>&lt;VirtualHost 220.231.220.231:80&gt;&nbsp;&nbsp;</p>
+<p>ServerAdmin&nbsp; &nbsp;<a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a>&nbsp;</p>
+<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
+<p>ServerName <a href="http://www.aaa.net/">www.aaa.net</a></p>
+<p>DocumentRoot&nbsp; /data/www/wress/</p>
+<p>&lt;Directory “/data/www/wress/“&gt;&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp;Options -Indexes&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp;Options FollowSymLinks Indexes</p>
+<p>&nbsp; &nbsp; AllowOverride All&nbsp;&nbsp;</p>
+<p>&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp; Require all granted&nbsp;&nbsp;</p>
+<p>&nbsp;&nbsp;</p>
+<p>ErrorLog logs/<a href="http://www.aaa.net-error_log/">www.aaa.net-error_log</a></p>
+<p>&nbsp;CustomLog logs/<a href="http://www.aaa.net-access_log/">www.aaa.net-access_log</a> common</p>
+<p>&nbsp;</p>
+<p>&lt;VirtualHost 220.231.220.231:80&gt;</p>
+<p>ServerAdmin&nbsp; <a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a></p>
+<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
+<p>ServerName img.aaa.net</p>
+<p>#ServerName 220.231.220.231</p>
+<p>DocumentRoot&nbsp; /data/www/html/</p>
+<p>&lt;Directory “/data/www/html/“&gt;</p>
+<p>&nbsp; &nbsp; Options -Indexes&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp; Options FollowSymLinks Indexes</p>
+<p>&nbsp; &nbsp; AllowOverride All</p>
+<p>&nbsp; &nbsp;Require all granted</p>
+
+
+<p>ErrorLog logs/img.aaa.net-error_log</p>
+<p>CustomLog logs/img.aaa.net-access_log common</p>
+
+
+<h2 id="这样都可以访问，apache也可以实现，做个小笔记。"><a href="#这样都可以访问，apache也可以实现，做个小笔记。" class="headerlink" title="这样都可以访问，apache也可以实现，做个小笔记。"></a>这样都可以访问，apache也可以实现，做个小笔记。</h2>]]></content>
+  </entry>
+  <entry>
+    <title>coredump 路径格式</title>
+    <url>/2023/062743960.html</url>
+    <content><![CDATA[<p>Coredump</p>
+<p>业务进程宕机以后开发需要查看dump查找定位问题，所有服务器初始化环境时候统一定制coredump路径；</p>
+<p>1.Core文件简介</p>
+<p>Core文件其实就是内存的映像，当程序崩溃时，存储内存的相应信息，主用用于对程序进行调试。当程序崩溃时便会产生core文件，其实准确的应该说是core dump 文件,默认生成位置与可执行程序位于同一目录下，文件名为core,其中是某一数字。</p>
+<p>2.开启或关闭Core文件的生成</p>
+<p>关闭或阻止core文件生成：</p>
+<p>$ulimit -c 0</p>
+<p>打开core文件生成：</p>
+<p>$ulimit -c unlimited</p>
+<p>检查core文件的选项是否打开：</p>
+<p>$ulimit -a</p>
+<p>ulimit参数含义如下：&nbsp;</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -a&nbsp;&nbsp;&nbsp;&nbsp; All current limits are reported<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -c&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of core files created<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -d&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of a process data segment<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -e&nbsp;&nbsp;&nbsp;&nbsp; The maximum scheduling priority (“nice”)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -f&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of files written by the shell and its children<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -i&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of pending signals<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -l&nbsp;&nbsp;&nbsp;&nbsp; The maximum size that may be locked into memory<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -m&nbsp;&nbsp;&nbsp;&nbsp; The maximum resident set size (has no effect on Linux)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -n&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of open file descriptors (most systems do not allow this value to be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -p&nbsp;&nbsp;&nbsp;&nbsp; The pipe size in 512-byte blocks (this may not be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -q&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of bytes in POSIX message queues<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -r&nbsp;&nbsp;&nbsp;&nbsp; The maximum real-time scheduling priority<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -s&nbsp;&nbsp;&nbsp;&nbsp; The maximum stack size<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -t&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of cpu time in seconds<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -u&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of processes available to a single user<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -v&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of virtual memory available to the shell<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -x&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of file locks</p>
+<p>&nbsp;</p>
+<p>#ulimit -a</p>
+<p>core file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -c) unlimited</p>
+<p>data seg size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -d) unlimited</p>
+<p>scheduling priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-e) 0</p>
+<p>file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -f) unlimited</p>
+<p>pending signals&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-i) 127974</p>
+<p>max locked memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -l) 64</p>
+<p>max memory size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -m) unlimited</p>
+<p>open files&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-n) 100000</p>
+<p>pipe size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (512 bytes, -p) 8</p>
+<p>POSIX message queues&nbsp;&nbsp;&nbsp;&nbsp; (bytes, -q) 819200</p>
+<p>real-time priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-r) 0</p>
+<p>stack size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -s) 8192</p>
+<p>cpu time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (seconds, -t) unlimited</p>
+<p>max user processes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-u) 655360</p>
+<p>virtual memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -v) unlimited</p>
+<p>file locks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-x) unlimited而我们需要修改的是open files (-n) 1024的值</p>
+<p>于是命令就是limit -n 2048(随各自需要设置)</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>以上配置只对当前会话起作用，下次重新登陆后，还是得重新配置。要想配置永久生效，得在/etc/profile或者/etc/security/limits.conf文件中进行配置。</p>
+<p>首先以root权限登陆，然后打开/etc/security/limits.conf文件，进行配置：</p>
+<p>#vim /etc/security/limits.conf</p>
+<p><domain> &nbsp; &nbsp;<type> &nbsp; &nbsp;<item> &nbsp; &nbsp; &nbsp; &nbsp;<value></value></item></type></domain></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;* &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;soft &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;core &nbsp; &nbsp; &nbsp; &nbsp; unlimited</p>
+<p>或者在/etc/profile中作如下配置：</p>
+<p>#vim /etc/profile</p>
+<p>ulimit -S -c unlimited &gt;/dev/null 2&gt;&amp;1</p>
+<p>或者想配置只针对某一用户有效，则修改此用户的<del>/.bashrc或者</del>/.bash_profile文件：</p>
+<p>limit -c unlimited</p>
+<p>ulimit -c 0 是禁止产生core文件，而ulimit -c 1024则限制产生的core文件的大小不能超过1024kb</p>
+<p>3.设置Core Dump的核心转储文件目录和命名规则</p>
+<p>/proc/sys/kernel/core_uses_pid可以控制产生的core文件的文件名中是否添加pid作为扩展，如果添加则文件内容为1，否则为0<br>/proc/sys/kernel/core_pattern可以设置格式化的core文件保存位置或文件名，比如原来文件内容是core-%e<br>可以这样修改:<br>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern<br>将会控制所产生的core文件会存放到/data/common/coredump目录下，产生的文件名为core-进程名-pid-时间戳<br>以下是参数列表:<br>&nbsp;&nbsp;&nbsp; %p - insert pid into filename 添加pid<br>&nbsp;&nbsp;&nbsp; %u - insert current uid into filename 添加当前uid<br>&nbsp;&nbsp;&nbsp; %g - insert current gid into filename 添加当前gid<br>&nbsp;&nbsp;&nbsp; %s - insert signal that caused the coredump into the filename 添加导致产生core的信号<br>&nbsp;&nbsp;&nbsp; %t - insert UNIX time that the coredump occurred into filename 添加core文件生成时的unix时间<br>&nbsp;&nbsp;&nbsp; %h - insert hostname where the coredump happened into filename 添加主机名<br>&nbsp;&nbsp;&nbsp; %e - insert coredumping executable name into filename 添加命令名</p>
+<p>4.core文件的使用</p>
+<p>在core文件所在目录下键入:<br>gdb -c core &nbsp; （-c指定core文件）<br>它会启动GNU的调试器，来调试core文件，并且会显示生成此core文件的程序名，中止此程序的信号等等<br>如果你已经知道是由什么程序生成此core文件的，比如MyServer崩溃了生成core.12345，那么用此指令调试:<br>gdb -c core MyServer</p>
+<p>&nbsp;源：<a href="https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html">https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html</a>&nbsp;</p>
+<p>5.永久生效：<br>当前不重启生效：<br>你可以用下列方式来完成<br>sysctl -w kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
+<p>或</p>
+<p>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern</p>
+<p>这些操作一旦计算机重启，则会丢失，如果你想持久化这些操作，可以在 /etc/sysctl.conf文件中增加：<br>kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
+<p>加好后，如果你想不重启看看效果的话，则用下面的命令：<br>sysctl -p<br>vim /etc/sysctl.conf</p>
+<p>net.ipv4.ip_forward = 0</p>
+<p>net.ipv4.conf.default.rp_filter = 1</p>
+<p>net.ipv4.conf.default.accept_source_route = 0</p>
+<p>kernel.core_uses_pid = 1</p>
+<p>net.ipv4.tcp_syncookies = 1</p>
+<p>kernel.msgmnb = 65536</p>
+<p>kernel.msgmax = 65536</p>
+<p>net.ipv6.conf.lo.disable_ipv6 = 1</p>
+<p>net.ipv4.conf.all.promote_secondaries = 1</p>
+<p>net.ipv4.conf.default.promote_secondaries = 1</p>
+<p>net.ipv6.neigh.default.gc_thresh3 = 4096</p>
+<p>net.ipv4.neigh.default.gc_thresh3 = 4096</p>
+<p>kernel.softlockup_panic = 1</p>
+<p>kernel.sysrq = 1</p>
+<p>net.ipv6.conf.all.disable_ipv6 = 1</p>
+<p>net.ipv6.conf.default.disable_ipv6 = 1</p>
+<p>vm.overcommit_memory = 1</p>
+<p>kernel.numa_balancing = 0</p>
+<p>kernel.shmmax = 68719476736</p>
+<p>kernel.printk = 5</p>
+<p>kernel.core_pattern = /data/common/coredump/core-%e-%p-%t</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>frp搭建</title>
+    <url>/2023/062739776.html</url>
+    <content><![CDATA[<p> &nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。</p>
+<p>首先到官网：</p>
+<p>&nbsp;<a href="https://github.com/fatedier/frp/releases">https://github.com/fatedier/frp/releases</a></p>
+<p>下载: frp_0.16.0_linux_amd64.tar.gz服务器端</p>
+<p>解压出来ls:</p>
+<p>frpc&nbsp; frpc_full.ini&nbsp; frpc_http.ini&nbsp; frpc.ini&nbsp; frps&nbsp; frps_full.ini&nbsp; frps.ini&nbsp; LICENSE&nbsp; nohup.out</p>
+<p>服务器端只需要两个文件frps和frps.ini,其中frps为可执行文件，frps.ini为配置文件默认配置文件如下：其中bind_addr为本机IP,bind_port为frp对客户端的端口号，auto_token是客户端连接服务器端的口令。</p>
+<p>[common]</p>
+<p>Bind_addr=0.0.0.0</p>
+<p>Bind_port =4443</p>
+<p>Auto_token = frp</p>
+<p>配置好以后可以运行起来./frps -c ./frps.ini</p>
+<p>最好后台运行：nohup ./frps -c ./frps.ini &amp;</p>
+<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:4443</p>
+<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
+<p>&nbsp;需要穿透端口的服务器端开启：</p>
+<p>nohup ./frps -c ./frps.ini &amp;</p>
+<p>同样将客户端解压后有七个文件，只需要frpc和frpc.ini,配置文件如下：</p>
+<p>&nbsp;[common]</p>
+<p>Server_addr = 123.123.123.123</p>
+<p>Server_port = 4443</p>
+<p>Auto-token = frp</p>
+<p>[ssh_1]</p>
+<p>Type = tcp</p>
+<p>Local_ip = 127.0.0.1</p>
+<p>Local_port = 22</p>
+<p>Remote_port = 10085</p>
+<p>注意：server_addr是服务器端的公网IP地址，server_port是frp服务端口号，auto_token是连接服务器的口令，必须和服务器保持一致。[ssh_1]是客户端通过服务器与用户之间的通道名，每个客户端必须不一样，remote_port是服务器端对外提供本机服务的端口号，即用户连接123.123.123.123:10085，相当于连接127.0.0.1:22,即arm板上的ssh服务</p>
+<p>运行客户端：./frpc -c ./frpc.ini</p>
+<p>&nbsp;</p>
+<p>当前的配置</p>
+<p>more frpc.ini</p>
+<p>[common]</p>
+<p>server_addr = dem.abc.com</p>
+<p>server_port = 7000</p>
+<p>[game]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 9001</p>
+<p>remote_port = 6000</p>
+<p>&nbsp;</p>
+<p>[http]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 80</p>
+<p>remote_port = 6001</p>
+<p>&nbsp;</p>
+<p>[mysql]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.235</p>
+<p>local_port = 3306</p>
+<p>remote_port = 13306</p>
+<p>more frpc_http.ini</p>
+<p>[common]</p>
+<p>server_addr = dem.abc.com</p>
+<p>server_port = 7000</p>
+<p>&nbsp;</p>
+<p>[http]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 80</p>
+<p>remote_port = 6001</p>
+<p>这样demo.abc.com 的13306映射到3306,6001映射到80端口等等；</p>
+<p>在客户端开启：最好后台运行启动客户端proxy：</p>
+<p>nohup ./frpc&nbsp; -c ./frpc.ini &amp;</p>
+<p>[I] [control.go:240] [e465e02f8bad1e5b] login to server success, get run id [e465e02f8bad1e5b], server udp port [0]</p>
+<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [http] start proxy success</p>
+<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [mysql] start proxy success</p>
+<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:7000</p>
+<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
+<p>2018/05/17 10:49:11 [I] [main.go:114] PrivilegeMode is enabled, you should pay more attention to security issues</p>
+<p>&nbsp;</p>
+<p>PS：配置很简单，但是记得nohup ./frps -c ./frps.ini &amp; 在要穿透的远程服务器开启，nohup ./frpc&nbsp; -c ./frpc.ini &amp; 在内网开启，记得开放远程服务器穿透端口；</p>
+<hr>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2023/062516107.html</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>hexogit搭建个人网站</title>
-    <url>/2023/11/14/hexogit%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99/</url>
+    <url>/2023/111457802.html</url>
     <content><![CDATA[<h1 id="1-nodejs安装"><a href="#1-nodejs安装" class="headerlink" title="1. nodejs安装"></a>1. nodejs安装</h1><h2 id="1-1使用Node-Version-Manager（nvm工具）"><a href="#1-1使用Node-Version-Manager（nvm工具）" class="headerlink" title="1.1使用Node Version Manager（nvm工具）"></a>1.1使用Node Version Manager（nvm工具）</h2><p> install stable`是使用Node Version Manager（nvm）安装Node.js的命令。nvm是一个用于管理多个Node.js版本的工具，可以轻松地在同一台机器上安装、切换和管理不同版本的Node.js。</p>
 <p><code>nvm install stable</code>指令表示安装最新的稳定版本的Node.js。执行此命令后，nvm会从Node.js官方仓库下载并自动安装最新的稳定版Node.js。安装过程可能需要一些时间，具体取决于您的网络速度。</p>
 <p>在centOS上安装Node.js，您可以按照以下步骤进行操作：</p>
@@ -1526,8 +790,792 @@
 ]]></content>
   </entry>
   <entry>
+    <title>centos U盘安装查找U盘设备名</title>
+    <url>/2023/111459478.html</url>
+    <content><![CDATA[<p>制作启动盘：UltraISO.exe 打开镜像文件，–启动—写入硬盘镜像—默认—开始大概7分钟后就制作完成。 这样制作以后U盘原数据就没了当心。</p>
+<p>主板del进cmos选择Usb首启动，看到3个选项：安装，测试&amp;安装,trouble修复，移动到第一项Install&nbsp;centos7</p>
+<p>很多时候卡到这边过不去，<br>按tab键编辑路径，将&nbsp;<br>vmlinuz initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 quiet&nbsp;<br>改成&nbsp;<br>vmlinuz initrd=initrd.img&nbsp;linux dd&nbsp;quiet&nbsp;<br>回车&nbsp;<br>然后就能在显示出的列表中 查看你的硬盘信息，很清晰就能知道哪一个是你的U盘（一般显示的几个 格式为NTFS的都是你电脑自身的盘符，另外的一个就是你的U盘，记下你的U盘的盘符名字 我的就是sdb4）&nbsp;</p>
+<p>系统会显示当前块设备：</p>
+<p>Sda1&nbsp; nfs&nbsp;</p>
+<p>Sda2&nbsp; nfs</p>
+<p>Sdb4&nbsp;&nbsp; vfat</p>
+<p>类似这些提示ccontinue 或者r reflush刷下块设备</p>
+<p>起初u盘没刷出来，刷新出来的sdb4<br>重新启动电脑，重复上面的步骤 这一次 将&nbsp;<br>vmlinuz initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 quiet&nbsp;<br>改成&nbsp;<br>vmlinuz initrd=initrd.img&nbsp;inst.stage2=hd:/dev/sdb4（你自己的U盘盘符）&nbsp;quiet&nbsp;<br>回车 等待安装程序启动，进行CentOS的安装</p>
+<hr>
+]]></content>
+  </entry>
+  <entry>
+    <title>linux install shadowsocks</title>
+    <url>/2023/071659235.html</url>
+    <content><![CDATA[<h1 id="1-安装Python和pip"><a href="#1-安装Python和pip" class="headerlink" title="1. 安装Python和pip"></a>1. 安装Python和pip</h1><p>sudo apt-get update</p>
+<p>sudo apt-get install python-pip</p>
+<h1 id="2-安装Shadowsocks"><a href="#2-安装Shadowsocks" class="headerlink" title="2. 安装Shadowsocks"></a>2. 安装Shadowsocks</h1><p>sudo pip install shadowsocks</p>
+<h1 id="3-配置Shadowsocks"><a href="#3-配置Shadowsocks" class="headerlink" title="3. 配置Shadowsocks"></a>3. 配置Shadowsocks</h1><p>cat &gt;&gt; /etc/shadowsocks.json &lt;&lt;EOF<br>{</p>
+<p>“server” : “ server ip”,<br>“server_port” : server port,<br>“local_port” : 1080,<br>“password” : “passwd”,<br>“timeout” : 200,<br>“method” : “aes-256-cfb”<br>}<br>EOF<br>参数的解释:<br>server：远程服务器IP地址<br>server_port：远程服务器端口号<br>local_port：本地端口号，默认为1080<br>password：远程服务器密码，自定义<br>timeout：超时时间，默认为300秒<br>method：加密方式，推荐aes-256-cfb</p>
+<h1 id="4-启动Shadowsocks"><a href="#4-启动Shadowsocks" class="headerlink" title="4. 启动Shadowsocks"></a>4. 启动Shadowsocks</h1><p>在命令行中输入：</p>
+<p>ssserver -c /etc/shadowsocks.json</p>
+<h1 id="5-添加系统服务"><a href="#5-添加系统服务" class="headerlink" title="5.添加系统服务"></a>5.添加系统服务</h1><p>cat &gt;&gt;/etc/systemd/system/shadows.service  &lt;&lt;EOF<br>[Unit]<br>Description=shadows server<br>[Install]<br>WantedBy=multi-user.target<br>[Service]<br>User=root<br>Group=root<br>ExecStart=/usr/bin/ssserver -c /etc/shadowsocks.json start<br>Restart=on-failure<br>EOF</p>
+<p>systemctl restart shadows.service<br>systemctl enable shadows.service</p>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>kafka Create topic 报错</title>
+    <url>/2023/071361284.html</url>
+    <content><![CDATA[<p>bin/kafka-console-consumer.sh –bootstrap-server localhost:9092 –topic kk_log<br>报错如下：<br>WARN [Consumer clientId=consumer-1, groupId=console-consumer-507] Connection to node -1 could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)</p>
+<p>配置server.confg时候设置的<br>advertised.listeners=PLAINTEXT://10.171.222.26:9092<br>此时需要用配置的IP而非localhost地址：</p>
+<p>nohup bin/zookeeper-server-start.sh config/zookeeper.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>nohup bin/kafka-server-start.sh config/server.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>netstat -ntpl|egrep “(2181|9092)”<br>运行起来再试试<br>bin/kafka-console-consumer.sh –bootstrap-server 10.171.222.26:9092 –topic kk_log<br>应该就可以了。<br>做个小笔记。</p>
+<p>PS zookeeper 报错，宕掉；</p>
+<p>[2016-06-27 12:07:14,065] INFO Closed socket connection for client /127.0.0.1:58824 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn) [2016-<br>[2016-06-27 12:07:17,351] INFO Refusing session request for client /127.0.0.1:58834 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)<br>[2016-06-27 12:07:17,351] INFO Closed socket connection for client /127.0.0.1:58834 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn)<br>[2016-06-27 12:07:19,048] INFO Accepted socket connection from /127.0.0.1:58840 (org.apache.zookeeper.server.NIOServerCnxnFactory)<br>[2016-06-27 12:07:19,048] INFO Refusing session request for client /127.0.0.1:58840 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)</p>
+<p>解决方法</p>
+<p>报错原因：服务器上还有应用在不停的向zookeeper发送请求</p>
+<p>解决方法：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用top -u [username]查看该用户下的所有进程，发现多了一个java进程在运行着；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、kill掉与java相关的进程；</p>
+<p>2、关闭zookeeper，删除zoo.cfg中的dataDir配置的文件夹；</p>
+<h2 id="3、重启zookeeper。"><a href="#3、重启zookeeper。" class="headerlink" title="3、重启zookeeper。"></a>3、重启zookeeper。</h2>]]></content>
+  </entry>
+  <entry>
+    <title>linux 磁盘挂载扩充格式化</title>
+    <url>/2023/11105462.html</url>
+    <content><![CDATA[<h1 id="linux服务器硬盘格式化挂载："><a href="#linux服务器硬盘格式化挂载：" class="headerlink" title="linux服务器硬盘格式化挂载："></a>linux服务器硬盘格式化挂载：</h1><p>请根据以下步骤对数据盘进行分区以及格式化，并挂载分区使数据盘可用。</p>
+<h2 id="1-1-查看数据盘信息"><a href="#1-1-查看数据盘信息" class="headerlink" title="1.1 查看数据盘信息"></a>1.1 查看数据盘信息</h2><p>登录Linux云服务器后，可以使用“fdisk -l”命令查看数据盘相关信息。<br>使用“df -h”命令，无法看到未分区和格式化的数据盘。 </p>
+<h2 id="1-2-数据盘分区"><a href="#1-2-数据盘分区" class="headerlink" title="1.2 数据盘分区"></a>1.2 数据盘分区</h2><p>执行以下命令，对数据盘进行分区。</p>
+<p>fdisk /dev/xvdb</p>
+<p>按照界面的提示，依次输入“n”(新建分区)、“p”(新建扩展分区)、“1”(使用第1个主分区)，两次回车(使用默认配置)，输入“wq”(保存分区表)，开始分区。<br>这里是以创建1个分区为例，开发者也可以根据自己的需求创建多个分区。</p>
+<h2 id="1-3-查看新分区"><a href="#1-3-查看新分区" class="headerlink" title="1.3 查看新分区"></a>1.3 查看新分区</h2><p>使用“fdisk -l”命令，即可查看到，新的分区xvdb1已经创建完成。</p>
+<h2 id="1-4-格式化新分区"><a href="#1-4-格式化新分区" class="headerlink" title="1.4 格式化新分区"></a>1.4 格式化新分区</h2><p>在进行分区格式化时，开发者可以自行决定文件系统的格式，如ext2、ext3等。<br>这里以“ext3”为例：<br>使用下面的命令对新分区进行格式化。 </p>
+<p>mkfs.ext3 /dev/xvdb1</p>
+<h2 id="1-5-挂载新分区"><a href="#1-5-挂载新分区" class="headerlink" title="1.5 挂载新分区"></a>1.5 挂载新分区</h2><p>使用命令“mkdir /mydata”创建mydata目录，再通过“mount /dev/xvdb1 /mydata”命令手动挂载新分区后，用“df -h”命令查看，出现以下信息说明挂载成功，即可以查看到数据盘了。</p>
+<h2 id="1-6-添加分区信息"><a href="#1-6-添加分区信息" class="headerlink" title="1.6 添加分区信息"></a>1.6 添加分区信息</h2><p>如果希望云服务器在重启或开机时能自动挂载数据盘，必须将分区信息添加到/etc/fstab中。如果没有添加，则云服务器重启或开机后，都不能自动挂载数据盘。<br>使用“echo ‘/dev/xvdb1 /mydata ext3 defaults 0 0’ &gt;&gt; /etc/fstab”命令添加分区信息后，使用“cat /etc/fstab”命令查看，出现以下信息表示添加分区信息成功。</p>
+<h1 id="2-腾讯云服务器硬盘扩充，新空间增加到已有分区空间中："><a href="#2-腾讯云服务器硬盘扩充，新空间增加到已有分区空间中：" class="headerlink" title="2.腾讯云服务器硬盘扩充，新空间增加到已有分区空间中："></a>2.腾讯云服务器硬盘扩充，新空间增加到已有分区空间中：</h1><p>  线上业务服务器1T硬盘，日志量太大，需要扩充到2T硬盘，关机购买硬盘以后启动开始在原有盘上面开始扩充：</p>
+<h2 id="2-1-查看数据盘信息"><a href="#2-1-查看数据盘信息" class="headerlink" title="2.1 查看数据盘信息"></a>2.1 查看数据盘信息</h2><h2 id="root-VM-0-17-centos-fdisk-l"><a href="#root-VM-0-17-centos-fdisk-l" class="headerlink" title="[root@VM_0_17_centos ~]# fdisk -l"></a>[root@VM_0_17_centos ~]# fdisk -l</h2><p> Disk /dev/vda: 53.7 GB, 53687091200 bytes, 104857600 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x000c7a75</p>
+<p>   Device Boot      Start         End      Blocks   Id  System</p>
+<p>/dev/vda1   *        2048   104857599    52427776   83  Linux</p>
+<p>Disk /dev/vdb: 2147.5 GB, 2147483648000 bytes, 4194304000 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x947d4eff</p>
+<p>   Device Boot      Start         End      Blocks   Id  System</p>
+<p>/dev/vdb1            2048  2097151999  1048574976   83  Linux</p>
+<h2 id="2-2查看原来1T磁盘："><a href="#2-2查看原来1T磁盘：" class="headerlink" title="2.2查看原来1T磁盘："></a>2.2查看原来1T磁盘：</h2><p>df -h</p>
+<p>Filesystem      Size  Used Avail Use% Mounted on</p>
+<p>/dev/vda1        50G  4.1G   43G   9% /</p>
+<p>devtmpfs         16G     0   16G   0% /dev</p>
+<p>tmpfs            16G   24K   16G   1% /dev/shm</p>
+<p>tmpfs            16G  300K   16G   1% /run</p>
+<p>tmpfs            16G     0   16G   0% /sys/fs/cgroup</p>
+<p>/dev/vdb1       985G  150G  785G  17% /data</p>
+<p>tmpfs           3.2G     0  3.2G   0% /run/user/0</p>
+<h2 id="2-3卸载原硬盘："><a href="#2-3卸载原硬盘：" class="headerlink" title="2.3卸载原硬盘："></a>2.3卸载原硬盘：</h2><p>umount /data/</p>
+<p>[root@VM_0_17_centos ~]# df -h</p>
+<p>Filesystem      Size  Used Avail Use% Mounted on</p>
+<p>/dev/vda1        50G  4.1G   43G   9% /</p>
+<p>devtmpfs         16G     0   16G   0% /dev</p>
+<p>tmpfs            16G   24K   16G   1% /dev/shm</p>
+<p>tmpfs            16G  300K   16G   1% /run</p>
+<p>tmpfs            16G     0   16G   0% /sys/fs/cgroup</p>
+<p>tmpfs           3.2G     0  3.2G   0% /run/user/0</p>
+<h2 id="2-4确认卸载："><a href="#2-4确认卸载：" class="headerlink" title="2.4确认卸载："></a>2.4确认卸载：</h2><p>[root@VM_0_17_centos ~]# fdisk -l</p>
+<p>Disk /dev/vda: 53.7 GB, 53687091200 bytes, 104857600 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x000c7a75</p>
+<p>   Device Boot      Start         End      Blocks   Id  System</p>
+<p>/dev/vda1   *        2048   104857599    52427776   83  Linux</p>
+<p>Disk /dev/vdb: 2147.5 GB, 2147483648000 bytes, 4194304000 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x947d4eff</p>
+<p>   Device Boot      Start         End      Blocks   Id  System</p>
+<p>/dev/vdb1            2048  2097151999  1048574976   83  Linux</p>
+<h2 id="2-5-开始格盘："><a href="#2-5-开始格盘：" class="headerlink" title="2.5 开始格盘："></a>2.5 开始格盘：</h2><p> 按照界面的提示，一次输入”p”(查看已有分区信息), ”d”(删除需要扩容的分区)、“n”(新建分区)、“p”(新建主分区)、“1”(使用第1个主分区，必须保持与需要扩容的分区一样)，两次回车(使用默认配置)，输入“w”(保存分区表)，开始分区。<br>这里是以创建1个分区为例，用户也可以根据自己的需求扩容多个分区。</p>
+<p>[root@VM_0_17_centos ~]# fdisk  /dev/vdb</p>
+<p>Welcome to fdisk (util-linux 2.23.2).</p>
+<p>Changes will remain in memory only, until you decide to write them.</p>
+<p>Be careful before using the write command.</p>
+<p> Command (m for help): p</p>
+<p>Disk /dev/vdb: 2147.5 GB, 2147483648000 bytes, 4194304000 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x947d4eff</p>
+<p>   Device Boot      Start         End      Blocks   Id  System</p>
+<p>/dev/vdb1            2048  2097151999  1048574976   83  Linux</p>
+<p>Command (m for help): d</p>
+<p>Selected partition 1</p>
+<p>Partition 1 is deleted</p>
+<p>Command (m for help): n</p>
+<p>Partition type:</p>
+<p>   p   primary (0 primary, 0 extended, 4 free)</p>
+<p>   e   extended</p>
+<p>Select (default p): p</p>
+<p>Partition number (1-4, default 1): 1</p>
+<p>First sector (2048-4194303999, default 2048):</p>
+<p>Using default value 2048</p>
+<p>Last sector, +sectors or +size{K,M,G} (2048-4194303999, default 4194303999):</p>
+<p>Using default value 4194303999</p>
+<p>Partition 1 of type Linux and of size 2 TiB is set</p>
+<p>Command (m for help): w</p>
+<p>The partition table has been altered!</p>
+<p>Calling ioctl() to re-read partition table.</p>
+<p>Syncing disks.</p>
+<p>[root@VM_0_17_centos ~]# fdisk -l</p>
+<p>Disk /dev/vda: 53.7 GB, 53687091200 bytes, 104857600 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x000c7a75</p>
+<p>   Device Boot      Start         End      Blocks   Id  System</p>
+<p>/dev/vda1   *        2048   104857599    52427776   83  Linux</p>
+<p>Disk /dev/vdb: 2147.5 GB, 2147483648000 bytes, 4194304000 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<p>Disk label type: dos</p>
+<p>Disk identifier: 0x947d4eff</p>
+<pre><code>Device Boot      Start         End      Blocks   Id  System
+</code></pre>
+<p>/dev/vdb1            2048  4194303999  2097150976   83  Linux</p>
+<h2 id="2-6确认磁盘"><a href="#2-6确认磁盘" class="headerlink" title="2.6确认磁盘"></a>2.6确认磁盘</h2><p>使用“fdisk –l /dev/vdb1”命令，即可查看到，新的分区vdb1已经创建并扩容完成：</p>
+<p>[root@VM_0_17_centos ~]# fdisk -l /dev/vdb1</p>
+<p> Disk /dev/vdb1: 2147.5 GB, 2147482599424 bytes, 4194301952 sectors</p>
+<p>Units = sectors of 1 * 512 = 512 bytes</p>
+<p>Sector size (logical/physical): 512 bytes / 512 bytes</p>
+<p>I/O size (minimum/optimal): 512 bytes / 512 bytes</p>
+<h2 id="2-7-再使用e2fsck-f-dev-xvdc1检查扩容的分区是否ok"><a href="#2-7-再使用e2fsck-f-dev-xvdc1检查扩容的分区是否ok" class="headerlink" title="2.7 再使用e2fsck -f /dev/xvdc1检查扩容的分区是否ok"></a>2.7 再使用e2fsck -f /dev/xvdc1检查扩容的分区是否ok</h2><p>[root@VM_0_17_centos /]# e2fsck -f /dev/vd</p>
+<p>vda   vda1  vdb   vdb1 </p>
+<p>[root@VM_0_17_centos /]# e2fsck -f /dev/vdb1</p>
+<p>e2fsck 1.42.9 (28-Dec-2013)</p>
+<p>/dev/vdb1 is mounted.</p>
+<p>e2fsck: Cannot continue, aborting.</p>
+<p>似乎看到一个报错，不过后面查看扩充成功了，是不是成功了半信半疑的。。</p>
+<h2 id="2-8-使用resize2fs-dev-xvdc1命令扩容分区："><a href="#2-8-使用resize2fs-dev-xvdc1命令扩容分区：" class="headerlink" title="2.8 使用resize2fs /dev/xvdc1命令扩容分区："></a>2.8 使用resize2fs /dev/xvdc1命令扩容分区：</h2><p>resize2fs /dev/vdb</p>
+<p>vdb   vdb1 </p>
+<p>[root@VM_0_17_centos /]# resize2fs /dev/vdb1</p>
+<p>resize2fs 1.42.9 (28-Dec-2013)</p>
+<p>Filesystem at /dev/vdb1 is mounted on /data; on-line resizing required</p>
+<p>old_desc_blocks = 125, new_desc_blocks = 250</p>
+<p>The filesystem on /dev/vdb1 is now 524287744 blocks long.</p>
+<p>df -h</p>
+<p>Filesystem      Size  Used Avail Use% Mounted on</p>
+<p>/dev/vda1        50G  4.1G   43G   9% /</p>
+<p>devtmpfs         16G     0   16G   0% /dev</p>
+<p>tmpfs            16G   24K   16G   1% /dev/shm</p>
+<p>tmpfs            16G  300K   16G   1% /run</p>
+<p>tmpfs            16G     0   16G   0% /sys/fs/cgroup</p>
+<p>/dev/vdb1       2.0T  150G  1.7T   8% /data</p>
+<p>tmpfs           3.2G     0  3.2G   0% /run/user/0</p>
+<h2 id="2-9-挂载-data盘，写入-etc-fstab"><a href="#2-9-挂载-data盘，写入-etc-fstab" class="headerlink" title="2.9  挂载/data盘，写入/etc/fstab"></a>2.9  挂载/data盘，写入/etc/fstab</h2><p> 不过做扩充时候是自动写进去的，重启过正常，数据没丢。。</p>
+<p>cat /etc/fstab</p>
+<p>/dev/vda1            /                    ext3       noatime,acl,user_xattr 1 1</p>
+<p>proc                 /proc                proc       defaults              0 0</p>
+<p>sysfs                /sys                 sysfs      noauto                0 0</p>
+<p>debugfs              /sys/kernel/debug    debugfs    noauto                0 0</p>
+<p>devpts               /dev/pts             devpts     mode=0620,gid=5       0 0</p>
+<p>/dev/disk/bd/virtio-diskt1            /data                    ext4       defaults,nofail 0 1</p>
+]]></content>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>linux有足够内存还使用swap</title>
+    <url>/2023/11131515.html</url>
+    <content><![CDATA[<p>一台主机内存swap报警上去以查看确实swap快耗尽；</p>
+<p>$free -m</p>
+<p>&nbsp; total&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; used&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; free&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; shared&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;buff/cache&nbsp;&nbsp; available</p>
+<p>Mem: 32012&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 8293&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 243&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 594&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 23475&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 22638</p>
+<p>Swap:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7999&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7315&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 684</p>
+<p>Linux starts swapping before the RAM is filled up. This is done to improve performance and responsiveness:</p>
+<p>Performance is increased because sometimes RAM is better used for disk cache than to store program memory. So it’s better to swap out a program that’s been inactive for a while, and instead keep often-used files in cache.</p>
+<p>Responsiveness is improved by swapping pages out when the system is idle, rather than when the memory is full and some program is running and requesting more RAM to complete a task.</p>
+<p>Swapping does slow the system down, of course — but the alternative to swapping isn’t not swapping, it’s having more RAM or using less RAM.</p>
+<p>翻译：Linux在物理内存用完之前使用swap，这样有助于提高系统性能和响应能力</p>
+<p>1 性能可以提升的原因是：一些内存放磁盘缓存比方内存更合适。所以，最好交换出暂时不使用的内存，而把经常使用的文件放内存里面</p>
+<p>2 提升响应能力通过，当系统空闲的时候swap page out，而不是当内存忙的时候，正在执行程序的时候执行swap</p>
+<p>swaping确实会是系统性能下降，当然，通过swap可以有更多的可用内存</p>
+<p>如何在有内存可用的时候，不使用swap呢？</p>
+<p>This behaviour can be configured by setting the value of&nbsp;/proc/sys/vm/swappiness. The default value is 60, setting it to 0 means “never use swap when there is still RAM left“ and 100 is swapping out memory as soon as possible.</p>
+<p>To change the value temporarily (lost on reboot):</p>
+<p>sudo sysctl vm.swappiness=10<br>1.<br>To change the value permanently: Edit the file&nbsp;/etc/sysctl.conf&nbsp;as root (e.g.&nbsp;sudo nano /etc/sysctl.conf) and change the line&nbsp;vm.swapiness=…&nbsp;to the desired value.</p>
+<p>There has been some debate on whether swapping out with free memory available is good or bad, but the Ubuntu help does indeed recommend a value of 10 for Desktop systems:&nbsp;<a href="https://help.ubuntu.com/community/SwapFaq">https://help.ubuntu.com/community/SwapFaq</a></p>
+<p>centos swappiness配置的路径 &nbsp;/proc/sys/vm/swappiness</p>
+<p>为什么不建议关闭swap</p>
+<p>It is NOT recommended to turn off swap even if you have enough memory. If your server needs more memory and it did not get it, it will crash. However, this can be prevented (to some extent) when you have a swap area.</p>
+<p>Yes, your server performance will degrade when using swap, but at least it will be operational and accessible. Then, you can plan for adding more memory when needed if your server starts using swap.</p>
+<p>I found&nbsp;&nbsp;this page&nbsp;talking about swap. Have a look at 3rd section.</p>
+<p>Instead of turning off swap, you can control the&nbsp;&nbsp;swapiness.</p>
+<p>参考</p>
+<p><a href="http://unix.stackexchange.com/questions/2658/why-use-swap-when-there-is-more-than-enough-ram">http://unix.stackexchange.com/questions/2658/why-use-swap-when-there-is-more-than-enough-ram</a></p>
+<p>swap知识 &nbsp;<a href="https://help.ubuntu.com/community/SwapFaq">https://help.ubuntu.com/community/SwapFaq</a></p>
+<p><a href="http://linux.cloudibee.com/2007/11/linux-performance-tuning-vm-swappiness/">http://linux.cloudibee.com/2007/11/linux-performance-tuning-vm-swappiness/</a></p>
+<p>转载自:&nbsp;<a href="https://blog.csdn.net/wjciayf/article/details/79913381">https://blog.csdn.net/wjciayf/article/details/79913381</a></p>
+<p>关于linux内存分配机制</p>
+<p>在linux的内存分配机制中，优先使用物理内存，当物理内存还有空闲时（还够用），不会释放其占用内存，就算占用内存的程序已经被关闭了，该程序所占用的内存用来做缓存使用，对于开启过的程序、或是读取刚存取过得数据会比较快。</p>
+<p>一．&nbsp;&nbsp;我们先来查看一个内存使用的例子：<br>[oracle@db1 ~]$ free -m<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; total&nbsp; &nbsp;&nbsp; &nbsp; used&nbsp; &nbsp;&nbsp;&nbsp; free&nbsp; &nbsp;&nbsp;&nbsp;shared&nbsp; &nbsp; buffers&nbsp;&nbsp;&nbsp;&nbsp;cached<br>Mem:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;72433&nbsp; &nbsp;&nbsp;&nbsp;67075&nbsp; &nbsp;&nbsp;&nbsp;5357&nbsp; &nbsp;&nbsp; &nbsp;0&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;558&nbsp; &nbsp;&nbsp; &nbsp; 62221<br>-/+ buffers/cache:&nbsp;&nbsp;&nbsp;&nbsp;4295&nbsp; &nbsp;&nbsp; &nbsp;68138<br>Swap:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;72096&nbsp; &nbsp;&nbsp; &nbsp;91&nbsp; &nbsp;&nbsp; &nbsp;72004<br>上述结果显示了67075M的used，但是（-/+ buffers/cache）减去buffers和cache的结果可以看到，所以当前进程实际占用内存是4296M。<br>可以这么理解：在linux的内存分配机制中，优先使用物理内存，当物理内存还有空闲时（还够用），不会释放其占用内存，就算占用内存的程序已经被关闭了，该程序所占用的内存用来做缓存使用，对于开启过的程序、或是读取刚存取过得数据会比较快。<br>如上面的例子：使用了72433M的内存，67075M被占用，但是buuffer和cached部分作为缓存，可以使用命中率的方式提高使用效率，而且这部分缓存是根据指令随时可以释放的，我们可以认为这部分内存没有实际被使用，也可以认为它是空闲的。<br>因此查看目前进程正在实际被使用的内存，是used-(buffers+cache)，也可以认为如果swap没有大量使用，mem还是够用的，只有mem被当前进程实际占用完（没有了buffers和cache），才会使用到swap的。</p>
+<p>二．&nbsp;Swap配置对性能的影响<br>分配太多的Swap空间会浪费磁盘空间，而Swap空间太少，则系统会发生错误。如果系统的物理内存用光了，系统就会跑得很慢，但仍能运行；如果Swap空间用光了，那么系统就会发生错误。例如，Web服务器能根据不同的请求数量衍生出多个服务进程（或线程），如果Swap空间用完，则服务进程无法启动，通常会出现“application is out of memory”的错误，严重时会造成服务进程的死锁。因此Swap空间的分配是很重要的。<br>通常情况下，Swap空间应大于或等于物理内存的大小，最小不应小于64M，通常Swap空间的大小应是物理内存的2-2.5倍。但根据不同的应用，应有不同的配置：如果是小的桌面系统，则只需要较小的Swap空间，而大的服务器系统则视情况不同需要不同大小的Swap空间。特别是数据库服务器和Web服务器，随着访问量的增加，对Swap空间的要求也会增加，一般来说对于4G&nbsp;以下的物理内存，配置2倍的swap，4G&nbsp;以上配置1倍。<br>另外，Swap分区的数量对性能也有很大的影响。因为Swap交换的操作是磁盘IO的操作，如果有多个Swap交换区，Swap空间的分配会以轮流的方式操作于所有的Swap，这样会大大均衡IO的负载，加快Swap交换的速度。如果只有一个交换区，所有的交换操作会使交换区变得很忙，使系统大多数时间处于等待状态，效率很低。用性能监视工具就会发现，此时的CPU并不很忙，而系统却慢。这说明，瓶颈在IO上，依靠提高CPU的速度是解决不了问题的。</p>
+<p>三.&nbsp;&nbsp;Linux&nbsp;内存机制<br>Linux支持虚拟内存(VirtualMmemory)，虚拟内存是指使用磁盘当作RAM的扩展，这样可用的内存的大小就相应地增大了。内核会将暂时不用的内存块的内容写到硬盘上，这样一来，这块内存就可用于其它目的。当需要用到原始的内容时，它们被重新读入内存。这些操作对用户来说是完全透明的;Linux下运行的程序只是看到有大量的内存可供使用而并没有注意到时不时它们的一部分是驻留在硬盘上的。当然，读写硬盘要比直接使用真实内存慢得多(要慢数千倍)，所以程序就不会象一直在内存中运行的那样快。用作虚拟内存的硬盘部分被称为交换空间(Swap Space)。<br>一般，在交换空间中的页面首先被换入内存;如果此时没有足够的物理内存来容纳它们又将被交换出来(到其他的交换空间中)。如果没有足够的虚拟内存来容纳所有这些页面，Linux就会波动而不正常;但经过一段较长的时间Linux会恢复，但此时系统已不可用了。<br>有时，尽管有许多的空闲内存，仍然会有许多的交换空间正被使用。这种情况是有可能发生的，例如如果在某一时刻有进行交换的必要，但后来一个占用很多物理内存的大进程结束并释放内存时。被交换出的数据并不会自动地交换进内存，除非有这个需要时。此时物理内存会在一段时间内保持空闲状态。对此并没有什么可担心的，但是知道了是怎么一回事，也就无所谓了。<br>许多操作系统使用了虚拟内存的方法。因为它们仅在运行时才需要交换空间，以解决不会在同一时间使用交换空间，因此，除了当前正在运行的操作系统的交换空间，其它的就是一种浪费。所以让它们共享一个交换空间将会更有效率。<br>注意：如果会有几个人同时使用这个系统，他们都将消耗内存。然而，如果两个人同时运行一个程序，内存消耗的总量并不是翻倍，因为代码页以及共享的库只存在一份。</p>
+<p>Linux系统常常动不动就使用交换空间，以保持尽可能多的空闲物理内存。即使并没有什么事情需要内存，Linux也会交换出暂时不用的内存页面。这可以避免等待交换所需的时间：当磁盘闲着，就可以提前做好交换。可以将交换空间分散在几个硬盘之上。针对相关磁盘的速度以及对磁盘的访问模式，这样做可以提高性能。</p>
+<p>与访问物理内存相比，磁盘的读写是很慢的。另外，在相应较短的时间内多次读磁盘同样的部分也是常有的事。例如，某人也许首先阅读了一段E-mail消息，然后为了答复又将这段消息读入编辑器中，然后又在将这个消息拷贝到文件夹中时，使得邮件程序又一次读入它。或者考虑一下在一个有着许多用户的系统中&nbsp;ls命令会被使用多少次。通过将信息从磁盘上仅读入一次并将其存于内存中，除了第一次读以外，可以加快所有其它读的速度。这叫作磁盘缓冲(Disk Buffering)，被用作此目的的内存称为高速缓冲(Buffer Cache)。但是，由于内存是一种有限而又不充足的资源，高速缓冲不可能做的很大(它不可能包容要用到的所有数据)。当缓冲充满了数据时，其中最长时间不用的数据将被舍弃以腾出内存空间用于新的数据。</p>
+<p>对写磁盘操作来说磁盘缓冲技术同样有效。一方面，被写入磁盘的数据常常会很快地又被读出(例如，原代码文件被保存到一个文件中，又被编译器读入)，所以将要被写的数据放入缓冲中是个好主意。另一方面，通过将数据放入缓冲中，而不是将其立刻写入磁盘，程序可以加快运行的速度。以后，写的操作可以在后台完成，而不会拖延程序的执行。<br>大多数操作系统都有高速缓冲(尽管可能称呼不同)，但是并不是都遵守上面的原理。有些是直接写(Write-Through)：数据将被立刻写入磁盘(当然，数据也被放入缓存中)。如果写操作是在以后做的，那么该缓存被称为后台写(Write-Back)。后台写比直接写更有效，但也容易出错：如果机器崩溃，或者突然掉电，缓冲中改变过的数据就被丢失了。如果仍未被写入的数据含有重要的薄记信息，这甚至可能意味着文件系统(如果有的话)已不完整。<br>针对以上的原因，出现了很多的日志文件系统，数据在缓冲区修改后，同时会被文件系统记录修改信息，这样即使此时系统掉电，系统重启后会首先从日志记录中恢复数据，保证数据不丢失。当然这些问题不再本文的叙述范围。<br>由于上述原因，在使用适当的关闭过程之前，绝对不要关掉电源，Sync命令倾空(Flushes)缓冲，也即，强迫所有未被写的数据写入磁盘，可用以确定所有的写操作都已完成。在传统的UNIX系统中，有一个叫做update的程序运行于后台，每隔30秒做一次sync操作，因此通常无需手工使用sync命令了。Linux另外有一个后台程序，Bdflush，这个程序执行更频繁的但不是全面的同步操作，以避免有时sync的大量磁盘I/O操作所带来的磁盘的突然冻结。<br>在Linux中，Bdflush是由update启动的。通常没有理由来担心此事，但如果由于某些原因bdflush进程死掉了，内核会对此作出警告，此时你就要手工地启动它了(/sbin/update)。</p>
+<p>缓存(Cache)实际并不是缓冲文件的，而是缓冲块的，块是磁盘I/O操作的最小单元(在Linux中，它们通常是1KB)。这样，目录、超级块、其它文件系统的薄记数据以及非文件系统的磁盘数据都可以被缓冲了。缓冲的效力主要是由它的大小决定的。缓冲太小的话等于没用。它只能容纳一点数据，因此在被重用时，所有缓冲的数据都将被倾空。实际的大小依赖于数据读写的频次、相同数据被访问的频率。只有用实验的方法才能知道。<br>如果缓存有固定的大小，那么缓存太大了也不好，因为这会使得空闲的内存太小而导致进行交换操作(这同样是慢的)。为了最有效地使用实际内存，Linux自动地使用所有空闲的内存作为高速缓冲，当程序需要更多的内存时，它也会自动地减小缓冲的大小。&nbsp;<br>这就是一般情况下Linux内存的一般机制，真正的Linux内存的运行机制远远比这个复杂。</p>
+<p>&nbsp;</p>
+<p>Other：</p>
+<p>swap tendency = mapped ratio / 2 + distress + swappiness</p>
+<p>The mapped ratio value is the percentage of pages in all memory zones thatbelong to User Mode address spaces (sc-&gt;nr_mapped) with respect to the totalnumber of allocatable page frames. A high value of mapped_ratio means that thedynamic memory is mostly used by User Mode processes, while a low value meansthat it is mostly used by the page cache.</p>
+<p>The distress value is a measure of how effectively the PFRA is reclaiming pageframes in this zone; it is based on the scanning priority of the zone in theprevious run of the PFRA, which is stored in the prev_priority field of thezone descriptor. The distress value depends on the zone’s previous priority asfollows:</p>
+<p>Zone prev. priority<br>12…7<br>6<br>5<br>4<br>3<br>2<br>1<br>0</p>
+<p>Distress value<br>0<br>1<br>3<br>6<br>12<br>25<br>50<br>100<br>Finally, the swappiness value is a user-defined constant, which is usually setto 60. The system administrator may tune this value by writing in the/proc/sys/vm/swappiness file or by issuing the proper sysctl( ) system call.</p>
+<p>Pages will be reclaimed from the address spaces of processes only if the zone’sswap tendency is greater than or equal to 100. Thus, if the systemadministrator sets swappiness to 0, then the PFRA never reclaims pages in theUser Mode address spaces unless the zone’s previous priority is zero (anunlikely event); if the administrator sets swappiness to 100, then the PFRAreclaims pages in the User Mode address spaces at every invocation.<br>swappiness，吃参数是得到swap tendency的一个量，而swap tendency是linux内核进行内存进行回收的一个阀值和标量。</p>
+<p><a href="https://blog.csdn.net/ly890700/article/details/73695750">https://blog.csdn.net/ly890700/article/details/73695750</a></p>
+<p>首先是,kswapd进程来定期扫描系统资源,查看内存是否够用,由两个值影响pages_high和page_low,如果现在可使用的区间在page_high&lt;x&lt;page_low,就开始检查从文件系统读入的文件,有无被修改的内存页面,如果有就写入到磁盘,但是,如果内存页面被修改了,有可能不是从文件系统读入的,即找不到回写的位置,如malloc产生的anonymous内存数据就写入swap分区,这部分当进程在次被唤醒,获得了CPU运行时间,在从swap读入。</p>
+<p>swappiness的值的大小对如何使用swap分区是有着很大的联系的。swappiness=0的时候表示最大限度使用物理内存，然后才是swap空间，swappiness＝100的时候表示积极的使用swap分区，并且把内存上的数据及时的搬运到swap空间里面。linux的基本默认设置为60，具体如下：</p>
+<p>cat /proc/sys/vm/swappiness<br>#60</p>
+<p>也就是说，你的内存在使用到100-60=40%的时候，就开始出现有交换分区的使用。大家知道，内存的速度会比磁盘快很多，这样子会加大系统IO，同时造的成大量页的换进换出，严重影响系统的性能，所以我们在操作系统层面，要尽可能使用内存，对该参数进行调整。</p>
+<p>临时调整的方法如下，我们调成10：</p>
+<p>sysctl vm.swappiness=10<br>#vm.swappiness=10</p>
+<p>cat /proc/sys/vm/swappiness</p>
+<p>#10</p>
+<p>这只是临时调整的方法，重启后会回到默认设置的.</p>
+<p>要想永久调整的话，需要在/etc/sysctl.conf修改，加上：</p>
+<p>sudo vim /etc/sysctl.conf</p>
+<p>加上</p>
+<h1 id="Controls-the-maximum-number-of-shared-memory-segments-in-pages"><a href="#Controls-the-maximum-number-of-shared-memory-segments-in-pages" class="headerlink" title="Controls the maximum number of shared memory segments, in pages"></a>Controls the maximum number of shared memory segments, in pages</h1><p>kernel.shmall = 4294967296 #这一个可以不用设置</p>
+<p>vm.swappiness = 10</p>
+<p>&nbsp;生效</p>
+<p>sudo sysctl -p</p>
+<p>这样便完成修改设置！</p>
+<p>&nbsp;</p>
+<p>Ps在服务器内存充裕的情况下尽量用内存，swap缓存设置低一些，使用swap是必要的；</p>
+<p>另外：swap可以扩充的，但是会不会影响线上业务，或者使用sysctl vm.swappiness=10命令时候会不会影响线上业务，一直纠结中。</p>
+<p>&nbsp;</p>
+<p>转自：<a href="https://www.cnblogs.com/EasonJim/p/7777904.html">https://www.cnblogs.com/EasonJim/p/7777904.html</a></p>
+<p>&nbsp;</p>
+<p>&nbsp;&nbsp;用文件增加swap：</p>
+<p>dd if=/dev/zero of=/tmp/swapadd bs=1024 count=2048000&nbsp; &nbsp; ###添加一块2G的swap文件</p>
+<p>mkswap /tmp/swapadd&nbsp; ####格式化文件</p>
+<p>swapon /tmp/swapadd ###增加swap</p>
+<p>free -m</p>
+<p>echo “/tmp/swapadd swap swap defaults 0 0” &gt;&gt; /etc/fstab&nbsp; &nbsp; ###开机自动挂载swap分区</p>
+<p>swapoff swapadd&nbsp; ###&nbsp;使用Swapoff命令收回Swap空间</p>
+<p>rm swapadd&nbsp;&nbsp; &nbsp;###从文件系统中回收此文件</p>
+<hr>
+]]></content>
+  </entry>
+  <entry>
+    <title>nginxlog切分</title>
+    <url>/2023/111760549.html</url>
+    <content><![CDATA[<p>1.设置日志文件存放目录，假设你的nginx的日志存在这个目录里<br>logs_path=”/data/log/nginx/“</p>
+<p>2.设置pid文件，这个根据你自己的环境，找到nginx.pid所在目录<br>pid_path=”/var/run/nginx.pid”</p>
+<p>3.创建分割存储的日期文件目录<br>datetime=<code>date -d "yesterday" +"%Y%m%d"</code>;<br>new_log_path=$logs_path$datetime<br>mkdir -p $new_log_path</p>
+<p>4.按照日期移动所有该目录下的日志文件<br>log_file_list=<code>ls -l $logs_path</code>;<br>for log_file in $log_file_list;<br>do<br>    log_file_name=$logs_path$log_file;<br>    if [ -f $log_file_name ];<br>    then<br>        mv $log_file_name $new_log_path;<br>    fi<br>done</p>
+<p>5.向nginx主进程发信号重新打开日志<br>kill -USR1 <code>cat ${pid_path}</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">logs_path=<span class="string">"/data/log/nginx/"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pid_path=<span class="string">"/var/run/nginx.pid"</span></span><br><span class="line"></span><br><span class="line">datetime=`<span class="built_in">date</span> -d <span class="string">"yesterday"</span> +<span class="string">"%Y%m%d"</span>`;</span><br><span class="line">new_log_path=$logs_path<span class="variable">$datetime</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$new_log_path</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">log_file_list=`<span class="built_in">ls</span> -l <span class="variable">$logs_path</span>`;</span><br><span class="line"><span class="keyword">for</span> log_file <span class="keyword">in</span> <span class="variable">$log_file_list</span>;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    log_file_name=$logs_path<span class="variable">$log_file</span>;</span><br><span class="line">    <span class="keyword">if</span> [ -f <span class="variable">$log_file_name</span> ];</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">mv</span> <span class="variable">$log_file_name</span> <span class="variable">$new_log_path</span>;</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">kill</span> -USR1 `<span class="built_in">cat</span> <span class="variable">${pid_path}</span>`</span><br></pre></td></tr></tbody></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>nginx编译ssl模块</title>
+    <url>/2023/062858442.html</url>
+    <content><![CDATA[<p>几个官网在一台服务器上面，其中一台是https的，增加一个官网以，重启nginx以后，https的网站直接报错，大意是ssl 在配置文件中unknow，但是这个https网站已经运行很久了，一时间有点郁闷，掉坑里了。</p>
+<p>查看nginx信息 /usr/local/nginx/sbin/nginx -V显示不支持ssl，那就好办，重新编译下ssl，但是线上业务跑着，难免有点担心，在测试机上跑了一次，正常的，才敢到线上操作，大致如此从网上找的如下：</p>
+<p>进入nginx源码目录：</p>
+<p>cd &nbsp;nginx-1.6.2</p>
+<p>./configure –prefix=/usr/local/nginx –user=www –group=www &nbsp;–with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
+<p>只添加ssl功能模块，有别的需求继续加上；</p>
+<p>运行完以后记得是make，make，make不是make &amp; make install ，install就覆盖安装了，千万搞清楚~</p>
+<p>make以后在当前目录生成odjs目录，下面就是新的nginx；</p>
+<p>剩下就好办，备份原来的nginx，把新生成的nginx替换原来的，</p>
+<p>备份旧的nginx程序</p>
+<p>cp /usr/local/nginx/sbin/nginx/usr/local/nginx/sbin/nginx.bak</p>
+<p>把新的nginx程序覆盖旧的</p>
+<p>cp objs/nginx /usr/local/nginx/sbin/nginx</p>
+<p>测试新的nginx程序是否正确</p>
+<p>/usr/local/nginx/sbin/nginx -t</p>
+<p>nginx: theconfiguration file /usr/local/nginx/conf/nginx.conf syntax is ok</p>
+<p>nginx:configuration file /usr/local/nginx/conf/nginx.conf test issuccessful</p>
+<p>平滑重启nginx</p>
+<p>/usr/local/nginx/sbin/nginx -s reload</p>
+<p>查看ngixn版本极其编译参数</p>
+<p>/usr/local/nginx/sbin/nginx -V</p>
+<p>configure arguments: –prefix=/data/app/nginx –user=www –group=www –with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
+<h6 id="权作一个跳坑记录。"><a href="#权作一个跳坑记录。" class="headerlink" title="权作一个跳坑记录。"></a>权作一个跳坑记录。</h6><hr>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>php 安装redis，protobuf,mcryp扩展</title>
+    <url>/2023/081036272.html</url>
+    <content><![CDATA[<p>&nbsp; 测试机上测试一些数据需要用到redis扩展，偷懒yum安装的php，以前yum install php-pecl-redis.x86_64可以安装扩展，这次找不到安装包，不折腾手动安装下。</p>
+<p>1.下载phpredis</p>
+<p>cd /usr/local/src</p>
+<p>wget <a href="https://github.com/nicolasff/phpredis/archive/2.2.4.tar.gz">https://github.com/nicolasff/phpredis/archive/2.2.4.tar.gz</a></p>
+<p>tar -zxvf 2.2.4.tar.gz</p>
+<p>cd phpredis-2.2.4/</p>
+<p>2.用phpize生成configure配置文件</p>
+<p>/usr/bin/phpize&nbsp; #会生成几个新文件，默认安装路径自定义的按照自定义路径；</p>
+<p>./configure –with-php-config=/usr/bin/php-config</p>
+<p>make #编译</p>
+<p>make install #安装</p>
+<p>make test #测试</p>
+<p>3.配置php支持</p>
+<p>vim /usr/local/php/etc/php.ini #编辑配置文件，在最后一行添加以下内容</p>
+<p>extension=”redis.so”</p>
+<ol start="4">
+<li></li>
+</ol>
+<p>重启http加载查看phpinfo信息：</p>
+<p>redis</p>
+<p>Redis Supportenabled</p>
+<p>Redis Version2.2.4</p>
+<p>成功！</p>
+<p>php扩展Protobuf</p>
+<p>下载protobuf扩展包：wget <a href="https://github.com/allegro/php-protobuf/archive/master.zip%E8%BF%99%E4%B8%AAmaster.zip%E4%BC%9A%E6%8A%A5%E9%94%99%EF%BC%9B">https://github.com/allegro/php-protobuf/archive/master.zip这个master.zip会报错；</a></p>
+<p>master.zip</p>
+<p>cd /home/tools/php-protobuf-master/</p>
+<p>phpize</p>
+<p>可能会报错php-devel</p>
+<p>yum install php-devel</p>
+<p>./configure<br>1.<br>make&nbsp;&amp;&amp;&nbsp;make&nbsp;install<br>1.</p>
+<p>If you ever happen to want to link against installed libraries</p>
+<p>in a given directory, LIBDIR, you must either use libtool, and</p>
+<p>specify the full pathname of the library, or use the `-LLIBDIR’</p>
+<p>flag during linking and do at least one of the following:</p>
+<p>&nbsp;&nbsp; - add LIBDIR to the `LD_LIBRARY_PATH’ environment variable</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; during execution</p>
+<p>&nbsp;&nbsp; - add LIBDIR to the `LD_RUN_PATH’ environment variable</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; during linking</p>
+<p>&nbsp;&nbsp; - use the `-Wl,-rpath -Wl,LIBDIR’ linker flag</p>
+<p>&nbsp;&nbsp; - have your system administrator add LIBDIR to `/etc/ld.so.conf’</p>
+<p>&nbsp;</p>
+<p>See any operating system documentation about shared libraries for</p>
+<p>more information, such as the ld(1) and ld.so(8) manual pages.</p>
+<hr>
+<p>&nbsp;</p>
+<p>Build complete.</p>
+<p>Don’t forget to run ‘make test’.</p>
+<p>&nbsp;</p>
+<p>Installing shared extensions:&nbsp;&nbsp;&nbsp;&nbsp; /usr/lib64/php/modules/</p>
+<p>然后再php.ini增加</p>
+<p>extension = protocolbuffers.so</p>
+<p>重启下http就可以了；</p>
+<p>装载protobuff库：</p>
+<p>&nbsp;pear&nbsp;channel-discover&nbsp;pear.pollinimini.net&nbsp;</p>
+<p>pear&nbsp;install&nbsp;drslump/Protobuf-beta&nbsp;</p>
+<p>mcryp扩展：</p>
+<p>yum install libmcrypt libmcrypt-devel mcrypt mhash 如果报错找不到补丁的话手动安装；</p>
+<p>下载Libmcrypt,mhash,mcrypt安装包</p>
+<p>Libmcrypt(libmcrypt-2.5.8.tar.gz)：<a href="http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91774&amp;release_id=487459">http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91774&amp;release_id=487459</a></p>
+<p>mcrypt(mcrypt-2.6.8.tar.gz ):<a href="http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91948&amp;release_id=642101">http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91948&amp;release_id=642101</a></p>
+<p>mhash(mhash-0.9.9.9.tar.gz):<a href="http://sourceforge.net/project/showfiles.php?group_id=4286&amp;package_id=4300&amp;release_id=645636">http://sourceforge.net/project/showfiles.php?group_id=4286&amp;package_id=4300&amp;release_id=645636</a></p>
+<p>2.先安装Libmcrypt</p>
+<p>tar -zxvf libmcrypt-2.5.8.tar.gz</p>
+<p>cd libmcrypt-2.5.8</p>
+<p>./configure</p>
+<p>make</p>
+<p>make install</p>
+<p>说明：libmcript默认安装在/usr/local&nbsp;</p>
+<p>3.再安装mhash</p>
+<p>tar -zxvf mhash-0.9.9.9.tar.gz</p>
+<p>cd mhash-0.9.9.9</p>
+<p>./configure</p>
+<p>make &amp;&amp; make install</p>
+<p>4.最后安装mcrypt</p>
+<p>tar -zxvf mcrypt-2.6.8.tar.gz</p>
+<p>cd mcrypt-2.6.8</p>
+<p>LD_LIBRARY_PATH=/usr/local/lib ./configure</p>
+<p>make &amp;&amp; make install</p>
+<p>说明：由于在配置Mcrypt时，会找不到libmcrypt的链接库，导致无法编译，因为Libmcrypt的链接库在/usr/local/lib文件夹下。</p>
+<p>因次，在配置mcrypt时要加入LD_LIBRARY_PATH=/usr/local/lib导入键接库。</p>
+<p>到&nbsp;<a href="http://cn.php.net/releases/">http://cn.php.net/releases/</a>&nbsp;网页下找到自己对应php版本，下载后解压</p>
+<p>cd php-5.4.16/ext/mcrypt/</p>
+<p>phpize (执行phpize命令（phpize是用来扩展php扩展模块的，通过phpize可以建立php的外挂模块，如果没有？yum install php-devel)</p>
+<p>phpize&nbsp;</p>
+<p>Configuring for:</p>
+<p>PHP Api Version:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;20100412</p>
+<p>Zend Module Api No:&nbsp; &nbsp; &nbsp; 20100525</p>
+<p>Zend Extension Api No:&nbsp; &nbsp;220100525</p>
+<p>yum 安装php./configure就可以，定制的需要自己的路径如比：./configure –with-php-config=/usr/bin/php-config</p>
+<p>./configure</p>
+<p>make &amp;&amp; make install</p>
+<p>Libraries have been installed in:</p>
+<p>&nbsp; &nbsp;/home/tools/php-5.4.16/ext/mcrypt/modules</p>
+<p>If you ever happen to want to link against installed libraries</p>
+<p>in a given directory, LIBDIR, you must either use libtool, and</p>
+<p>specify the full pathname of the library, or use the `-LLIBDIR’</p>
+<p>flag during linking and do at least one of the following:</p>
+<p>&nbsp; &nbsp;- add LIBDIR to the `LD_LIBRARY_PATH’ environment variable</p>
+<p>&nbsp; &nbsp; &nbsp;during execution</p>
+<p>&nbsp; &nbsp;- add LIBDIR to the `LD_RUN_PATH’ environment variable</p>
+<p>&nbsp; &nbsp; &nbsp;during linking</p>
+<p>&nbsp; &nbsp;- use the `-Wl,-rpath -Wl,LIBDIR’ linker flag</p>
+<p>&nbsp; &nbsp;- have your system administrator add LIBDIR to `/etc/ld.so.conf’</p>
+<p>See any operating system documentation about shared libraries for</p>
+<p>more information, such as the ld(1) and ld.so(8) manual pages.</p>
+<hr>
+<p>Build complete.</p>
+<p>Don’t forget to run ‘make test’.</p>
+<p>Installing shared extensions:&nbsp; &nbsp; &nbsp;/usr/lib64/php/modules/</p>
+<p>php.ini添加一条extension=mcrypt.so</p>
+<p>extension = protocolbuffers.so</p>
+<p>extension = mcrypt.so</p>
+<hr>
+]]></content>
+  </entry>
+  <entry>
+    <title>ssh免密登录问题</title>
+    <url>/2023/071760022.html</url>
+    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
+<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
+<p>服务器A需要免密码访问服务器B：</p>
+<ol>
+<li>在A上面生成公钥密钥，执行命令</li>
+</ol>
+<p>&nbsp;</p>
+<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
+<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
+<ol start="2">
+<li>将公钥id_rsa.pub拷贝到B机器上</li>
+</ol>
+<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
+<ol start="3">
+<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
+</ol>
+<p>cd&nbsp;/home/user/.ssh</p>
+<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
+<ol start="4">
+<li>设置 authorized_keys权限</li>
+</ol>
+<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
+<hr>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>zabbix 清理历史数据</title>
+    <url>/2023/071761914.html</url>
+    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
+<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
+<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
+<p>root@Testl]$ date +%s -d”20160929”</p>
+<p>1475078400</p>
+<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
+<p>Query OK, 36093 rows affected (43.64 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
+<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history;</p>
+<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
+<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history_uint;</p>
+<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
+<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>漫长时间等待以后看下效果：</p>
+<p>原来数据：</p>
+<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
+<p>压缩中：</p>
+<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
+<p>find -size +50M -exec ls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
+<p>最终删两个表以后数据：</p>
+<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
+<p>完了以后，重启mysql，zabbix，nginx试试；</p>
+<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>vsftp 锁定用户目录</title>
+    <url>/2023/071114619.html</url>
+    <content><![CDATA[<p>vsftp 安装以后给用户权限和锁定目录；</p>
+<p>关闭SELinux：</p>
+<p>修改/etc/selinux/config文件中的SELINUX=”” 为 disabled ，然后重启。</p>
+<p>如果不想重启系统，使用命令setenforce 0</p>
+<p>添加用户：</p>
+<p>useradd -d /var/www -s /sbin/nologin ftpuser</p>
+<p>主要是修改/etc/vsftpd/vsftpd.conf如下：</p>
+<p>chroot_local_user=NO</p>
+<p>chroot_list_enable=YES</p>
+<p>chroot_list_file=/etc/vsftpd/vsftpd.chroot_list</p>
+<p>vim chroot_list</p>
+<p>添加锁定目录用户</p>
+<p>Ftpuser</p>
+<p>Upload</p>
+<p>当然可以修改路径：</p>
+<p>usermod –d /www/html&nbsp; &nbsp;ftpuser</p>
+<p>**vsftpd.user_list：该文件里的用户账户在默认情况下也不能访问FTP服务器，仅当vsftpd .conf配置文件里启用userlist_enable=NO选项时才允许访问。</p>
+<p>/etc/vsftpd/user_list ，添加上需要阻止的本地用户，一个用户名一行&nbsp;用被阻止的用户</p>
+<p>grep -v “^#” vsftpd.conf&nbsp;</p>
+<p>anonymous_enable=NO</p>
+<p>local_enable=YES</p>
+<p>write_enable=YES</p>
+<p>local_umask=000</p>
+<p>dirmessage_enable=YES</p>
+<p>xferlog_enable=YES</p>
+<p>connect_from_port_20=YES</p>
+<p>xferlog_file=/var/log/xferlog</p>
+<p>xferlog_std_format=YES</p>
+<p>chroot_local_user=NO</p>
+<p>chroot_list_enable=YES</p>
+<p>chroot_list_file=/etc/vsftpd/chroot_list</p>
+<p>listen=YES</p>
+<p>listen_port=21</p>
+<p>pasv_address=192.168.10.123</p>
+<p>pasv_addr_resolve=yes</p>
+<p>pasv_enable=YES</p>
+<p>pasv_min_port=5000</p>
+<p>pasv_max_port=5008</p>
+<p>use_localtime=YES</p>
+<p>listen_ipv6=NO</p>
+<p>allow_writeable_chroot=YES</p>
+<p>pam_service_name=vsftpd</p>
+<p>userlist_enable=YES</p>
+<p>配置相关来源网络：</p>
+<p>登录和对匿名用户的设置</p>
+<p>write_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //是否对登录用户开启写权限。属全局性设置。默认NO<br>local_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //是否允许本地用户登录FTP服务器。默认为NO<br>anonymous_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //设置是否允许匿名用户登录FTP服务器。默认为YES<br>ftp_username=ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //定义匿名用户的账户名称，默认值为ftp。<br>no_anon_password=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //匿名用户登录时是否询问口令。设置为YES，则不询问。默&nbsp;<br>认NO<br>anon_world_readable_only=YES&nbsp;&nbsp; //匿名用户是否允许下载可阅读的文档，默认为YES。<br>&nbsp;&nbsp; anon_upload_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //是否允许匿名用户上传文件。只有在write_enable设置为<br>YES时，该配置项才有效。而且匿名用户对相应的目录必须有写权限。默认为NO。<br>anon_mkdir_write_enable=YES //是否允许匿名用户创建目录。只有在write_enable设置为&nbsp;&nbsp;&nbsp; YES时有效。且匿名用户对上层目录有写入的权限。默认为NO。<br>anon_other_write_enable=NO&nbsp;&nbsp;&nbsp; //若设置为YES，则匿名用户会被允许拥有多于<br>上传和建立目录的权限，还会拥有删除和更名权限。默认值为NO。</p>
+<p>2．设置用户登录后所在的目录&nbsp;<br>local_root=/var/ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 设置本地用户登录后所在的目录。默认配置文件中没有设置该项，此时用户登录FTP服务器后，所在的目录为该用户的主目录，对于root用户，则为/root目录。<br>anon_root=/var/ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置匿名用户登录后所在的目录。若未指定，则默认为/var/ftp目录。</p>
+<p>&nbsp;</p>
+<p>3．控制用户是否允许切换到上级目录&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 在默认配置下，用户可以使用“cd..”命名切换到上级目录。比如，若用户登录后所在的目录为/var/ftp，则在“ftp&gt;”命令行 下，执行“cd..”命令后，用户将切换到其上级目录/var，若继续执行该命令，则可进入Linux系统的根目录，从而可以对整个Linux的文件系统 进行操作。</p>
+<p>若设置了write_enable=YES，则用户还可对根目录下的文件进行改写操作，会给系统带来极大的安全隐患，因此，必须防止用户切换到Linux的根目录，相关的配置项如下：<br>chroot_list_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 设置是否启用chroot_list_file配置项指定的用户列表文件。设置为YES则除了列在j/etc/vsftpd/chroot_list文件中的的帐号外，所有登录的用户都可以进入ftp根目录之外的目录。默认NO<br>chroot_list_file=/etc/vsftpd/chroot_list&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 用于指定用户列表文件，该文件用于控制哪些用户可以切换到FTP站点根目录的上级目录。<br>chroot_local_user=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 用于指定用户列表文件中的用户，是否允许切换到上级目录。默认NO<br>注意：要对本地用户查看效果，需先设置local_root=/var/ftp</p>
+<p>具体情况有以下几种：<br>1）当chroot_list_enable=YES，chroot_local_user=YES时，在/etc/vsftpd/chroot_list文件中列出的用户，可以切换到上级目录；未在文件中列出的用户，不能切换到站点根目录的上级目录。<br>2）当chroot_list_enable=YES，chroot_local_user=NO时，在/etc/vsftpd/chroot_list文件中列出的用户，不能切换到站点根目录的上级目录；未在文件中列出的用户，可以切换到上级目录。<br>3）当chroot_list_enable=NO，chroot_local_user=YES时，所有用户均不能切换到上级目录。<br>4）当chroot_list_enable=NO，chroot_local_user=NO时，所有用户均可以切换到上级目录。<br>5）当用户不允许切换到上级目录时，登录后FTP站点的根目录“/”是该FTP账户的主目录，即文件的系统的/var/ftp目录。</p>
+<p>&nbsp;</p>
+<p>4．设置访问控制&nbsp;<br>（1）设置允许或不允许访问的主机（见TBP14）<br>tcp_wrappers=YES用来设置vsftpd服务器是否与tcp wrapper相结合，进行主机的访问控制。默认设置为YES，vsftpd服务器会检查/etc/hosts.allow和/etc /hosts.deny中的设置，以决定请求连接的主机是否允许访问该FTP服务器。这两个文件可以起到简易的防火墙功能。<br>比如，若要仅允许192.168.168.1～192.168.168.254的用户，可以访问连接vsftpd服务器，则可在/etc/hosts.allow文件中添加以下内容：<br>vsftpd：192.168.168.0/255.255.255.0 ：allow<br>all：all：deny</p>
+<p>（2）设置允许或不允许访问的用户<br>对用户的访问控制由/etc/vsftpd/user_list和/etc/vsftpd/ftpusers文件来控制实现。相关配置命令如下：<br>userlist_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 决定/etc/vsftpd/user_list文件是否启用生效。YES则生效，NO不生效。<br>userlist_deny=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 决定/etc/vsftpd/user_list文件中的用户是允许访问还是不允许访问。若设置为YES，则/etc/vsftpd/user_list 文件中的用户将不允许访问FTP服务器；若设置为NO，则只有vsftpd.user_list文件中的用户，才能访问FTP服务器。</p>
+<p>&nbsp;</p>
+<p>5．设置访问速度&nbsp;<br>anon_max_rate=0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置匿名用户所能使用的最大传输速度，单位为b/s。若设置为0，则不受速度限制，此为默认值。<br>local_max_rate=0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 设置本地用户所能使用的最大传输速度。默认为0，不受限制。</p>
+<p>&nbsp;</p>
+<p>6．定义用户配置文件&nbsp;<br>在vsftpd服务器中，不同用户还可使用不同的配置，这要通过用户配置文件来实现。<br>user_config_dir=/etc/vsftpd/userconf //用于设置用户配置文件所在的目录。<br>设置了该配置项后，当用户登录FTP服务器时，系统就会到/etc/vsftpd/userconf目录下读取与当前用户名相同的文件，并根据文件中的配 置命令，对当前用户进行更进一步的配置。比如，利用用户配置文件，可实现对不同用户进行访问的速度进行控制，在各用户配置文件中，定义 local_max_rate配置，以决定该用户允许的访问速度。</p>
+<p>&nbsp;</p>
+<p>7．与连接相关的设置&nbsp;<br>listen=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置vsftpd服务器是否以standalone模式运行。以standalone模式运行是一种较好的方式，此时listen必须设置为YES， 此为默认值，建议不要更改。很多与服务器运行相关的配置命令，需要此运行模式才有效。若设置为NO，则vsftpd不是以独立的服务运行，要受 xinetd服务的管理控制，功能上会受限制。</p>
+<p>max_clients=0<br>//设置vsftpd允许的最大连接数，默认为0，表示不受限制。若设置为150时，则同时允许有150个连接，超出的将拒绝建立连接。只有在以standalone模式运行时才有效。</p>
+<p>max_per_ip=0<br>// 设置每个IP地址允许与FTP服务器同时建立连接的数目。默认为0，不受限制。通常可对此配置进行设置，防止同一个用户建立太多的连接。只有在以standalone模式运行时才有效。</p>
+<p>listen_address=IP地址&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置在指定的IP地址上侦听用户的FTP请求。若不设置，则对服务器所绑定的所有IP地址进行侦听。只有在以standalone模式运行时才有效。 对于只绑定了一个IP地址的服务器，不需要配置该项，默认情况下，配置文件中没有该配置项。若服务器同时绑定了多个IP地址，则应通过该配置项，指定在哪 个IP地址上提供FTP服务，即指定FTP服务器所使用的IP地址。<br>注意：设置此值前后，可以通过netstat -tnl对比端口的监听情况</p>
+<p>accept_timeout=60&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置建立被动（PASV）数据连接的超时时间，单位为秒，默认值为60。<br>connect_timeout=60&nbsp;&nbsp;&nbsp;&nbsp;<br>// PORT方式下建立数据连接的超时时间，单位为秒。<br>data_connection_timeout=300&nbsp;&nbsp;&nbsp;<br>//设置建立FTP数据连接的超时时间，默认为300秒。</p>
+<p>idle_session_timeout＝600&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置多长时间不对FTP服务器进行任何操作，则断开该FTP连接，单位为秒，默认为600秒。即设置发呆的逾时时间，在这个时间内，若没有数据传送或指令的输入，则会强行断开连接。<br>pam_service_name=vsftpd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置在PAM所使用的名称，默认值为vsftpd。</p>
+<p>setproctitle_enable=NO|YES&nbsp;&nbsp;&nbsp;<br>//设置每个与FTP服务器的连接，是否以不同的进程表现出来，默认值为NO，此时只有一个名为vsftpd的进程。若设置为YES，则每个连接都会有一个vsftpd进程，使用“ps -ef|grep ftp”命令可查看到详细的FTP连接信息。安全起见，建议关闭。</p>
+<p>&nbsp;PS:有时候不能上传文件，查看锁定目录权限和allow_writeable_chroot=YES 还可以查看下</p>
+<p>getsebool -a|grep ftp</p>
+<p>输入setsebool -P ftpd_full_access=on打开权限即可：</p>
+<p>getsebool -a|grep ftp查看：</p>
+<p>getsebool -a|grep ftp</p>
+<p>ftpd_anon_write –&gt; off</p>
+<p>ftpd_connect_all_unreserved –&gt; off</p>
+<p>ftpd_connect_db –&gt; off</p>
+<p>ftpd_full_access –&gt; on</p>
+<p>ftpd_use_cifs –&gt; off</p>
+<p>ftpd_use_fusefs –&gt; off</p>
+<p>ftpd_use_nfs –&gt; off</p>
+<p>ftpd_use_passive_mode –&gt; off</p>
+<p>httpd_can_connect_ftp –&gt; off</p>
+<p>httpd_enable_ftp_server –&gt; off</p>
+<p>tftp_anon_write –&gt; off</p>
+<p>tftp_home_dir –&gt; off</p>
+<h2 id="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"><a href="#vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。" class="headerlink" title="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"></a>vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。</h2>]]></content>
+      <tags>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>zabbix3.0.1安装过程的小坑</title>
+    <url>/2023/081629672.html</url>
+    <content><![CDATA[<p>1.安装</p>
+<p>首先lamp环境安装完毕，开始安装zabbix；</p>
+<p>下载完毕zabbix-3.0.1.tar.gz，解压</p>
+<p>cd &nbsp;zabbix-3.0.1</p>
+<p>./configure –prefix=/usr/local/zabbix&nbsp; –enable-server \</p>
+<p>–enable-proxy –enable-agent –enable-ipv6–with-mysql=/usr/local/mysql/bin/mysql_config –with-net-snmp \</p>
+<p>–with-libcurl –with-openipmi–with-unixodbc –with-ldap –with-ssh2 –enable-java –enable-ipv6–enable-proxy</p>
+<p>自行编译但是会报错：</p>
+<p>Unixodbc没找到</p>
+<p>mysql_config</p>
+<p>configure: error: SSH2 library not found</p>
+<p>yum install php-pecl-ssh2.x86_64 libssh2-devel.x86_64</p>
+<p>yum install net-snmp-devel</p>
+<p>yum -y install unixODBC*</p>
+<p>yum install openldap openldap-devel</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; yumlist openldap</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; yumlist openldap-devel</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>checking for SSH2 support… yes</p>
+<p>checking for OPENIPMI support… no</p>
+<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h</p>
+<p>&nbsp;</p>
+<p>&nbsp;<a href="https://centos.pkgs.org/6/centos-x86_64/OpenIPMI-2.0.16-14.el6.x86_64.rpm.html">https://centos.pkgs.org/6/centos-x86_64/OpenIPMI-2.0.16-14.el6.x86_64.rpm.html</a></p>
+<p>rpm -ivh OpenIPMI-2.0.16-14.el6.x86_64.rpm</p>
+<p>&nbsp;<br>vhOpenIPMI-de<br>pum install OpenIPMI-devel</p>
+<p>&nbsp;</p>
+<p>报错checking for OPENIPMI support… no</p>
+<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h</p>
+<p>需要安装OpenIPMI和OpenIPMI-devel</p>
+<p>&nbsp;</p>
+<p>Yum安装OpenIPMI并下载OpenIPMI-devel-2.0.16-14.el6.x86_64.rpm</p>
+<p> yum install OpenIPMI</p>
+<p> rpm -ivhOpenIPMI-devel-2.0.16-14.el6.x86_64.rpm</p>
+<p>报错 error: Failed dependencies:</p>
+<p>pkgconfig(ncurses) is needed byOpenIPMI-devel-2.0.16-14.el6.x86_64</p>
+<p> yum install ncurses-devel</p>
+<p> rpm -ivhOpenIPMI-devel-2.0.16-14.el6.x86_64.rpm</p>
+<p>onfigure: error: Invalid OPENIPMI directory- unable to find ipmiif.h</p>
+<p>需要安装libssh2-devel</p>
+<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h</p>
+<p>需要安装OpenIPMI-devel</p>
+<p>hecking for SSH2 support… yes</p>
+<p>checking for OPENIPMI support… yes</p>
+<p>checking for javac… no</p>
+<p>configure: error: Unable to find”javac” executable in path</p>
+<p>configure: error: Jabber library notfound&nbsp; #yum install iksemel-devel即可，</p>
+<p>&nbsp;configure: error: LIBXML2 library not found&nbsp;&nbsp;&nbsp;</p>
+<p>#yum install libxml2-devel&nbsp;</p>
+<p>&nbsp;configure: error: unixODBC library notfound&nbsp;&nbsp;&nbsp;</p>
+<p>#yum install unixODBC-devel&nbsp;&nbsp;</p>
+<p>configure: error: Invalid OPENIPMIdirectory - unable to find ipmiif.h&nbsp;&nbsp;&nbsp;</p>
+<p>#yum install OpenIPMI-devel&nbsp;&nbsp;</p>
+<p>configure: error: Unable to find”javac” executable in path&nbsp;&nbsp;&nbsp;</p>
+<p>#yum install java*&nbsp;&nbsp;&nbsp; 具体什么包没找，直接通配算逑，生产环境可去掉–enable-java选项</p>
+<p>&nbsp;configure: error: Curl library not found&nbsp;</p>
+<p>&nbsp;#yum install curl-devel</p>
+<p>&nbsp;</p>
+<p>make &amp;&amp; make install</p>
+<ol start="2">
+<li>导数据库顺序schema-p_w_picpath-data,</li>
+</ol>
+<p>添加系统软连接：</p>
+<p>[<a href="mailto:root@vm_1_11zabbix-3.0.1">root@vm_1_11zabbix-3.0.1</a>]# ln -s /usr/local/zabbix/sbin/* /usr/local/sbin/</p>
+<p>[root@vm_1_11 zabbix-3.0.1]# ln -s /usr/local/zabbix/bin/* /usr/local/bin/</p>
+<p>添加zabbix服务对应的端口：</p>
+<p>[root@vm_1_11 mysql]# vim /etc/services</p>
+<p>在文件末尾添加：</p>
+<p> Zabbix</p>
+<p>zabbix-agent 10050/tcp # Zabbix Agent</p>
+<p>zabbix-agent 10050/udp # Zabbix Agent</p>
+<p>zabbix-trapper 10051/tcp # Zabbix Trapper</p>
+<p>zabbix-trapper 10051/udp # Zabbix Trapper</p>
+<p>修改zabbix配置文件：</p>
+<p>[root@vm_1_11 tools]# vim /usr/local/zabbix/etc/zabbix_server.conf</p>
+<p>修改以下几处：</p>
+<p>DBName=zabbix</p>
+<p>DBUser=zabbix</p>
+<p>DBPassword=zabbix</p>
+<p>AlertScriptsPath==/usr/local/zabbix/share/zabbix/alertscripts &nbsp;#zabbix运行脚本存放目录</p>
+<p>DBPort=3306</p>
+<p>&nbsp;vim /usr/local/zabbix/etc/zabbix_agentd.conf</p>
+<p>Include=/usr/local/zabbix/etc/zabbix_agentd.conf.d/</p>
+<p>UnsafeUserParameters=1 &nbsp;#启用自定义key</p>
+<p>添加开机启动脚本：</p>
+<p>[root@vm_1_11 tools]# cp /usr/local/src/zabbix-3.0.3/misc/init.d/fedora/core/zabbix_server /etc/rc.d/init.d/zabbix_server</p>
+<p>客户端：</p>
+<p>[root@vm_1_11 tools]# cp /usr/local/src/zabbix-3.0.3/misc/init.d/fedora/core/zabbix_agentd /etc/rc.d/init.d/zabbix_agentd</p>
+<p>[root@vm_1_11 tools]# chmod a+x /etc/rc.d/init.d/zabbix_*</p>
+<p>[root@vm_1_11 tools]# chkconfig zabbix_server on</p>
+<p>[root@vm_1_11 tools]# chkconfig zabbix_agentd on</p>
+<p>修改zabbix开机启动脚本中的zabbix安装目录：</p>
+<p>[root@vm_1_11 tools]# vim /etc/rc.d/init.d/zabbix_server</p>
+<p>修改以下内容：</p>
+<p>BASEDIR=/usr/local/zabbix/</p>
+<p>[root@vm_1_11 tools]# vim /etc/rc.d/init.d/zabbix_agentd</p>
+<p>修改以下内容：</p>
+<p>BASEDIR=/usr/local/zabbix/</p>
+<p>复制zabbix的web站点文件到nginx：</p>
+<p>[root@vm_1_11 tools]# cp -r /usr/local/src/zabbix-3.0.3/frontends/php/* /usr/local/nginx/html/zabbix/</p>
+<p>启动：</p>
+<p>[root@vm_1_11 tools]# systemctl daemon-reload</p>
+<p>[root@vm_1_11 tools]# service zabbix_server start</p>
+<p>[root@vm_1_11 tools]# service zabbix_agentd start</p>
+<p>&nbsp;查看进程：ps -eaf|grep zabbix_server</p>
+<p>zabbix_server [7212]: cannot run as root!</p>
+<p>添加zabbix用户；</p>
+<p>在zabbix/setup/php 页面会检测信息可能会报错要都ok才能下一步哦，</p>
+<p>按照报错信息调试vim /etc/php.ini</p>
+<p>查找如下参数并修改为：</p>
+<hr>
+<p>post_max_size = 16M</p>
+<p>max_execution_time = 300</p>
+<p>max_input_time = 300</p>
+<p><img src="/../images/20231114-1.png"></p>
+<p>/etc/php.ini修改以后还是这样，可能php.ini路径修改了，</p>
+<p>本例中就是到</p>
+<p>-rw-r–r– 1 root root 73930 Mar 27 18:19php.ini</p>
+<p>-rw-r–r– 1 root root 73928 Mar 27 18:18php.ini_0327</p>
+<p>[root@VM_54_42_centos etc]# pwd</p>
+<p>/usr/local/php/etc</p>
+<p>vim /usr/local/nginx/html/zabbix/include/locales.inc.php</p>
+<p>修改中文字符；chinese–true</p>
+<p>邮件报警：在zabbix mkdir&nbsp;alertscripts vim send_email.sh</p>
+<p>#!/bin/sh</p>
+<p>#export.UTF-8</p>
+<p>FILE=/var/log/zabbix/mailtmp.txt</p>
+<p>echo “$3” &gt;$FILE</p>
+<p>dos2unix -k $FILE</p>
+<p>/bin/mail -s “$2” $1 &lt; $FILE</p>
+<p>zabbix-管理–示警媒介类型–定制脚本-sendmail脚本，–添加联系人邮件。。</p>
+]]></content>
+      <tags>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>zabbix监控业务进程变动</title>
-    <url>/2023/11/13/zabbix_%E7%9B%91%E6%8E%A7%E8%BF%9B%E7%A8%8B%E5%AE%95%E6%9C%BA/</url>
+    <url>/2023/111359213.html</url>
     <content><![CDATA[<p>Zabbix 监控进程宕机</p>
 <p>  业务需求后端进程宕机以后能在短时间内迅速拉起，业务影响不大，但是开发需要查看coredump，要求能监控到pid变化；在现有构架下zabbix能监控并报警；</p>
 <p>当然zabbix设置报警设置就不再一一</p>
@@ -1553,41 +1601,5 @@
       <tags>
         <tag>工具</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>nginxlog切分</title>
-    <url>/2023/11/17/nginx-log-%E5%88%87%E5%88%86/</url>
-    <content><![CDATA[<p>1.设置日志文件存放目录，假设你的nginx的日志存在这个目录里<br>logs_path=”/data/log/nginx/“</p>
-<p>2.设置pid文件，这个根据你自己的环境，找到nginx.pid所在目录<br>pid_path=”/var/run/nginx.pid”</p>
-<p>3.创建分割存储的日期文件目录<br>datetime=<code>date -d "yesterday" +"%Y%m%d"</code>;<br>new_log_path=$logs_path$datetime<br>mkdir -p $new_log_path</p>
-<p>4.按照日期移动所有该目录下的日志文件<br>log_file_list=<code>ls -l $logs_path</code>;<br>for log_file in $log_file_list;<br>do<br>    log_file_name=$logs_path$log_file;<br>    if [ -f $log_file_name ];<br>    then<br>        mv $log_file_name $new_log_path;<br>    fi<br>done</p>
-<p>5.向nginx主进程发信号重新打开日志<br>kill -USR1 <code>cat ${pid_path}</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">logs_path=<span class="string">"/data/log/nginx/"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pid_path=<span class="string">"/var/run/nginx.pid"</span></span><br><span class="line"></span><br><span class="line">datetime=`<span class="built_in">date</span> -d <span class="string">"yesterday"</span> +<span class="string">"%Y%m%d"</span>`;</span><br><span class="line">new_log_path=$logs_path<span class="variable">$datetime</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$new_log_path</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">log_file_list=`<span class="built_in">ls</span> -l <span class="variable">$logs_path</span>`;</span><br><span class="line"><span class="keyword">for</span> log_file <span class="keyword">in</span> <span class="variable">$log_file_list</span>;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    log_file_name=$logs_path<span class="variable">$log_file</span>;</span><br><span class="line">    <span class="keyword">if</span> [ -f <span class="variable">$log_file_name</span> ];</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">mv</span> <span class="variable">$log_file_name</span> <span class="variable">$new_log_path</span>;</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">kill</span> -USR1 `<span class="built_in">cat</span> <span class="variable">${pid_path}</span>`</span><br></pre></td></tr></tbody></table></figure>
-
-
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Debian 10挂载加swap</title>
-    <url>/2023/11/17/Debian-10%E6%8C%82%E8%BD%BD%E5%8A%A0swap/</url>
-    <content><![CDATA[<p>以根目录挂载为4G例：<br>dd if=/dev/zero of=/swapfile count=4096 bs=1M</p>
-<p>ls / | grep swapfile<br>chmod 600 /swapfile<br>ls -lh /swapfile<br>-rw——- 1 root root 4.0G Aug 17 12:14 /swapfile<br>通过运行以下命令告诉服务器设置swap文件：<br>mkswap /swapfile<br>swapon /swapfile<br>free -m<br>vi /etc/fstab<br>/swapfile swap swap defaults 0 0<br>保存。</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>Debian10 安装ossfs</title>
-    <url>/2023/11/17/Debian10-%E5%AE%89%E8%A3%85ossfs/</url>
-    <content><![CDATA[<p>1.<br>sudo apt-get install automake autotools-dev g++  git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev  make pkg-config<br>2.<br>git clone <a href="https://github.com/aliyun/ossfs.git">https://github.com/aliyun/ossfs.git</a><br>cd ossfs/<br> ./autogen.sh<br>  ./configure<br>Sudo   make<br> Sudo make install<br>3.配置bucket信息和accessKey信息：<br>echo Bucket名称:要是用的AccessKeyId:对应的AccessKeySecret  &gt; /etc/passwd-ossfs<br>示例：<br>mkdir -p /data/ossfs<br>cosfs examplebucket-1250000000 /data/ossfs -ourl=<a href="http://cos.ap-guangzhou.myqcloud.com/">http://cos.ap-guangzhou.myqcloud.com</a> </p>
-<p>ossfs ts-1121-patch-oss  /data/ossfs/ -ourl=<a href="https://oss-cn-hangzhou-internal.aliyuncs.com/">https://oss-cn-hangzhou-internal.aliyuncs.com</a> -oallow_other</p>
-<p>其中：<br><mountpoint> 为本地挂载目录（例如/mnt）。<br><region> 为地域简称， 例如 ap-guangzhou 、 eu-frankfurt 等。更多地域简称信息，请参见 可用地域。<br>-odbglevel 指定日志级别，默认为crit，可选值为crit、error、warn、info、debug。<br>-oallow_other 允许非挂载用户访问挂载文件夹。</region></mountpoint></p>
-<p>创建启动脚本：<br>Vim /etc/init.d/ossfs<br>ossfs demo-patch-oss /data/ossfs/ -ourl=oss-cn-hangzhou-internal.aliyuncs.com -oallow_other<br>Chmod u+x /etc/init.dossfs</p>
-<p>Centos：<br>chkncondif ossf on<br>Debian;<br>update-rc.d  ossfs  defaults</p>
-]]></content>
   </entry>
 </search>
