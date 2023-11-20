@@ -1727,4 +1727,47 @@
         <tag>点滴</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Centos同时安装python2和python3</title>
+    <url>/2023/11203350.html</url>
+    <content><![CDATA[<p>   在centos中，自带有python2，因此需要经常安装python3。但是这里有一个坑，就是centos的yum是用python2写的，如果正常编译安装python3，那么yum就会直接挂了。为了方便以后编译安装python3，不用天天去网上找教程仅供参考。</p>
+<p>首先连上服务器，看下python版本：</p>
+<p> python -V</p>
+<p>centos默认带有python2.7.5：</p>
+<p>接下来我们开始安装python3。</p>
+<p>1 安装python3所需要的组件</p>
+<p>yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make wget libffi-devel</p>
+<p>2 备份现有的python2</p>
+<p>cd /usr/bin</p>
+<p>mv python python.bak</p>
+<p>mv pip pip.bak</p>
+<p>不用猜当前yum肯定挂了不能用了。</p>
+<ol start="3">
+<li><p>卸载python3.6.5</p>
+<p>在这里去python的官网，找到需要的python版本链接，然后通过wget方式直接下载到linux服务器，当然你也可以从浏览器下载，然后上传到linux服务器。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cd /usr/local/</span><br><span class="line">wget https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tar.xz</span><br></pre></td></tr></tbody></table></figure>
+
+<p>tar -xvJf Python-3.6.5.tar.xz</p>
+<p>cd Python-3.6.5</p>
+<p>指定安装路径</p>
+<p>./configure –prefix=/usr/local/python3 –enable-optimizations</p>
+<p>编译并安装</p>
+<p>make &amp;&amp; make install</p>
+<p>最后显示Successfully installed pip-9.0.3 setuptools-39.0.1</p>
+<p>修改软连接，将python3指向python，顺便把pip也重新指向：</p>
+<p>ln -s /usr/local/python3/bin/python3 /usr/bin/python</p>
+<p>ln -s /usr/local/python3/bin/pip3 /usr/bin/pip</p>
+<p>查看版本号：</p>
+<p>[root@localhost /home/tools/Python-3.6.5]$python -V<br>Python 3.6.5<br>[root@localhost /home/tools/Python-3.6.5]$python2 -V<br>Python 2.7.5</p>
+<p>4.修改yum配置：</p>
+<p>装完了python3之后，我们要修一下yum了，不然以后都没法装软件和环境了。</p>
+<p>vim /usr/bin/yum</p>
+<p>把头部的 #! /usr/bin/python 修改为 #! /usr/bin/python2  修改保存。</p>
+<p>vim /usr/libexec/urlgrabber-ext-down</p>
+<p>#! /usr/bin/python修改为#! /usr/bin/python2 保存退出。</p>
+<p>至此，yum 可以正常使用了。</p>
+</li>
+</ol>
+]]></content>
+  </entry>
 </search>

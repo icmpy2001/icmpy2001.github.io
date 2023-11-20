@@ -6,7 +6,7 @@
   <link href="https://blog.icmpy.net/atom.xml" rel="self"/>
   
   <link href="https://blog.icmpy.net/"/>
-  <updated>2023-11-20T07:12:47.902Z</updated>
+  <updated>2023-11-20T08:45:11.000Z</updated>
   <id>https://blog.icmpy.net/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Centos同时安装python2和python3</title>
+    <link href="https://blog.icmpy.net/2023/11203350.html"/>
+    <id>https://blog.icmpy.net/2023/11203350.html</id>
+    <published>2023-11-20T08:44:08.000Z</published>
+    <updated>2023-11-20T08:45:11.000Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;  </summary>
+        
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>docker 安装walle2部署项目</title>
@@ -473,32 +494,6 @@
     
     
     
-    
-  </entry>
-  
-  <entry>
-    <title>vsftp 锁定用户目录</title>
-    <link href="https://blog.icmpy.net/2023/071114619.html"/>
-    <id>https://blog.icmpy.net/2023/071114619.html</id>
-    <published>2023-07-11T07:21:51.000Z</published>
-    <updated>2023-11-17T02:12:11.676Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;vsftp 安装以后给用户权限和锁定目录；&lt;/p&gt;
-&lt;p&gt;关闭SELinux：&lt;/p&gt;
-&lt;p&gt;修改/etc/selinux/config文件中的SELINUX=”” 为 disabled ，然后重启。&lt;/p&gt;
-&lt;p&gt;如果不想重启系统，使用命令setenforce</summary>
-        
-      
-    
-    
-    
-    
-    <category term="工具" scheme="https://blog.icmpy.net/tags/%E5%B7%A5%E5%85%B7/"/>
     
   </entry>
   
