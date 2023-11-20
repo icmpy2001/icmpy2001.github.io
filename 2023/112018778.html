@@ -4,9 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="centos7 改网卡名eth0, 云上的小雨滴">
-    <meta name="description" content="安装完Centos7系统，网卡命名跟之前发生了变化,不是eth0，虽然唯一好确定但是作为centos6.X过来的还是不好记，那就把网卡名字重新命名为eth0吧。
-1.先编辑网卡的配置文件将里面的NAME DEVICE项修改为eth0，vim">
+    <meta name="keywords" content="/var/log/messages日志恢复, 云上的小雨滴">
+    <meta name="description" content="Linux容易犯的一个错误是把日志文件给直接删除，而不是删除日志文件的内容。直接删除日志文件往往导致新产生的日志记录无法被写入到日志文件中（因为它已经被删除了），而仅仅重新新建（touch）同样名字的文件是解决不了问题的。本文以Unbutu">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -18,7 +17,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>centos7 改网卡名eth0 | 云上的小雨滴</title>
+    <title>/var/log/messages日志恢复 | 云上的小雨滴</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -353,12 +352,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">centos7 改网卡名eth0</h1>
+                    <h1 class="description center-align post-title">/var/log/messages日志恢复</h1>
                 </div>
             </div>
         </div>
@@ -380,13 +379,9 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                    <div class="article-tag">
-                        
-                            <a href="/tags/%E7%82%B9%E6%BB%B4/">
-                                <span class="chip bg-color">点滴</span>
-                            </a>
-                        
-                    </div>
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -398,7 +393,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-11-14
+                    2023-11-20
                 </div>
                 
 
@@ -407,7 +402,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    413
+                    409
                 </div>
                 
 
@@ -437,32 +432,12 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>安装完Centos7系统，网卡命名跟之前发生了变化,不是eth0，虽然唯一好确定但是作为centos6.X过来的还是不好记，那就把网卡名字重新命名为eth0吧。</p>
-<p>1.先编辑网卡的配置文件将里面的NAME DEVICE项修改为eth0，vim /etc/sysconfig/network-scripts/ifcfg-enp2s0</p>
-<p>NAME=enp2s0 改为eth0</p>
-<p>DEVICE=enp2s0 改为 eth0</p>
-<p>2.cd /etc/sysconfig/network-scripts/ mv&nbsp;ifcfg-enp2s0 ifcfg-eth0</p>
-<p>3.禁用该可预测命名规则。对于这一点，你可以在启动时传递“net.ifnames=0 biosdevname=0 ”的内核参数。这是通过编辑/etc/default/grub并加入“net.ifnames=0 biosdevname=0 ”到GRUBCMDLINELINUX变量来实现的。</p>
-<p>&nbsp;vim /etc/default/grub&nbsp;添加红色部分；</p>
-<p>GRUB_CMDLINE_LINUX=”crashkernel=auto rd.lvm.lv=cl/root&nbsp;net.ifnames=0 biosdevname=0&nbsp;&nbsp;rd.lvm.lv=cl/swap rhgb quiet” &nbsp;</p>
-<p>4.运行命令grub2-mkconfig -o /boot/grub2/grub.cfg&nbsp;来重新生成GRUB配置并更新内核参数。</p>
-<p>&nbsp;grub2-mkconfig -o /boot/grub2/grub.cfg</p>
-<p>Generating grub configuration file …</p>
-<p>Found linux image: /boot/vmlinuz-3.10.0-514.el7.x86_64</p>
-<p>Found initrd image: /boot/initramfs-3.10.0-514.el7.x86_64.img</p>
-<p>Found linux image: /boot/vmlinuz-0-rescue-50b1d05808e44d898bef511aa2945d76</p>
-<p>Found initrd image: /boot/initramfs-0-rescue-50b1d05808e44d898bef511aa2945d76.img</p>
-<p>done</p>
-<p>5.重启机器改名eth0生效；</p>
-<p>PS:有时候重启以后会自动生成一个不是我们指定的ip，这个时候需要把网卡mac地址加进去 ifcfg-eth0中：HWADDR=30:5a:3a:e0:90:3c</p>
-<p>也可以修改</p>
-<p>cd /etc/udev/rules.d/</p>
-<p>vim&nbsp;70-persistent-net.rules</p>
-<p>注释掉原来的，添加新或者修改：</p>
-<p>SUBSYSTEM==”net”, ACTION==”add”, DRIVERS==”?<em>“, ATTR{address}==”00:0c:29:1f:1a:f5”, KERNEL==”eth</em>“, NAME=”eth0”</p>
-<p>修改为：</p>
-<p>SUBSYSTEM==”net”, ACTION==”add”, DRIVERS==”?<em>“, ATTR{address}==”30:5a:3a:e0:90:3c”, KERNEL==”eth</em>“, NAME=”eth0”</p>
-<h2 id="重启机器试试"><a href="#重启机器试试" class="headerlink" title="重启机器试试~"></a>重启机器试试~</h2>
+                <p>Linux容易犯的一个错误是把日志文件给直接删除，而不是删除日志文件的内容。<br>直接删除日志文件往往导致新产生的日志记录无法被写入到日志文件中（因为它已经被删除了），而仅仅重新新建（touch）同样名字的文件是解决不了问题的。<br>本文以Unbutu系统为例，介绍如何恢复被误删除的syslog文件：<br>首先，在以root用户执行如下lsof命令，查询打开/var/log/messages文件的进程的进程ID(PID)。<br>root@zck:/var/log# lsof | grep messages<br>rsyslogd 544 syslog 7w REG 8,1 214641 134422 /var/log/messages<br>从上面命令输出可以看到，这个打开/var/log/messages文件的进程的PID是544，文件/var/log/messages的文件描述符（FD）号是7。<br>根据上述的PID和FD，可以在/proc找到对应的文件：<br>root@zck:/var/log#ls -al /proc/544/fd/7<br>l-wx—— 1 root root 64 2012-07-14 14:48 7 -&gt; /var/log/messages<br>将文件/proc/544/fd/7拷贝到/var/log/messages<br>cp /proc/544/fd/7 /var/log/messages&nbsp;</p>
+<p>然后重新启动syslog服务即可恢复被误删除的日志文件，并且新的日志记录能够继续被写入日志文件。<br>以root用户运行service命令。其中，service命令的第2个参数可能是syslog、也可能是rsyslog。<br>具体可以使用通过命令查询得知。<br>登录后复制<br>root@zck:/proc/544/fd# service –status-all<br> [ ? ] …<br> [ ? ] rc.local<br> [ ? ] rsyslog<br> [ ? ] screen-cleanup<br> [ ? ] …  #——————————-</p>
+<p>复制代码代码如下:<br>root@zck:/proc/544/fd# service rsyslog restart<br>rsyslog start/running, process 2673</p>
+<p>清空日志文件：<br>cat /dev/null&gt;/var/log/messages</p>
+<p>转自url:<a target="_blank" rel="noopener" href="https://blog.51cto.com/u_11146845/6240737">https://blog.51cto.com/u_11146845/6240737</a></p>
+
                 
             </div>
             <hr/>
@@ -488,7 +463,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://blog.icmpy.net/2023/111420634.html">https://blog.icmpy.net/2023/111420634.html</a>
+                    <a href="https://blog.icmpy.net/2023/112018778.html">https://blog.icmpy.net/2023/112018778.html</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -525,11 +500,7 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            
-                                <a href="/tags/%E7%82%B9%E6%BB%B4/">
-                                    <span class="chip bg-color">点滴</span>
-                                </a>
-                            
+                            <span class="chip bg-color">无标签</span>
                         </div>
                     
                 </div>
@@ -840,66 +811,18 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2023/111458217.html">
+                <a href="/2023/112018778.html">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="Tengine 安装">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="/var/log/messages日志恢复">
                         
-                        <span class="card-title">Tengine 安装</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-11-14
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E7%B3%BB%E7%BB%9F/" class="post-category">
-                                    系统
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E9%9A%8F%E7%AC%94/">
-                        <span class="chip bg-color">随笔</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2023/111459478.html">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="centos U盘安装查找U盘设备名">
-                        
-                        <span class="card-title">centos U盘安装查找U盘设备名</span>
+                        <span class="card-title">/var/log/messages日志恢复</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -910,7 +833,45 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-11-14
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-11-20
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            云上的小雨滴
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2023/11203350.html">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="Centos同时安装python2和python3">
+                        
+                        <span class="card-title">Centos同时安装python2和python3</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-11-20
                             </span>
                         <span class="publish-author">
                             
