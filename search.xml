@@ -1602,4 +1602,129 @@
         <tag>工具</tag>
       </tags>
   </entry>
+  <entry>
+    <title>docker 安装walle2部署项目</title>
+    <url>/2023/112024358.html</url>
+    <content><![CDATA[<p>​     项目从git上面拉取代码，然后打包推送到服务器，更新启动服务，开发大神需要ci/cd平台，当前开源的可能walle和蓝鲸cmdb系统比较实用，123正反面选择了walle，据说已经停了好久，不过对于项目来说够用了，开始吧。</p>
+<h1 id="1-walle2-安装"><a href="#1-walle2-安装" class="headerlink" title="1. walle2 安装"></a>1. walle2 安装</h1><p>前期准备：</p>
+<p>cat /etc/redhat-release &amp;&amp; uname -a</p>
+<p>CentOS Linux release 7.8.2003 (Core)</p>
+<p>Linux centos7-1 3.10.0-1127.el7.x86_64 </p>
+<p>systemctl stop firewalld &amp;&amp; systemctl disable firewalld</p>
+<p>echo SELINUX=disabled &gt; /etc/sysconfig/selinux </p>
+<p>cp  /etc/sysctl.conf /etc/sysctl.conf.bak</p>
+<p>echo net.ipv4.tcp_syncookies = 1 &gt;&gt; /etc/sysctl.conf</p>
+<p>echo net.ipv4.tcp_tw_reuse = 1 &gt;&gt; /etc/sysctl.conf</p>
+<p>echo net.ipv4.tcp_tw_recycle = 1 &gt;&gt; /etc/sysctl.conf</p>
+<p>echo net.ipv4.tcp_fin_timeout = 10 &gt;&gt; /etc/sysctl.conf</p>
+<p>echo net.ipv4.ip_forward = 1  &gt;&gt; /etc/sysctl.conf</p>
+<p>sysctl -p</p>
+<p>1.Docker 安装：</p>
+<p>yum install -y yum-utils device-mapper-persistent-data lvm2</p>
+<p>yum-config-manager –add-repo <a href="http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo">http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</a></p>
+<p>yum install docker-ce docker-ce-cli containerd.io</p>
+<p>systemctl start dockersystemctl enable docker</p>
+<p>注意：在安装过程中，也许会遇到Requires: container-selinux &gt;= 2.9 的异常；可以打开 Centos下载包中的最新container-selinux包的地址,</p>
+<p>然后运行：yum install -y <a href="http://mirror.centos.org/centos/7/extras/x86_64/Packages/container-selinux-2.68-1.el7.noarch.rpm">http://mirror.centos.org/centos/7/extras/x86_64/Packages/container-selinux-2.68-1.el7.noarch.rpm</a></p>
+<p>当然也可以：</p>
+<p>curl -fsSL <a href="https://get.docker.com/">https://get.docker.com</a> -o get-docker.sh</p>
+<p>bash  get-docker.sh运行安装docker</p>
+<p>2.docker-compose安装：</p>
+<p>curl -L <a href="https://github.com/docker/compose/releases/download/1.24.0/docker-compose-%60uname">https://github.com/docker/compose/releases/download/1.24.0/docker-compose-`uname</a> -s<code>-</code>uname -m` -o /usr/local/bin/docker-compose</p>
+<p>chmod +x /usr/local/bin/docker-compose</p>
+<p>3.创建初始文件：walle.env：</p>
+<p>在docker-compose.yml同级目录新建出示文件walle.env，连接数据库MYSQL_USER默认使用root,如需使用其他用户，需自建用户更改walle.env文件</p>
+<p>vim walle.env</p>
+<p>Set MySQL/Rails environment</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">MYSQL_USER=root</span><br><span class="line">MYSQL_PASSWORD=walle#123</span><br><span class="line">MYSQL_DATABASE=walle</span><br><span class="line">MYSQL_ROOT_PASSWORD=walle#123</span><br><span class="line">MYSQL_HOST=db</span><br><span class="line">MYSQL_PORT=3306</span><br></pre></td></tr></tbody></table></figure>
+
+<p>MYSQL_ROOT_PASSWORD=walle#123 这个是那个的root密码没明白-_-</p>
+<p>4.编写docker-compose的yaml文件：</p>
+<p>参考： <a href="https://walle-web.io/docs/installation_docker.html">https://walle-web.io/docs/installation_docker.html</a></p>
+<figure class="highlight yml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># docker version:  18.06.0+</span></span><br><span class="line"><span class="comment"># docker-compose version: 1.23.2+</span></span><br><span class="line"><span class="comment"># OpenSSL version: OpenSSL 1.1.0h</span></span><br><span class="line"><span class="attr">version:</span> <span class="string">"3.7"</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">alenx/walle-web:2.1</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">walle-nginx</span></span><br><span class="line">    <span class="attr">hostname:</span> <span class="string">nginx-web</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="comment"># 如果宿主机80端口被占用，可自行修改为其他port(&gt;=1024)</span></span><br><span class="line">      <span class="comment"># 0.0.0.0:要绑定的宿主机端口:docker容器内端口80</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">"80:80"</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">python</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">walle-net</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">python:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">alenx/walle-python:2.1</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">walle-python</span></span><br><span class="line">    <span class="attr">hostname:</span> <span class="string">walle-python</span></span><br><span class="line">    <span class="attr">env_file:</span></span><br><span class="line">      <span class="comment"># walle.env需和docker-compose在同级目录</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./walle.env</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">bash</span> <span class="string">-c</span> <span class="string">"cd /opt/walle_home/ &amp;&amp; /bin/bash admin.sh migration &amp;&amp;  python waller.py"</span></span><br><span class="line">    <span class="attr">expose:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">"5000"</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/opt/walle_home/plugins/:/opt/walle_home/plugins/</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/opt/walle_home/codebase/:/opt/walle_home/codebase/</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/opt/walle_home/logs/:/opt/walle_home/logs/</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/root/.ssh:/root/.ssh/</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">db</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">walle-net</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">db:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">walle-mysql</span></span><br><span class="line">    <span class="attr">hostname:</span> <span class="string">walle-mysql</span></span><br><span class="line">    <span class="attr">env_file:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./walle.env</span></span><br><span class="line">    <span class="attr">command:</span> [ <span class="string">'--default-authentication-plugin=mysql_native_password'</span>, <span class="string">'--character-set-server=utf8mb4'</span>, <span class="string">'--collation-server=utf8mb4_unicode_ci'</span>]</span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">"3306:3306"</span></span><br><span class="line">    <span class="attr">expose:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">"3306"</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/data/walle/mysql:/var/lib/mysql</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">walle-net</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line"></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">walle-net:</span></span><br><span class="line">    <span class="attr">driver:</span> <span class="string">bridge</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<p>5.一键启动：<br>docker-compose up -d注意：要再yaml目录下，而且env文件也要再此目录下。</p>
+<p>docker-compose up -d&amp;&amp; docker-compose logs -f</p>
+<p><img src="/../images/20231120-1.png"></p>
+<p>docker ps -a #查看镜像</p>
+<p>docker-compose down #关闭并删除镜像</p>
+<p>docker-compose  start/stop/rm  容器  #打开/停止/删除镜像</p>
+<p>常用操作</p>
+<p>构建服务</p>
+<p>docker-compose build</p>
+<p>启动服务,启动过程中可以直接查看终端日志，观察启动是否成功</p>
+<p>docker-compose up</p>
+<p>启动服务在后台，如果确认部署成功，则可以使用此命令，将应用跑在后台，作用类似 nohup python waller.py &amp;</p>
+<p>docker-compose up -d</p>
+<p>查看日志,效果类似 tail -f waller.log</p>
+<p>docker-compose logs -f</p>
+<p>停止服务,会停止服务的运行，但是不会删除服务所所依附的网络，以及存储等</p>
+<p>docker-compose stop</p>
+<p>删除服务，并删除服务产生的网络，存储等，并且会关闭服务的守护</p>
+<p>docker-compose down</p>
+<p>docker 安装walle2部署项目<br><a href="https://blog.51cto.com/xpu2001/6951109">https://blog.51cto.com/xpu2001/6951109</a></p>
+<p>docker-compose down</p>
+<p>[root@iZt4niz156030y3q2videiZ bin]# ./docker-compose stop</p>
+<p><img src="/images/20231120-2.png"></p>
+<p>[root@iZt4niz156030y3q2videiZ bin]# ./docker-compose  start</p>
+<p><img src="/images/20231120-3.png"></p>
+<p>常见错误</p>
+<p>1.如果遇见一下错误（Can’t connat to mysql server on ‘db’），请docker-compose down之后再docker-compose up一次就可以了，这是mysql没有初始化完，就启动了python-server.</p>
+<p><img src="/images/20231120-4.png"></p>
+<p>[root@iZt4niz156030y3q2videiZ bin]# docker ps</p>
+<p>CONTAINER ID   IMAGE                    COMMAND                  CREATED       STATUS         PORTS                               NAMES</p>
+<p>ecc54f24309b   alenx/walle-web:2.1      “nginx -g ‘daemon of…”   2 hours ago   Up 2 seconds   0.0.0.0:80-&gt;80/tcp                  walle-nginx</p>
+<p>ceae5c89959f   alenx/walle-python:2.1   “bash -c ‘cd /opt/wa…”   2 hours ago   Up 2 seconds   5000/tcp                            walle-python</p>
+<p>b62c91374266   mysql                    “docker-entrypoint.s…”   2 hours ago   Up 3 seconds   0.0.0.0:3306-&gt;3306/tcp, 33060/tcp   walle-mysql</p>
+<h1 id="2-项目部署"><a href="#2-项目部署" class="headerlink" title="2.项目部署"></a>2.项目部署</h1><p>登录进去有5个默认账号：</p>
+<p>超管：<a href="mailto:super@walle-web.io">super@walle-web.io</a> \ Walle123</p>
+<p>所有者：<a href="mailto:owner@walle-web.io">owner@walle-web.io</a> \ Walle123</p>
+<p>负责人：<a href="mailto:master@walle-web.io">master@walle-web.io</a> \ Walle123</p>
+<p>开发者：<a href="mailto:developer@walle-web.io">developer@walle-web.io</a> \ Walle123</p>
+<p>访客：<a href="mailto:reporter@walle-web.io">reporter@walle-web.io</a> \ Walle123</p>
+<p>用超管进去，可以编辑账号信息，和管理空间。至于这几个账号权限和关系，参照： <a href="https://walle-web.io/docs/configuration-user.html">https://walle-web.io/docs/configuration-user.html</a></p>
+<p>账号和空间配置完毕以后，进入环境管理，一般开发环境，线上和测试环境，或者自定义。</p>
+<p>环境管理-添加项目环境：</p>
+<p><img src="/images/20231120-5.png"></p>
+<p>服务器管理–添加服务器:</p>
+<p><img src="/images/20231120-6.png"></p>
+<p>项目管理–添加项目</p>
+<p><img src="/images/20231120-7.png"></p>
+<p><img src="/images/20231120-8.png" alt="9"></p>
+<p>做了一个简单测试，看下效果：git提取代码，更新到服务器上面，用supervisor启动服务进程。</p>
+<p>创建上线单：</p>
+<p><img src="/images/20231120-9.png"></p>
+<p>提交，审核，上线：</p>
+<p><img src="/images/20231120-10.png"></p>
+<p>服务器效果：</p>
+<p> public -&gt; /data/www/release/19_18_20230802_18365</p>
+<p>cd /data/www/release/ &amp;&amp; ls</p>
+<p>11_10_20230728_142237  11_10_20230728_142342  11_12_20230731_175251  11_13_20230801_103508  11_15_20230801_173410  11_16_20230801_181332  11_17_20230802_161908  19_18_20230802_183658</p>
+<p>每次更新做的软连接，对应data/www/release下面的几个版本号；回滚就是把连接做到原来的补丁上面；</p>
+<p>似乎walle2没有增量，单个文件更新功能，或者没找到在哪，walle1有这个功能，实属可惜。</p>
+<p>说明：walle服务器需要到所管理的服务器实现免密访问，如果用其他用户也需要把用户的做免密。</p>
+<p>碰到的问题：项目管理，免密已经做好了测试正常，但是检测不通过，日志报timeout</p>
+<p>ERROR /opt/walle_home/walle/service/waller.py 111 waller.run task_id=0, user:www host:192.168.8.96 command:[ -d wwwroot ] || mkdir -p wwwroot, status=1, message:</p>
+<p>error: [Errno 110] Connection timed out</p>
+<p><img src="/images/20231120-11.png"></p>
+<p>没头绪，后面一次次尝试中发现，是docker cat /etc/docker/daemon.json</p>
+<p>Iptables设置的问题，可以尝试去掉再试试。</p>
+<p>{</p>
+<p>  “iptables”:false</p>
+<p>}</p>
+<p>做个简单笔记而已。</p>
+<p>参考：</p>
+<p> <a href="https://walle-web.io/docs/configuration-user.html">https://walle-web.io/docs/configuration-user.html</a></p>
+<p> <a href="https://www.yj-example.cn/?p=505">https://www.yj-example.cn/?p=505</a></p>
+<hr>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
+  </entry>
 </search>
