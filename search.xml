@@ -1,6 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Centos同时安装python2和python3</title>
+    <url>/2023/11203350.html</url>
+    <content><![CDATA[<p>   在centos中，自带有python2，因此需要经常安装python3。但是这里有一个坑，就是centos的yum是用python2写的，如果正常编译安装python3，那么yum就会直接挂了。为了方便以后编译安装python3，不用天天去网上找教程仅供参考。</p>
+<p>首先连上服务器，看下python版本：</p>
+<p> python -V</p>
+<p>centos默认带有python2.7.5：</p>
+<p>接下来我们开始安装python3。</p>
+<p>1 安装python3所需要的组件</p>
+<p>yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make wget libffi-devel</p>
+<p>2 备份现有的python2</p>
+<p>cd /usr/bin</p>
+<p>mv python python.bak</p>
+<p>mv pip pip.bak</p>
+<p>不用猜当前yum肯定挂了不能用了。</p>
+<ol start="3">
+<li><p>卸载python3.6.5</p>
+<p>在这里去python的官网，找到需要的python版本链接，然后通过wget方式直接下载到linux服务器，当然你也可以从浏览器下载，然后上传到linux服务器。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cd /usr/local/</span><br><span class="line">wget https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tar.xz</span><br></pre></td></tr></tbody></table></figure>
+
+<p>tar -xvJf Python-3.6.5.tar.xz</p>
+<p>cd Python-3.6.5</p>
+<p>指定安装路径</p>
+<p>./configure –prefix=/usr/local/python3 –enable-optimizations</p>
+<p>编译并安装</p>
+<p>make &amp;&amp; make install</p>
+<p>最后显示Successfully installed pip-9.0.3 setuptools-39.0.1</p>
+<p>修改软连接，将python3指向python，顺便把pip也重新指向：</p>
+<p>ln -s /usr/local/python3/bin/python3 /usr/bin/python</p>
+<p>ln -s /usr/local/python3/bin/pip3 /usr/bin/pip</p>
+<p>查看版本号：</p>
+<p>[root@localhost /home/tools/Python-3.6.5]$python -V<br>Python 3.6.5<br>[root@localhost /home/tools/Python-3.6.5]$python2 -V<br>Python 2.7.5</p>
+<p>4.修改yum配置：</p>
+<p>装完了python3之后，我们要修一下yum了，不然以后都没法装软件和环境了。</p>
+<p>vim /usr/bin/yum</p>
+<p>把头部的 #! /usr/bin/python 修改为 #! /usr/bin/python2  修改保存。</p>
+<p>vim /usr/libexec/urlgrabber-ext-down</p>
+<p>#! /usr/bin/python修改为#! /usr/bin/python2 保存退出。</p>
+<p>至此，yum 可以正常使用了。</p>
+</li>
+</ol>
+]]></content>
+  </entry>
+  <entry>
     <title>Debian 10挂载加swap</title>
     <url>/2023/111727163.html</url>
     <content><![CDATA[<p>以根目录挂载为4G例：<br>dd if=/dev/zero of=/swapfile count=4096 bs=1M</p>
@@ -25,6 +68,94 @@
       <categories>
         <category>系统</category>
       </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Rsync同步文件</title>
+    <url>/2023/081064777.html</url>
+    <content><![CDATA[<p>Rsync常用的一款同步文件工具。配置也很方便。</p>
+<p>&nbsp;</p>
+<p>yum install sync -y或者apt-get install sync</p>
+<ul>
+<li>服务安装好之后，/etc下没有配置文件，一般情况可以copy示例文件到/etc下</li>
+</ul>
+<p>&nbsp;</p>
+<p>#cp&nbsp;/usr/share/doc/rsync/examples/rsyncd.conf&nbsp;/etc</p>
+<p>&nbsp;</p>
+<p>vim /etc/rsyncd.conf</p>
+<p>uid = common</p>
+<p>gid = common</p>
+<p>use chroot = no</p>
+<p>max connections = 10</p>
+<p>strict modes = yes</p>
+<p>hosts allow = 192.168.2.12&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #可以空格，允许多个</p>
+<p>hosts deny = *</p>
+<p>port = 5699&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;#默认开启端口</p>
+<p>pid file = /var/run/rsyncd.pid</p>
+<p>lock file = /var/run/rsync.lock</p>
+<p>log file = /var/log/rsyncd.log</p>
+<p>[hmt]</p>
+<p>path = /data/www/html/</p>
+<p>comment = hello</p>
+<p>ignore errors</p>
+<p>read only = no</p>
+<p>write only = no</p>
+<p>hosts allow = 192.168.2.12&nbsp;</p>
+<p>list = false</p>
+<p>auth users = hmt</p>
+<p>secrets file = /etc/rsync.password</p>
+<ul>
+<li>建立/etc/rsyncd/rsyncd.secrets文件</li>
+</ul>
+<p>#vim /etc/rsync.password</p>
+<p>#cat /etc/rsyncd/rsyncd.secrets</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;hmt:123456</p>
+<ul>
+<li>为了密码的安全性，我们必须把权限设为600</li>
+</ul>
+<p> chown root:root /etc/rsyncd/rsyncd.secrets</p>
+<p>chmod 600&nbsp;&nbsp;/etc/rsync.password</p>
+<p> chmod 600&nbsp;/etc/rsyncd/rsyncd.secrets</p>
+<p> vim /etc/rsyncd/rsyncd.motd</p>
+<p>&nbsp;</p>
+<p>启动rsync：</p>
+<p>systemctl start rsyncd.service</p>
+<p>&nbsp;lsof -i:5699</p>
+<p>lsof -i:5699</p>
+<p>COMMAND PID USER&nbsp; &nbsp;FD&nbsp; &nbsp;TYPE&nbsp; &nbsp;DEVICE SIZE/OFF NODE NAME</p>
+<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 4u&nbsp; IPv4 22661487&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
+<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 5u&nbsp; IPv6 22661488&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
+<p>至此服务器端安装完毕；</p>
+<p>客户端安装配置：</p>
+<p>&nbsp;</p>
+<p>yum -y install rsync</p>
+<p>&nbsp;客户端需要vim&nbsp;/etc/rsync.password&nbsp;</p>
+<p>cat&nbsp;&nbsp;/etc/rsync.password</p>
+<p>123456</p>
+<p>运行：</p>
+<p>rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
+<p>Password: 这里要输入rsync的密码，是服务器端提供的，在前面的例子中，我们用的是 asdf，输入的密码并不显示出来；输好后就回车；&nbsp;注：&nbsp;这个命令的意思就是说，用rsync 用户登录到服务器上，把/data/www/html&nbsp;数据，同步到本地目录/data/www/html/上。当然本地的目录是可以你自己定义的，比如 dave也是可以的；当你在客户端上，当前操作的目录下没有/tmp/test/这个目录时，系统会自动为你创建一个；当存在/tmp/test/这个目录中，你要注意它的写权限。</p>
+<p>参数说明：</p>
+<p>&nbsp;-a 参数，相当于-rlptgoD，</p>
+<p>&nbsp;&nbsp;&nbsp;-r 是递归 -l 是链接文件，意思是拷贝链接文件；</p>
+<p>&nbsp;&nbsp;&nbsp;-p 表示保持文件原有权限；</p>
+<p>&nbsp;&nbsp;&nbsp;-t 保持文件原有时间；<br>&nbsp;&nbsp;&nbsp;-g 保持文件原有用户组；</p>
+<p>&nbsp;&nbsp;&nbsp;-o 保持文件原有属主；</p>
+<p>&nbsp;&nbsp;&nbsp;-D 相当于块设备文件；</p>
+<p>&nbsp;&nbsp;&nbsp;-z 传输时压缩；</p>
+<p>&nbsp;&nbsp;&nbsp;-P 传输进度；</p>
+<p>&nbsp;&nbsp;&nbsp;-v 传输时的进度等信息，和-P有点关系</p>
+<p>&nbsp;<br>*</p>
+<p>rsync -avzP &nbsp;–delete <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools&nbsp;/tmp/test/</p>
+<p>–delete 选项，表示服务器上的数据要与客户端完全一致，如果 /tmp/test/目录中有服务器上不存在的文件，则删除。最终目的是让/tmp/test/目录上的数据完全与服务器上保持一致；用的时候要小心点，最好不要把已经有重要数所据的目录，当做本地更新目录，否则会把你的数据全部删除；
+&nbsp;</p>
+<p>计划任务同步：</p>
+<p>*/5 * * * * rsync -zvaP <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools /tmp/test/ –password-file=/etc/rsyncd/rsyncd.secrets</p>
+<p>*/5 * * * * rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
+<p>&nbsp;</p>
+]]></content>
       <tags>
         <tag>随笔</tag>
       </tags>
@@ -239,94 +370,6 @@
       <categories>
         <category>系统</category>
       </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Rsync同步文件</title>
-    <url>/2023/081064777.html</url>
-    <content><![CDATA[<p>Rsync常用的一款同步文件工具。配置也很方便。</p>
-<p>&nbsp;</p>
-<p>yum install sync -y或者apt-get install sync</p>
-<ul>
-<li>服务安装好之后，/etc下没有配置文件，一般情况可以copy示例文件到/etc下</li>
-</ul>
-<p>&nbsp;</p>
-<p>#cp&nbsp;/usr/share/doc/rsync/examples/rsyncd.conf&nbsp;/etc</p>
-<p>&nbsp;</p>
-<p>vim /etc/rsyncd.conf</p>
-<p>uid = common</p>
-<p>gid = common</p>
-<p>use chroot = no</p>
-<p>max connections = 10</p>
-<p>strict modes = yes</p>
-<p>hosts allow = 192.168.2.12&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #可以空格，允许多个</p>
-<p>hosts deny = *</p>
-<p>port = 5699&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;#默认开启端口</p>
-<p>pid file = /var/run/rsyncd.pid</p>
-<p>lock file = /var/run/rsync.lock</p>
-<p>log file = /var/log/rsyncd.log</p>
-<p>[hmt]</p>
-<p>path = /data/www/html/</p>
-<p>comment = hello</p>
-<p>ignore errors</p>
-<p>read only = no</p>
-<p>write only = no</p>
-<p>hosts allow = 192.168.2.12&nbsp;</p>
-<p>list = false</p>
-<p>auth users = hmt</p>
-<p>secrets file = /etc/rsync.password</p>
-<ul>
-<li>建立/etc/rsyncd/rsyncd.secrets文件</li>
-</ul>
-<p>#vim /etc/rsync.password</p>
-<p>#cat /etc/rsyncd/rsyncd.secrets</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;hmt:123456</p>
-<ul>
-<li>为了密码的安全性，我们必须把权限设为600</li>
-</ul>
-<p> chown root:root /etc/rsyncd/rsyncd.secrets</p>
-<p>chmod 600&nbsp;&nbsp;/etc/rsync.password</p>
-<p> chmod 600&nbsp;/etc/rsyncd/rsyncd.secrets</p>
-<p> vim /etc/rsyncd/rsyncd.motd</p>
-<p>&nbsp;</p>
-<p>启动rsync：</p>
-<p>systemctl start rsyncd.service</p>
-<p>&nbsp;lsof -i:5699</p>
-<p>lsof -i:5699</p>
-<p>COMMAND PID USER&nbsp; &nbsp;FD&nbsp; &nbsp;TYPE&nbsp; &nbsp;DEVICE SIZE/OFF NODE NAME</p>
-<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 4u&nbsp; IPv4 22661487&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
-<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 5u&nbsp; IPv6 22661488&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
-<p>至此服务器端安装完毕；</p>
-<p>客户端安装配置：</p>
-<p>&nbsp;</p>
-<p>yum -y install rsync</p>
-<p>&nbsp;客户端需要vim&nbsp;/etc/rsync.password&nbsp;</p>
-<p>cat&nbsp;&nbsp;/etc/rsync.password</p>
-<p>123456</p>
-<p>运行：</p>
-<p>rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
-<p>Password: 这里要输入rsync的密码，是服务器端提供的，在前面的例子中，我们用的是 asdf，输入的密码并不显示出来；输好后就回车；&nbsp;注：&nbsp;这个命令的意思就是说，用rsync 用户登录到服务器上，把/data/www/html&nbsp;数据，同步到本地目录/data/www/html/上。当然本地的目录是可以你自己定义的，比如 dave也是可以的；当你在客户端上，当前操作的目录下没有/tmp/test/这个目录时，系统会自动为你创建一个；当存在/tmp/test/这个目录中，你要注意它的写权限。</p>
-<p>参数说明：</p>
-<p>&nbsp;-a 参数，相当于-rlptgoD，</p>
-<p>&nbsp;&nbsp;&nbsp;-r 是递归 -l 是链接文件，意思是拷贝链接文件；</p>
-<p>&nbsp;&nbsp;&nbsp;-p 表示保持文件原有权限；</p>
-<p>&nbsp;&nbsp;&nbsp;-t 保持文件原有时间；<br>&nbsp;&nbsp;&nbsp;-g 保持文件原有用户组；</p>
-<p>&nbsp;&nbsp;&nbsp;-o 保持文件原有属主；</p>
-<p>&nbsp;&nbsp;&nbsp;-D 相当于块设备文件；</p>
-<p>&nbsp;&nbsp;&nbsp;-z 传输时压缩；</p>
-<p>&nbsp;&nbsp;&nbsp;-P 传输进度；</p>
-<p>&nbsp;&nbsp;&nbsp;-v 传输时的进度等信息，和-P有点关系</p>
-<p>&nbsp;<br>*</p>
-<p>rsync -avzP &nbsp;–delete <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools&nbsp;/tmp/test/</p>
-<p>–delete 选项，表示服务器上的数据要与客户端完全一致，如果 /tmp/test/目录中有服务器上不存在的文件，则删除。最终目的是让/tmp/test/目录上的数据完全与服务器上保持一致；用的时候要小心点，最好不要把已经有重要数所据的目录，当做本地更新目录，否则会把你的数据全部删除；
-&nbsp;</p>
-<p>计划任务同步：</p>
-<p>*/5 * * * * rsync -zvaP <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools /tmp/test/ –password-file=/etc/rsyncd/rsyncd.secrets</p>
-<p>*/5 * * * * rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
-<p>&nbsp;</p>
-]]></content>
       <tags>
         <tag>随笔</tag>
       </tags>
@@ -674,6 +717,131 @@
       </tags>
   </entry>
   <entry>
+    <title>docker 安装walle2部署项目</title>
+    <url>/2023/112024358.html</url>
+    <content><![CDATA[<p>​     项目从git上面拉取代码，然后打包推送到服务器，更新启动服务，开发大神需要ci/cd平台，当前开源的可能walle和蓝鲸cmdb系统比较实用，123正反面选择了walle，据说已经停了好久，不过对于项目来说够用了，开始吧。</p>
+<h1 id="1-walle2-安装"><a href="#1-walle2-安装" class="headerlink" title="1. walle2 安装"></a>1. walle2 安装</h1><p>前期准备：</p>
+<p>cat /etc/redhat-release &amp;&amp; uname -a</p>
+<p>CentOS Linux release 7.8.2003 (Core)</p>
+<p>Linux centos7-1 3.10.0-1127.el7.x86_64 </p>
+<p>systemctl stop firewalld &amp;&amp; systemctl disable firewalld</p>
+<p>echo SELINUX=disabled &gt; /etc/sysconfig/selinux </p>
+<p>cp  /etc/sysctl.conf /etc/sysctl.conf.bak</p>
+<p>echo net.ipv4.tcp_syncookies = 1 &gt;&gt; /etc/sysctl.conf</p>
+<p>echo net.ipv4.tcp_tw_reuse = 1 &gt;&gt; /etc/sysctl.conf</p>
+<p>echo net.ipv4.tcp_tw_recycle = 1 &gt;&gt; /etc/sysctl.conf</p>
+<p>echo net.ipv4.tcp_fin_timeout = 10 &gt;&gt; /etc/sysctl.conf</p>
+<p>echo net.ipv4.ip_forward = 1  &gt;&gt; /etc/sysctl.conf</p>
+<p>sysctl -p</p>
+<p>1.Docker 安装：</p>
+<p>yum install -y yum-utils device-mapper-persistent-data lvm2</p>
+<p>yum-config-manager –add-repo <a href="http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo">http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</a></p>
+<p>yum install docker-ce docker-ce-cli containerd.io</p>
+<p>systemctl start dockersystemctl enable docker</p>
+<p>注意：在安装过程中，也许会遇到Requires: container-selinux &gt;= 2.9 的异常；可以打开 Centos下载包中的最新container-selinux包的地址,</p>
+<p>然后运行：yum install -y <a href="http://mirror.centos.org/centos/7/extras/x86_64/Packages/container-selinux-2.68-1.el7.noarch.rpm">http://mirror.centos.org/centos/7/extras/x86_64/Packages/container-selinux-2.68-1.el7.noarch.rpm</a></p>
+<p>当然也可以：</p>
+<p>curl -fsSL <a href="https://get.docker.com/">https://get.docker.com</a> -o get-docker.sh</p>
+<p>bash  get-docker.sh运行安装docker</p>
+<p>2.docker-compose安装：</p>
+<p>curl -L <a href="https://github.com/docker/compose/releases/download/1.24.0/docker-compose-%60uname">https://github.com/docker/compose/releases/download/1.24.0/docker-compose-`uname</a> -s<code>-</code>uname -m` -o /usr/local/bin/docker-compose</p>
+<p>chmod +x /usr/local/bin/docker-compose</p>
+<p>3.创建初始文件：walle.env：</p>
+<p>在docker-compose.yml同级目录新建出示文件walle.env，连接数据库MYSQL_USER默认使用root,如需使用其他用户，需自建用户更改walle.env文件</p>
+<p>vim walle.env</p>
+<p>Set MySQL/Rails environment</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">MYSQL_USER=root</span><br><span class="line">MYSQL_PASSWORD=walle#123</span><br><span class="line">MYSQL_DATABASE=walle</span><br><span class="line">MYSQL_ROOT_PASSWORD=walle#123</span><br><span class="line">MYSQL_HOST=db</span><br><span class="line">MYSQL_PORT=3306</span><br></pre></td></tr></tbody></table></figure>
+
+<p>MYSQL_ROOT_PASSWORD=walle#123 这个是那个的root密码没明白-_-</p>
+<p>4.编写docker-compose的yaml文件：</p>
+<p>参考： <a href="https://walle-web.io/docs/installation_docker.html">https://walle-web.io/docs/installation_docker.html</a></p>
+<figure class="highlight yml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># docker version:  18.06.0+</span></span><br><span class="line"><span class="comment"># docker-compose version: 1.23.2+</span></span><br><span class="line"><span class="comment"># OpenSSL version: OpenSSL 1.1.0h</span></span><br><span class="line"><span class="attr">version:</span> <span class="string">"3.7"</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">alenx/walle-web:2.1</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">walle-nginx</span></span><br><span class="line">    <span class="attr">hostname:</span> <span class="string">nginx-web</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="comment"># 如果宿主机80端口被占用，可自行修改为其他port(&gt;=1024)</span></span><br><span class="line">      <span class="comment"># 0.0.0.0:要绑定的宿主机端口:docker容器内端口80</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">"80:80"</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">python</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">walle-net</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">python:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">alenx/walle-python:2.1</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">walle-python</span></span><br><span class="line">    <span class="attr">hostname:</span> <span class="string">walle-python</span></span><br><span class="line">    <span class="attr">env_file:</span></span><br><span class="line">      <span class="comment"># walle.env需和docker-compose在同级目录</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./walle.env</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">bash</span> <span class="string">-c</span> <span class="string">"cd /opt/walle_home/ &amp;&amp; /bin/bash admin.sh migration &amp;&amp;  python waller.py"</span></span><br><span class="line">    <span class="attr">expose:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">"5000"</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/opt/walle_home/plugins/:/opt/walle_home/plugins/</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/opt/walle_home/codebase/:/opt/walle_home/codebase/</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/opt/walle_home/logs/:/opt/walle_home/logs/</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/root/.ssh:/root/.ssh/</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">db</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">walle-net</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">db:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">walle-mysql</span></span><br><span class="line">    <span class="attr">hostname:</span> <span class="string">walle-mysql</span></span><br><span class="line">    <span class="attr">env_file:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./walle.env</span></span><br><span class="line">    <span class="attr">command:</span> [ <span class="string">'--default-authentication-plugin=mysql_native_password'</span>, <span class="string">'--character-set-server=utf8mb4'</span>, <span class="string">'--collation-server=utf8mb4_unicode_ci'</span>]</span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">"3306:3306"</span></span><br><span class="line">    <span class="attr">expose:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">"3306"</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/data/walle/mysql:/var/lib/mysql</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">walle-net</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line"></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">walle-net:</span></span><br><span class="line">    <span class="attr">driver:</span> <span class="string">bridge</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<p>5.一键启动：<br>docker-compose up -d注意：要再yaml目录下，而且env文件也要再此目录下。</p>
+<p>docker-compose up -d&amp;&amp; docker-compose logs -f</p>
+<p><img src="/../images/20231120-1.png"></p>
+<p>docker ps -a #查看镜像</p>
+<p>docker-compose down #关闭并删除镜像</p>
+<p>docker-compose  start/stop/rm  容器  #打开/停止/删除镜像</p>
+<p>常用操作</p>
+<p>构建服务</p>
+<p>docker-compose build</p>
+<p>启动服务,启动过程中可以直接查看终端日志，观察启动是否成功</p>
+<p>docker-compose up</p>
+<p>启动服务在后台，如果确认部署成功，则可以使用此命令，将应用跑在后台，作用类似 nohup python waller.py &amp;</p>
+<p>docker-compose up -d</p>
+<p>查看日志,效果类似 tail -f waller.log</p>
+<p>docker-compose logs -f</p>
+<p>停止服务,会停止服务的运行，但是不会删除服务所所依附的网络，以及存储等</p>
+<p>docker-compose stop</p>
+<p>删除服务，并删除服务产生的网络，存储等，并且会关闭服务的守护</p>
+<p>docker-compose down</p>
+<p>docker 安装walle2部署项目<br><a href="https://blog.51cto.com/xpu2001/6951109">https://blog.51cto.com/xpu2001/6951109</a></p>
+<p>docker-compose down</p>
+<p>[root@iZt4niz156030y3q2videiZ bin]# ./docker-compose stop</p>
+<p><img src="/images/20231120-2.png"></p>
+<p>[root@iZt4niz156030y3q2videiZ bin]# ./docker-compose  start</p>
+<p><img src="/images/20231120-3.png"></p>
+<p>常见错误</p>
+<p>1.如果遇见一下错误（Can’t connat to mysql server on ‘db’），请docker-compose down之后再docker-compose up一次就可以了，这是mysql没有初始化完，就启动了python-server.</p>
+<p><img src="/images/20231120-4.png"></p>
+<p>[root@iZt4niz156030y3q2videiZ bin]# docker ps</p>
+<p>CONTAINER ID   IMAGE                    COMMAND                  CREATED       STATUS         PORTS                               NAMES</p>
+<p>ecc54f24309b   alenx/walle-web:2.1      “nginx -g ‘daemon of…”   2 hours ago   Up 2 seconds   0.0.0.0:80-&gt;80/tcp                  walle-nginx</p>
+<p>ceae5c89959f   alenx/walle-python:2.1   “bash -c ‘cd /opt/wa…”   2 hours ago   Up 2 seconds   5000/tcp                            walle-python</p>
+<p>b62c91374266   mysql                    “docker-entrypoint.s…”   2 hours ago   Up 3 seconds   0.0.0.0:3306-&gt;3306/tcp, 33060/tcp   walle-mysql</p>
+<h1 id="2-项目部署"><a href="#2-项目部署" class="headerlink" title="2.项目部署"></a>2.项目部署</h1><p>登录进去有5个默认账号：</p>
+<p>超管：<a href="mailto:super@walle-web.io">super@walle-web.io</a> \ Walle123</p>
+<p>所有者：<a href="mailto:owner@walle-web.io">owner@walle-web.io</a> \ Walle123</p>
+<p>负责人：<a href="mailto:master@walle-web.io">master@walle-web.io</a> \ Walle123</p>
+<p>开发者：<a href="mailto:developer@walle-web.io">developer@walle-web.io</a> \ Walle123</p>
+<p>访客：<a href="mailto:reporter@walle-web.io">reporter@walle-web.io</a> \ Walle123</p>
+<p>用超管进去，可以编辑账号信息，和管理空间。至于这几个账号权限和关系，参照： <a href="https://walle-web.io/docs/configuration-user.html">https://walle-web.io/docs/configuration-user.html</a></p>
+<p>账号和空间配置完毕以后，进入环境管理，一般开发环境，线上和测试环境，或者自定义。</p>
+<p>环境管理-添加项目环境：</p>
+<p><img src="/images/20231120-5.png"></p>
+<p>服务器管理–添加服务器:</p>
+<p><img src="/images/20231120-6.png"></p>
+<p>项目管理–添加项目</p>
+<p><img src="/images/20231120-7.png"></p>
+<p><img src="/images/20231120-8.png" alt="9"></p>
+<p>做了一个简单测试，看下效果：git提取代码，更新到服务器上面，用supervisor启动服务进程。</p>
+<p>创建上线单：</p>
+<p><img src="/images/20231120-9.png"></p>
+<p>提交，审核，上线：</p>
+<p><img src="/images/20231120-10.png"></p>
+<p>服务器效果：</p>
+<p> public -&gt; /data/www/release/19_18_20230802_18365</p>
+<p>cd /data/www/release/ &amp;&amp; ls</p>
+<p>11_10_20230728_142237  11_10_20230728_142342  11_12_20230731_175251  11_13_20230801_103508  11_15_20230801_173410  11_16_20230801_181332  11_17_20230802_161908  19_18_20230802_183658</p>
+<p>每次更新做的软连接，对应data/www/release下面的几个版本号；回滚就是把连接做到原来的补丁上面；</p>
+<p>似乎walle2没有增量，单个文件更新功能，或者没找到在哪，walle1有这个功能，实属可惜。</p>
+<p>说明：walle服务器需要到所管理的服务器实现免密访问，如果用其他用户也需要把用户的做免密。</p>
+<p>碰到的问题：项目管理，免密已经做好了测试正常，但是检测不通过，日志报timeout</p>
+<p>ERROR /opt/walle_home/walle/service/waller.py 111 waller.run task_id=0, user:www host:192.168.8.96 command:[ -d wwwroot ] || mkdir -p wwwroot, status=1, message:</p>
+<p>error: [Errno 110] Connection timed out</p>
+<p><img src="/images/20231120-11.png"></p>
+<p>没头绪，后面一次次尝试中发现，是docker cat /etc/docker/daemon.json</p>
+<p>Iptables设置的问题，可以尝试去掉再试试。</p>
+<p>{</p>
+<p>  “iptables”:false</p>
+<p>}</p>
+<p>做个简单笔记而已。</p>
+<p>参考：</p>
+<p> <a href="https://walle-web.io/docs/configuration-user.html">https://walle-web.io/docs/configuration-user.html</a></p>
+<p> <a href="https://www.yj-example.cn/?p=505">https://www.yj-example.cn/?p=505</a></p>
+<hr>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hello World</title>
     <url>/2023/062516107.html</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
@@ -690,6 +858,40 @@
 
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>kafka Create topic 报错</title>
+    <url>/2023/071361284.html</url>
+    <content><![CDATA[<p>bin/kafka-console-consumer.sh –bootstrap-server localhost:9092 –topic kk_log<br>报错如下：<br>WARN [Consumer clientId=consumer-1, groupId=console-consumer-507] Connection to node -1 could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)</p>
+<p>配置server.confg时候设置的<br>advertised.listeners=PLAINTEXT://10.171.222.26:9092<br>此时需要用配置的IP而非localhost地址：</p>
+<p>nohup bin/zookeeper-server-start.sh config/zookeeper.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>nohup bin/kafka-server-start.sh config/server.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>netstat -ntpl|egrep “(2181|9092)”<br>运行起来再试试<br>bin/kafka-console-consumer.sh –bootstrap-server 10.171.222.26:9092 –topic kk_log<br>应该就可以了。<br>做个小笔记。</p>
+<p>PS zookeeper 报错，宕掉；</p>
+<p>[2016-06-27 12:07:14,065] INFO Closed socket connection for client /127.0.0.1:58824 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn) [2016-<br>[2016-06-27 12:07:17,351] INFO Refusing session request for client /127.0.0.1:58834 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)<br>[2016-06-27 12:07:17,351] INFO Closed socket connection for client /127.0.0.1:58834 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn)<br>[2016-06-27 12:07:19,048] INFO Accepted socket connection from /127.0.0.1:58840 (org.apache.zookeeper.server.NIOServerCnxnFactory)<br>[2016-06-27 12:07:19,048] INFO Refusing session request for client /127.0.0.1:58840 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)</p>
+<p>解决方法</p>
+<p>报错原因：服务器上还有应用在不停的向zookeeper发送请求</p>
+<p>解决方法：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用top -u [username]查看该用户下的所有进程，发现多了一个java进程在运行着；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、kill掉与java相关的进程；</p>
+<p>2、关闭zookeeper，删除zoo.cfg中的dataDir配置的文件夹；</p>
+<h2 id="3、重启zookeeper。"><a href="#3、重启zookeeper。" class="headerlink" title="3、重启zookeeper。"></a>3、重启zookeeper。</h2>]]></content>
+  </entry>
+  <entry>
+    <title>linux install shadowsocks</title>
+    <url>/2023/071659235.html</url>
+    <content><![CDATA[<h1 id="1-安装Python和pip"><a href="#1-安装Python和pip" class="headerlink" title="1. 安装Python和pip"></a>1. 安装Python和pip</h1><p>sudo apt-get update</p>
+<p>sudo apt-get install python-pip</p>
+<h1 id="2-安装Shadowsocks"><a href="#2-安装Shadowsocks" class="headerlink" title="2. 安装Shadowsocks"></a>2. 安装Shadowsocks</h1><p>sudo pip install shadowsocks</p>
+<h1 id="3-配置Shadowsocks"><a href="#3-配置Shadowsocks" class="headerlink" title="3. 配置Shadowsocks"></a>3. 配置Shadowsocks</h1><p>cat &gt;&gt; /etc/shadowsocks.json &lt;&lt;EOF<br>{</p>
+<p>“server” : “ server ip”,<br>“server_port” : server port,<br>“local_port” : 1080,<br>“password” : “passwd”,<br>“timeout” : 200,<br>“method” : “aes-256-cfb”<br>}<br>EOF<br>参数的解释:<br>server：远程服务器IP地址<br>server_port：远程服务器端口号<br>local_port：本地端口号，默认为1080<br>password：远程服务器密码，自定义<br>timeout：超时时间，默认为300秒<br>method：加密方式，推荐aes-256-cfb</p>
+<h1 id="4-启动Shadowsocks"><a href="#4-启动Shadowsocks" class="headerlink" title="4. 启动Shadowsocks"></a>4. 启动Shadowsocks</h1><p>在命令行中输入：</p>
+<p>ssserver -c /etc/shadowsocks.json</p>
+<h1 id="5-添加系统服务"><a href="#5-添加系统服务" class="headerlink" title="5.添加系统服务"></a>5.添加系统服务</h1><p>cat &gt;&gt;/etc/systemd/system/shadows.service  &lt;&lt;EOF<br>[Unit]<br>Description=shadows server<br>[Install]<br>WantedBy=multi-user.target<br>[Service]<br>User=root<br>Group=root<br>ExecStart=/usr/bin/ssserver -c /etc/shadowsocks.json start<br>Restart=on-failure<br>EOF</p>
+<p>systemctl restart shadows.service<br>systemctl enable shadows.service</p>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
   </entry>
   <entry>
     <title>hexogit搭建个人网站</title>
@@ -803,40 +1005,6 @@
 
 <p>由于做了ssl证书，80做了个跳转到443上面，域名需要到平台做解析，A记录到自己的服务器，如果流量大的话可以做cdn，Cname到平台给的记录值，ssl证书申请，主流云平台都可以免费申请，填写一些资料以后很快就可以签发证书，选择对应的证书上传即可。</p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>kafka Create topic 报错</title>
-    <url>/2023/071361284.html</url>
-    <content><![CDATA[<p>bin/kafka-console-consumer.sh –bootstrap-server localhost:9092 –topic kk_log<br>报错如下：<br>WARN [Consumer clientId=consumer-1, groupId=console-consumer-507] Connection to node -1 could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)</p>
-<p>配置server.confg时候设置的<br>advertised.listeners=PLAINTEXT://10.171.222.26:9092<br>此时需要用配置的IP而非localhost地址：</p>
-<p>nohup bin/zookeeper-server-start.sh config/zookeeper.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>nohup bin/kafka-server-start.sh config/server.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>netstat -ntpl|egrep “(2181|9092)”<br>运行起来再试试<br>bin/kafka-console-consumer.sh –bootstrap-server 10.171.222.26:9092 –topic kk_log<br>应该就可以了。<br>做个小笔记。</p>
-<p>PS zookeeper 报错，宕掉；</p>
-<p>[2016-06-27 12:07:14,065] INFO Closed socket connection for client /127.0.0.1:58824 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn) [2016-<br>[2016-06-27 12:07:17,351] INFO Refusing session request for client /127.0.0.1:58834 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)<br>[2016-06-27 12:07:17,351] INFO Closed socket connection for client /127.0.0.1:58834 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn)<br>[2016-06-27 12:07:19,048] INFO Accepted socket connection from /127.0.0.1:58840 (org.apache.zookeeper.server.NIOServerCnxnFactory)<br>[2016-06-27 12:07:19,048] INFO Refusing session request for client /127.0.0.1:58840 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)</p>
-<p>解决方法</p>
-<p>报错原因：服务器上还有应用在不停的向zookeeper发送请求</p>
-<p>解决方法：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用top -u [username]查看该用户下的所有进程，发现多了一个java进程在运行着；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、kill掉与java相关的进程；</p>
-<p>2、关闭zookeeper，删除zoo.cfg中的dataDir配置的文件夹；</p>
-<h2 id="3、重启zookeeper。"><a href="#3、重启zookeeper。" class="headerlink" title="3、重启zookeeper。"></a>3、重启zookeeper。</h2>]]></content>
-  </entry>
-  <entry>
-    <title>linux install shadowsocks</title>
-    <url>/2023/071659235.html</url>
-    <content><![CDATA[<h1 id="1-安装Python和pip"><a href="#1-安装Python和pip" class="headerlink" title="1. 安装Python和pip"></a>1. 安装Python和pip</h1><p>sudo apt-get update</p>
-<p>sudo apt-get install python-pip</p>
-<h1 id="2-安装Shadowsocks"><a href="#2-安装Shadowsocks" class="headerlink" title="2. 安装Shadowsocks"></a>2. 安装Shadowsocks</h1><p>sudo pip install shadowsocks</p>
-<h1 id="3-配置Shadowsocks"><a href="#3-配置Shadowsocks" class="headerlink" title="3. 配置Shadowsocks"></a>3. 配置Shadowsocks</h1><p>cat &gt;&gt; /etc/shadowsocks.json &lt;&lt;EOF<br>{</p>
-<p>“server” : “ server ip”,<br>“server_port” : server port,<br>“local_port” : 1080,<br>“password” : “passwd”,<br>“timeout” : 200,<br>“method” : “aes-256-cfb”<br>}<br>EOF<br>参数的解释:<br>server：远程服务器IP地址<br>server_port：远程服务器端口号<br>local_port：本地端口号，默认为1080<br>password：远程服务器密码，自定义<br>timeout：超时时间，默认为300秒<br>method：加密方式，推荐aes-256-cfb</p>
-<h1 id="4-启动Shadowsocks"><a href="#4-启动Shadowsocks" class="headerlink" title="4. 启动Shadowsocks"></a>4. 启动Shadowsocks</h1><p>在命令行中输入：</p>
-<p>ssserver -c /etc/shadowsocks.json</p>
-<h1 id="5-添加系统服务"><a href="#5-添加系统服务" class="headerlink" title="5.添加系统服务"></a>5.添加系统服务</h1><p>cat &gt;&gt;/etc/systemd/system/shadows.service  &lt;&lt;EOF<br>[Unit]<br>Description=shadows server<br>[Install]<br>WantedBy=multi-user.target<br>[Service]<br>User=root<br>Group=root<br>ExecStart=/usr/bin/ssserver -c /etc/shadowsocks.json start<br>Restart=on-failure<br>EOF</p>
-<p>systemctl restart shadows.service<br>systemctl enable shadows.service</p>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
   </entry>
   <entry>
     <title>linux 磁盘挂载扩充格式化</title>
@@ -993,6 +1161,19 @@
 ]]></content>
       <tags>
         <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>/var/log/messages日志恢复</title>
+    <url>/2023/112018778.html</url>
+    <content><![CDATA[<p>Linux容易犯的一个错误是把日志文件给直接删除，而不是删除日志文件的内容。<br>直接删除日志文件往往导致新产生的日志记录无法被写入到日志文件中（因为它已经被删除了），而仅仅重新新建（touch）同样名字的文件是解决不了问题的。<br>本文以Unbutu系统为例，介绍如何恢复被误删除的syslog文件：<br>首先，在以root用户执行如下lsof命令，查询打开/var/log/messages文件的进程的进程ID(PID)。<br>root@zck:/var/log# lsof | grep messages<br>rsyslogd 544 syslog 7w REG 8,1 214641 134422 /var/log/messages<br>从上面命令输出可以看到，这个打开/var/log/messages文件的进程的PID是544，文件/var/log/messages的文件描述符（FD）号是7。<br>根据上述的PID和FD，可以在/proc找到对应的文件：<br>root@zck:/var/log#ls -al /proc/544/fd/7<br>l-wx—— 1 root root 64 2012-07-14 14:48 7 -&gt; /var/log/messages<br>将文件/proc/544/fd/7拷贝到/var/log/messages<br>cp /proc/544/fd/7 /var/log/messages&nbsp;</p>
+<p>然后重新启动syslog服务即可恢复被误删除的日志文件，并且新的日志记录能够继续被写入日志文件。<br>以root用户运行service命令。其中，service命令的第2个参数可能是syslog、也可能是rsyslog。<br>具体可以使用通过命令查询得知。<br>登录后复制<br>root@zck:/proc/544/fd# service –status-all<br> [ ? ] …<br> [ ? ] rc.local<br> [ ? ] rsyslog<br> [ ? ] screen-cleanup<br> [ ? ] …  #——————————-</p>
+<p>复制代码代码如下:<br>root@zck:/proc/544/fd# service rsyslog restart<br>rsyslog start/running, process 2673</p>
+<p>清空日志文件：<br>cat /dev/null&gt;/var/log/messages</p>
+<p>转自url:<a href="https://blog.51cto.com/u_11146845/6240737">https://blog.51cto.com/u_11146845/6240737</a></p>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
       </tags>
   </entry>
   <entry>
@@ -1287,6 +1468,63 @@
       </tags>
   </entry>
   <entry>
+    <title>zabbix 清理历史数据</title>
+    <url>/2023/071761914.html</url>
+    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
+<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
+<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
+<p>root@Testl]$ date +%s -d”20160929”</p>
+<p>1475078400</p>
+<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
+<p>Query OK, 36093 rows affected (43.64 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
+<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history;</p>
+<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
+<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history_uint;</p>
+<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
+<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>漫长时间等待以后看下效果：</p>
+<p>原来数据：</p>
+<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
+<p>压缩中：</p>
+<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
+<p>find -size +50M -exec ls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
+<p>最终删两个表以后数据：</p>
+<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
+<p>完了以后，重启mysql，zabbix，nginx试试；</p>
+<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>vsftp 锁定用户目录</title>
     <url>/2023/071114619.html</url>
     <content><![CDATA[<p>vsftp 安装以后给用户权限和锁定目录；</p>
@@ -1378,60 +1616,32 @@
       </tags>
   </entry>
   <entry>
-    <title>zabbix 清理历史数据</title>
-    <url>/2023/071761914.html</url>
-    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
-<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
-<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
-<p>root@Testl]$ date +%s -d”20160929”</p>
-<p>1475078400</p>
-<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
-<p>Query OK, 36093 rows affected (43.64 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
-<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history;</p>
-<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
-<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history_uint;</p>
-<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
-<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>漫长时间等待以后看下效果：</p>
-<p>原来数据：</p>
-<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
-<p>压缩中：</p>
-<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
-<p>find -size +50M -exec ls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
-<p>最终删两个表以后数据：</p>
-<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
-<p>完了以后，重启mysql，zabbix，nginx试试；</p>
-<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
+    <title>zabbix监控业务进程变动</title>
+    <url>/2023/111359213.html</url>
+    <content><![CDATA[<p>Zabbix 监控进程宕机</p>
+<p>  业务需求后端进程宕机以后能在短时间内迅速拉起，业务影响不大，但是开发需要查看coredump，要求能监控到pid变化；在现有构架下zabbix能监控并报警；</p>
+<p>当然zabbix设置报警设置就不再一一</p>
+<p>在每台服务器/etc/zabbix/zabbix_agentd.conf设置路径：此例只需要piddiff.sh</p>
+<p>UserParameter=checkpid,sh /usr/local/script/piddiff.sh</p>
+<p>UserParameter=test,sh /usr/local/script/test.sh</p>
+<p>UserParameter=discovery.process,/usr/local/script/disprocess.sh</p>
+<p>UserParameter=process.check[*],/usr/local/script/proc_check.sh $1 $2 $3</p>
+<p>/usr/local/script下面存放脚本</p>
+<p>Vim piddiff.sh</p>
+<p>aapid为业务监控id 取值根据业务需求；</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#/bin/sh</span></span><br><span class="line"></span><br><span class="line">onl_ok=1</span><br><span class="line"></span><br><span class="line">onl_cored=3</span><br><span class="line"></span><br><span class="line"><span class="built_in">dir</span>=/usr/local/script</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ ! -f <span class="string">"<span class="variable">$dir</span>/old.txt"</span> ]];<span class="keyword">then</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/old.txt</span><br><span class="line"></span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">         <span class="built_in">sleep</span> 1s           </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/now.txt</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ! diff -q <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; /dev/null; <span class="keyword">then</span></span><br><span class="line"></span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_cored</span></span><br><span class="line">    </span><br><span class="line">          diff -c <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; <span class="variable">$dir</span>/`<span class="built_in">date</span> <span class="string">"+%Y%m%d%H%M"</span>`_diff.txt</span><br><span class="line">    </span><br><span class="line">          <span class="built_in">cat</span> <span class="variable">$dir</span>/now.txt &gt;<span class="variable">$dir</span>/old.txt</span><br><span class="line">    </span><br><span class="line">     <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_ok</span>    </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>一个简单的判断脚本；</p>
+<p>Zabbix30秒会抓取一次，正常没变化为1，有变化为3，那么zabbix抓取数值为3则表示pid有变化，会发出警报；</p>
+<p>Zabbix设置：</p>
+<p>监控项模板添加如下：</p>
+<p><img src="/../images/20231113-1.png"></p>
+<p>触发器：{Template OS Linux:checkpid.last()}=3</p>
+<p><img src="/../images/20231113-2.png"></p>
 <hr>
 ]]></content>
       <tags>
-        <tag>点滴</tag>
+        <tag>工具</tag>
       </tags>
   </entry>
   <entry>
@@ -1571,216 +1781,6 @@
 ]]></content>
       <tags>
         <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>zabbix监控业务进程变动</title>
-    <url>/2023/111359213.html</url>
-    <content><![CDATA[<p>Zabbix 监控进程宕机</p>
-<p>  业务需求后端进程宕机以后能在短时间内迅速拉起，业务影响不大，但是开发需要查看coredump，要求能监控到pid变化；在现有构架下zabbix能监控并报警；</p>
-<p>当然zabbix设置报警设置就不再一一</p>
-<p>在每台服务器/etc/zabbix/zabbix_agentd.conf设置路径：此例只需要piddiff.sh</p>
-<p>UserParameter=checkpid,sh /usr/local/script/piddiff.sh</p>
-<p>UserParameter=test,sh /usr/local/script/test.sh</p>
-<p>UserParameter=discovery.process,/usr/local/script/disprocess.sh</p>
-<p>UserParameter=process.check[*],/usr/local/script/proc_check.sh $1 $2 $3</p>
-<p>/usr/local/script下面存放脚本</p>
-<p>Vim piddiff.sh</p>
-<p>aapid为业务监控id 取值根据业务需求；</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#/bin/sh</span></span><br><span class="line"></span><br><span class="line">onl_ok=1</span><br><span class="line"></span><br><span class="line">onl_cored=3</span><br><span class="line"></span><br><span class="line"><span class="built_in">dir</span>=/usr/local/script</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ ! -f <span class="string">"<span class="variable">$dir</span>/old.txt"</span> ]];<span class="keyword">then</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/old.txt</span><br><span class="line"></span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">         <span class="built_in">sleep</span> 1s           </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/now.txt</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ! diff -q <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; /dev/null; <span class="keyword">then</span></span><br><span class="line"></span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_cored</span></span><br><span class="line">    </span><br><span class="line">          diff -c <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; <span class="variable">$dir</span>/`<span class="built_in">date</span> <span class="string">"+%Y%m%d%H%M"</span>`_diff.txt</span><br><span class="line">    </span><br><span class="line">          <span class="built_in">cat</span> <span class="variable">$dir</span>/now.txt &gt;<span class="variable">$dir</span>/old.txt</span><br><span class="line">    </span><br><span class="line">     <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_ok</span>    </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>一个简单的判断脚本；</p>
-<p>Zabbix30秒会抓取一次，正常没变化为1，有变化为3，那么zabbix抓取数值为3则表示pid有变化，会发出警报；</p>
-<p>Zabbix设置：</p>
-<p>监控项模板添加如下：</p>
-<p><img src="/../images/20231113-1.png"></p>
-<p>触发器：{Template OS Linux:checkpid.last()}=3</p>
-<p><img src="/../images/20231113-2.png"></p>
-<hr>
-]]></content>
-      <tags>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>docker 安装walle2部署项目</title>
-    <url>/2023/112024358.html</url>
-    <content><![CDATA[<p>​     项目从git上面拉取代码，然后打包推送到服务器，更新启动服务，开发大神需要ci/cd平台，当前开源的可能walle和蓝鲸cmdb系统比较实用，123正反面选择了walle，据说已经停了好久，不过对于项目来说够用了，开始吧。</p>
-<h1 id="1-walle2-安装"><a href="#1-walle2-安装" class="headerlink" title="1. walle2 安装"></a>1. walle2 安装</h1><p>前期准备：</p>
-<p>cat /etc/redhat-release &amp;&amp; uname -a</p>
-<p>CentOS Linux release 7.8.2003 (Core)</p>
-<p>Linux centos7-1 3.10.0-1127.el7.x86_64 </p>
-<p>systemctl stop firewalld &amp;&amp; systemctl disable firewalld</p>
-<p>echo SELINUX=disabled &gt; /etc/sysconfig/selinux </p>
-<p>cp  /etc/sysctl.conf /etc/sysctl.conf.bak</p>
-<p>echo net.ipv4.tcp_syncookies = 1 &gt;&gt; /etc/sysctl.conf</p>
-<p>echo net.ipv4.tcp_tw_reuse = 1 &gt;&gt; /etc/sysctl.conf</p>
-<p>echo net.ipv4.tcp_tw_recycle = 1 &gt;&gt; /etc/sysctl.conf</p>
-<p>echo net.ipv4.tcp_fin_timeout = 10 &gt;&gt; /etc/sysctl.conf</p>
-<p>echo net.ipv4.ip_forward = 1  &gt;&gt; /etc/sysctl.conf</p>
-<p>sysctl -p</p>
-<p>1.Docker 安装：</p>
-<p>yum install -y yum-utils device-mapper-persistent-data lvm2</p>
-<p>yum-config-manager –add-repo <a href="http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo">http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</a></p>
-<p>yum install docker-ce docker-ce-cli containerd.io</p>
-<p>systemctl start dockersystemctl enable docker</p>
-<p>注意：在安装过程中，也许会遇到Requires: container-selinux &gt;= 2.9 的异常；可以打开 Centos下载包中的最新container-selinux包的地址,</p>
-<p>然后运行：yum install -y <a href="http://mirror.centos.org/centos/7/extras/x86_64/Packages/container-selinux-2.68-1.el7.noarch.rpm">http://mirror.centos.org/centos/7/extras/x86_64/Packages/container-selinux-2.68-1.el7.noarch.rpm</a></p>
-<p>当然也可以：</p>
-<p>curl -fsSL <a href="https://get.docker.com/">https://get.docker.com</a> -o get-docker.sh</p>
-<p>bash  get-docker.sh运行安装docker</p>
-<p>2.docker-compose安装：</p>
-<p>curl -L <a href="https://github.com/docker/compose/releases/download/1.24.0/docker-compose-%60uname">https://github.com/docker/compose/releases/download/1.24.0/docker-compose-`uname</a> -s<code>-</code>uname -m` -o /usr/local/bin/docker-compose</p>
-<p>chmod +x /usr/local/bin/docker-compose</p>
-<p>3.创建初始文件：walle.env：</p>
-<p>在docker-compose.yml同级目录新建出示文件walle.env，连接数据库MYSQL_USER默认使用root,如需使用其他用户，需自建用户更改walle.env文件</p>
-<p>vim walle.env</p>
-<p>Set MySQL/Rails environment</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">MYSQL_USER=root</span><br><span class="line">MYSQL_PASSWORD=walle#123</span><br><span class="line">MYSQL_DATABASE=walle</span><br><span class="line">MYSQL_ROOT_PASSWORD=walle#123</span><br><span class="line">MYSQL_HOST=db</span><br><span class="line">MYSQL_PORT=3306</span><br></pre></td></tr></tbody></table></figure>
-
-<p>MYSQL_ROOT_PASSWORD=walle#123 这个是那个的root密码没明白-_-</p>
-<p>4.编写docker-compose的yaml文件：</p>
-<p>参考： <a href="https://walle-web.io/docs/installation_docker.html">https://walle-web.io/docs/installation_docker.html</a></p>
-<figure class="highlight yml"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># docker version:  18.06.0+</span></span><br><span class="line"><span class="comment"># docker-compose version: 1.23.2+</span></span><br><span class="line"><span class="comment"># OpenSSL version: OpenSSL 1.1.0h</span></span><br><span class="line"><span class="attr">version:</span> <span class="string">"3.7"</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">alenx/walle-web:2.1</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">walle-nginx</span></span><br><span class="line">    <span class="attr">hostname:</span> <span class="string">nginx-web</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="comment"># 如果宿主机80端口被占用，可自行修改为其他port(&gt;=1024)</span></span><br><span class="line">      <span class="comment"># 0.0.0.0:要绑定的宿主机端口:docker容器内端口80</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">"80:80"</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">python</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">walle-net</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">python:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">alenx/walle-python:2.1</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">walle-python</span></span><br><span class="line">    <span class="attr">hostname:</span> <span class="string">walle-python</span></span><br><span class="line">    <span class="attr">env_file:</span></span><br><span class="line">      <span class="comment"># walle.env需和docker-compose在同级目录</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./walle.env</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">bash</span> <span class="string">-c</span> <span class="string">"cd /opt/walle_home/ &amp;&amp; /bin/bash admin.sh migration &amp;&amp;  python waller.py"</span></span><br><span class="line">    <span class="attr">expose:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">"5000"</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/opt/walle_home/plugins/:/opt/walle_home/plugins/</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/opt/walle_home/codebase/:/opt/walle_home/codebase/</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/opt/walle_home/logs/:/opt/walle_home/logs/</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/root/.ssh:/root/.ssh/</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">db</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">walle-net</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">db:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">walle-mysql</span></span><br><span class="line">    <span class="attr">hostname:</span> <span class="string">walle-mysql</span></span><br><span class="line">    <span class="attr">env_file:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./walle.env</span></span><br><span class="line">    <span class="attr">command:</span> [ <span class="string">'--default-authentication-plugin=mysql_native_password'</span>, <span class="string">'--character-set-server=utf8mb4'</span>, <span class="string">'--collation-server=utf8mb4_unicode_ci'</span>]</span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">"3306:3306"</span></span><br><span class="line">    <span class="attr">expose:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">"3306"</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/data/walle/mysql:/var/lib/mysql</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">walle-net</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line"></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">walle-net:</span></span><br><span class="line">    <span class="attr">driver:</span> <span class="string">bridge</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<p>5.一键启动：<br>docker-compose up -d注意：要再yaml目录下，而且env文件也要再此目录下。</p>
-<p>docker-compose up -d&amp;&amp; docker-compose logs -f</p>
-<p><img src="/../images/20231120-1.png"></p>
-<p>docker ps -a #查看镜像</p>
-<p>docker-compose down #关闭并删除镜像</p>
-<p>docker-compose  start/stop/rm  容器  #打开/停止/删除镜像</p>
-<p>常用操作</p>
-<p>构建服务</p>
-<p>docker-compose build</p>
-<p>启动服务,启动过程中可以直接查看终端日志，观察启动是否成功</p>
-<p>docker-compose up</p>
-<p>启动服务在后台，如果确认部署成功，则可以使用此命令，将应用跑在后台，作用类似 nohup python waller.py &amp;</p>
-<p>docker-compose up -d</p>
-<p>查看日志,效果类似 tail -f waller.log</p>
-<p>docker-compose logs -f</p>
-<p>停止服务,会停止服务的运行，但是不会删除服务所所依附的网络，以及存储等</p>
-<p>docker-compose stop</p>
-<p>删除服务，并删除服务产生的网络，存储等，并且会关闭服务的守护</p>
-<p>docker-compose down</p>
-<p>docker 安装walle2部署项目<br><a href="https://blog.51cto.com/xpu2001/6951109">https://blog.51cto.com/xpu2001/6951109</a></p>
-<p>docker-compose down</p>
-<p>[root@iZt4niz156030y3q2videiZ bin]# ./docker-compose stop</p>
-<p><img src="/images/20231120-2.png"></p>
-<p>[root@iZt4niz156030y3q2videiZ bin]# ./docker-compose  start</p>
-<p><img src="/images/20231120-3.png"></p>
-<p>常见错误</p>
-<p>1.如果遇见一下错误（Can’t connat to mysql server on ‘db’），请docker-compose down之后再docker-compose up一次就可以了，这是mysql没有初始化完，就启动了python-server.</p>
-<p><img src="/images/20231120-4.png"></p>
-<p>[root@iZt4niz156030y3q2videiZ bin]# docker ps</p>
-<p>CONTAINER ID   IMAGE                    COMMAND                  CREATED       STATUS         PORTS                               NAMES</p>
-<p>ecc54f24309b   alenx/walle-web:2.1      “nginx -g ‘daemon of…”   2 hours ago   Up 2 seconds   0.0.0.0:80-&gt;80/tcp                  walle-nginx</p>
-<p>ceae5c89959f   alenx/walle-python:2.1   “bash -c ‘cd /opt/wa…”   2 hours ago   Up 2 seconds   5000/tcp                            walle-python</p>
-<p>b62c91374266   mysql                    “docker-entrypoint.s…”   2 hours ago   Up 3 seconds   0.0.0.0:3306-&gt;3306/tcp, 33060/tcp   walle-mysql</p>
-<h1 id="2-项目部署"><a href="#2-项目部署" class="headerlink" title="2.项目部署"></a>2.项目部署</h1><p>登录进去有5个默认账号：</p>
-<p>超管：<a href="mailto:super@walle-web.io">super@walle-web.io</a> \ Walle123</p>
-<p>所有者：<a href="mailto:owner@walle-web.io">owner@walle-web.io</a> \ Walle123</p>
-<p>负责人：<a href="mailto:master@walle-web.io">master@walle-web.io</a> \ Walle123</p>
-<p>开发者：<a href="mailto:developer@walle-web.io">developer@walle-web.io</a> \ Walle123</p>
-<p>访客：<a href="mailto:reporter@walle-web.io">reporter@walle-web.io</a> \ Walle123</p>
-<p>用超管进去，可以编辑账号信息，和管理空间。至于这几个账号权限和关系，参照： <a href="https://walle-web.io/docs/configuration-user.html">https://walle-web.io/docs/configuration-user.html</a></p>
-<p>账号和空间配置完毕以后，进入环境管理，一般开发环境，线上和测试环境，或者自定义。</p>
-<p>环境管理-添加项目环境：</p>
-<p><img src="/images/20231120-5.png"></p>
-<p>服务器管理–添加服务器:</p>
-<p><img src="/images/20231120-6.png"></p>
-<p>项目管理–添加项目</p>
-<p><img src="/images/20231120-7.png"></p>
-<p><img src="/images/20231120-8.png" alt="9"></p>
-<p>做了一个简单测试，看下效果：git提取代码，更新到服务器上面，用supervisor启动服务进程。</p>
-<p>创建上线单：</p>
-<p><img src="/images/20231120-9.png"></p>
-<p>提交，审核，上线：</p>
-<p><img src="/images/20231120-10.png"></p>
-<p>服务器效果：</p>
-<p> public -&gt; /data/www/release/19_18_20230802_18365</p>
-<p>cd /data/www/release/ &amp;&amp; ls</p>
-<p>11_10_20230728_142237  11_10_20230728_142342  11_12_20230731_175251  11_13_20230801_103508  11_15_20230801_173410  11_16_20230801_181332  11_17_20230802_161908  19_18_20230802_183658</p>
-<p>每次更新做的软连接，对应data/www/release下面的几个版本号；回滚就是把连接做到原来的补丁上面；</p>
-<p>似乎walle2没有增量，单个文件更新功能，或者没找到在哪，walle1有这个功能，实属可惜。</p>
-<p>说明：walle服务器需要到所管理的服务器实现免密访问，如果用其他用户也需要把用户的做免密。</p>
-<p>碰到的问题：项目管理，免密已经做好了测试正常，但是检测不通过，日志报timeout</p>
-<p>ERROR /opt/walle_home/walle/service/waller.py 111 waller.run task_id=0, user:www host:192.168.8.96 command:[ -d wwwroot ] || mkdir -p wwwroot, status=1, message:</p>
-<p>error: [Errno 110] Connection timed out</p>
-<p><img src="/images/20231120-11.png"></p>
-<p>没头绪，后面一次次尝试中发现，是docker cat /etc/docker/daemon.json</p>
-<p>Iptables设置的问题，可以尝试去掉再试试。</p>
-<p>{</p>
-<p>  “iptables”:false</p>
-<p>}</p>
-<p>做个简单笔记而已。</p>
-<p>参考：</p>
-<p> <a href="https://walle-web.io/docs/configuration-user.html">https://walle-web.io/docs/configuration-user.html</a></p>
-<p> <a href="https://www.yj-example.cn/?p=505">https://www.yj-example.cn/?p=505</a></p>
-<hr>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>点滴</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Centos同时安装python2和python3</title>
-    <url>/2023/11203350.html</url>
-    <content><![CDATA[<p>   在centos中，自带有python2，因此需要经常安装python3。但是这里有一个坑，就是centos的yum是用python2写的，如果正常编译安装python3，那么yum就会直接挂了。为了方便以后编译安装python3，不用天天去网上找教程仅供参考。</p>
-<p>首先连上服务器，看下python版本：</p>
-<p> python -V</p>
-<p>centos默认带有python2.7.5：</p>
-<p>接下来我们开始安装python3。</p>
-<p>1 安装python3所需要的组件</p>
-<p>yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make wget libffi-devel</p>
-<p>2 备份现有的python2</p>
-<p>cd /usr/bin</p>
-<p>mv python python.bak</p>
-<p>mv pip pip.bak</p>
-<p>不用猜当前yum肯定挂了不能用了。</p>
-<ol start="3">
-<li><p>卸载python3.6.5</p>
-<p>在这里去python的官网，找到需要的python版本链接，然后通过wget方式直接下载到linux服务器，当然你也可以从浏览器下载，然后上传到linux服务器。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cd /usr/local/</span><br><span class="line">wget https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tar.xz</span><br></pre></td></tr></tbody></table></figure>
-
-<p>tar -xvJf Python-3.6.5.tar.xz</p>
-<p>cd Python-3.6.5</p>
-<p>指定安装路径</p>
-<p>./configure –prefix=/usr/local/python3 –enable-optimizations</p>
-<p>编译并安装</p>
-<p>make &amp;&amp; make install</p>
-<p>最后显示Successfully installed pip-9.0.3 setuptools-39.0.1</p>
-<p>修改软连接，将python3指向python，顺便把pip也重新指向：</p>
-<p>ln -s /usr/local/python3/bin/python3 /usr/bin/python</p>
-<p>ln -s /usr/local/python3/bin/pip3 /usr/bin/pip</p>
-<p>查看版本号：</p>
-<p>[root@localhost /home/tools/Python-3.6.5]$python -V<br>Python 3.6.5<br>[root@localhost /home/tools/Python-3.6.5]$python2 -V<br>Python 2.7.5</p>
-<p>4.修改yum配置：</p>
-<p>装完了python3之后，我们要修一下yum了，不然以后都没法装软件和环境了。</p>
-<p>vim /usr/bin/yum</p>
-<p>把头部的 #! /usr/bin/python 修改为 #! /usr/bin/python2  修改保存。</p>
-<p>vim /usr/libexec/urlgrabber-ext-down</p>
-<p>#! /usr/bin/python修改为#! /usr/bin/python2 保存退出。</p>
-<p>至此，yum 可以正常使用了。</p>
-</li>
-</ol>
-]]></content>
-  </entry>
-  <entry>
-    <title>/var/log/messages日志恢复</title>
-    <url>/2023/112018778.html</url>
-    <content><![CDATA[<p>Linux容易犯的一个错误是把日志文件给直接删除，而不是删除日志文件的内容。<br>直接删除日志文件往往导致新产生的日志记录无法被写入到日志文件中（因为它已经被删除了），而仅仅重新新建（touch）同样名字的文件是解决不了问题的。<br>本文以Unbutu系统为例，介绍如何恢复被误删除的syslog文件：<br>首先，在以root用户执行如下lsof命令，查询打开/var/log/messages文件的进程的进程ID(PID)。<br>root@zck:/var/log# lsof | grep messages<br>rsyslogd 544 syslog 7w REG 8,1 214641 134422 /var/log/messages<br>从上面命令输出可以看到，这个打开/var/log/messages文件的进程的PID是544，文件/var/log/messages的文件描述符（FD）号是7。<br>根据上述的PID和FD，可以在/proc找到对应的文件：<br>root@zck:/var/log#ls -al /proc/544/fd/7<br>l-wx—— 1 root root 64 2012-07-14 14:48 7 -&gt; /var/log/messages<br>将文件/proc/544/fd/7拷贝到/var/log/messages<br>cp /proc/544/fd/7 /var/log/messages&nbsp;</p>
-<p>然后重新启动syslog服务即可恢复被误删除的日志文件，并且新的日志记录能够继续被写入日志文件。<br>以root用户运行service命令。其中，service命令的第2个参数可能是syslog、也可能是rsyslog。<br>具体可以使用通过命令查询得知。<br>登录后复制<br>root@zck:/proc/544/fd# service –status-all<br> [ ? ] …<br> [ ? ] rc.local<br> [ ? ] rsyslog<br> [ ? ] screen-cleanup<br> [ ? ] …  #——————————-</p>
-<p>复制代码代码如下:<br>root@zck:/proc/544/fd# service rsyslog restart<br>rsyslog start/running, process 2673</p>
-<p>清空日志文件：<br>cat /dev/null&gt;/var/log/messages</p>
-<p>转自url:<a href="https://blog.51cto.com/u_11146845/6240737">https://blog.51cto.com/u_11146845/6240737</a></p>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
       </tags>
   </entry>
 </search>
