@@ -1783,4 +1783,78 @@
         <tag>工具</tag>
       </tags>
   </entry>
+  <entry>
+    <title>debain 安装gitea</title>
+    <url>/2023/112836920.html</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>xtrabackup还原mysql</title>
+    <url>/2023/11284499.html</url>
+    <content><![CDATA[<p>1.下载ALI平台备份包：</p>
+<p>wget -c  “<a href="http://rdsbak-shanghai-v2-3az.oss-cn-shanghai-internal.aliyuncs.com/custins69321456/hins25992165_data_20230823211743_qp.xb?Expires=1693118738&amp;OSSAccessKeyId=STS.NSsAyPF7ptqMtxtGCnRWs9jPm&amp;Signature=DetUT9/MR8P3w1hNCAhrqhmGroE=&amp;Region=cn-shanghai&amp;security-token=CAISuAJ1q6Ft5B2yfSjIr5DGCsPkq+hRw7Omdl7FYxgLOmlYCWXio7ebsKs4lp6exUAKBgPYcVkLWRrTAYrTjzK6y4+MMppqWwagAEBdVqNVtpRXFvQK286fv+F5dsXmzkn030ugsDUCggdFRS5C/sAhwv4PZG9BMvrv6NAx/HJ9jw6G+oSFq1Bz6VbH+4xR+U+23d/TSYejmarHZaCV0294O0NSg2UoEJueNsMJt7afZG95M8Zv3/sctFZ1ctHXHmOQ1VDcNvXQexe3w==">http://rdsbak-shanghai-v2-3az.oss-cn-shanghai-internal.aliyuncs.com/custins69321456/hins25992165_data_20230823211743_qp.xb?Expires=1693118738&amp;OSSAccessKeyId=STS.NSsAyPF7ptqMtxtGCnRWs9jPm&amp;Signature=DetUT9%2FMR8P3w1hNCAhrqhmGroE%3D&amp;Region=cn-shanghai&amp;security-token=CAISuAJ1q6Ft5B2yfSjIr5DGCsPkq%2BhRw7Omdl7FYxgLOmlYCWXio7ebsKs4lp6exUAKBgPYcVkLWRrTAYrTjzK6y4%2BMMppqWwagAEBdVqNVtpRXFvQK286fv%2BF5dsXmzkn030ugsDUCggdFRS5C%2FsAhwv4PZG9BMvrv6NAx%2FHJ9jw6G%2BoSFq1Bz6VbH%2B4xR%2BU%2B23d%2FTSYejmarHZaCV0294O0NSg2UoEJueNsMJt7afZG95M8Zv3%2FsctFZ1ctHXHmOQ1VDcNvXQexe3w%3D%3D</a>“ -O 2023082121_qp.xb &gt; /tmp/download.log </p>
+<p>命令：nohup wget -c -t 0 “备份文件下载地址” -O 下载的目标路径及文件名 &gt; 下载输出日志到对应文件 &amp;</p>
+<p>示例：nohup wget -c -t 0 “<a href="https://example.aliyundoc.com/examplebackup.qp.xb">https://example.aliyundoc.com/examplebackup.qp.xb</a>“ -O /backup/examplebackup.qp.xb &gt; /tmp/download.log &amp;</p>
+<p>各命令代表含义如下：</p>
+<p>-t 0：无限重试。</p>
+<p>-c：支持断点续传。</p>
+<p>-O：下载的目标路径及文件名。</p>
+<p>nohup：避免因手误执行复制操作或者终端断开连接，把正在进行的下载中断，且当下载完毕后，之前的进程将会自动退出。</p>
+<p>命令：nohup curl -C - –retry 10 “备份文件下载地址” -o 自定义文件名 &gt; 下载输出日志到对应文件 &amp;</p>
+<p>示例：nohup curl -C –retry 10 “<a href="https://example.aliyundoc.com/examplebackup.qp.xb">https://example.aliyundoc.com/examplebackup.qp.xb</a>“ -o backup.qp.xb &gt; /tmp/download.log &amp;</p>
+<p>各命令代表含义如下：</p>
+<p>–retry 10：任务失败时的重试次数，以上示例表示重试10次。</p>
+<p>-C -：支持自动断点续传。</p>
+<p>-o：下载的目标路径及文件名。</p>
+<p>nohup：避免因手误执行复制操作或者终端断开连接，把正在进行的下载中断，且当下载完毕后，之前的进程将会自动退出。</p>
+<p>2  XtraBackup 还原</p>
+<p>下载Percona XtraBackup 2.4.28为例，安装命令如下：</p>
+<p>如果是MySQL 5.7、5.6或5.5实例，下载并安装Percona XtraBackup 2.4，如果是MySQL 8.0实例，下载并安装Percona XtraBackup 8.0，具体请参见<a href="https://docs.percona.com/percona-xtrabackup/8.0/installation.html">Percona XtraBackup 8.0</a>。</p>
+<p>wget <a href="https://downloads.percona.com/downloads/Percona-XtraBackup-2.4/Percona-XtraBackup-2.4.28/binary/redhat/7/x86_64/percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm">https://downloads.percona.com/downloads/Percona-XtraBackup-2.4/Percona-XtraBackup-2.4.28/binary/redhat/7/x86_64/percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm</a></p>
+<p> sudo yum localinstall -y percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm</p>
+<p> 安装解压工具qpress：</p>
+<p>## 下载可执行文件的tar包</p>
+<p>wget “<a href="https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/file-manage-files/zh-CN/20230406/flxd/qpress-11-linux-x64.tar">https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/file-manage-files/zh-CN/20230406/flxd/qpress-11-linux-x64.tar</a>“</p>
+<p> ## 解压下载的tar包，取出可执行文件</p>
+<p>tar -xvf qpress-11-linux-x64.tar</p>
+<p> ## 设置qpress文件的执行权限</p>
+<p>sudo chmod 775 qpress</p>
+<p> ## 拷贝qpress到/usr/bin中</p>
+<p>sudo cp qpress /usr/bin</p>
+<p>解压：</p>
+<p>cat 20230823211743_qp.xb |xbstream -x -v -C /data/mysql_data/</p>
+<p>innobackupex –decompress –remove-original /data/mysql_data/</p>
+<p>## 步骤一：解包</p>
+<p>cat 20230823211743_qp.xb |xbstream -x -v -C /data/mysql_data/</p>
+<p> ## 步骤二：解压</p>
+<p>### MySQL 5.5/5.6/5.7</p>
+<p>innobackupex –decompress –remove-original /data/mysql_data/</p>
+<p><img src="/../images/20231128_1.png" alt="img"> </p>
+<p>Mysql5.7恢复：</p>
+<p>innobackupex –defaults-file=/var/mysql_bkdata/backup-my.cnf –apply-log /data/mysql_data/</p>
+<p><img src="/../images/20231128_2.png" alt="img"> </p>
+<p>编辑my.cnf</p>
+<p>datadir=/data/mysql/</p>
+<p>innodb_undo_tablespaces=2</p>
+<p>innodb_undo_directory=/data/mysql/</p>
+<p>#@</p>
+<p> 修改****datadir****的参数取值为/var/mysql_newdata。</p>
+<p>放大查看复制代码</p>
+<p>datadir = /var/mysql_newdata</p>
+<p> mysql_newdata为自建数据库的新数据目录，已在[准备工作]中创建。</p>
+<p>在my.cnf中添加如下内容。</p>
+<p>innodb_undo_tablespaces=2</p>
+<p>innodb_undo_directory=/var/mysql_newdata</p>
+<p>参数****innodb_undo_tablespaces****的取值需要与/var/mysql_bkdata/backup-my.cnf中的取值相同，您可以使用cat /var/mysql_bkdata/backup-my.cnf | grep innodb_undo_tablespaces查询。</p>
+<p>恢复数据。</p>
+<p>sudo innobackupex –defaults-file=/etc/my.cnf –copy-back /data/mysql_data/</p>
+<p>从备份目录copy到数据目录</p>
+<p><img src="/../images/20231128_3.png" alt="img"> </p>
+<p><img src="/../images/20231128_4.png" alt="img"> </p>
+<p>给于mysql新目录权限，进入mysql</p>
+]]></content>
+      <tags>
+        <tag>随便</tag>
+      </tags>
+  </entry>
 </search>
