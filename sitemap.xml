@@ -11,15 +11,6 @@
   </url>
   
   <url>
-    <loc>https://blog.icmpy.net/2023/112836920.html</loc>
-    
-    <lastmod>2023-11-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.icmpy.net/2023/112018778.html</loc>
     
     <lastmod>2023-11-20</lastmod>
@@ -355,7 +346,7 @@
 
   <url>
     <loc>https://blog.icmpy.net/</loc>
-    <lastmod>2023-11-28</lastmod>
+    <lastmod>2023-11-29</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -363,28 +354,28 @@
   
   <url>
     <loc>https://blog.icmpy.net/tags/%E9%9A%8F%E7%AC%94/</loc>
-    <lastmod>2023-11-28</lastmod>
+    <lastmod>2023-11-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.icmpy.net/tags/%E7%82%B9%E6%BB%B4/</loc>
-    <lastmod>2023-11-28</lastmod>
+    <lastmod>2023-11-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.icmpy.net/tags/%E5%B7%A5%E5%85%B7/</loc>
-    <lastmod>2023-11-28</lastmod>
+    <lastmod>2023-11-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.icmpy.net/tags/%E9%9A%8F%E4%BE%BF/</loc>
-    <lastmod>2023-11-28</lastmod>
+    <lastmod>2023-11-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -393,7 +384,7 @@
   
   <url>
     <loc>https://blog.icmpy.net/categories/%E7%B3%BB%E7%BB%9F/</loc>
-    <lastmod>2023-11-28</lastmod>
+    <lastmod>2023-11-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
