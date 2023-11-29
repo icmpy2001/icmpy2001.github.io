@@ -1,3 +1,5 @@
+https://blog.icmpy.net/categories/index.html
+https://blog.icmpy.net/tags/index.html
 https://blog.icmpy.net/2023/11284499.html
 https://blog.icmpy.net/2023/112018778.html
 https://blog.icmpy.net/2023/11203350.html
@@ -12,15 +14,12 @@ https://blog.icmpy.net/2023/071760022.html
 https://blog.icmpy.net/2023/062739776.html
 https://blog.icmpy.net/2023/071659235.html
 https://blog.icmpy.net/2023/111760549.html
-https://blog.icmpy.net/tags/index.html
 https://blog.icmpy.net/2023/11105462.html
 https://blog.icmpy.net/2023/111359213.html
 https://blog.icmpy.net/2023/081629672.html
 https://blog.icmpy.net/2023/071114619.html
 https://blog.icmpy.net/2023/081064777.html
 https://blog.icmpy.net/2023/111420634.html
-https://blog.icmpy.net/categories/index.html
-https://blog.icmpy.net/categories/index-2.html
 https://blog.icmpy.net/2023/062862696.html
 https://blog.icmpy.net/2023/062743960.html
 https://blog.icmpy.net/2023/062858442.html
@@ -34,8 +33,6 @@ https://blog.icmpy.net/404/index.html
 https://blog.icmpy.net/contact/index.html
 https://blog.icmpy.net/friends/index.html
 https://blog.icmpy.net/about/index-1.html
-https://blog.icmpy.net/tags/index-1.html
-https://blog.icmpy.net/categories/index-1.html
 https://blog.icmpy.net/
 https://blog.icmpy.net/tags/%E9%9A%8F%E7%AC%94/
 https://blog.icmpy.net/tags/%E7%82%B9%E6%BB%B4/
