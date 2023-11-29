@@ -52,9 +52,9 @@
 
     <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
 
-<meta name="generator" content="Hexo 7.0.0">
+<meta name="generator" content="Hexo 7.0.0"><link rel="alternate" href="/atom.xml" title="云上的小雨滴" type="application/atom+xml">
+
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="alternate" href="/atom.xml" title="云上的小雨滴" type="application/atom+xml">
 </head>
 
 
@@ -986,33 +986,53 @@ ls / | grep swapfilechmod 600 /swapfilels -lh /swapfile-rw——- 1
             <br>
             
         </div>
-        <div class="col s12 m4 l4 social-link social-statis">
-    <a href="https://icmpy2001.github.io" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <div class="col s12 m4 l4 social-link social-statis"><% if (theme.socialLink.github) { %>
+    <a href="<%= theme.socialLink.github %>" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
         <i class="fab fa-github"></i>
     </a>
+<% } %>
 
-
-
-    <a href="mailto:cmpy2001@163.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+<% if (theme.socialLink.email) { %>
+    <a href="mailto:<%= theme.socialLink.email %>" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
         <i class="fas fa-envelope-open"></i>
     </a>
+<% } %>
 
+<% if (theme.socialLink.facebook) { %>
+    <a href="<%= theme.socialLink.facebook %>" class="tooltipped" target="_blank" data-tooltip="关注我的Facebook: <%= theme.socialLink.facebook %>" data-position="top" data-delay="50">
+        <i class="fab fa-facebook-f"></i>
+    </a>
+<% } %>
 
+<% if (theme.socialLink.twitter) { %>
+    <a href="<%= theme.socialLink.twitter %>" class="tooltipped" target="_blank" data-tooltip="关注我的Twitter: <%= theme.socialLink.twitter %>" data-position="top" data-delay="50">
+        <i class="fab fa-twitter"></i>
+    </a>
+<% } %>
 
+<% if (theme.socialLink.qq) { %>
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=<%= theme.socialLink.qq %>" class="tooltipped" target="_blank" data-tooltip="QQ联系我: <%= theme.socialLink.qq %>" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+<% } %>
 
+<% if (theme.socialLink.weibo) { %>
+    <a href="<%= theme.socialLink.weibo %>" class="tooltipped" target="_blank" data-tooltip="关注我的微博: <%= theme.socialLink.weibo %>" data-position="top" data-delay="50">
+        <i class="fab fa-weibo"></i>
+    </a>
+<% } %>
 
+<% if (theme.socialLink.zhihu) { %>
+    <a href="<%= theme.socialLink.zhihu %>" class="tooltipped" target="_blank" data-tooltip="关注我的知乎: <%= theme.socialLink.zhihu %>" data-position="top" data-delay="50">
+        <i class="fab fa-zhihu1">知</i>
+    </a>
+<% } %>
 
-
-
-
-
-
-
-
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+<% if (theme.socialLink.rss) { %>
+    <a href="<%- url_for('/atom.xml') %>" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
         <i class="fas fa-rss"></i>
     </a>
-
+<% } %>
 </div>
     </div>
 </footer>

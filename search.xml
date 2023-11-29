@@ -1,35 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Debian 10挂载加swap</title>
-    <url>/2023/111727163.html</url>
-    <content><![CDATA[<p>以根目录挂载为4G例：<br>dd if=/dev/zero of=/swapfile count=4096 bs=1M</p>
-<p>ls / | grep swapfile<br>chmod 600 /swapfile<br>ls -lh /swapfile<br>-rw——- 1 root root 4.0G Aug 17 12:14 /swapfile<br>通过运行以下命令告诉服务器设置swap文件：<br>mkswap /swapfile<br>swapon /swapfile<br>free -m<br>vi /etc/fstab<br>/swapfile swap swap defaults 0 0<br>保存。</p>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Debian10 安装ossfs</title>
-    <url>/2023/111750151.html</url>
-    <content><![CDATA[<p>1.<br>sudo apt-get install automake autotools-dev g++  git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev  make pkg-config<br>2.<br>git clone <a href="https://github.com/aliyun/ossfs.git">https://github.com/aliyun/ossfs.git</a><br>cd ossfs/<br> ./autogen.sh<br>  ./configure<br>Sudo   make<br> Sudo make install<br>3.配置bucket信息和accessKey信息：<br>echo Bucket名称:要是用的AccessKeyId:对应的AccessKeySecret  &gt; /etc/passwd-ossfs<br>示例：<br>mkdir -p /data/ossfs<br>cosfs examplebucket-1250000000 /data/ossfs -ourl=<a href="http://cos.ap-guangzhou.myqcloud.com/">http://cos.ap-guangzhou.myqcloud.com</a> </p>
-<p>ossfs ts-1121-patch-oss  /data/ossfs/ -ourl=<a href="https://oss-cn-hangzhou-internal.aliyuncs.com/">https://oss-cn-hangzhou-internal.aliyuncs.com</a> -oallow_other</p>
-<p>其中：<br><mountpoint> 为本地挂载目录（例如/mnt）。<br><region> 为地域简称， 例如 ap-guangzhou 、 eu-frankfurt 等。更多地域简称信息，请参见 可用地域。<br>-odbglevel 指定日志级别，默认为crit，可选值为crit、error、warn、info、debug。<br>-oallow_other 允许非挂载用户访问挂载文件夹。</region></mountpoint></p>
-<p>创建启动脚本：<br>Vim /etc/init.d/ossfs<br>ossfs demo-patch-oss /data/ossfs/ -ourl=oss-cn-hangzhou-internal.aliyuncs.com -oallow_other<br>Chmod u+x /etc/init.dossfs</p>
-<p>Centos：<br>chkncondif ossf on<br>Debian;<br>update-rc.d  ossfs  defaults</p>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Centos同时安装python2和python3</title>
     <url>/2023/11203350.html</url>
     <content><![CDATA[<p>   在centos中，自带有python2，因此需要经常安装python3。但是这里有一个坑，就是centos的yum是用python2写的，如果正常编译安装python3，那么yum就会直接挂了。为了方便以后编译安装python3，不用天天去网上找教程仅供参考。</p>
@@ -71,6 +42,35 @@
 </li>
 </ol>
 ]]></content>
+  </entry>
+  <entry>
+    <title>Debian 10挂载加swap</title>
+    <url>/2023/111727163.html</url>
+    <content><![CDATA[<p>以根目录挂载为4G例：<br>dd if=/dev/zero of=/swapfile count=4096 bs=1M</p>
+<p>ls / | grep swapfile<br>chmod 600 /swapfile<br>ls -lh /swapfile<br>-rw——- 1 root root 4.0G Aug 17 12:14 /swapfile<br>通过运行以下命令告诉服务器设置swap文件：<br>mkswap /swapfile<br>swapon /swapfile<br>free -m<br>vi /etc/fstab<br>/swapfile swap swap defaults 0 0<br>保存。</p>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Debian10 安装ossfs</title>
+    <url>/2023/111750151.html</url>
+    <content><![CDATA[<p>1.<br>sudo apt-get install automake autotools-dev g++  git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev  make pkg-config<br>2.<br>git clone <a href="https://github.com/aliyun/ossfs.git">https://github.com/aliyun/ossfs.git</a><br>cd ossfs/<br> ./autogen.sh<br>  ./configure<br>Sudo   make<br> Sudo make install<br>3.配置bucket信息和accessKey信息：<br>echo Bucket名称:要是用的AccessKeyId:对应的AccessKeySecret  &gt; /etc/passwd-ossfs<br>示例：<br>mkdir -p /data/ossfs<br>cosfs examplebucket-1250000000 /data/ossfs -ourl=<a href="http://cos.ap-guangzhou.myqcloud.com/">http://cos.ap-guangzhou.myqcloud.com</a> </p>
+<p>ossfs ts-1121-patch-oss  /data/ossfs/ -ourl=<a href="https://oss-cn-hangzhou-internal.aliyuncs.com/">https://oss-cn-hangzhou-internal.aliyuncs.com</a> -oallow_other</p>
+<p>其中：<br><mountpoint> 为本地挂载目录（例如/mnt）。<br><region> 为地域简称， 例如 ap-guangzhou 、 eu-frankfurt 等。更多地域简称信息，请参见 可用地域。<br>-odbglevel 指定日志级别，默认为crit，可选值为crit、error、warn、info、debug。<br>-oallow_other 允许非挂载用户访问挂载文件夹。</region></mountpoint></p>
+<p>创建启动脚本：<br>Vim /etc/init.d/ossfs<br>ossfs demo-patch-oss /data/ossfs/ -ourl=oss-cn-hangzhou-internal.aliyuncs.com -oallow_other<br>Chmod u+x /etc/init.dossfs</p>
+<p>Centos：<br>chkncondif ossf on<br>Debian;<br>update-rc.d  ossfs  defaults</p>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
   </entry>
   <entry>
     <title>ELK安装调试及遇到的问题</title>
@@ -757,6 +757,91 @@
       </tags>
   </entry>
   <entry>
+    <title>frp搭建</title>
+    <url>/2023/062739776.html</url>
+    <content><![CDATA[<p> &nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。</p>
+<p>首先到官网：</p>
+<p>&nbsp;<a href="https://github.com/fatedier/frp/releases">https://github.com/fatedier/frp/releases</a></p>
+<p>下载: frp_0.16.0_linux_amd64.tar.gz服务器端</p>
+<p>解压出来ls:</p>
+<p>frpc&nbsp; frpc_full.ini&nbsp; frpc_http.ini&nbsp; frpc.ini&nbsp; frps&nbsp; frps_full.ini&nbsp; frps.ini&nbsp; LICENSE&nbsp; nohup.out</p>
+<p>服务器端只需要两个文件frps和frps.ini,其中frps为可执行文件，frps.ini为配置文件默认配置文件如下：其中bind_addr为本机IP,bind_port为frp对客户端的端口号，auto_token是客户端连接服务器端的口令。</p>
+<p>[common]</p>
+<p>Bind_addr=0.0.0.0</p>
+<p>Bind_port =4443</p>
+<p>Auto_token = frp</p>
+<p>配置好以后可以运行起来./frps -c ./frps.ini</p>
+<p>最好后台运行：nohup ./frps -c ./frps.ini &amp;</p>
+<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:4443</p>
+<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
+<p>&nbsp;需要穿透端口的服务器端开启：</p>
+<p>nohup ./frps -c ./frps.ini &amp;</p>
+<p>同样将客户端解压后有七个文件，只需要frpc和frpc.ini,配置文件如下：</p>
+<p>&nbsp;[common]</p>
+<p>Server_addr = 123.123.123.123</p>
+<p>Server_port = 4443</p>
+<p>Auto-token = frp</p>
+<p>[ssh_1]</p>
+<p>Type = tcp</p>
+<p>Local_ip = 127.0.0.1</p>
+<p>Local_port = 22</p>
+<p>Remote_port = 10085</p>
+<p>注意：server_addr是服务器端的公网IP地址，server_port是frp服务端口号，auto_token是连接服务器的口令，必须和服务器保持一致。[ssh_1]是客户端通过服务器与用户之间的通道名，每个客户端必须不一样，remote_port是服务器端对外提供本机服务的端口号，即用户连接123.123.123.123:10085，相当于连接127.0.0.1:22,即arm板上的ssh服务</p>
+<p>运行客户端：./frpc -c ./frpc.ini</p>
+<p>&nbsp;</p>
+<p>当前的配置</p>
+<p>more frpc.ini</p>
+<p>[common]</p>
+<p>server_addr = dem.abc.com</p>
+<p>server_port = 7000</p>
+<p>[game]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 9001</p>
+<p>remote_port = 6000</p>
+<p>&nbsp;</p>
+<p>[http]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 80</p>
+<p>remote_port = 6001</p>
+<p>&nbsp;</p>
+<p>[mysql]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.235</p>
+<p>local_port = 3306</p>
+<p>remote_port = 13306</p>
+<p>more frpc_http.ini</p>
+<p>[common]</p>
+<p>server_addr = dem.abc.com</p>
+<p>server_port = 7000</p>
+<p>&nbsp;</p>
+<p>[http]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 80</p>
+<p>remote_port = 6001</p>
+<p>这样demo.abc.com 的13306映射到3306,6001映射到80端口等等；</p>
+<p>在客户端开启：最好后台运行启动客户端proxy：</p>
+<p>nohup ./frpc&nbsp; -c ./frpc.ini &amp;</p>
+<p>[I] [control.go:240] [e465e02f8bad1e5b] login to server success, get run id [e465e02f8bad1e5b], server udp port [0]</p>
+<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [http] start proxy success</p>
+<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [mysql] start proxy success</p>
+<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:7000</p>
+<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
+<p>2018/05/17 10:49:11 [I] [main.go:114] PrivilegeMode is enabled, you should pay more attention to security issues</p>
+<p>&nbsp;</p>
+<p>PS：配置很简单，但是记得nohup ./frps -c ./frps.ini &amp; 在要穿透的远程服务器开启，nohup ./frpc&nbsp; -c ./frpc.ini &amp; 在内网开启，记得开放远程服务器穿透端口；</p>
+<hr>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hello World</title>
     <url>/2023/062516107.html</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
@@ -886,91 +971,6 @@
 
 <p>由于做了ssl证书，80做了个跳转到443上面，域名需要到平台做解析，A记录到自己的服务器，如果流量大的话可以做cdn，Cname到平台给的记录值，ssl证书申请，主流云平台都可以免费申请，填写一些资料以后很快就可以签发证书，选择对应的证书上传即可。</p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>frp搭建</title>
-    <url>/2023/062739776.html</url>
-    <content><![CDATA[<p> &nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。</p>
-<p>首先到官网：</p>
-<p>&nbsp;<a href="https://github.com/fatedier/frp/releases">https://github.com/fatedier/frp/releases</a></p>
-<p>下载: frp_0.16.0_linux_amd64.tar.gz服务器端</p>
-<p>解压出来ls:</p>
-<p>frpc&nbsp; frpc_full.ini&nbsp; frpc_http.ini&nbsp; frpc.ini&nbsp; frps&nbsp; frps_full.ini&nbsp; frps.ini&nbsp; LICENSE&nbsp; nohup.out</p>
-<p>服务器端只需要两个文件frps和frps.ini,其中frps为可执行文件，frps.ini为配置文件默认配置文件如下：其中bind_addr为本机IP,bind_port为frp对客户端的端口号，auto_token是客户端连接服务器端的口令。</p>
-<p>[common]</p>
-<p>Bind_addr=0.0.0.0</p>
-<p>Bind_port =4443</p>
-<p>Auto_token = frp</p>
-<p>配置好以后可以运行起来./frps -c ./frps.ini</p>
-<p>最好后台运行：nohup ./frps -c ./frps.ini &amp;</p>
-<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:4443</p>
-<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
-<p>&nbsp;需要穿透端口的服务器端开启：</p>
-<p>nohup ./frps -c ./frps.ini &amp;</p>
-<p>同样将客户端解压后有七个文件，只需要frpc和frpc.ini,配置文件如下：</p>
-<p>&nbsp;[common]</p>
-<p>Server_addr = 123.123.123.123</p>
-<p>Server_port = 4443</p>
-<p>Auto-token = frp</p>
-<p>[ssh_1]</p>
-<p>Type = tcp</p>
-<p>Local_ip = 127.0.0.1</p>
-<p>Local_port = 22</p>
-<p>Remote_port = 10085</p>
-<p>注意：server_addr是服务器端的公网IP地址，server_port是frp服务端口号，auto_token是连接服务器的口令，必须和服务器保持一致。[ssh_1]是客户端通过服务器与用户之间的通道名，每个客户端必须不一样，remote_port是服务器端对外提供本机服务的端口号，即用户连接123.123.123.123:10085，相当于连接127.0.0.1:22,即arm板上的ssh服务</p>
-<p>运行客户端：./frpc -c ./frpc.ini</p>
-<p>&nbsp;</p>
-<p>当前的配置</p>
-<p>more frpc.ini</p>
-<p>[common]</p>
-<p>server_addr = dem.abc.com</p>
-<p>server_port = 7000</p>
-<p>[game]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.232</p>
-<p>local_port = 9001</p>
-<p>remote_port = 6000</p>
-<p>&nbsp;</p>
-<p>[http]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.232</p>
-<p>local_port = 80</p>
-<p>remote_port = 6001</p>
-<p>&nbsp;</p>
-<p>[mysql]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.235</p>
-<p>local_port = 3306</p>
-<p>remote_port = 13306</p>
-<p>more frpc_http.ini</p>
-<p>[common]</p>
-<p>server_addr = dem.abc.com</p>
-<p>server_port = 7000</p>
-<p>&nbsp;</p>
-<p>[http]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.232</p>
-<p>local_port = 80</p>
-<p>remote_port = 6001</p>
-<p>这样demo.abc.com 的13306映射到3306,6001映射到80端口等等；</p>
-<p>在客户端开启：最好后台运行启动客户端proxy：</p>
-<p>nohup ./frpc&nbsp; -c ./frpc.ini &amp;</p>
-<p>[I] [control.go:240] [e465e02f8bad1e5b] login to server success, get run id [e465e02f8bad1e5b], server udp port [0]</p>
-<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [http] start proxy success</p>
-<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [mysql] start proxy success</p>
-<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:7000</p>
-<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
-<p>2018/05/17 10:49:11 [I] [main.go:114] PrivilegeMode is enabled, you should pay more attention to security issues</p>
-<p>&nbsp;</p>
-<p>PS：配置很简单，但是记得nohup ./frps -c ./frps.ini &amp; 在要穿透的远程服务器开启，nohup ./frpc&nbsp; -c ./frpc.ini &amp; 在内网开启，记得开放远程服务器穿透端口；</p>
-<hr>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
   </entry>
   <entry>
     <title>kafka Create topic 报错</title>
@@ -1468,6 +1468,75 @@
       </tags>
   </entry>
   <entry>
+    <title>xtrabackup还原mysql</title>
+    <url>/2023/11284499.html</url>
+    <content><![CDATA[<p>1.下载ALI平台备份包：</p>
+<p>wget -c  “<a href="http://rdsbak-shanghai-v2-3az.oss-cn-shanghai-internal.aliyuncs.com/custins69321456/hins25992165_data_20230823211743_qp.xb?Expires=16931mOQ1VDcN">http://rdsbak-shanghai-v2-3az.oss-cn-shanghai-internal.aliyuncs.com/custins69321456/hins25992165_data_20230823211743_qp.xb?Expires=16931mOQ1VDcN</a>…..” -O 2023082121_qp.xb &gt; /tmp/download.log </p>
+<p>命令：nohup wget -c -t 0 “备份文件下载地址” -O 下载的目标路径及文件名 &gt; 下载输出日志到对应文件 &amp;</p>
+<p>示例：nohup wget -c -t 0 “<a href="https://example.aliyundoc.com/examplebackup.qp.xb">https://example.aliyundoc.com/examplebackup.qp.xb</a>“ -O /backup/examplebackup.qp.xb &gt; /tmp/download.log &amp;</p>
+<p>各命令代表含义如下：</p>
+<p>-t 0：无限重试。</p>
+<p>-c：支持断点续传。</p>
+<p>-O：下载的目标路径及文件名。</p>
+<p>nohup：避免因手误执行复制操作或者终端断开连接，把正在进行的下载中断，且当下载完毕后，之前的进程将会自动退出。</p>
+<p>命令：nohup curl -C - –retry 10 “备份文件下载地址” -o 自定义文件名 &gt; 下载输出日志到对应文件 &amp;</p>
+<p>示例：nohup curl -C –retry 10 “<a href="https://example.aliyundoc.com/examplebackup.qp.xb">https://example.aliyundoc.com/examplebackup.qp.xb</a>“ -o backup.qp.xb &gt; /tmp/download.log &amp;</p>
+<p>各命令代表含义如下：</p>
+<p>–retry 10：任务失败时的重试次数，以上示例表示重试10次。</p>
+<p>-C -：支持自动断点续传。</p>
+<p>-o：下载的目标路径及文件名。</p>
+<p>nohup：避免因手误执行复制操作或者终端断开连接，把正在进行的下载中断，且当下载完毕后，之前的进程将会自动退出。</p>
+<p>2  XtraBackup 还原</p>
+<p>下载Percona XtraBackup 2.4.28为例，安装命令如下：</p>
+<p>如果是MySQL 5.7、5.6或5.5实例，下载并安装Percona XtraBackup 2.4，如果是MySQL 8.0实例，下载并安装Percona XtraBackup 8.0，具体请参见<a href="https://docs.percona.com/percona-xtrabackup/8.0/installation.html">Percona XtraBackup 8.0</a>。</p>
+<p>wget <a href="https://downloads.percona.com/downloads/Percona-XtraBackup-2.4/Percona-XtraBackup-2.4.28/binary/redhat/7/x86_64/percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm">https://downloads.percona.com/downloads/Percona-XtraBackup-2.4/Percona-XtraBackup-2.4.28/binary/redhat/7/x86_64/percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm</a></p>
+<p> sudo yum localinstall -y percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm</p>
+<p> 安装解压工具qpress：</p>
+<p>## 下载可执行文件的tar包</p>
+<p>wget “<a href="https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/file-manage-files/zh-CN/20230406/flxd/qpress-11-linux-x64.tar">https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/file-manage-files/zh-CN/20230406/flxd/qpress-11-linux-x64.tar</a>“</p>
+<p> ## 解压下载的tar包，取出可执行文件</p>
+<p>tar -xvf qpress-11-linux-x64.tar</p>
+<p> ## 设置qpress文件的执行权限</p>
+<p>sudo chmod 775 qpress</p>
+<p> ## 拷贝qpress到/usr/bin中</p>
+<p>sudo cp qpress /usr/bin</p>
+<p>解压：</p>
+<p>cat 20230823211743_qp.xb |xbstream -x -v -C /data/mysql_data/</p>
+<p>innobackupex –decompress –remove-original /data/mysql_data/</p>
+<p>## 步骤一：解包</p>
+<p>cat 20230823211743_qp.xb |xbstream -x -v -C /data/mysql_data/</p>
+<p> ## 步骤二：解压</p>
+<p>### MySQL 5.5/5.6/5.7</p>
+<p>innobackupex –decompress –remove-original /data/mysql_data/</p>
+<p><img src="/../images/20231128_1.png" alt="img"> </p>
+<p>Mysql5.7恢复：</p>
+<p>innobackupex –defaults-file=/var/mysql_bkdata/backup-my.cnf –apply-log /data/mysql_data/</p>
+<p><img src="/../images/20231128_2.png" alt="img"> </p>
+<p>编辑my.cnf</p>
+<p>datadir=/data/mysql/</p>
+<p>innodb_undo_tablespaces=2</p>
+<p>innodb_undo_directory=/data/mysql/</p>
+<p>#@</p>
+<p> 修改****datadir****的参数取值为/var/mysql_newdata。</p>
+<p>放大查看复制代码</p>
+<p>datadir = /var/mysql_newdata</p>
+<p> mysql_newdata为自建数据库的新数据目录，已在[准备工作]中创建。</p>
+<p>在my.cnf中添加如下内容。</p>
+<p>innodb_undo_tablespaces=2</p>
+<p>innodb_undo_directory=/var/mysql_newdata</p>
+<p>参数****innodb_undo_tablespaces****的取值需要与/var/mysql_bkdata/backup-my.cnf中的取值相同，您可以使用cat /var/mysql_bkdata/backup-my.cnf | grep innodb_undo_tablespaces查询。</p>
+<p>恢复数据。</p>
+<p>sudo innobackupex –defaults-file=/etc/my.cnf –copy-back /data/mysql_data/</p>
+<p>从备份目录copy到数据目录</p>
+<p><img src="/../images/20231128_3.png" alt="img"> </p>
+<p><img src="/../images/20231128_4.png" alt="img"> </p>
+<p>给于mysql新目录权限，进入mysql</p>
+]]></content>
+      <tags>
+        <tag>随便</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>vsftp 锁定用户目录</title>
     <url>/2023/071114619.html</url>
     <content><![CDATA[<p>vsftp 安装以后给用户权限和锁定目录；</p>
@@ -1556,132 +1625,6 @@
 <h2 id="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"><a href="#vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。" class="headerlink" title="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"></a>vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。</h2>]]></content>
       <tags>
         <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>xtrabackup还原mysql</title>
-    <url>/2023/11284499.html</url>
-    <content><![CDATA[<p>1.下载ALI平台备份包：</p>
-<p>wget -c  “<a href="http://rdsbak-shanghai-v2-3az.oss-cn-shanghai-internal.aliyuncs.com/custins69321456/hins25992165_data_20230823211743_qp.xb?Expires=16931mOQ1VDcN">http://rdsbak-shanghai-v2-3az.oss-cn-shanghai-internal.aliyuncs.com/custins69321456/hins25992165_data_20230823211743_qp.xb?Expires=16931mOQ1VDcN</a>…..” -O 2023082121_qp.xb &gt; /tmp/download.log </p>
-<p>命令：nohup wget -c -t 0 “备份文件下载地址” -O 下载的目标路径及文件名 &gt; 下载输出日志到对应文件 &amp;</p>
-<p>示例：nohup wget -c -t 0 “<a href="https://example.aliyundoc.com/examplebackup.qp.xb">https://example.aliyundoc.com/examplebackup.qp.xb</a>“ -O /backup/examplebackup.qp.xb &gt; /tmp/download.log &amp;</p>
-<p>各命令代表含义如下：</p>
-<p>-t 0：无限重试。</p>
-<p>-c：支持断点续传。</p>
-<p>-O：下载的目标路径及文件名。</p>
-<p>nohup：避免因手误执行复制操作或者终端断开连接，把正在进行的下载中断，且当下载完毕后，之前的进程将会自动退出。</p>
-<p>命令：nohup curl -C - –retry 10 “备份文件下载地址” -o 自定义文件名 &gt; 下载输出日志到对应文件 &amp;</p>
-<p>示例：nohup curl -C –retry 10 “<a href="https://example.aliyundoc.com/examplebackup.qp.xb">https://example.aliyundoc.com/examplebackup.qp.xb</a>“ -o backup.qp.xb &gt; /tmp/download.log &amp;</p>
-<p>各命令代表含义如下：</p>
-<p>–retry 10：任务失败时的重试次数，以上示例表示重试10次。</p>
-<p>-C -：支持自动断点续传。</p>
-<p>-o：下载的目标路径及文件名。</p>
-<p>nohup：避免因手误执行复制操作或者终端断开连接，把正在进行的下载中断，且当下载完毕后，之前的进程将会自动退出。</p>
-<p>2  XtraBackup 还原</p>
-<p>下载Percona XtraBackup 2.4.28为例，安装命令如下：</p>
-<p>如果是MySQL 5.7、5.6或5.5实例，下载并安装Percona XtraBackup 2.4，如果是MySQL 8.0实例，下载并安装Percona XtraBackup 8.0，具体请参见<a href="https://docs.percona.com/percona-xtrabackup/8.0/installation.html">Percona XtraBackup 8.0</a>。</p>
-<p>wget <a href="https://downloads.percona.com/downloads/Percona-XtraBackup-2.4/Percona-XtraBackup-2.4.28/binary/redhat/7/x86_64/percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm">https://downloads.percona.com/downloads/Percona-XtraBackup-2.4/Percona-XtraBackup-2.4.28/binary/redhat/7/x86_64/percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm</a></p>
-<p> sudo yum localinstall -y percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm</p>
-<p> 安装解压工具qpress：</p>
-<p>## 下载可执行文件的tar包</p>
-<p>wget “<a href="https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/file-manage-files/zh-CN/20230406/flxd/qpress-11-linux-x64.tar">https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/file-manage-files/zh-CN/20230406/flxd/qpress-11-linux-x64.tar</a>“</p>
-<p> ## 解压下载的tar包，取出可执行文件</p>
-<p>tar -xvf qpress-11-linux-x64.tar</p>
-<p> ## 设置qpress文件的执行权限</p>
-<p>sudo chmod 775 qpress</p>
-<p> ## 拷贝qpress到/usr/bin中</p>
-<p>sudo cp qpress /usr/bin</p>
-<p>解压：</p>
-<p>cat 20230823211743_qp.xb |xbstream -x -v -C /data/mysql_data/</p>
-<p>innobackupex –decompress –remove-original /data/mysql_data/</p>
-<p>## 步骤一：解包</p>
-<p>cat 20230823211743_qp.xb |xbstream -x -v -C /data/mysql_data/</p>
-<p> ## 步骤二：解压</p>
-<p>### MySQL 5.5/5.6/5.7</p>
-<p>innobackupex –decompress –remove-original /data/mysql_data/</p>
-<p><img src="/../images/20231128_1.png" alt="img"> </p>
-<p>Mysql5.7恢复：</p>
-<p>innobackupex –defaults-file=/var/mysql_bkdata/backup-my.cnf –apply-log /data/mysql_data/</p>
-<p><img src="/../images/20231128_2.png" alt="img"> </p>
-<p>编辑my.cnf</p>
-<p>datadir=/data/mysql/</p>
-<p>innodb_undo_tablespaces=2</p>
-<p>innodb_undo_directory=/data/mysql/</p>
-<p>#@</p>
-<p> 修改****datadir****的参数取值为/var/mysql_newdata。</p>
-<p>放大查看复制代码</p>
-<p>datadir = /var/mysql_newdata</p>
-<p> mysql_newdata为自建数据库的新数据目录，已在[准备工作]中创建。</p>
-<p>在my.cnf中添加如下内容。</p>
-<p>innodb_undo_tablespaces=2</p>
-<p>innodb_undo_directory=/var/mysql_newdata</p>
-<p>参数****innodb_undo_tablespaces****的取值需要与/var/mysql_bkdata/backup-my.cnf中的取值相同，您可以使用cat /var/mysql_bkdata/backup-my.cnf | grep innodb_undo_tablespaces查询。</p>
-<p>恢复数据。</p>
-<p>sudo innobackupex –defaults-file=/etc/my.cnf –copy-back /data/mysql_data/</p>
-<p>从备份目录copy到数据目录</p>
-<p><img src="/../images/20231128_3.png" alt="img"> </p>
-<p><img src="/../images/20231128_4.png" alt="img"> </p>
-<p>给于mysql新目录权限，进入mysql</p>
-]]></content>
-      <tags>
-        <tag>随便</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>zabbix 清理历史数据</title>
-    <url>/2023/071761914.html</url>
-    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
-<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
-<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
-<p>root@Testl]$ date +%s -d”20160929”</p>
-<p>1475078400</p>
-<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
-<p>Query OK, 36093 rows affected (43.64 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
-<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history;</p>
-<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
-<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history_uint;</p>
-<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
-<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>漫长时间等待以后看下效果：</p>
-<p>原来数据：</p>
-<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
-<p>压缩中：</p>
-<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
-<p>find -size +50M -exec ls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
-<p>最终删两个表以后数据：</p>
-<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
-<p>完了以后，重启mysql，zabbix，nginx试试；</p>
-<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
-<hr>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
       </tags>
   </entry>
   <entry>
@@ -1821,6 +1764,63 @@
 ]]></content>
       <tags>
         <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>zabbix 清理历史数据</title>
+    <url>/2023/071761914.html</url>
+    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
+<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
+<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
+<p>root@Testl]$ date +%s -d”20160929”</p>
+<p>1475078400</p>
+<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
+<p>Query OK, 36093 rows affected (43.64 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
+<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history;</p>
+<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
+<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history_uint;</p>
+<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
+<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>漫长时间等待以后看下效果：</p>
+<p>原来数据：</p>
+<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
+<p>压缩中：</p>
+<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
+<p>find -size +50M -exec ls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
+<p>最终删两个表以后数据：</p>
+<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
+<p>完了以后，重启mysql，zabbix，nginx试试；</p>
+<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
       </tags>
   </entry>
   <entry>
