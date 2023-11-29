@@ -341,61 +341,25 @@
     <div class="col s10 offset-s1 m8 offset-m2 l8 offset-l2">
         <div class="brand">
             <div class="title center-align">
-                <% if (config.subtitle && config.subtitle.length > 0) { %>
-                <%= config.subtitle %>
-                <% } else { %>
-                    subtitle
-                <% } %>
+                
+                Jary 的小茅屋
+                
             </div>
 
             <div class="description center-align">
-                <% if (theme.subtitle.enable) { %>
-                <span id="subtitle"></span>
-                <script src="<%- theme.jsDelivr.url %><%- url_for(theme.libs.js.typed) %>"></script>
-                <script>
-                    var typed = new Typed("#subtitle", {
-                        strings: [ 
-                            <% theme.subtitle.sub.forEach(function(item){%>
-                                "<%= item %>",
-                            <% }) %>
-                        ],
-                        startDelay: <%= theme.subtitle.startDelay %>,
-                        typeSpeed: <%= theme.subtitle.typeSpeed %>,
-                        loop: <%= theme.subtitle.loop %>,
-                        backSpeed: <%= theme.subtitle.backSpeed %>,
-                        showCursor: <%= theme.subtitle.showCursor %>
-                    });
-                </script>
-                <% } else { %>
-                    //<%= config.description %>
-                    <%= "正在加载今日诗词..." %>
-                <% } %>
+                
+                    <span id="jinrishici-sentence">正在加载今日诗词....</span>
+                
             </div>
         </div>
     </div>
 </div>
 
-<% if (theme.banner.enable) { %>
-<script>
-    // 每天切换 banner 图.  Switch banner image every day.
-    var bannerUrl = "<%- theme.jsDelivr.url %><%- url_for('/medias/banner/') %>" + new Date().getDay() + '.jpg';
-    $('.bg-cover').css('background-image', 'url(' + bannerUrl + ')');
-</script>
-<script>
-    <% if (theme.banner.enable && theme.banner.random) { %>
-      var bannerUrl = "<%- theme.jsDelivr.url %><%- url_for('/medias/featureimages/') %>" + Math.floor(Math.random() * <%- theme.featureImages.length %>) + '.jpg';
-    <% } else { %>
-      // 每天切换 banner 图.  Switch banner image every day.
-      var bannerUrl = "<%- theme.jsDelivr.url %><%- url_for('/medias/banner/') %>" + new Date().getDay() + '.jpg';
-    <% } %>
-    $('.bg-cover.about-cover').css('background-image', 'url(' + bannerUrl + ')');
 
-</script>
-<% } else { %>
 <script>
-    $('.bg-cover').css('background-image', 'url(<%- theme.jsDelivr.url %><%- url_for('/medias/banner/0.jpg') %>)');
+    $('.bg-cover').css('background-image', 'url(/medias/banner/0.jpg)');
 </script>
-<% } %>
+
 
     </div>
 </div>
@@ -945,33 +909,53 @@ u
             <br>
             
         </div>
-        <div class="col s12 m4 l4 social-link social-statis">
-    <a href="https://icmpy2001.github.io" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <div class="col s12 m4 l4 social-link social-statis"><% if (theme.socialLink.github) { %>
+    <a href="<%= theme.socialLink.github %>" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
         <i class="fab fa-github"></i>
     </a>
+<% } %>
 
-
-
-    <a href="mailto:cmpy2001@163.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+<% if (theme.socialLink.email) { %>
+    <a href="mailto:<%= theme.socialLink.email %>" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
         <i class="fas fa-envelope-open"></i>
     </a>
+<% } %>
 
+<% if (theme.socialLink.facebook) { %>
+    <a href="<%= theme.socialLink.facebook %>" class="tooltipped" target="_blank" data-tooltip="关注我的Facebook: <%= theme.socialLink.facebook %>" data-position="top" data-delay="50">
+        <i class="fab fa-facebook-f"></i>
+    </a>
+<% } %>
 
+<% if (theme.socialLink.twitter) { %>
+    <a href="<%= theme.socialLink.twitter %>" class="tooltipped" target="_blank" data-tooltip="关注我的Twitter: <%= theme.socialLink.twitter %>" data-position="top" data-delay="50">
+        <i class="fab fa-twitter"></i>
+    </a>
+<% } %>
 
+<% if (theme.socialLink.qq) { %>
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=<%= theme.socialLink.qq %>" class="tooltipped" target="_blank" data-tooltip="QQ联系我: <%= theme.socialLink.qq %>" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+<% } %>
 
+<% if (theme.socialLink.weibo) { %>
+    <a href="<%= theme.socialLink.weibo %>" class="tooltipped" target="_blank" data-tooltip="关注我的微博: <%= theme.socialLink.weibo %>" data-position="top" data-delay="50">
+        <i class="fab fa-weibo"></i>
+    </a>
+<% } %>
 
+<% if (theme.socialLink.zhihu) { %>
+    <a href="<%= theme.socialLink.zhihu %>" class="tooltipped" target="_blank" data-tooltip="关注我的知乎: <%= theme.socialLink.zhihu %>" data-position="top" data-delay="50">
+        <i class="fab fa-zhihu1">知</i>
+    </a>
+<% } %>
 
-
-
-
-
-
-
-
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+<% if (theme.socialLink.rss) { %>
+    <a href="<%- url_for('/atom.xml') %>" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
         <i class="fas fa-rss"></i>
     </a>
-
+<% } %>
 </div>
     </div>
 </footer>
