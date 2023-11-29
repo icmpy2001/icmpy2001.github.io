@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://blog.icmpy.net/tags/index.html</loc>
+    <loc>https://blog.icmpy.net/about/index.html</loc>
     
     <lastmod>2023-11-29</lastmod>
     
@@ -12,6 +12,15 @@
   
   <url>
     <loc>https://blog.icmpy.net/categories/index.html</loc>
+    
+    <lastmod>2023-11-29</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.icmpy.net/tags/index.html</loc>
     
     <lastmod>2023-11-29</lastmod>
     
@@ -50,15 +59,6 @@
     <loc>https://blog.icmpy.net/2023/112024358.html</loc>
     
     <lastmod>2023-11-20</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.icmpy.net/about/index.html</loc>
-    
-    <lastmod>2023-11-17</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
