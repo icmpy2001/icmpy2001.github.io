@@ -1,71 +1,14 @@
 <!DOCTYPE HTML>
 <html lang="zh-CN">
-<%
-    var title = page.title;
 
-    // tags, categories, about pages title
-    if (title == 'tags') {
-        title = __('tags');
-    } else if (title == 'categories') {
-        title = __('categories');
-    } else if (title == 'about') {
-        title = __('about');
-    }
-
-    // archives, category, tag pages title
-    if (is_archive()) {
-        title = __('archives');
-        if (is_month()) {
-            title += ': ' + page.year + '/' + page.month;
-        } else if (is_year()) {
-            title += ': ' + page.year;
-        }
-    } else if (is_category()) {
-        title = __('category') + ': ' + page.category;
-    } else if (is_tag()) {
-        title = __('tag') + ': ' + page.tag;
-    }
-
-    // final page title.
-    var pageTitle = title ? title + ' | ' + config.title : config.title;
-
-    // keywords.
-    var keyWords = config.keywords ? config.keywords : config.title;
-    if (page.keywords) {
-        keyWords = page.keywords;
-    } else {
-    	keyWords = title ? title  + ', ' + keyWords : keyWords;
-    }
-
-    // description.
-    var description = config.description ? config.description : config.title;
-    if (page.summary) {
-        description = page.summary;
-    } else if (page.hasOwnProperty('__post') && page.__post) {
-        description = strip_html(page.content).substring(0, 120);
-    }
-
-    let iconType = 'image/png'
-    let faviconExt = theme.favicon.substr(theme.favicon.lastIndexOf('.') + 1, theme.favicon.length)
-    if (faviconExt === 'png') {
-        iconType = 'image/png'
-    } else if (faviconExt === 'svg') {
-        iconType = 'image/svg+xml'
-    } else if (faviconExt === 'gif') {
-        iconType = 'image/gif'
-    } else if (faviconExt === 'jpeg') {
-        iconType = 'image/jpeg'
-    } else if (faviconExt === 'jpg') {
-        iconType = 'image/jpeg'
-    } else if (faviconExt === 'ico') {
-        iconType = 'image/x-icon, image/vnd.microsoft.icon'
-    }
-%>
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="<%= keyWords %>">
-    <meta name="description" content="<%= description %>">
+    <meta name="keywords" content="coredump 路径格式, 云上的小雨滴">
+    <meta name="description" content="Coredump
+业务进程宕机以后开发需要查看dump查找定位问题，所有服务器初始化环境时候统一定制coredump路径；
+1.Core文件简介
+Core文件其实就是内存的映像，当程序崩溃时，存储内存的相应信息，主用用于对程序进行调试。当程">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -74,12 +17,43 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="referrer" content="no-referrer-when-downgrade">
-    <%- partial('_partial/google-analytics') %>
-    <title><%= pageTitle %></title>
-    <link rel="icon" type="<%= iconType %>" href="<%- theme.jsDelivr.url %><%- url_for(theme.favicon) %>">
-    <%- partial('_partial/main-style') %>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
 
-    <script src="<%- theme.jsDelivr.url %><%- url_for(theme.libs.js.jquery) %>"></script>
+
+    <title>coredump 路径格式 | 云上的小雨滴</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+    <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
 
 <meta name="generator" content="Hexo 7.0.0">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
