@@ -973,6 +973,20 @@
 ]]></content>
   </entry>
   <entry>
+    <title>kafka Create topic 报错</title>
+    <url>/2023/071361284.html</url>
+    <content><![CDATA[<p>bin/kafka-console-consumer.sh –bootstrap-server localhost:9092 –topic kk_log<br>报错如下：<br>WARN [Consumer clientId=consumer-1, groupId=console-consumer-507] Connection to node -1 could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)</p>
+<p>配置server.confg时候设置的<br>advertised.listeners=PLAINTEXT://10.171.222.26:9092<br>此时需要用配置的IP而非localhost地址：</p>
+<p>nohup bin/zookeeper-server-start.sh config/zookeeper.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>nohup bin/kafka-server-start.sh config/server.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>netstat -ntpl|egrep “(2181|9092)”<br>运行起来再试试<br>bin/kafka-console-consumer.sh –bootstrap-server 10.171.222.26:9092 –topic kk_log<br>应该就可以了。<br>做个小笔记。</p>
+<p>PS zookeeper 报错，宕掉；</p>
+<p>[2016-06-27 12:07:14,065] INFO Closed socket connection for client /127.0.0.1:58824 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn) [2016-<br>[2016-06-27 12:07:17,351] INFO Refusing session request for client /127.0.0.1:58834 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)<br>[2016-06-27 12:07:17,351] INFO Closed socket connection for client /127.0.0.1:58834 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn)<br>[2016-06-27 12:07:19,048] INFO Accepted socket connection from /127.0.0.1:58840 (org.apache.zookeeper.server.NIOServerCnxnFactory)<br>[2016-06-27 12:07:19,048] INFO Refusing session request for client /127.0.0.1:58840 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)</p>
+<p>解决方法</p>
+<p>报错原因：服务器上还有应用在不停的向zookeeper发送请求</p>
+<p>解决方法：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用top -u [username]查看该用户下的所有进程，发现多了一个java进程在运行着；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、kill掉与java相关的进程；</p>
+<p>2、关闭zookeeper，删除zoo.cfg中的dataDir配置的文件夹；</p>
+<h2 id="3、重启zookeeper。"><a href="#3、重启zookeeper。" class="headerlink" title="3、重启zookeeper。"></a>3、重启zookeeper。</h2>]]></content>
+  </entry>
+  <entry>
     <title>linux install shadowsocks</title>
     <url>/2023/071659235.html</url>
     <content><![CDATA[<h1 id="1-安装Python和pip"><a href="#1-安装Python和pip" class="headerlink" title="1. 安装Python和pip"></a>1. 安装Python和pip</h1><p>sudo apt-get update</p>
@@ -1232,20 +1246,6 @@
 <p>rm swapadd&nbsp;&nbsp; &nbsp;###从文件系统中回收此文件</p>
 <hr>
 ]]></content>
-  </entry>
-  <entry>
-    <title>kafka Create topic 报错</title>
-    <url>/2023/071361284.html</url>
-    <content><![CDATA[<p>bin/kafka-console-consumer.sh –bootstrap-server localhost:9092 –topic kk_log<br>报错如下：<br>WARN [Consumer clientId=consumer-1, groupId=console-consumer-507] Connection to node -1 could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)</p>
-<p>配置server.confg时候设置的<br>advertised.listeners=PLAINTEXT://10.171.222.26:9092<br>此时需要用配置的IP而非localhost地址：</p>
-<p>nohup bin/zookeeper-server-start.sh config/zookeeper.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>nohup bin/kafka-server-start.sh config/server.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>netstat -ntpl|egrep “(2181|9092)”<br>运行起来再试试<br>bin/kafka-console-consumer.sh –bootstrap-server 10.171.222.26:9092 –topic kk_log<br>应该就可以了。<br>做个小笔记。</p>
-<p>PS zookeeper 报错，宕掉；</p>
-<p>[2016-06-27 12:07:14,065] INFO Closed socket connection for client /127.0.0.1:58824 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn) [2016-<br>[2016-06-27 12:07:17,351] INFO Refusing session request for client /127.0.0.1:58834 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)<br>[2016-06-27 12:07:17,351] INFO Closed socket connection for client /127.0.0.1:58834 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn)<br>[2016-06-27 12:07:19,048] INFO Accepted socket connection from /127.0.0.1:58840 (org.apache.zookeeper.server.NIOServerCnxnFactory)<br>[2016-06-27 12:07:19,048] INFO Refusing session request for client /127.0.0.1:58840 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)</p>
-<p>解决方法</p>
-<p>报错原因：服务器上还有应用在不停的向zookeeper发送请求</p>
-<p>解决方法：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用top -u [username]查看该用户下的所有进程，发现多了一个java进程在运行着；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、kill掉与java相关的进程；</p>
-<p>2、关闭zookeeper，删除zoo.cfg中的dataDir配置的文件夹；</p>
-<h2 id="3、重启zookeeper。"><a href="#3、重启zookeeper。" class="headerlink" title="3、重启zookeeper。"></a>3、重启zookeeper。</h2>]]></content>
   </entry>
   <entry>
     <title>/var/log/messages日志恢复</title>
@@ -1559,6 +1559,26 @@
       </tags>
   </entry>
   <entry>
+    <title>windows2012 RDP 连接失败</title>
+    <url>/2023/120114297.html</url>
+    <content><![CDATA[<p>   完美解决RDO”连接无法继续，因为未启用身份验证，并且远程计算机需要启用身份验证以进行连接” </p>
+<p><img src="/../images/20231201_1.jpg" alt="img"> </p>
+<p>解决：<br>1.先用win7自带远程工具mstsc连接到Win10 （或者 服务器Windows Server 2016 ）<br>2.开始-运行-gpedit.msc，进入组策略编辑器<br>3.找到左侧边栏 计算机配置-管理模板-Windows组件-远程桌面服务-远程桌面会话主机-【安全】项<br>4.修改“远程（RDP）连接要求使用指定的安全层”，改为启用，安全层选择RDP<br>5.修改“要求使用网络级别的身份验证对远程连接的用户进行身份验证”，改为禁用<br>6.重启计算机 （或者运行 gpupdate 更新组策略）</p>
+<p>.<img src="/../images/20231201_2.jpg" alt="img"></p>
+<p>打开【安全】项的原始状态是： (计算机配置-管理模板-Windows组件-远程桌面服务-远程桌面会话主机-【安全】)</p>
+<p>​    需要修改的是右边窗口的两项：“****远程（RDP）连接要求使用指定的安全层*<em><strong>” 、“</strong></em>*要求使用网络级别的身份验证对远程连接的用户进行身份验证****”</p>
+<p><img src="/../images/20231201_3.jpg" alt="img"> </p>
+<p>开始修改，如下方两个截图说明：</p>
+<p><img src="/../images/20231201_4.jpg" alt="img"> </p>
+<p><img src="/../images/20231201_5.jpg" alt="img"> </p>
+<p>完成。</p>
+<p>转自：<a href="https://www.579yun.cn/helparticle/44.html">https://www.579yun.cn/helparticle/44.html</a></p>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>xtrabackup还原mysql</title>
     <url>/2023/11284499.html</url>
     <content><![CDATA[<p>1.下载ALI平台备份包：</p>
@@ -1625,26 +1645,6 @@
 ]]></content>
       <tags>
         <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>windows2012 RDP 连接失败</title>
-    <url>/2023/120114297.html</url>
-    <content><![CDATA[<p>   完美解决RDO”连接无法继续，因为未启用身份验证，并且远程计算机需要启用身份验证以进行连接” </p>
-<p><img src="/../images/20231201_1.jpg" alt="img"> </p>
-<p>解决：<br>1.先用win7自带远程工具mstsc连接到Win10 （或者 服务器Windows Server 2016 ）<br>2.开始-运行-gpedit.msc，进入组策略编辑器<br>3.找到左侧边栏 计算机配置-管理模板-Windows组件-远程桌面服务-远程桌面会话主机-【安全】项<br>4.修改“远程（RDP）连接要求使用指定的安全层”，改为启用，安全层选择RDP<br>5.修改“要求使用网络级别的身份验证对远程连接的用户进行身份验证”，改为禁用<br>6.重启计算机 （或者运行 gpupdate 更新组策略）</p>
-<p>.<img src="/../images/20231201_2.jpg" alt="img"></p>
-<p>打开【安全】项的原始状态是： (计算机配置-管理模板-Windows组件-远程桌面服务-远程桌面会话主机-【安全】)</p>
-<p>​    需要修改的是右边窗口的两项：“****远程（RDP）连接要求使用指定的安全层*<em><strong>” 、“</strong></em>*要求使用网络级别的身份验证对远程连接的用户进行身份验证****”</p>
-<p><img src="/../images/20231201_3.jpg" alt="img"> </p>
-<p>开始修改，如下方两个截图说明：</p>
-<p><img src="/../images/20231201_4.jpg" alt="img"> </p>
-<p><img src="/../images/20231201_5.jpg" alt="img"> </p>
-<p>完成。</p>
-<p>转自：<a href="https://www.579yun.cn/helparticle/44.html">https://www.579yun.cn/helparticle/44.html</a></p>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
       </tags>
   </entry>
   <entry>
