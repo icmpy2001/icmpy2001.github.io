@@ -1,6 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Centos同时安装python2和python3</title>
+    <url>/2023/11203350.html</url>
+    <content><![CDATA[<p>   在centos中，自带有python2，因此需要经常安装python3。但是这里有一个坑，就是centos的yum是用python2写的，如果正常编译安装python3，那么yum就会直接挂了。为了方便以后编译安装python3，不用天天去网上找教程仅供参考。</p>
+<p>首先连上服务器，看下python版本：</p>
+<p> python -V</p>
+<p>centos默认带有python2.7.5：</p>
+<p>接下来我们开始安装python3。</p>
+<p>1 安装python3所需要的组件</p>
+<p>yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make wget libffi-devel</p>
+<p>2 备份现有的python2</p>
+<p>cd /usr/bin</p>
+<p>mv python python.bak</p>
+<p>mv pip pip.bak</p>
+<p>不用猜当前yum肯定挂了不能用了。</p>
+<ol start="3">
+<li><p>卸载python3.6.5</p>
+<p>在这里去python的官网，找到需要的python版本链接，然后通过wget方式直接下载到linux服务器，当然你也可以从浏览器下载，然后上传到linux服务器。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cd /usr/local/</span><br><span class="line">wget https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tar.xz</span><br></pre></td></tr></tbody></table></figure>
+
+<p>tar -xvJf Python-3.6.5.tar.xz</p>
+<p>cd Python-3.6.5</p>
+<p>指定安装路径</p>
+<p>./configure –prefix=/usr/local/python3 –enable-optimizations</p>
+<p>编译并安装</p>
+<p>make &amp;&amp; make install</p>
+<p>最后显示Successfully installed pip-9.0.3 setuptools-39.0.1</p>
+<p>修改软连接，将python3指向python，顺便把pip也重新指向：</p>
+<p>ln -s /usr/local/python3/bin/python3 /usr/bin/python</p>
+<p>ln -s /usr/local/python3/bin/pip3 /usr/bin/pip</p>
+<p>查看版本号：</p>
+<p>[root@localhost /home/tools/Python-3.6.5]$python -V<br>Python 3.6.5<br>[root@localhost /home/tools/Python-3.6.5]$python2 -V<br>Python 2.7.5</p>
+<p>4.修改yum配置：</p>
+<p>装完了python3之后，我们要修一下yum了，不然以后都没法装软件和环境了。</p>
+<p>vim /usr/bin/yum</p>
+<p>把头部的 #! /usr/bin/python 修改为 #! /usr/bin/python2  修改保存。</p>
+<p>vim /usr/libexec/urlgrabber-ext-down</p>
+<p>#! /usr/bin/python修改为#! /usr/bin/python2 保存退出。</p>
+<p>至此，yum 可以正常使用了。</p>
+</li>
+</ol>
+]]></content>
+  </entry>
+  <entry>
     <title>Debian 10挂载加swap</title>
     <url>/2023/111727163.html</url>
     <content><![CDATA[<p>以根目录挂载为4G例：<br>dd if=/dev/zero of=/swapfile count=4096 bs=1M</p>
@@ -332,56 +375,6 @@
       </tags>
   </entry>
   <entry>
-    <title>apache多网站对应80端口</title>
-    <url>/2023/062862696.html</url>
-    <content><![CDATA[<p>一台服务器绑定多个域名，已经装了apache，nginx就不使用了，利用apache主机头名虚拟主机用80端口对应多个网站，万能的网络上面有文档如下：</p>
-<p>Aapche 如果需要绑定多个域名到一个IP上,是支持的。需要注意以下2点:</p>
-<p>1 必须要开启 NameVirtualHost开关选项，</p>
-<p>如：NameVirtualHost 220.231.220.231:80</p>
-<p>2 NameVirtualHost 需要指定具体的端口</p>
-<p>例如”:80″,跟&lt;VirtualHost 220.231.32.*:80&gt;对应，否则会报错:</p>
-<p>mixing * ports and non-* ports with a NameVirtualHost address is not supported, proceeding with undefined results。</p>
-<p>翻译过来就是: NameVirtualHost 地址，指定端口和不指定端口混合使用是不支持的，将会产生未逾期的后果。</p>
-<p>未逾期的后果就是: 第2个不起作用，仅当一个站点设置起作用。</p>
-<p>按着做下来：</p>
-<p>IncludeOptional conf.d/*.conf</p>
-<p>ServerSignature Off</p>
-<p>NameVirtualHost 220.231.220.231:80</p>
-<p>&lt;VirtualHost 220.231.220.231:80&gt;&nbsp;&nbsp;</p>
-<p>ServerAdmin&nbsp; &nbsp;<a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a>&nbsp;</p>
-<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
-<p>ServerName <a href="http://www.aaa.net/">www.aaa.net</a></p>
-<p>DocumentRoot&nbsp; /data/www/wress/</p>
-<p>&lt;Directory “/data/www/wress/“&gt;&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp;Options -Indexes&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp;Options FollowSymLinks Indexes</p>
-<p>&nbsp; &nbsp; AllowOverride All&nbsp;&nbsp;</p>
-<p>&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp; Require all granted&nbsp;&nbsp;</p>
-<p>&nbsp;&nbsp;</p>
-<p>ErrorLog logs/<a href="http://www.aaa.net-error_log/">www.aaa.net-error_log</a></p>
-<p>&nbsp;CustomLog logs/<a href="http://www.aaa.net-access_log/">www.aaa.net-access_log</a> common</p>
-<p>&nbsp;</p>
-<p>&lt;VirtualHost 220.231.220.231:80&gt;</p>
-<p>ServerAdmin&nbsp; <a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a></p>
-<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
-<p>ServerName img.aaa.net</p>
-<p>#ServerName 220.231.220.231</p>
-<p>DocumentRoot&nbsp; /data/www/html/</p>
-<p>&lt;Directory “/data/www/html/“&gt;</p>
-<p>&nbsp; &nbsp; Options -Indexes&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp; Options FollowSymLinks Indexes</p>
-<p>&nbsp; &nbsp; AllowOverride All</p>
-<p>&nbsp; &nbsp;Require all granted</p>
-
-
-<p>ErrorLog logs/img.aaa.net-error_log</p>
-<p>CustomLog logs/img.aaa.net-access_log common</p>
-
-
-<h2 id="这样都可以访问，apache也可以实现，做个小笔记。"><a href="#这样都可以访问，apache也可以实现，做个小笔记。" class="headerlink" title="这样都可以访问，apache也可以实现，做个小笔记。"></a>这样都可以访问，apache也可以实现，做个小笔记。</h2>]]></content>
-  </entry>
-  <entry>
     <title>Tengine 安装</title>
     <url>/2023/111458217.html</url>
     <content><![CDATA[<p>Tengine安装</p>
@@ -455,6 +448,56 @@
       </tags>
   </entry>
   <entry>
+    <title>apache多网站对应80端口</title>
+    <url>/2023/062862696.html</url>
+    <content><![CDATA[<p>一台服务器绑定多个域名，已经装了apache，nginx就不使用了，利用apache主机头名虚拟主机用80端口对应多个网站，万能的网络上面有文档如下：</p>
+<p>Aapche 如果需要绑定多个域名到一个IP上,是支持的。需要注意以下2点:</p>
+<p>1 必须要开启 NameVirtualHost开关选项，</p>
+<p>如：NameVirtualHost 220.231.220.231:80</p>
+<p>2 NameVirtualHost 需要指定具体的端口</p>
+<p>例如”:80″,跟&lt;VirtualHost 220.231.32.*:80&gt;对应，否则会报错:</p>
+<p>mixing * ports and non-* ports with a NameVirtualHost address is not supported, proceeding with undefined results。</p>
+<p>翻译过来就是: NameVirtualHost 地址，指定端口和不指定端口混合使用是不支持的，将会产生未逾期的后果。</p>
+<p>未逾期的后果就是: 第2个不起作用，仅当一个站点设置起作用。</p>
+<p>按着做下来：</p>
+<p>IncludeOptional conf.d/*.conf</p>
+<p>ServerSignature Off</p>
+<p>NameVirtualHost 220.231.220.231:80</p>
+<p>&lt;VirtualHost 220.231.220.231:80&gt;&nbsp;&nbsp;</p>
+<p>ServerAdmin&nbsp; &nbsp;<a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a>&nbsp;</p>
+<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
+<p>ServerName <a href="http://www.aaa.net/">www.aaa.net</a></p>
+<p>DocumentRoot&nbsp; /data/www/wress/</p>
+<p>&lt;Directory “/data/www/wress/“&gt;&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp;Options -Indexes&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp;Options FollowSymLinks Indexes</p>
+<p>&nbsp; &nbsp; AllowOverride All&nbsp;&nbsp;</p>
+<p>&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp; Require all granted&nbsp;&nbsp;</p>
+<p>&nbsp;&nbsp;</p>
+<p>ErrorLog logs/<a href="http://www.aaa.net-error_log/">www.aaa.net-error_log</a></p>
+<p>&nbsp;CustomLog logs/<a href="http://www.aaa.net-access_log/">www.aaa.net-access_log</a> common</p>
+<p>&nbsp;</p>
+<p>&lt;VirtualHost 220.231.220.231:80&gt;</p>
+<p>ServerAdmin&nbsp; <a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a></p>
+<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
+<p>ServerName img.aaa.net</p>
+<p>#ServerName 220.231.220.231</p>
+<p>DocumentRoot&nbsp; /data/www/html/</p>
+<p>&lt;Directory “/data/www/html/“&gt;</p>
+<p>&nbsp; &nbsp; Options -Indexes&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp; Options FollowSymLinks Indexes</p>
+<p>&nbsp; &nbsp; AllowOverride All</p>
+<p>&nbsp; &nbsp;Require all granted</p>
+
+
+<p>ErrorLog logs/img.aaa.net-error_log</p>
+<p>CustomLog logs/img.aaa.net-access_log common</p>
+
+
+<h2 id="这样都可以访问，apache也可以实现，做个小笔记。"><a href="#这样都可以访问，apache也可以实现，做个小笔记。" class="headerlink" title="这样都可以访问，apache也可以实现，做个小笔记。"></a>这样都可以访问，apache也可以实现，做个小笔记。</h2>]]></content>
+  </entry>
+  <entry>
     <title>centos U盘安装查找U盘设备名</title>
     <url>/2023/111459478.html</url>
     <content><![CDATA[<p>制作启动盘：UltraISO.exe 打开镜像文件，–启动—写入硬盘镜像—默认—开始大概7分钟后就制作完成。 这样制作以后U盘原数据就没了当心。</p>
@@ -467,49 +510,6 @@
 <p>类似这些提示ccontinue 或者r reflush刷下块设备</p>
 <p>起初u盘没刷出来，刷新出来的sdb4<br>重新启动电脑，重复上面的步骤 这一次 将&nbsp;<br>vmlinuz initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 quiet&nbsp;<br>改成&nbsp;<br>vmlinuz initrd=initrd.img&nbsp;inst.stage2=hd:/dev/sdb4（你自己的U盘盘符）&nbsp;quiet&nbsp;<br>回车 等待安装程序启动，进行CentOS的安装</p>
 <hr>
-]]></content>
-  </entry>
-  <entry>
-    <title>Centos同时安装python2和python3</title>
-    <url>/2023/11203350.html</url>
-    <content><![CDATA[<p>   在centos中，自带有python2，因此需要经常安装python3。但是这里有一个坑，就是centos的yum是用python2写的，如果正常编译安装python3，那么yum就会直接挂了。为了方便以后编译安装python3，不用天天去网上找教程仅供参考。</p>
-<p>首先连上服务器，看下python版本：</p>
-<p> python -V</p>
-<p>centos默认带有python2.7.5：</p>
-<p>接下来我们开始安装python3。</p>
-<p>1 安装python3所需要的组件</p>
-<p>yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make wget libffi-devel</p>
-<p>2 备份现有的python2</p>
-<p>cd /usr/bin</p>
-<p>mv python python.bak</p>
-<p>mv pip pip.bak</p>
-<p>不用猜当前yum肯定挂了不能用了。</p>
-<ol start="3">
-<li><p>卸载python3.6.5</p>
-<p>在这里去python的官网，找到需要的python版本链接，然后通过wget方式直接下载到linux服务器，当然你也可以从浏览器下载，然后上传到linux服务器。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cd /usr/local/</span><br><span class="line">wget https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tar.xz</span><br></pre></td></tr></tbody></table></figure>
-
-<p>tar -xvJf Python-3.6.5.tar.xz</p>
-<p>cd Python-3.6.5</p>
-<p>指定安装路径</p>
-<p>./configure –prefix=/usr/local/python3 –enable-optimizations</p>
-<p>编译并安装</p>
-<p>make &amp;&amp; make install</p>
-<p>最后显示Successfully installed pip-9.0.3 setuptools-39.0.1</p>
-<p>修改软连接，将python3指向python，顺便把pip也重新指向：</p>
-<p>ln -s /usr/local/python3/bin/python3 /usr/bin/python</p>
-<p>ln -s /usr/local/python3/bin/pip3 /usr/bin/pip</p>
-<p>查看版本号：</p>
-<p>[root@localhost /home/tools/Python-3.6.5]$python -V<br>Python 3.6.5<br>[root@localhost /home/tools/Python-3.6.5]$python2 -V<br>Python 2.7.5</p>
-<p>4.修改yum配置：</p>
-<p>装完了python3之后，我们要修一下yum了，不然以后都没法装软件和环境了。</p>
-<p>vim /usr/bin/yum</p>
-<p>把头部的 #! /usr/bin/python 修改为 #! /usr/bin/python2  修改保存。</p>
-<p>vim /usr/libexec/urlgrabber-ext-down</p>
-<p>#! /usr/bin/python修改为#! /usr/bin/python2 保存退出。</p>
-<p>至此，yum 可以正常使用了。</p>
-</li>
-</ol>
 ]]></content>
   </entry>
   <entry>
@@ -543,6 +543,92 @@
 <h2 id="重启机器试试"><a href="#重启机器试试" class="headerlink" title="重启机器试试~"></a>重启机器试试~</h2>]]></content>
       <tags>
         <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>coredump 路径格式</title>
+    <url>/2023/062743960.html</url>
+    <content><![CDATA[<p>Coredump</p>
+<p>业务进程宕机以后开发需要查看dump查找定位问题，所有服务器初始化环境时候统一定制coredump路径；</p>
+<p>1.Core文件简介</p>
+<p>Core文件其实就是内存的映像，当程序崩溃时，存储内存的相应信息，主用用于对程序进行调试。当程序崩溃时便会产生core文件，其实准确的应该说是core dump 文件,默认生成位置与可执行程序位于同一目录下，文件名为core,其中是某一数字。</p>
+<p>2.开启或关闭Core文件的生成</p>
+<p>关闭或阻止core文件生成：</p>
+<p>$ulimit -c 0</p>
+<p>打开core文件生成：</p>
+<p>$ulimit -c unlimited</p>
+<p>检查core文件的选项是否打开：</p>
+<p>$ulimit -a</p>
+<p>ulimit参数含义如下：&nbsp;</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -a&nbsp;&nbsp;&nbsp;&nbsp; All current limits are reported<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -c&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of core files created<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -d&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of a process data segment<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -e&nbsp;&nbsp;&nbsp;&nbsp; The maximum scheduling priority (“nice”)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -f&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of files written by the shell and its children<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -i&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of pending signals<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -l&nbsp;&nbsp;&nbsp;&nbsp; The maximum size that may be locked into memory<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -m&nbsp;&nbsp;&nbsp;&nbsp; The maximum resident set size (has no effect on Linux)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -n&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of open file descriptors (most systems do not allow this value to be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -p&nbsp;&nbsp;&nbsp;&nbsp; The pipe size in 512-byte blocks (this may not be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -q&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of bytes in POSIX message queues<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -r&nbsp;&nbsp;&nbsp;&nbsp; The maximum real-time scheduling priority<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -s&nbsp;&nbsp;&nbsp;&nbsp; The maximum stack size<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -t&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of cpu time in seconds<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -u&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of processes available to a single user<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -v&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of virtual memory available to the shell<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -x&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of file locks</p>
+<p>&nbsp;</p>
+<p>#ulimit -a</p>
+<p>core file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -c) unlimited</p>
+<p>data seg size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -d) unlimited</p>
+<p>scheduling priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-e) 0</p>
+<p>file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -f) unlimited</p>
+<p>pending signals&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-i) 127974</p>
+<p>max locked memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -l) 64</p>
+<p>max memory size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -m) unlimited</p>
+<p>open files&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-n) 100000</p>
+<p>pipe size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (512 bytes, -p) 8</p>
+<p>POSIX message queues&nbsp;&nbsp;&nbsp;&nbsp; (bytes, -q) 819200</p>
+<p>real-time priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-r) 0</p>
+<p>stack size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -s) 8192</p>
+<p>cpu time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (seconds, -t) unlimited</p>
+<p>max user processes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-u) 655360</p>
+<p>virtual memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -v) unlimited</p>
+<p>file locks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-x) unlimited而我们需要修改的是open files (-n) 1024的值</p>
+<p>于是命令就是limit -n 2048(随各自需要设置)</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>以上配置只对当前会话起作用，下次重新登陆后，还是得重新配置。要想配置永久生效，得在/etc/profile或者/etc/security/limits.conf文件中进行配置。</p>
+<p>首先以root权限登陆，然后打开/etc/security/limits.conf文件，进行配置：</p>
+<p>#vim /etc/security/limits.conf</p>
+<p><domain> &nbsp; &nbsp;<type> &nbsp; &nbsp;<item> &nbsp; &nbsp; &nbsp; &nbsp;<value></value></item></type></domain></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;* &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;soft &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;core &nbsp; &nbsp; &nbsp; &nbsp; unlimited</p>
+<p>或者在/etc/profile中作如下配置：</p>
+<p>#vim /etc/profile</p>
+<p>ulimit -S -c unlimited &gt;/dev/null 2&gt;&amp;1</p>
+<p>或者想配置只针对某一用户有效，则修改此用户的<del>/.bashrc或者</del>/.bash_profile文件：</p>
+<p>limit -c unlimited</p>
+<p>ulimit -c 0 是禁止产生core文件，而ulimit -c 1024则限制产生的core文件的大小不能超过1024kb</p>
+<p>3.设置Core Dump的核心转储文件目录和命名规则</p>
+<p>/proc/sys/kernel/core_uses_pid可以控制产生的core文件的文件名中是否添加pid作为扩展，如果添加则文件内容为1，否则为0<br>/proc/sys/kernel/core_pattern可以设置格式化的core文件保存位置或文件名，比如原来文件内容是core-%e<br>可以这样修改:<br>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern<br>将会控制所产生的core文件会存放到/data/common/coredump目录下，产生的文件名为core-进程名-pid-时间戳<br>以下是参数列表:<br>&nbsp;&nbsp;&nbsp; %p - insert pid into filename 添加pid<br>&nbsp;&nbsp;&nbsp; %u - insert current uid into filename 添加当前uid<br>&nbsp;&nbsp;&nbsp; %g - insert current gid into filename 添加当前gid<br>&nbsp;&nbsp;&nbsp; %s - insert signal that caused the coredump into the filename 添加导致产生core的信号<br>&nbsp;&nbsp;&nbsp; %t - insert UNIX time that the coredump occurred into filename 添加core文件生成时的unix时间<br>&nbsp;&nbsp;&nbsp; %h - insert hostname where the coredump happened into filename 添加主机名<br>&nbsp;&nbsp;&nbsp; %e - insert coredumping executable name into filename 添加命令名</p>
+<p>4.core文件的使用</p>
+<p>在core文件所在目录下键入:<br>gdb -c core &nbsp; （-c指定core文件）<br>它会启动GNU的调试器，来调试core文件，并且会显示生成此core文件的程序名，中止此程序的信号等等<br>如果你已经知道是由什么程序生成此core文件的，比如MyServer崩溃了生成core.12345，那么用此指令调试:<br>gdb -c core MyServer</p>
+<p>&nbsp;源：<a href="https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html">https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html</a>&nbsp;</p>
+<p>5.永久生效：<br>当前不重启生效：<br>你可以用下列方式来完成<br>sysctl -w kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
+<p>或</p>
+<p>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern</p>
+<p>这些操作一旦计算机重启，则会丢失，如果你想持久化这些操作，可以在 /etc/sysctl.conf文件中增加：<br>kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
+<p>加好后，如果你想不重启看看效果的话，则用下面的命令：<br>sysctl -p<br>vim /etc/sysctl.conf</p>
+<p>net.ipv4.ip_forward = 0</p>
+<p>net.ipv4.conf.default.rp_filter = 1</p>
+<p>net.ipv4.conf.default.accept_source_route = 0</p>
+<p>kernel.core_uses_pid = 1</p>
+<p>net.ipv4.tcp_syncookies = 1</p>
+<p>kernel.msgmnb = 65536</p>
+<p>kernel.msgmax = 65536</p>
+<p>net.ipv6.conf.lo.disable_ipv6 = 1</p>
+<p>net.ipv4.conf.all.promote_secondaries = 1</p>
+<p>net.ipv4.conf.default.promote_secondaries = 1</p>
+<p>net.ipv6.neigh.default.gc_thresh3 = 4096</p>
+<p>net.ipv4.neigh.default.gc_thresh3 = 4096</p>
+<p>kernel.softlockup_panic = 1</p>
+<p>kernel.sysrq = 1</p>
+<p>net.ipv6.conf.all.disable_ipv6 = 1</p>
+<p>net.ipv6.conf.default.disable_ipv6 = 1</p>
+<p>vm.overcommit_memory = 1</p>
+<p>kernel.numa_balancing = 0</p>
+<p>kernel.shmmax = 68719476736</p>
+<p>kernel.printk = 5</p>
+<p>kernel.core_pattern = /data/common/coredump/core-%e-%p-%t</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>随笔</tag>
       </tags>
   </entry>
   <entry>
@@ -756,92 +842,6 @@
       </tags>
   </entry>
   <entry>
-    <title>coredump 路径格式</title>
-    <url>/2023/062743960.html</url>
-    <content><![CDATA[<p>Coredump</p>
-<p>业务进程宕机以后开发需要查看dump查找定位问题，所有服务器初始化环境时候统一定制coredump路径；</p>
-<p>1.Core文件简介</p>
-<p>Core文件其实就是内存的映像，当程序崩溃时，存储内存的相应信息，主用用于对程序进行调试。当程序崩溃时便会产生core文件，其实准确的应该说是core dump 文件,默认生成位置与可执行程序位于同一目录下，文件名为core,其中是某一数字。</p>
-<p>2.开启或关闭Core文件的生成</p>
-<p>关闭或阻止core文件生成：</p>
-<p>$ulimit -c 0</p>
-<p>打开core文件生成：</p>
-<p>$ulimit -c unlimited</p>
-<p>检查core文件的选项是否打开：</p>
-<p>$ulimit -a</p>
-<p>ulimit参数含义如下：&nbsp;</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -a&nbsp;&nbsp;&nbsp;&nbsp; All current limits are reported<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -c&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of core files created<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -d&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of a process data segment<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -e&nbsp;&nbsp;&nbsp;&nbsp; The maximum scheduling priority (“nice”)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -f&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of files written by the shell and its children<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -i&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of pending signals<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -l&nbsp;&nbsp;&nbsp;&nbsp; The maximum size that may be locked into memory<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -m&nbsp;&nbsp;&nbsp;&nbsp; The maximum resident set size (has no effect on Linux)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -n&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of open file descriptors (most systems do not allow this value to be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -p&nbsp;&nbsp;&nbsp;&nbsp; The pipe size in 512-byte blocks (this may not be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -q&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of bytes in POSIX message queues<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -r&nbsp;&nbsp;&nbsp;&nbsp; The maximum real-time scheduling priority<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -s&nbsp;&nbsp;&nbsp;&nbsp; The maximum stack size<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -t&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of cpu time in seconds<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -u&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of processes available to a single user<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -v&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of virtual memory available to the shell<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -x&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of file locks</p>
-<p>&nbsp;</p>
-<p>#ulimit -a</p>
-<p>core file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -c) unlimited</p>
-<p>data seg size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -d) unlimited</p>
-<p>scheduling priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-e) 0</p>
-<p>file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -f) unlimited</p>
-<p>pending signals&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-i) 127974</p>
-<p>max locked memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -l) 64</p>
-<p>max memory size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -m) unlimited</p>
-<p>open files&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-n) 100000</p>
-<p>pipe size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (512 bytes, -p) 8</p>
-<p>POSIX message queues&nbsp;&nbsp;&nbsp;&nbsp; (bytes, -q) 819200</p>
-<p>real-time priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-r) 0</p>
-<p>stack size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -s) 8192</p>
-<p>cpu time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (seconds, -t) unlimited</p>
-<p>max user processes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-u) 655360</p>
-<p>virtual memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -v) unlimited</p>
-<p>file locks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-x) unlimited而我们需要修改的是open files (-n) 1024的值</p>
-<p>于是命令就是limit -n 2048(随各自需要设置)</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>以上配置只对当前会话起作用，下次重新登陆后，还是得重新配置。要想配置永久生效，得在/etc/profile或者/etc/security/limits.conf文件中进行配置。</p>
-<p>首先以root权限登陆，然后打开/etc/security/limits.conf文件，进行配置：</p>
-<p>#vim /etc/security/limits.conf</p>
-<p><domain> &nbsp; &nbsp;<type> &nbsp; &nbsp;<item> &nbsp; &nbsp; &nbsp; &nbsp;<value></value></item></type></domain></p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp;* &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;soft &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;core &nbsp; &nbsp; &nbsp; &nbsp; unlimited</p>
-<p>或者在/etc/profile中作如下配置：</p>
-<p>#vim /etc/profile</p>
-<p>ulimit -S -c unlimited &gt;/dev/null 2&gt;&amp;1</p>
-<p>或者想配置只针对某一用户有效，则修改此用户的<del>/.bashrc或者</del>/.bash_profile文件：</p>
-<p>limit -c unlimited</p>
-<p>ulimit -c 0 是禁止产生core文件，而ulimit -c 1024则限制产生的core文件的大小不能超过1024kb</p>
-<p>3.设置Core Dump的核心转储文件目录和命名规则</p>
-<p>/proc/sys/kernel/core_uses_pid可以控制产生的core文件的文件名中是否添加pid作为扩展，如果添加则文件内容为1，否则为0<br>/proc/sys/kernel/core_pattern可以设置格式化的core文件保存位置或文件名，比如原来文件内容是core-%e<br>可以这样修改:<br>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern<br>将会控制所产生的core文件会存放到/data/common/coredump目录下，产生的文件名为core-进程名-pid-时间戳<br>以下是参数列表:<br>&nbsp;&nbsp;&nbsp; %p - insert pid into filename 添加pid<br>&nbsp;&nbsp;&nbsp; %u - insert current uid into filename 添加当前uid<br>&nbsp;&nbsp;&nbsp; %g - insert current gid into filename 添加当前gid<br>&nbsp;&nbsp;&nbsp; %s - insert signal that caused the coredump into the filename 添加导致产生core的信号<br>&nbsp;&nbsp;&nbsp; %t - insert UNIX time that the coredump occurred into filename 添加core文件生成时的unix时间<br>&nbsp;&nbsp;&nbsp; %h - insert hostname where the coredump happened into filename 添加主机名<br>&nbsp;&nbsp;&nbsp; %e - insert coredumping executable name into filename 添加命令名</p>
-<p>4.core文件的使用</p>
-<p>在core文件所在目录下键入:<br>gdb -c core &nbsp; （-c指定core文件）<br>它会启动GNU的调试器，来调试core文件，并且会显示生成此core文件的程序名，中止此程序的信号等等<br>如果你已经知道是由什么程序生成此core文件的，比如MyServer崩溃了生成core.12345，那么用此指令调试:<br>gdb -c core MyServer</p>
-<p>&nbsp;源：<a href="https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html">https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html</a>&nbsp;</p>
-<p>5.永久生效：<br>当前不重启生效：<br>你可以用下列方式来完成<br>sysctl -w kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
-<p>或</p>
-<p>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern</p>
-<p>这些操作一旦计算机重启，则会丢失，如果你想持久化这些操作，可以在 /etc/sysctl.conf文件中增加：<br>kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
-<p>加好后，如果你想不重启看看效果的话，则用下面的命令：<br>sysctl -p<br>vim /etc/sysctl.conf</p>
-<p>net.ipv4.ip_forward = 0</p>
-<p>net.ipv4.conf.default.rp_filter = 1</p>
-<p>net.ipv4.conf.default.accept_source_route = 0</p>
-<p>kernel.core_uses_pid = 1</p>
-<p>net.ipv4.tcp_syncookies = 1</p>
-<p>kernel.msgmnb = 65536</p>
-<p>kernel.msgmax = 65536</p>
-<p>net.ipv6.conf.lo.disable_ipv6 = 1</p>
-<p>net.ipv4.conf.all.promote_secondaries = 1</p>
-<p>net.ipv4.conf.default.promote_secondaries = 1</p>
-<p>net.ipv6.neigh.default.gc_thresh3 = 4096</p>
-<p>net.ipv4.neigh.default.gc_thresh3 = 4096</p>
-<p>kernel.softlockup_panic = 1</p>
-<p>kernel.sysrq = 1</p>
-<p>net.ipv6.conf.all.disable_ipv6 = 1</p>
-<p>net.ipv6.conf.default.disable_ipv6 = 1</p>
-<p>vm.overcommit_memory = 1</p>
-<p>kernel.numa_balancing = 0</p>
-<p>kernel.shmmax = 68719476736</p>
-<p>kernel.printk = 5</p>
-<p>kernel.core_pattern = /data/common/coredump/core-%e-%p-%t</p>
-<hr>
-]]></content>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hello World</title>
     <url>/2023/062516107.html</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
@@ -985,6 +985,26 @@
 
 <p>由于做了ssl证书，80做了个跳转到443上面，域名需要到平台做解析，A记录到自己的服务器，如果流量大的话可以做cdn，Cname到平台给的记录值，ssl证书申请，主流云平台都可以免费申请，填写一些资料以后很快就可以签发证书，选择对应的证书上传即可。</p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>linux install shadowsocks</title>
+    <url>/2023/071659235.html</url>
+    <content><![CDATA[<h1 id="1-安装Python和pip"><a href="#1-安装Python和pip" class="headerlink" title="1. 安装Python和pip"></a>1. 安装Python和pip</h1><p>sudo apt-get update</p>
+<p>sudo apt-get install python-pip</p>
+<h1 id="2-安装Shadowsocks"><a href="#2-安装Shadowsocks" class="headerlink" title="2. 安装Shadowsocks"></a>2. 安装Shadowsocks</h1><p>sudo pip install shadowsocks</p>
+<h1 id="3-配置Shadowsocks"><a href="#3-配置Shadowsocks" class="headerlink" title="3. 配置Shadowsocks"></a>3. 配置Shadowsocks</h1><p>cat &gt;&gt; /etc/shadowsocks.json &lt;&lt;EOF<br>{</p>
+<p>“server” : “ server ip”,<br>“server_port” : server port,<br>“local_port” : 1080,<br>“password” : “passwd”,<br>“timeout” : 200,<br>“method” : “aes-256-cfb”<br>}<br>EOF<br>参数的解释:<br>server：远程服务器IP地址<br>server_port：远程服务器端口号<br>local_port：本地端口号，默认为1080<br>password：远程服务器密码，自定义<br>timeout：超时时间，默认为300秒<br>method：加密方式，推荐aes-256-cfb</p>
+<h1 id="4-启动Shadowsocks"><a href="#4-启动Shadowsocks" class="headerlink" title="4. 启动Shadowsocks"></a>4. 启动Shadowsocks</h1><p>在命令行中输入：</p>
+<p>ssserver -c /etc/shadowsocks.json</p>
+<h1 id="5-添加系统服务"><a href="#5-添加系统服务" class="headerlink" title="5.添加系统服务"></a>5.添加系统服务</h1><p>cat &gt;&gt;/etc/systemd/system/shadows.service  &lt;&lt;EOF<br>[Unit]<br>Description=shadows server<br>[Install]<br>WantedBy=multi-user.target<br>[Service]<br>User=root<br>Group=root<br>ExecStart=/usr/bin/ssserver -c /etc/shadowsocks.json start<br>Restart=on-failure<br>EOF</p>
+<p>systemctl restart shadows.service<br>systemctl enable shadows.service</p>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
   </entry>
   <entry>
     <title>linux 磁盘挂载扩充格式化</title>
@@ -1241,17 +1261,16 @@
       </tags>
   </entry>
   <entry>
-    <title>linux install shadowsocks</title>
-    <url>/2023/071659235.html</url>
-    <content><![CDATA[<h1 id="1-安装Python和pip"><a href="#1-安装Python和pip" class="headerlink" title="1. 安装Python和pip"></a>1. 安装Python和pip</h1><p>sudo apt-get update</p>
-<p>sudo apt-get install python-pip</p>
-<h1 id="2-安装Shadowsocks"><a href="#2-安装Shadowsocks" class="headerlink" title="2. 安装Shadowsocks"></a>2. 安装Shadowsocks</h1><p>sudo pip install shadowsocks</p>
-<h1 id="3-配置Shadowsocks"><a href="#3-配置Shadowsocks" class="headerlink" title="3. 配置Shadowsocks"></a>3. 配置Shadowsocks</h1><p>cat &gt;&gt; /etc/shadowsocks.json &lt;&lt;EOF<br>{</p>
-<p>“server” : “ server ip”,<br>“server_port” : server port,<br>“local_port” : 1080,<br>“password” : “passwd”,<br>“timeout” : 200,<br>“method” : “aes-256-cfb”<br>}<br>EOF<br>参数的解释:<br>server：远程服务器IP地址<br>server_port：远程服务器端口号<br>local_port：本地端口号，默认为1080<br>password：远程服务器密码，自定义<br>timeout：超时时间，默认为300秒<br>method：加密方式，推荐aes-256-cfb</p>
-<h1 id="4-启动Shadowsocks"><a href="#4-启动Shadowsocks" class="headerlink" title="4. 启动Shadowsocks"></a>4. 启动Shadowsocks</h1><p>在命令行中输入：</p>
-<p>ssserver -c /etc/shadowsocks.json</p>
-<h1 id="5-添加系统服务"><a href="#5-添加系统服务" class="headerlink" title="5.添加系统服务"></a>5.添加系统服务</h1><p>cat &gt;&gt;/etc/systemd/system/shadows.service  &lt;&lt;EOF<br>[Unit]<br>Description=shadows server<br>[Install]<br>WantedBy=multi-user.target<br>[Service]<br>User=root<br>Group=root<br>ExecStart=/usr/bin/ssserver -c /etc/shadowsocks.json start<br>Restart=on-failure<br>EOF</p>
-<p>systemctl restart shadows.service<br>systemctl enable shadows.service</p>
+    <title>nginxlog切分</title>
+    <url>/2023/111760549.html</url>
+    <content><![CDATA[<p>1.设置日志文件存放目录，假设你的nginx的日志存在这个目录里<br>logs_path=”/data/log/nginx/“</p>
+<p>2.设置pid文件，这个根据你自己的环境，找到nginx.pid所在目录<br>pid_path=”/var/run/nginx.pid”</p>
+<p>3.创建分割存储的日期文件目录<br>datetime=<code>date -d "yesterday" +"%Y%m%d"</code>;<br>new_log_path=$logs_path$datetime<br>mkdir -p $new_log_path</p>
+<p>4.按照日期移动所有该目录下的日志文件<br>log_file_list=<code>ls -l $logs_path</code>;<br>for log_file in $log_file_list;<br>do<br>    log_file_name=$logs_path$log_file;<br>    if [ -f $log_file_name ];<br>    then<br>        mv $log_file_name $new_log_path;<br>    fi<br>done</p>
+<p>5.向nginx主进程发信号重新打开日志<br>kill -USR1 <code>cat ${pid_path}</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">logs_path=<span class="string">"/data/log/nginx/"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pid_path=<span class="string">"/var/run/nginx.pid"</span></span><br><span class="line"></span><br><span class="line">datetime=`<span class="built_in">date</span> -d <span class="string">"yesterday"</span> +<span class="string">"%Y%m%d"</span>`;</span><br><span class="line">new_log_path=$logs_path<span class="variable">$datetime</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$new_log_path</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">log_file_list=`<span class="built_in">ls</span> -l <span class="variable">$logs_path</span>`;</span><br><span class="line"><span class="keyword">for</span> log_file <span class="keyword">in</span> <span class="variable">$log_file_list</span>;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    log_file_name=$logs_path<span class="variable">$log_file</span>;</span><br><span class="line">    <span class="keyword">if</span> [ -f <span class="variable">$log_file_name</span> ];</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">mv</span> <span class="variable">$log_file_name</span> <span class="variable">$new_log_path</span>;</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">kill</span> -USR1 `<span class="built_in">cat</span> <span class="variable">${pid_path}</span>`</span><br></pre></td></tr></tbody></table></figure>
+
+
 ]]></content>
       <categories>
         <category>系统</category>
@@ -1289,25 +1308,6 @@
 ]]></content>
       <tags>
         <tag>点滴</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>nginxlog切分</title>
-    <url>/2023/111760549.html</url>
-    <content><![CDATA[<p>1.设置日志文件存放目录，假设你的nginx的日志存在这个目录里<br>logs_path=”/data/log/nginx/“</p>
-<p>2.设置pid文件，这个根据你自己的环境，找到nginx.pid所在目录<br>pid_path=”/var/run/nginx.pid”</p>
-<p>3.创建分割存储的日期文件目录<br>datetime=<code>date -d "yesterday" +"%Y%m%d"</code>;<br>new_log_path=$logs_path$datetime<br>mkdir -p $new_log_path</p>
-<p>4.按照日期移动所有该目录下的日志文件<br>log_file_list=<code>ls -l $logs_path</code>;<br>for log_file in $log_file_list;<br>do<br>    log_file_name=$logs_path$log_file;<br>    if [ -f $log_file_name ];<br>    then<br>        mv $log_file_name $new_log_path;<br>    fi<br>done</p>
-<p>5.向nginx主进程发信号重新打开日志<br>kill -USR1 <code>cat ${pid_path}</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">logs_path=<span class="string">"/data/log/nginx/"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pid_path=<span class="string">"/var/run/nginx.pid"</span></span><br><span class="line"></span><br><span class="line">datetime=`<span class="built_in">date</span> -d <span class="string">"yesterday"</span> +<span class="string">"%Y%m%d"</span>`;</span><br><span class="line">new_log_path=$logs_path<span class="variable">$datetime</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$new_log_path</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">log_file_list=`<span class="built_in">ls</span> -l <span class="variable">$logs_path</span>`;</span><br><span class="line"><span class="keyword">for</span> log_file <span class="keyword">in</span> <span class="variable">$log_file_list</span>;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    log_file_name=$logs_path<span class="variable">$log_file</span>;</span><br><span class="line">    <span class="keyword">if</span> [ -f <span class="variable">$log_file_name</span> ];</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">mv</span> <span class="variable">$log_file_name</span> <span class="variable">$new_log_path</span>;</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">kill</span> -USR1 `<span class="built_in">cat</span> <span class="variable">${pid_path}</span>`</span><br></pre></td></tr></tbody></table></figure>
-
-
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
       </tags>
   </entry>
   <entry>
@@ -1430,44 +1430,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>ssh免密登录问题</title>
-    <url>/2023/071760022.html</url>
-    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
-<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
-<p>服务器A需要免密码访问服务器B：</p>
-<ol>
-<li>在A上面生成公钥密钥，执行命令</li>
-</ol>
-<p>&nbsp;</p>
-<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
-<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
-<ol start="2">
-<li>将公钥id_rsa.pub拷贝到B机器上</li>
-</ol>
-<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
-<ol start="3">
-<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
-</ol>
-<p>cd&nbsp;/home/user/.ssh</p>
-<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
-<ol start="4">
-<li>设置 authorized_keys权限</li>
-</ol>
-<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
-<hr>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>vsftp 锁定用户目录</title>
     <url>/2023/071114619.html</url>
     <content><![CDATA[<p>vsftp 安装以后给用户权限和锁定目录；</p>
@@ -1556,6 +1518,44 @@
 <h2 id="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"><a href="#vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。" class="headerlink" title="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"></a>vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。</h2>]]></content>
       <tags>
         <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ssh免密登录问题</title>
+    <url>/2023/071760022.html</url>
+    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
+<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
+<p>服务器A需要免密码访问服务器B：</p>
+<ol>
+<li>在A上面生成公钥密钥，执行命令</li>
+</ol>
+<p>&nbsp;</p>
+<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
+<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
+<ol start="2">
+<li>将公钥id_rsa.pub拷贝到B机器上</li>
+</ol>
+<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
+<ol start="3">
+<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
+</ol>
+<p>cd&nbsp;/home/user/.ssh</p>
+<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
+<ol start="4">
+<li>设置 authorized_keys权限</li>
+</ol>
+<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
+<hr>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
       </tags>
   </entry>
   <entry>
@@ -1817,7 +1817,7 @@
 <figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">\#!/bin/bash</span><br><span class="line"></span><br><span class="line">\#export.UTF-8</span><br><span class="line"></span><br><span class="line">FILE=/var/log/zabbix/mailtmp.txt</span><br><span class="line"></span><br><span class="line">echo "$3" &gt;$FILE</span><br><span class="line"></span><br><span class="line">dos2unix -k $FILE</span><br><span class="line"></span><br><span class="line">/bin/mail -s "$2" $1 &lt; $FILE</span><br><span class="line"></span><br><span class="line">\#!/bin/bash</span><br><span class="line"></span><br><span class="line">\#messages=`echo $3 | tr '\r\n' '\n'`</span><br><span class="line"></span><br><span class="line">\#subject=`echo $2 | tr '\r\n' '\n'`</span><br><span class="line"></span><br><span class="line">\#echo "${messages}" | mail -v -s "${subject}" $1 &gt;&gt;/var/log/zabbix/mailx.log 2&gt;&amp;1</span><br></pre></td></tr></tbody></table></figure>
 
 
-<p><img src="/../images/20231201_9.png"><br>消息模版基本一致；</p>
+<p>消息模版基本一致；</p>
 <p>3）钉钉告警：</p>
 <p>钉钉脚本：</p>
 <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">\<span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#coding:utf-8</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#zabbix钉钉报警</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests,json,sys,os,datetime</span><br><span class="line"></span><br><span class="line">webhook=<span class="string">"https://oapi.dingtalk.com/robot/send?access_token=21211212111abcababcb..."</span>    <span class="comment">#说明：这里改为自己创建的机器人的webhook的值，钉钉个人现在不好申请了；</span></span><br><span class="line"></span><br><span class="line">user=sys.argv[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">text=sys.argv[<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">data={</span><br><span class="line"></span><br><span class="line">  <span class="string">"msgtype"</span>: <span class="string">"text"</span>,</span><br><span class="line"></span><br><span class="line">  <span class="string">"text"</span>: {</span><br><span class="line"></span><br><span class="line">​    <span class="string">"content"</span>: text</span><br><span class="line"></span><br><span class="line">  },</span><br><span class="line"></span><br><span class="line">  <span class="string">"at"</span>: {</span><br><span class="line"></span><br><span class="line">​    <span class="string">"atMobiles"</span>: [</span><br><span class="line"></span><br><span class="line">​      user</span><br><span class="line"></span><br><span class="line">​    ],</span><br><span class="line"></span><br><span class="line">​    <span class="string">"isAtAll"</span>: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">headers = {<span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>}</span><br><span class="line"></span><br><span class="line">x=requests.post(url=webhook,data=json.dumps(data),headers=headers)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> os.path.exists(<span class="string">"/usr/local/zabbix/log/ding.log"</span>):</span><br><span class="line"></span><br><span class="line">  f=<span class="built_in">open</span>(<span class="string">"/usr/local/zabbix/log/ding.log"</span>,<span class="string">"a+"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">  f=<span class="built_in">open</span>(<span class="string">"/usr/local/zabbix/log/ding.log"</span>,<span class="string">"w+"</span>)</span><br><span class="line"></span><br><span class="line">f.write(<span class="string">"\n"</span>+<span class="string">"--"</span>*<span class="number">30</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> x.json()[<span class="string">"errcode"</span>] == <span class="number">0</span>:</span><br><span class="line"></span><br><span class="line">  f.write(<span class="string">"\n"</span>+<span class="built_in">str</span>(datetime.datetime.now())+<span class="string">"   "</span>+<span class="built_in">str</span>(user)+<span class="string">"   "</span>+<span class="string">"发送成功"</span>+<span class="string">"\n"</span>+<span class="built_in">str</span>(text))</span><br><span class="line"></span><br><span class="line">  f.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">  f.write(<span class="string">"\n"</span>+<span class="built_in">str</span>(datetime.datetime.now()) + <span class="string">"   "</span> + <span class="built_in">str</span>(user) + <span class="string">"   "</span> + <span class="string">"发送失败"</span> + <span class="string">"\n"</span> + <span class="built_in">str</span>(text))</span><br><span class="line"></span><br><span class="line">  f.close()</span><br></pre></td></tr></tbody></table></figure>
@@ -1830,7 +1830,7 @@
 <p>UserParameter=dis.process,/usr/lib/zabbix/alertscripts/discovery_process.sh</p>
 <p>UserParameter=proc.check[*],/usr/lib/zabbix/alertscripts/process_check.sh $1 $2 $3</p>
 <p>遇到问题：邮件只能发送给admin，建立的其他用户一直没收到邮件，后来添加到admin用户以后可以收到，其他用户没收到邮件挺奇怪的事情，现在没头绪。</p>
-<p><img src="/../images/20231201_10.png"></p>
+<p><img src="/../images/20231201_9.png"></p>
 ]]></content>
       <tags>
         <tag>心得</tag>
