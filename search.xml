@@ -44,10 +44,13 @@
 ]]></content>
   </entry>
   <entry>
-    <title>Debian 10挂载加swap</title>
-    <url>/2023/111727163.html</url>
-    <content><![CDATA[<p>以根目录挂载为4G例：<br>dd if=/dev/zero of=/swapfile count=4096 bs=1M</p>
-<p>ls / | grep swapfile<br>chmod 600 /swapfile<br>ls -lh /swapfile<br>-rw——- 1 root root 4.0G Aug 17 12:14 /swapfile<br>通过运行以下命令告诉服务器设置swap文件：<br>mkswap /swapfile<br>swapon /swapfile<br>free -m<br>vi /etc/fstab<br>/swapfile swap swap defaults 0 0<br>保存。</p>
+    <title>Debian10 安装ossfs</title>
+    <url>/2023/111750151.html</url>
+    <content><![CDATA[<p>1.<br>sudo apt-get install automake autotools-dev g++  git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev  make pkg-config<br>2.<br>git clone <a href="https://github.com/aliyun/ossfs.git">https://github.com/aliyun/ossfs.git</a><br>cd ossfs/<br> ./autogen.sh<br>  ./configure<br>Sudo   make<br> Sudo make install<br>3.配置bucket信息和accessKey信息：<br>echo Bucket名称:要是用的AccessKeyId:对应的AccessKeySecret  &gt; /etc/passwd-ossfs<br>示例：<br>mkdir -p /data/ossfs<br>cosfs examplebucket-1250000000 /data/ossfs -ourl=<a href="http://cos.ap-guangzhou.myqcloud.com/">http://cos.ap-guangzhou.myqcloud.com</a> </p>
+<p>ossfs ts-1121-patch-oss  /data/ossfs/ -ourl=<a href="https://oss-cn-hangzhou-internal.aliyuncs.com/">https://oss-cn-hangzhou-internal.aliyuncs.com</a> -oallow_other</p>
+<p>其中：<br><mountpoint> 为本地挂载目录（例如/mnt）。<br><region> 为地域简称， 例如 ap-guangzhou 、 eu-frankfurt 等。更多地域简称信息，请参见 可用地域。<br>-odbglevel 指定日志级别，默认为crit，可选值为crit、error、warn、info、debug。<br>-oallow_other 允许非挂载用户访问挂载文件夹。</region></mountpoint></p>
+<p>创建启动脚本：<br>Vim /etc/init.d/ossfs<br>ossfs demo-patch-oss /data/ossfs/ -ourl=oss-cn-hangzhou-internal.aliyuncs.com -oallow_other<br>Chmod u+x /etc/init.dossfs</p>
+<p>Centos：<br>chkncondif ossf on<br>Debian;<br>update-rc.d  ossfs  defaults</p>
 ]]></content>
       <categories>
         <category>系统</category>
@@ -57,13 +60,10 @@
       </tags>
   </entry>
   <entry>
-    <title>Debian10 安装ossfs</title>
-    <url>/2023/111750151.html</url>
-    <content><![CDATA[<p>1.<br>sudo apt-get install automake autotools-dev g++  git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev  make pkg-config<br>2.<br>git clone <a href="https://github.com/aliyun/ossfs.git">https://github.com/aliyun/ossfs.git</a><br>cd ossfs/<br> ./autogen.sh<br>  ./configure<br>Sudo   make<br> Sudo make install<br>3.配置bucket信息和accessKey信息：<br>echo Bucket名称:要是用的AccessKeyId:对应的AccessKeySecret  &gt; /etc/passwd-ossfs<br>示例：<br>mkdir -p /data/ossfs<br>cosfs examplebucket-1250000000 /data/ossfs -ourl=<a href="http://cos.ap-guangzhou.myqcloud.com/">http://cos.ap-guangzhou.myqcloud.com</a> </p>
-<p>ossfs ts-1121-patch-oss  /data/ossfs/ -ourl=<a href="https://oss-cn-hangzhou-internal.aliyuncs.com/">https://oss-cn-hangzhou-internal.aliyuncs.com</a> -oallow_other</p>
-<p>其中：<br><mountpoint> 为本地挂载目录（例如/mnt）。<br><region> 为地域简称， 例如 ap-guangzhou 、 eu-frankfurt 等。更多地域简称信息，请参见 可用地域。<br>-odbglevel 指定日志级别，默认为crit，可选值为crit、error、warn、info、debug。<br>-oallow_other 允许非挂载用户访问挂载文件夹。</region></mountpoint></p>
-<p>创建启动脚本：<br>Vim /etc/init.d/ossfs<br>ossfs demo-patch-oss /data/ossfs/ -ourl=oss-cn-hangzhou-internal.aliyuncs.com -oallow_other<br>Chmod u+x /etc/init.dossfs</p>
-<p>Centos：<br>chkncondif ossf on<br>Debian;<br>update-rc.d  ossfs  defaults</p>
+    <title>Debian 10挂载加swap</title>
+    <url>/2023/111727163.html</url>
+    <content><![CDATA[<p>以根目录挂载为4G例：<br>dd if=/dev/zero of=/swapfile count=4096 bs=1M</p>
+<p>ls / | grep swapfile<br>chmod 600 /swapfile<br>ls -lh /swapfile<br>-rw——- 1 root root 4.0G Aug 17 12:14 /swapfile<br>通过运行以下命令告诉服务器设置swap文件：<br>mkswap /swapfile<br>swapon /swapfile<br>free -m<br>vi /etc/fstab<br>/swapfile swap swap defaults 0 0<br>保存。</p>
 ]]></content>
       <categories>
         <category>系统</category>
@@ -375,6 +375,56 @@
       </tags>
   </entry>
   <entry>
+    <title>apache多网站对应80端口</title>
+    <url>/2023/062862696.html</url>
+    <content><![CDATA[<p>一台服务器绑定多个域名，已经装了apache，nginx就不使用了，利用apache主机头名虚拟主机用80端口对应多个网站，万能的网络上面有文档如下：</p>
+<p>Aapche 如果需要绑定多个域名到一个IP上,是支持的。需要注意以下2点:</p>
+<p>1 必须要开启 NameVirtualHost开关选项，</p>
+<p>如：NameVirtualHost 220.231.220.231:80</p>
+<p>2 NameVirtualHost 需要指定具体的端口</p>
+<p>例如”:80″,跟&lt;VirtualHost 220.231.32.*:80&gt;对应，否则会报错:</p>
+<p>mixing * ports and non-* ports with a NameVirtualHost address is not supported, proceeding with undefined results。</p>
+<p>翻译过来就是: NameVirtualHost 地址，指定端口和不指定端口混合使用是不支持的，将会产生未逾期的后果。</p>
+<p>未逾期的后果就是: 第2个不起作用，仅当一个站点设置起作用。</p>
+<p>按着做下来：</p>
+<p>IncludeOptional conf.d/*.conf</p>
+<p>ServerSignature Off</p>
+<p>NameVirtualHost 220.231.220.231:80</p>
+<p>&lt;VirtualHost 220.231.220.231:80&gt;&nbsp;&nbsp;</p>
+<p>ServerAdmin&nbsp; &nbsp;<a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a>&nbsp;</p>
+<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
+<p>ServerName <a href="http://www.aaa.net/">www.aaa.net</a></p>
+<p>DocumentRoot&nbsp; /data/www/wress/</p>
+<p>&lt;Directory “/data/www/wress/“&gt;&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp;Options -Indexes&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp;Options FollowSymLinks Indexes</p>
+<p>&nbsp; &nbsp; AllowOverride All&nbsp;&nbsp;</p>
+<p>&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp; Require all granted&nbsp;&nbsp;</p>
+<p>&nbsp;&nbsp;</p>
+<p>ErrorLog logs/<a href="http://www.aaa.net-error_log/">www.aaa.net-error_log</a></p>
+<p>&nbsp;CustomLog logs/<a href="http://www.aaa.net-access_log/">www.aaa.net-access_log</a> common</p>
+<p>&nbsp;</p>
+<p>&lt;VirtualHost 220.231.220.231:80&gt;</p>
+<p>ServerAdmin&nbsp; <a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a></p>
+<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
+<p>ServerName img.aaa.net</p>
+<p>#ServerName 220.231.220.231</p>
+<p>DocumentRoot&nbsp; /data/www/html/</p>
+<p>&lt;Directory “/data/www/html/“&gt;</p>
+<p>&nbsp; &nbsp; Options -Indexes&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp; Options FollowSymLinks Indexes</p>
+<p>&nbsp; &nbsp; AllowOverride All</p>
+<p>&nbsp; &nbsp;Require all granted</p>
+
+
+<p>ErrorLog logs/img.aaa.net-error_log</p>
+<p>CustomLog logs/img.aaa.net-access_log common</p>
+
+
+<h2 id="这样都可以访问，apache也可以实现，做个小笔记。"><a href="#这样都可以访问，apache也可以实现，做个小笔记。" class="headerlink" title="这样都可以访问，apache也可以实现，做个小笔记。"></a>这样都可以访问，apache也可以实现，做个小笔记。</h2>]]></content>
+  </entry>
+  <entry>
     <title>Tengine 安装</title>
     <url>/2023/111458217.html</url>
     <content><![CDATA[<p>Tengine安装</p>
@@ -446,56 +496,6 @@
       <tags>
         <tag>随笔</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>apache多网站对应80端口</title>
-    <url>/2023/062862696.html</url>
-    <content><![CDATA[<p>一台服务器绑定多个域名，已经装了apache，nginx就不使用了，利用apache主机头名虚拟主机用80端口对应多个网站，万能的网络上面有文档如下：</p>
-<p>Aapche 如果需要绑定多个域名到一个IP上,是支持的。需要注意以下2点:</p>
-<p>1 必须要开启 NameVirtualHost开关选项，</p>
-<p>如：NameVirtualHost 220.231.220.231:80</p>
-<p>2 NameVirtualHost 需要指定具体的端口</p>
-<p>例如”:80″,跟&lt;VirtualHost 220.231.32.*:80&gt;对应，否则会报错:</p>
-<p>mixing * ports and non-* ports with a NameVirtualHost address is not supported, proceeding with undefined results。</p>
-<p>翻译过来就是: NameVirtualHost 地址，指定端口和不指定端口混合使用是不支持的，将会产生未逾期的后果。</p>
-<p>未逾期的后果就是: 第2个不起作用，仅当一个站点设置起作用。</p>
-<p>按着做下来：</p>
-<p>IncludeOptional conf.d/*.conf</p>
-<p>ServerSignature Off</p>
-<p>NameVirtualHost 220.231.220.231:80</p>
-<p>&lt;VirtualHost 220.231.220.231:80&gt;&nbsp;&nbsp;</p>
-<p>ServerAdmin&nbsp; &nbsp;<a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a>&nbsp;</p>
-<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
-<p>ServerName <a href="http://www.aaa.net/">www.aaa.net</a></p>
-<p>DocumentRoot&nbsp; /data/www/wress/</p>
-<p>&lt;Directory “/data/www/wress/“&gt;&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp;Options -Indexes&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp;Options FollowSymLinks Indexes</p>
-<p>&nbsp; &nbsp; AllowOverride All&nbsp;&nbsp;</p>
-<p>&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp; Require all granted&nbsp;&nbsp;</p>
-<p>&nbsp;&nbsp;</p>
-<p>ErrorLog logs/<a href="http://www.aaa.net-error_log/">www.aaa.net-error_log</a></p>
-<p>&nbsp;CustomLog logs/<a href="http://www.aaa.net-access_log/">www.aaa.net-access_log</a> common</p>
-<p>&nbsp;</p>
-<p>&lt;VirtualHost 220.231.220.231:80&gt;</p>
-<p>ServerAdmin&nbsp; <a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a></p>
-<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
-<p>ServerName img.aaa.net</p>
-<p>#ServerName 220.231.220.231</p>
-<p>DocumentRoot&nbsp; /data/www/html/</p>
-<p>&lt;Directory “/data/www/html/“&gt;</p>
-<p>&nbsp; &nbsp; Options -Indexes&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp; Options FollowSymLinks Indexes</p>
-<p>&nbsp; &nbsp; AllowOverride All</p>
-<p>&nbsp; &nbsp;Require all granted</p>
-
-
-<p>ErrorLog logs/img.aaa.net-error_log</p>
-<p>CustomLog logs/img.aaa.net-access_log common</p>
-
-
-<h2 id="这样都可以访问，apache也可以实现，做个小笔记。"><a href="#这样都可以访问，apache也可以实现，做个小笔记。" class="headerlink" title="这样都可以访问，apache也可以实现，做个小笔记。"></a>这样都可以访问，apache也可以实现，做个小笔记。</h2>]]></content>
   </entry>
   <entry>
     <title>centos U盘安装查找U盘设备名</title>
@@ -1248,6 +1248,19 @@
 ]]></content>
   </entry>
   <entry>
+    <title>/var/log/messages日志恢复</title>
+    <url>/2023/112018778.html</url>
+    <content><![CDATA[<p>Linux容易犯的一个错误是把日志文件给直接删除，而不是删除日志文件的内容。<br>直接删除日志文件往往导致新产生的日志记录无法被写入到日志文件中（因为它已经被删除了），而仅仅重新新建（touch）同样名字的文件是解决不了问题的。<br>本文以Unbutu系统为例，介绍如何恢复被误删除的syslog文件：<br>首先，在以root用户执行如下lsof命令，查询打开/var/log/messages文件的进程的进程ID(PID)。<br>root@zck:/var/log# lsof | grep messages<br>rsyslogd 544 syslog 7w REG 8,1 214641 134422 /var/log/messages<br>从上面命令输出可以看到，这个打开/var/log/messages文件的进程的PID是544，文件/var/log/messages的文件描述符（FD）号是7。<br>根据上述的PID和FD，可以在/proc找到对应的文件：<br>root@zck:/var/log#ls -al /proc/544/fd/7<br>l-wx—— 1 root root 64 2012-07-14 14:48 7 -&gt; /var/log/messages<br>将文件/proc/544/fd/7拷贝到/var/log/messages<br>cp /proc/544/fd/7 /var/log/messages&nbsp;</p>
+<p>然后重新启动syslog服务即可恢复被误删除的日志文件，并且新的日志记录能够继续被写入日志文件。<br>以root用户运行service命令。其中，service命令的第2个参数可能是syslog、也可能是rsyslog。<br>具体可以使用通过命令查询得知。<br>登录后复制<br>root@zck:/proc/544/fd# service –status-all<br> [ ? ] …<br> [ ? ] rc.local<br> [ ? ] rsyslog<br> [ ? ] screen-cleanup<br> [ ? ] …  #——————————-</p>
+<p>复制代码代码如下:<br>root@zck:/proc/544/fd# service rsyslog restart<br>rsyslog start/running, process 2673</p>
+<p>清空日志文件：<br>cat /dev/null&gt;/var/log/messages</p>
+<p>转自url:<a href="https://blog.51cto.com/u_11146845/6240737">https://blog.51cto.com/u_11146845/6240737</a></p>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>nginxlog切分</title>
     <url>/2023/111760549.html</url>
     <content><![CDATA[<p>1.设置日志文件存放目录，假设你的nginx的日志存在这个目录里<br>logs_path=”/data/log/nginx/“</p>
@@ -1264,19 +1277,6 @@
       </categories>
       <tags>
         <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>/var/log/messages日志恢复</title>
-    <url>/2023/112018778.html</url>
-    <content><![CDATA[<p>Linux容易犯的一个错误是把日志文件给直接删除，而不是删除日志文件的内容。<br>直接删除日志文件往往导致新产生的日志记录无法被写入到日志文件中（因为它已经被删除了），而仅仅重新新建（touch）同样名字的文件是解决不了问题的。<br>本文以Unbutu系统为例，介绍如何恢复被误删除的syslog文件：<br>首先，在以root用户执行如下lsof命令，查询打开/var/log/messages文件的进程的进程ID(PID)。<br>root@zck:/var/log# lsof | grep messages<br>rsyslogd 544 syslog 7w REG 8,1 214641 134422 /var/log/messages<br>从上面命令输出可以看到，这个打开/var/log/messages文件的进程的PID是544，文件/var/log/messages的文件描述符（FD）号是7。<br>根据上述的PID和FD，可以在/proc找到对应的文件：<br>root@zck:/var/log#ls -al /proc/544/fd/7<br>l-wx—— 1 root root 64 2012-07-14 14:48 7 -&gt; /var/log/messages<br>将文件/proc/544/fd/7拷贝到/var/log/messages<br>cp /proc/544/fd/7 /var/log/messages&nbsp;</p>
-<p>然后重新启动syslog服务即可恢复被误删除的日志文件，并且新的日志记录能够继续被写入日志文件。<br>以root用户运行service命令。其中，service命令的第2个参数可能是syslog、也可能是rsyslog。<br>具体可以使用通过命令查询得知。<br>登录后复制<br>root@zck:/proc/544/fd# service –status-all<br> [ ? ] …<br> [ ? ] rc.local<br> [ ? ] rsyslog<br> [ ? ] screen-cleanup<br> [ ? ] …  #——————————-</p>
-<p>复制代码代码如下:<br>root@zck:/proc/544/fd# service rsyslog restart<br>rsyslog start/running, process 2673</p>
-<p>清空日志文件：<br>cat /dev/null&gt;/var/log/messages</p>
-<p>转自url:<a href="https://blog.51cto.com/u_11146845/6240737">https://blog.51cto.com/u_11146845/6240737</a></p>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
       </tags>
   </entry>
   <entry>
@@ -1308,6 +1308,44 @@
 ]]></content>
       <tags>
         <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ssh免密登录问题</title>
+    <url>/2023/071760022.html</url>
+    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
+<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
+<p>服务器A需要免密码访问服务器B：</p>
+<ol>
+<li>在A上面生成公钥密钥，执行命令</li>
+</ol>
+<p>&nbsp;</p>
+<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
+<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
+<ol start="2">
+<li>将公钥id_rsa.pub拷贝到B机器上</li>
+</ol>
+<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
+<ol start="3">
+<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
+</ol>
+<p>cd&nbsp;/home/user/.ssh</p>
+<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
+<ol start="4">
+<li>设置 authorized_keys权限</li>
+</ol>
+<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
+<hr>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
       </tags>
   </entry>
   <entry>
@@ -1430,44 +1468,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>ssh免密登录问题</title>
-    <url>/2023/071760022.html</url>
-    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
-<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
-<p>服务器A需要免密码访问服务器B：</p>
-<ol>
-<li>在A上面生成公钥密钥，执行命令</li>
-</ol>
-<p>&nbsp;</p>
-<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
-<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
-<ol start="2">
-<li>将公钥id_rsa.pub拷贝到B机器上</li>
-</ol>
-<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
-<ol start="3">
-<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
-</ol>
-<p>cd&nbsp;/home/user/.ssh</p>
-<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
-<ol start="4">
-<li>设置 authorized_keys权限</li>
-</ol>
-<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
-<hr>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>vsftp 锁定用户目录</title>
     <url>/2023/071114619.html</url>
     <content><![CDATA[<p>vsftp 安装以后给用户权限和锁定目录；</p>
@@ -1559,207 +1559,6 @@
       </tags>
   </entry>
   <entry>
-    <title>xtrabackup还原mysql</title>
-    <url>/2023/11284499.html</url>
-    <content><![CDATA[<p>1.下载ALI平台备份包：</p>
-<p>wget -c  “<a href="http://rdsbak-shanghai-v2-3az.oss-cn-shanghai-internal.aliyuncs.com/custins69321456/hins25992165_data_20230823211743_qp.xb?Expires=16931mOQ1VDcN">http://rdsbak-shanghai-v2-3az.oss-cn-shanghai-internal.aliyuncs.com/custins69321456/hins25992165_data_20230823211743_qp.xb?Expires=16931mOQ1VDcN</a>…..” -O 2023082121_qp.xb &gt; /tmp/download.log </p>
-<p>命令：nohup wget -c -t 0 “备份文件下载地址” -O 下载的目标路径及文件名 &gt; 下载输出日志到对应文件 &amp;</p>
-<p>示例：nohup wget -c -t 0 “<a href="https://example.aliyundoc.com/examplebackup.qp.xb">https://example.aliyundoc.com/examplebackup.qp.xb</a>“ -O /backup/examplebackup.qp.xb &gt; /tmp/download.log &amp;</p>
-<p>各命令代表含义如下：</p>
-<p>-t 0：无限重试。</p>
-<p>-c：支持断点续传。</p>
-<p>-O：下载的目标路径及文件名。</p>
-<p>nohup：避免因手误执行复制操作或者终端断开连接，把正在进行的下载中断，且当下载完毕后，之前的进程将会自动退出。</p>
-<p>命令：nohup curl -C - –retry 10 “备份文件下载地址” -o 自定义文件名 &gt; 下载输出日志到对应文件 &amp;</p>
-<p>示例：nohup curl -C –retry 10 “<a href="https://example.aliyundoc.com/examplebackup.qp.xb">https://example.aliyundoc.com/examplebackup.qp.xb</a>“ -o backup.qp.xb &gt; /tmp/download.log &amp;</p>
-<p>各命令代表含义如下：</p>
-<p>–retry 10：任务失败时的重试次数，以上示例表示重试10次。</p>
-<p>-C -：支持自动断点续传。</p>
-<p>-o：下载的目标路径及文件名。</p>
-<p>nohup：避免因手误执行复制操作或者终端断开连接，把正在进行的下载中断，且当下载完毕后，之前的进程将会自动退出。</p>
-<p>2  XtraBackup 还原</p>
-<p>下载Percona XtraBackup 2.4.28为例，安装命令如下：</p>
-<p>如果是MySQL 5.7、5.6或5.5实例，下载并安装Percona XtraBackup 2.4，如果是MySQL 8.0实例，下载并安装Percona XtraBackup 8.0，具体请参见<a href="https://docs.percona.com/percona-xtrabackup/8.0/installation.html">Percona XtraBackup 8.0</a>。</p>
-<p>wget <a href="https://downloads.percona.com/downloads/Percona-XtraBackup-2.4/Percona-XtraBackup-2.4.28/binary/redhat/7/x86_64/percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm">https://downloads.percona.com/downloads/Percona-XtraBackup-2.4/Percona-XtraBackup-2.4.28/binary/redhat/7/x86_64/percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm</a></p>
-<p> sudo yum localinstall -y percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm</p>
-<p> 安装解压工具qpress：</p>
-<p>## 下载可执行文件的tar包</p>
-<p>wget “<a href="https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/file-manage-files/zh-CN/20230406/flxd/qpress-11-linux-x64.tar">https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/file-manage-files/zh-CN/20230406/flxd/qpress-11-linux-x64.tar</a>“</p>
-<p> ## 解压下载的tar包，取出可执行文件</p>
-<p>tar -xvf qpress-11-linux-x64.tar</p>
-<p> ## 设置qpress文件的执行权限</p>
-<p>sudo chmod 775 qpress</p>
-<p> ## 拷贝qpress到/usr/bin中</p>
-<p>sudo cp qpress /usr/bin</p>
-<p>解压：</p>
-<p>cat 20230823211743_qp.xb |xbstream -x -v -C /data/mysql_data/</p>
-<p>innobackupex –decompress –remove-original /data/mysql_data/</p>
-<p>## 步骤一：解包</p>
-<p>cat 20230823211743_qp.xb |xbstream -x -v -C /data/mysql_data/</p>
-<p> ## 步骤二：解压</p>
-<p>### MySQL 5.5/5.6/5.7</p>
-<p>innobackupex –decompress –remove-original /data/mysql_data/</p>
-<p><img src="/../images/20231128_1.png" alt="img"> </p>
-<p>Mysql5.7恢复：</p>
-<p>innobackupex –defaults-file=/var/mysql_bkdata/backup-my.cnf –apply-log /data/mysql_data/</p>
-<p><img src="/../images/20231128_2.png" alt="img"> </p>
-<p>编辑my.cnf</p>
-<p>datadir=/data/mysql/</p>
-<p>innodb_undo_tablespaces=2</p>
-<p>innodb_undo_directory=/data/mysql/</p>
-<p>#@</p>
-<p> 修改****datadir****的参数取值为/var/mysql_newdata。</p>
-<p>放大查看复制代码</p>
-<p>datadir = /var/mysql_newdata</p>
-<p> mysql_newdata为自建数据库的新数据目录，已在[准备工作]中创建。</p>
-<p>在my.cnf中添加如下内容。</p>
-<p>innodb_undo_tablespaces=2</p>
-<p>innodb_undo_directory=/var/mysql_newdata</p>
-<p>参数****innodb_undo_tablespaces****的取值需要与/var/mysql_bkdata/backup-my.cnf中的取值相同，您可以使用cat /var/mysql_bkdata/backup-my.cnf | grep innodb_undo_tablespaces查询。</p>
-<p>恢复数据。</p>
-<p>sudo innobackupex –defaults-file=/etc/my.cnf –copy-back /data/mysql_data/</p>
-<p>从备份目录copy到数据目录</p>
-<p><img src="/../images/20231128_3.png" alt="img"> </p>
-<p><img src="/../images/20231128_4.png" alt="img"> </p>
-<p>给于mysql新目录权限，进入mysql</p>
-]]></content>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>zabbix 设置163报警邮箱</title>
-    <url>/2023/120119617.html</url>
-    <content><![CDATA[<h1 id="1-测试端口是否开放："><a href="#1-测试端口是否开放：" class="headerlink" title="1.测试端口是否开放："></a>1.测试端口是否开放：</h1><p>nc -w 2 smtp.exmail.qq.com 465 &lt; /dev/null &amp;&amp; echo “port is ok”</p>
-<p>nc -w 2 smtp.exmail.qq.com 25 &lt; /dev/null &amp;&amp; echo “port is ok”</p>
-<p>首先拿到163邮箱的授权码，邮箱设置–选择“POP/SMTP/IMAP”选项，选择“IMAP/SMTP服务”，点击开启，扫码页面可以选择扫码发送短信，或者点击下方“手动发送短信”，点击“我已发送”后，如果系统检测到用户成功发送短信，即获取到授权码。授权码可以在多个第三方客户端使用。</p>
-<h1 id="2-配置163邮箱"><a href="#2-配置163邮箱" class="headerlink" title="2.配置163邮箱"></a>2.配置163邮箱</h1><p>zabbix路径:/usr/lib/zabbix/,执行：</p>
-<p>certutil -A -n “GeoTrust SSL CA - G3” -t “Pu,Pu,Pu” -d /usr/lib/zabbix/.certs./ -i /usr/lib/zabbix/.certs./163.crt</p>
-<p>certutil:  unable to open “/usr/lib/zabbix/.certs./163.crt” for reading (-5950, 2).</p>
-<p>没有到.certs 目录下执行或者certs不可读</p>
-<p>cd .certs/</p>
-<p> certutil -A -n “GeoTrust SSL CA - G3” -t “Pu,Pu,Pu” -d ./ -i 163.crt</p>
-<p>Notice: Trust flag u is set automatically if the private key is present.</p>
-<p>依然报错；</p>
-<p> echo “hehe” | mail -v -s “test”  <a href="mailto:abc1@qq.com">abc1@qq.com</a></p>
-<p>Resolving host smtp.163.com . . .Could not resolve host: smtp.163.com</p>
-<p>Vim /etc/mail.rc</p>
-<p>set from=邮箱地址</p>
-<p>set smtp=smtps://smtp.163.com:465</p>
-<p>set smtp-auth-user=账号名不要加@</p>
-<p>set smtp-auth-password=授权码</p>
-<p>set smtp-auth=login</p>
-<p>set ssl-verify=ignore</p>
-<p>=后面不要“”</p>
-<p>测试发邮件：</p>
-<p> echo “邮件正文” | mail -s “ZABBIX-TEST” <a href="mailto:cxxx@163.com">cxxx@163.com</a></p>
-<p>Resolving host smtp.163.com . . . done.</p>
-<p>Connecting to 103.74.29.40:465 . . . connected.</p>
-<p>Error initializing NSS: Unknown error -8015.</p>
-<p>Error initializing NSS: Unknown error -8015.</p>
-<p>“/root/dead.letter” 11/320</p>
-<p>. . . message not sent.</p>
-<p>很莫名奇妙，最终在root下面生产.certs，首先在/root下生成相应文件，在copy到zabbix路径下面；</p>
-<p>cd /root</p>
-<p> mkdir .certs</p>
-<p> echo -n | openssl s_client -connect smtp.163.com:465 | sed -ne ‘/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p’ &gt; /root/.certs/163.crt</p>
-<p>depth=2 C = US, O = DigiCert Inc, OU = <a href="http://www.digicert.com/">www.digicert.com</a>, CN = DigiCert Global Root CA</p>
-<p>verify return:1</p>
-<p>depth=1 C = US, O = DigiCert Inc, CN = GeoTrust RSA CN CA G2</p>
-<p>verify return:1</p>
-<p>depth=0 C = CN, ST = zhejiang, L = hangzhou, O = “NetEase (Hangzhou) Network Co., Ltd”, CN = *.163.com</p>
-<p>verify return:1</p>
-<p>DONE</p>
-<p>certutil -A -n “GeoTrust SSL CA” -t “C,,” -d /root/.certs -i /root/.certs/163.crt</p>
-<p>certutil -A -n “GeoTrust Global CA” -t “C,,” -d /root/.certs -i /root/.certs/163.crt</p>
-<p>Cd .certs</p>
-<p>certutil -A -n “GeoTrust SSL CA - G3” -t “Pu,Pu,Pu” -d /root/.certs/./ -i /root/.certs/163.crt</p>
-<p>Notice: Trust flag u is set automatically if the private key is present.</p>
-<p> ls /root/.certs/</p>
-<p>163.crt  cert8.db  key3.db  secmod.db</p>
-<p>certutil -L -d /root/.certs</p>
-<p>Certificate Nickname                     Trust Attributes</p>
-<p>​                               SSL,S/MIME,JAR/XPI</p>
-<p>GeoTrust SSL CA                        P,P,P</p>
-<p>cp -a /root/.certs/ /etc/zabbix/ &amp;&amp; cd /etc/zabbix &amp;&amp; chmod 777 -R .certs</p>
-<p> tail -10f /etc/mail.rc</p>
-<p>set from=<a href="mailto:email@163.com">email@163.com</a></p>
-<p>set smtp=smtps://smtp.163.com:465</p>
-<p>set smtp-auth-user=用户名不带@</p>
-<p>set smtp-auth-password=授权码</p>
-<p>set smtp-auth=login</p>
-<p>set ssl-verify=ignore</p>
-<p>set nss-config-dir=/etc/zabbix/.certs</p>
-<p> echo “邮件正文” | mail -s “ZABBIX-TEST” <a href="mailto:cxxx@163.com">cxxx@163.com</a></p>
-<p>成功了；</p>
-<p>Zabbix安装，参照官网<a href="https://www.zabbix.com/cn/download">https://www.zabbix.com/cn/download</a></p>
-<p>或者网上一大堆源码安装教程；</p>
-<h1 id="3-邮件报警配置："><a href="#3-邮件报警配置：" class="headerlink" title="3.邮件报警配置："></a>3.邮件报警配置：</h1><p>Zabbix5.0安装调试完毕，邮件系统发送，给多用户发送遇到了问题，期初创建了多个用户，用163邮件通知，也有sendmail脚本通知，钉钉通知脚本都用过，</p>
-<p>设置了3种通知方式：163邮件通知，钉钉报警给机器人，sendmail脚本发送报警；</p>
-<p><img src="/../images/20231201_6.png"></p>
-<p> 1）163邮件通知：</p>
-<p><img src="/../images/20231201_7.png"></p>
-<p><img src="/../images/20231201_8.png"></p>
-<p>消息模版：</p>
-<p>问题：</p>
-<p>主题：</p>
-<p>TRIGGER.STATUS,服务器:HOSTNAME1,发生:TRIGGER.NAME</p>
-<p>消息：</p>
-<p>告警主机:HOST.NAME</p>
-<p>告警IP:HOST.IP</p>
-<p>告警时间:EVENT.DATE-EVENT.TIME</p>
-<p>告警等级:TRIGGER.SEVERITY</p>
-<p>告警信息:TRIGGER.NAME:ITEM.VALUE</p>
-<p>问题详情:ITEM.NAME:ITEM.VALUE</p>
-<p>当前状态:TRIGGER.STATUS:ITEM.VALUE</p>
-<p>事件ID:EVENT.ID</p>
-<p>——-FROM ZABBIX 平台——-163邮局—-</p>
-<p>问题恢复：</p>
-<p>主题：</p>
-<p>恢复{TRIGGER.STATUS}, 服务器:{HOSTNAME1}: {TRIGGER.NAME} 已恢复！</p>
-<p>消息：</p>
-<p>告警主机: {HOSTNAME1}</p>
-<p>主机地址: {HOST.IP}</p>
-<p>告警等级: {TRIGGER.SEVERITY}</p>
-<p>监控项目: {TRIGGER.KEY1}</p>
-<p>问题详情: {ITEM.NAME}:{ITEM.VALUE}</p>
-<p>当前状态: {TRIGGER.STATUS}: {ITEM.VALUE1}</p>
-<p>告警信息: {TRIGGER.NAME}</p>
-<p>告警时间: {EVENT.DATE} {EVENT.TIME}</p>
-<p>事件ID: {EVENT.ID}</p>
-<p>——来自zabbix监控平台–163邮局—–</p>
-<p>问题更新：</p>
-<p>Updated problem in {EVENT.AGE}: {EVENT.NAME}</p>
-<p>消息：</p>
-<p>{USER.FULLNAME} {EVENT.UPDATE.ACTION} problem at {EVENT.UPDATE.DATE} {EVENT.UPDATE.TIME}.</p>
-<p>{EVENT.UPDATE.MESSAGE}</p>
-<p>Current problem status is {EVENT.STATUS}, age is {EVENT.AGE}, acknowledged: {EVENT.ACK.STATUS}.</p>
-<p>——来自zabbix监控平台–163邮局—–</p>
-<p> 2）Sendmail.sh</p>
-<p>脚本：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">\#!/bin/bash</span><br><span class="line"></span><br><span class="line">\#export.UTF-8</span><br><span class="line"></span><br><span class="line">FILE=/var/log/zabbix/mailtmp.txt</span><br><span class="line"></span><br><span class="line">echo "$3" &gt;$FILE</span><br><span class="line"></span><br><span class="line">dos2unix -k $FILE</span><br><span class="line"></span><br><span class="line">/bin/mail -s "$2" $1 &lt; $FILE</span><br><span class="line"></span><br><span class="line">\#!/bin/bash</span><br><span class="line"></span><br><span class="line">\#messages=`echo $3 | tr '\r\n' '\n'`</span><br><span class="line"></span><br><span class="line">\#subject=`echo $2 | tr '\r\n' '\n'`</span><br><span class="line"></span><br><span class="line">\#echo "${messages}" | mail -v -s "${subject}" $1 &gt;&gt;/var/log/zabbix/mailx.log 2&gt;&amp;1</span><br></pre></td></tr></tbody></table></figure>
-
-
-<p><img src="/../images/20231201_9.png"><br>消息模版基本一致；</p>
-<p>3）钉钉告警：</p>
-<p>钉钉脚本：</p>
-<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">\<span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#coding:utf-8</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#zabbix钉钉报警</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests,json,sys,os,datetime</span><br><span class="line"></span><br><span class="line">webhook=<span class="string">"https://oapi.dingtalk.com/robot/send?access_token=21211212111abcababcb..."</span>    <span class="comment">#说明：这里改为自己创建的机器人的webhook的值，钉钉个人现在不好申请了；</span></span><br><span class="line"></span><br><span class="line">user=sys.argv[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">text=sys.argv[<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">data={</span><br><span class="line"></span><br><span class="line">  <span class="string">"msgtype"</span>: <span class="string">"text"</span>,</span><br><span class="line"></span><br><span class="line">  <span class="string">"text"</span>: {</span><br><span class="line"></span><br><span class="line">​    <span class="string">"content"</span>: text</span><br><span class="line"></span><br><span class="line">  },</span><br><span class="line"></span><br><span class="line">  <span class="string">"at"</span>: {</span><br><span class="line"></span><br><span class="line">​    <span class="string">"atMobiles"</span>: [</span><br><span class="line"></span><br><span class="line">​      user</span><br><span class="line"></span><br><span class="line">​    ],</span><br><span class="line"></span><br><span class="line">​    <span class="string">"isAtAll"</span>: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">headers = {<span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>}</span><br><span class="line"></span><br><span class="line">x=requests.post(url=webhook,data=json.dumps(data),headers=headers)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> os.path.exists(<span class="string">"/usr/local/zabbix/log/ding.log"</span>):</span><br><span class="line"></span><br><span class="line">  f=<span class="built_in">open</span>(<span class="string">"/usr/local/zabbix/log/ding.log"</span>,<span class="string">"a+"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">  f=<span class="built_in">open</span>(<span class="string">"/usr/local/zabbix/log/ding.log"</span>,<span class="string">"w+"</span>)</span><br><span class="line"></span><br><span class="line">f.write(<span class="string">"\n"</span>+<span class="string">"--"</span>*<span class="number">30</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> x.json()[<span class="string">"errcode"</span>] == <span class="number">0</span>:</span><br><span class="line"></span><br><span class="line">  f.write(<span class="string">"\n"</span>+<span class="built_in">str</span>(datetime.datetime.now())+<span class="string">"   "</span>+<span class="built_in">str</span>(user)+<span class="string">"   "</span>+<span class="string">"发送成功"</span>+<span class="string">"\n"</span>+<span class="built_in">str</span>(text))</span><br><span class="line"></span><br><span class="line">  f.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">  f.write(<span class="string">"\n"</span>+<span class="built_in">str</span>(datetime.datetime.now()) + <span class="string">"   "</span> + <span class="built_in">str</span>(user) + <span class="string">"   "</span> + <span class="string">"发送失败"</span> + <span class="string">"\n"</span> + <span class="built_in">str</span>(text))</span><br><span class="line"></span><br><span class="line">  f.close()</span><br></pre></td></tr></tbody></table></figure>
-
-<p>Zabbix_server.conf</p>
-<p>设置脚本路径：AlertScriptsPath=/usr/lib/zabbix/alertscripts</p>
-<p>ExternalScripts=/usr/lib/zabbix/externalscripts</p>
-<p>所监控的服务器设置监控脚本：/etc/zabbix/zabbix_agentd.conf</p>
-<p># UserParameter=</p>
-<p>UserParameter=dis.process,/usr/lib/zabbix/alertscripts/discovery_process.sh</p>
-<p>UserParameter=proc.check[*],/usr/lib/zabbix/alertscripts/process_check.sh $1 $2 $3</p>
-<p>遇到问题：邮件只能发送给admin，建立的其他用户一直没收到邮件，后来添加到admin用户以后可以收到，其他用户没收到邮件挺奇怪的事情，现在没头绪。</p>
-<p><img src="/../images/20231201_10.png"></p>
-]]></content>
-      <tags>
-        <tag>心得</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>windows2012 RDP 连接失败</title>
     <url>/2023/120114297.html</url>
     <content><![CDATA[<p>   完美解决RDO”连接无法继续，因为未启用身份验证，并且远程计算机需要启用身份验证以进行连接” </p>
@@ -1834,6 +1633,207 @@
 ]]></content>
       <tags>
         <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>xtrabackup还原mysql</title>
+    <url>/2023/11284499.html</url>
+    <content><![CDATA[<p>1.下载ALI平台备份包：</p>
+<p>wget -c  “<a href="http://rdsbak-shanghai-v2-3az.oss-cn-shanghai-internal.aliyuncs.com/custins69321456/hins25992165_data_20230823211743_qp.xb?Expires=16931mOQ1VDcN">http://rdsbak-shanghai-v2-3az.oss-cn-shanghai-internal.aliyuncs.com/custins69321456/hins25992165_data_20230823211743_qp.xb?Expires=16931mOQ1VDcN</a>…..” -O 2023082121_qp.xb &gt; /tmp/download.log </p>
+<p>命令：nohup wget -c -t 0 “备份文件下载地址” -O 下载的目标路径及文件名 &gt; 下载输出日志到对应文件 &amp;</p>
+<p>示例：nohup wget -c -t 0 “<a href="https://example.aliyundoc.com/examplebackup.qp.xb">https://example.aliyundoc.com/examplebackup.qp.xb</a>“ -O /backup/examplebackup.qp.xb &gt; /tmp/download.log &amp;</p>
+<p>各命令代表含义如下：</p>
+<p>-t 0：无限重试。</p>
+<p>-c：支持断点续传。</p>
+<p>-O：下载的目标路径及文件名。</p>
+<p>nohup：避免因手误执行复制操作或者终端断开连接，把正在进行的下载中断，且当下载完毕后，之前的进程将会自动退出。</p>
+<p>命令：nohup curl -C - –retry 10 “备份文件下载地址” -o 自定义文件名 &gt; 下载输出日志到对应文件 &amp;</p>
+<p>示例：nohup curl -C –retry 10 “<a href="https://example.aliyundoc.com/examplebackup.qp.xb">https://example.aliyundoc.com/examplebackup.qp.xb</a>“ -o backup.qp.xb &gt; /tmp/download.log &amp;</p>
+<p>各命令代表含义如下：</p>
+<p>–retry 10：任务失败时的重试次数，以上示例表示重试10次。</p>
+<p>-C -：支持自动断点续传。</p>
+<p>-o：下载的目标路径及文件名。</p>
+<p>nohup：避免因手误执行复制操作或者终端断开连接，把正在进行的下载中断，且当下载完毕后，之前的进程将会自动退出。</p>
+<p>2  XtraBackup 还原</p>
+<p>下载Percona XtraBackup 2.4.28为例，安装命令如下：</p>
+<p>如果是MySQL 5.7、5.6或5.5实例，下载并安装Percona XtraBackup 2.4，如果是MySQL 8.0实例，下载并安装Percona XtraBackup 8.0，具体请参见<a href="https://docs.percona.com/percona-xtrabackup/8.0/installation.html">Percona XtraBackup 8.0</a>。</p>
+<p>wget <a href="https://downloads.percona.com/downloads/Percona-XtraBackup-2.4/Percona-XtraBackup-2.4.28/binary/redhat/7/x86_64/percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm">https://downloads.percona.com/downloads/Percona-XtraBackup-2.4/Percona-XtraBackup-2.4.28/binary/redhat/7/x86_64/percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm</a></p>
+<p> sudo yum localinstall -y percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm</p>
+<p> 安装解压工具qpress：</p>
+<p>## 下载可执行文件的tar包</p>
+<p>wget “<a href="https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/file-manage-files/zh-CN/20230406/flxd/qpress-11-linux-x64.tar">https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/file-manage-files/zh-CN/20230406/flxd/qpress-11-linux-x64.tar</a>“</p>
+<p> ## 解压下载的tar包，取出可执行文件</p>
+<p>tar -xvf qpress-11-linux-x64.tar</p>
+<p> ## 设置qpress文件的执行权限</p>
+<p>sudo chmod 775 qpress</p>
+<p> ## 拷贝qpress到/usr/bin中</p>
+<p>sudo cp qpress /usr/bin</p>
+<p>解压：</p>
+<p>cat 20230823211743_qp.xb |xbstream -x -v -C /data/mysql_data/</p>
+<p>innobackupex –decompress –remove-original /data/mysql_data/</p>
+<p>## 步骤一：解包</p>
+<p>cat 20230823211743_qp.xb |xbstream -x -v -C /data/mysql_data/</p>
+<p> ## 步骤二：解压</p>
+<p>### MySQL 5.5/5.6/5.7</p>
+<p>innobackupex –decompress –remove-original /data/mysql_data/</p>
+<p><img src="/../images/20231128_1.png" alt="img"> </p>
+<p>Mysql5.7恢复：</p>
+<p>innobackupex –defaults-file=/var/mysql_bkdata/backup-my.cnf –apply-log /data/mysql_data/</p>
+<p><img src="/../images/20231128_2.png" alt="img"> </p>
+<p>编辑my.cnf</p>
+<p>datadir=/data/mysql/</p>
+<p>innodb_undo_tablespaces=2</p>
+<p>innodb_undo_directory=/data/mysql/</p>
+<p>#@</p>
+<p> 修改****datadir****的参数取值为/var/mysql_newdata。</p>
+<p>放大查看复制代码</p>
+<p>datadir = /var/mysql_newdata</p>
+<p> mysql_newdata为自建数据库的新数据目录，已在[准备工作]中创建。</p>
+<p>在my.cnf中添加如下内容。</p>
+<p>innodb_undo_tablespaces=2</p>
+<p>innodb_undo_directory=/var/mysql_newdata</p>
+<p>参数****innodb_undo_tablespaces****的取值需要与/var/mysql_bkdata/backup-my.cnf中的取值相同，您可以使用cat /var/mysql_bkdata/backup-my.cnf | grep innodb_undo_tablespaces查询。</p>
+<p>恢复数据。</p>
+<p>sudo innobackupex –defaults-file=/etc/my.cnf –copy-back /data/mysql_data/</p>
+<p>从备份目录copy到数据目录</p>
+<p><img src="/../images/20231128_3.png" alt="img"> </p>
+<p><img src="/../images/20231128_4.png" alt="img"> </p>
+<p>给于mysql新目录权限，进入mysql</p>
+]]></content>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>zabbix 设置163报警邮箱</title>
+    <url>/2023/120119617.html</url>
+    <content><![CDATA[<h2 id="1-测试端口是否开放："><a href="#1-测试端口是否开放：" class="headerlink" title="1.测试端口是否开放："></a>1.测试端口是否开放：</h2><p>nc -w 2 smtp.exmail.qq.com 465 &lt; /dev/null &amp;&amp; echo “port is ok”</p>
+<p>nc -w 2 smtp.exmail.qq.com 25 &lt; /dev/null &amp;&amp; echo “port is ok”</p>
+<p>首先拿到163邮箱的授权码，邮箱设置–选择“POP/SMTP/IMAP”选项，选择“IMAP/SMTP服务”，点击开启，扫码页面可以选择扫码发送短信，或者点击下方“手动发送短信”，点击“我已发送”后，如果系统检测到用户成功发送短信，即获取到授权码。授权码可以在多个第三方客户端使用。</p>
+<h2 id="2-配置163邮箱"><a href="#2-配置163邮箱" class="headerlink" title="2.配置163邮箱"></a>2.配置163邮箱</h2><p>zabbix路径:/usr/lib/zabbix/,执行：</p>
+<p>certutil -A -n “GeoTrust SSL CA - G3” -t “Pu,Pu,Pu” -d /usr/lib/zabbix/.certs./ -i /usr/lib/zabbix/.certs./163.crt</p>
+<p>certutil:  unable to open “/usr/lib/zabbix/.certs./163.crt” for reading (-5950, 2).</p>
+<p>没有到.certs 目录下执行或者certs不可读</p>
+<p>cd .certs/</p>
+<p> certutil -A -n “GeoTrust SSL CA - G3” -t “Pu,Pu,Pu” -d ./ -i 163.crt</p>
+<p>Notice: Trust flag u is set automatically if the private key is present.</p>
+<p>依然报错；</p>
+<p> echo “hehe” | mail -v -s “test”  <a href="mailto:abc1@qq.com">abc1@qq.com</a></p>
+<p>Resolving host smtp.163.com . . .Could not resolve host: smtp.163.com</p>
+<p>Vim /etc/mail.rc</p>
+<p>set from=邮箱地址</p>
+<p>set smtp=smtps://smtp.163.com:465</p>
+<p>set smtp-auth-user=账号名不要加@</p>
+<p>set smtp-auth-password=授权码</p>
+<p>set smtp-auth=login</p>
+<p>set ssl-verify=ignore</p>
+<p>=后面不要“”</p>
+<p>测试发邮件：</p>
+<p> echo “邮件正文” | mail -s “ZABBIX-TEST” <a href="mailto:cxxx@163.com">cxxx@163.com</a></p>
+<p>Resolving host smtp.163.com . . . done.</p>
+<p>Connecting to 103.74.29.40:465 . . . connected.</p>
+<p>Error initializing NSS: Unknown error -8015.</p>
+<p>Error initializing NSS: Unknown error -8015.</p>
+<p>“/root/dead.letter” 11/320</p>
+<p>. . . message not sent.</p>
+<p>很莫名奇妙，最终在root下面生产.certs，首先在/root下生成相应文件，在copy到zabbix路径下面；</p>
+<p>cd /root</p>
+<p> mkdir .certs</p>
+<p> echo -n | openssl s_client -connect smtp.163.com:465 | sed -ne ‘/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p’ &gt; /root/.certs/163.crt</p>
+<p>depth=2 C = US, O = DigiCert Inc, OU = <a href="http://www.digicert.com/">www.digicert.com</a>, CN = DigiCert Global Root CA</p>
+<p>verify return:1</p>
+<p>depth=1 C = US, O = DigiCert Inc, CN = GeoTrust RSA CN CA G2</p>
+<p>verify return:1</p>
+<p>depth=0 C = CN, ST = zhejiang, L = hangzhou, O = “NetEase (Hangzhou) Network Co., Ltd”, CN = *.163.com</p>
+<p>verify return:1</p>
+<p>DONE</p>
+<p>certutil -A -n “GeoTrust SSL CA” -t “C,,” -d /root/.certs -i /root/.certs/163.crt</p>
+<p>certutil -A -n “GeoTrust Global CA” -t “C,,” -d /root/.certs -i /root/.certs/163.crt</p>
+<p>Cd .certs</p>
+<p>certutil -A -n “GeoTrust SSL CA - G3” -t “Pu,Pu,Pu” -d /root/.certs/./ -i /root/.certs/163.crt</p>
+<p>Notice: Trust flag u is set automatically if the private key is present.</p>
+<p> ls /root/.certs/</p>
+<p>163.crt  cert8.db  key3.db  secmod.db</p>
+<p>certutil -L -d /root/.certs</p>
+<p>Certificate Nickname                     Trust Attributes</p>
+<p>​                               SSL,S/MIME,JAR/XPI</p>
+<p>GeoTrust SSL CA                        P,P,P</p>
+<p>cp -a /root/.certs/ /etc/zabbix/ &amp;&amp; cd /etc/zabbix &amp;&amp; chmod 777 -R .certs</p>
+<p> tail -10f /etc/mail.rc</p>
+<p>set from=<a href="mailto:email@163.com">email@163.com</a></p>
+<p>set smtp=smtps://smtp.163.com:465</p>
+<p>set smtp-auth-user=用户名不带@</p>
+<p>set smtp-auth-password=授权码</p>
+<p>set smtp-auth=login</p>
+<p>set ssl-verify=ignore</p>
+<p>set nss-config-dir=/etc/zabbix/.certs</p>
+<p> echo “邮件正文” | mail -s “ZABBIX-TEST” <a href="mailto:cxxx@163.com">cxxx@163.com</a></p>
+<p>成功了；</p>
+<p>Zabbix安装，参照官网<a href="https://www.zabbix.com/cn/download">https://www.zabbix.com/cn/download</a></p>
+<p>或者网上一大堆源码安装教程；</p>
+<h2 id="3-邮件报警配置："><a href="#3-邮件报警配置：" class="headerlink" title="3.邮件报警配置："></a>3.邮件报警配置：</h2><p>Zabbix5.0安装调试完毕，邮件系统发送，给多用户发送遇到了问题，期初创建了多个用户，用163邮件通知，也有sendmail脚本通知，钉钉通知脚本都用过，</p>
+<p>设置了3种通知方式：163邮件通知，钉钉报警给机器人，sendmail脚本发送报警；</p>
+<p><img src="/../images/20231201_6.png"></p>
+<p> 1）163邮件通知：</p>
+<p><img src="/../images/20231201_7.png"></p>
+<p><img src="/../images/20231201_8.png"></p>
+<p>消息模版：</p>
+<p>问题：</p>
+<p>主题：</p>
+<p>TRIGGER.STATUS,服务器:HOSTNAME1,发生:TRIGGER.NAME</p>
+<p>消息：</p>
+<p>告警主机:HOST.NAME</p>
+<p>告警IP:HOST.IP</p>
+<p>告警时间:EVENT.DATE-EVENT.TIME</p>
+<p>告警等级:TRIGGER.SEVERITY</p>
+<p>告警信息:TRIGGER.NAME:ITEM.VALUE</p>
+<p>问题详情:ITEM.NAME:ITEM.VALUE</p>
+<p>当前状态:TRIGGER.STATUS:ITEM.VALUE</p>
+<p>事件ID:EVENT.ID</p>
+<p>——-FROM ZABBIX 平台——-163邮局—-</p>
+<p>问题恢复：</p>
+<p>主题：</p>
+<p>恢复{TRIGGER.STATUS}, 服务器:{HOSTNAME1}: {TRIGGER.NAME} 已恢复！</p>
+<p>消息：</p>
+<p>告警主机: {HOSTNAME1}</p>
+<p>主机地址: {HOST.IP}</p>
+<p>告警等级: {TRIGGER.SEVERITY}</p>
+<p>监控项目: {TRIGGER.KEY1}</p>
+<p>问题详情: {ITEM.NAME}:{ITEM.VALUE}</p>
+<p>当前状态: {TRIGGER.STATUS}: {ITEM.VALUE1}</p>
+<p>告警信息: {TRIGGER.NAME}</p>
+<p>告警时间: {EVENT.DATE} {EVENT.TIME}</p>
+<p>事件ID: {EVENT.ID}</p>
+<p>——来自zabbix监控平台–163邮局—–</p>
+<p>问题更新：</p>
+<p>Updated problem in {EVENT.AGE}: {EVENT.NAME}</p>
+<p>消息：</p>
+<p>{USER.FULLNAME} {EVENT.UPDATE.ACTION} problem at {EVENT.UPDATE.DATE} {EVENT.UPDATE.TIME}.</p>
+<p>{EVENT.UPDATE.MESSAGE}</p>
+<p>Current problem status is {EVENT.STATUS}, age is {EVENT.AGE}, acknowledged: {EVENT.ACK.STATUS}.</p>
+<p>——来自zabbix监控平台–163邮局—–</p>
+<p> 2）Sendmail.sh</p>
+<p>脚本：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">\#!/bin/bash</span><br><span class="line"></span><br><span class="line">\#export.UTF-8</span><br><span class="line"></span><br><span class="line">FILE=/var/log/zabbix/mailtmp.txt</span><br><span class="line"></span><br><span class="line">echo "$3" &gt;$FILE</span><br><span class="line"></span><br><span class="line">dos2unix -k $FILE</span><br><span class="line"></span><br><span class="line">/bin/mail -s "$2" $1 &lt; $FILE</span><br><span class="line"></span><br><span class="line">\#!/bin/bash</span><br><span class="line"></span><br><span class="line">\#messages=`echo $3 | tr '\r\n' '\n'`</span><br><span class="line"></span><br><span class="line">\#subject=`echo $2 | tr '\r\n' '\n'`</span><br><span class="line"></span><br><span class="line">\#echo "${messages}" | mail -v -s "${subject}" $1 &gt;&gt;/var/log/zabbix/mailx.log 2&gt;&amp;1</span><br></pre></td></tr></tbody></table></figure>
+
+
+<p><img src="/../images/20231201_9.png"><br>消息模版基本一致；</p>
+<p>3）钉钉告警：</p>
+<p>钉钉脚本：</p>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">\<span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#coding:utf-8</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#zabbix钉钉报警</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests,json,sys,os,datetime</span><br><span class="line"></span><br><span class="line">webhook=<span class="string">"https://oapi.dingtalk.com/robot/send?access_token=21211212111abcababcb..."</span>    <span class="comment">#说明：这里改为自己创建的机器人的webhook的值，钉钉个人现在不好申请了；</span></span><br><span class="line"></span><br><span class="line">user=sys.argv[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">text=sys.argv[<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">data={</span><br><span class="line"></span><br><span class="line">  <span class="string">"msgtype"</span>: <span class="string">"text"</span>,</span><br><span class="line"></span><br><span class="line">  <span class="string">"text"</span>: {</span><br><span class="line"></span><br><span class="line">​    <span class="string">"content"</span>: text</span><br><span class="line"></span><br><span class="line">  },</span><br><span class="line"></span><br><span class="line">  <span class="string">"at"</span>: {</span><br><span class="line"></span><br><span class="line">​    <span class="string">"atMobiles"</span>: [</span><br><span class="line"></span><br><span class="line">​      user</span><br><span class="line"></span><br><span class="line">​    ],</span><br><span class="line"></span><br><span class="line">​    <span class="string">"isAtAll"</span>: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">headers = {<span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>}</span><br><span class="line"></span><br><span class="line">x=requests.post(url=webhook,data=json.dumps(data),headers=headers)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> os.path.exists(<span class="string">"/usr/local/zabbix/log/ding.log"</span>):</span><br><span class="line"></span><br><span class="line">  f=<span class="built_in">open</span>(<span class="string">"/usr/local/zabbix/log/ding.log"</span>,<span class="string">"a+"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">  f=<span class="built_in">open</span>(<span class="string">"/usr/local/zabbix/log/ding.log"</span>,<span class="string">"w+"</span>)</span><br><span class="line"></span><br><span class="line">f.write(<span class="string">"\n"</span>+<span class="string">"--"</span>*<span class="number">30</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> x.json()[<span class="string">"errcode"</span>] == <span class="number">0</span>:</span><br><span class="line"></span><br><span class="line">  f.write(<span class="string">"\n"</span>+<span class="built_in">str</span>(datetime.datetime.now())+<span class="string">"   "</span>+<span class="built_in">str</span>(user)+<span class="string">"   "</span>+<span class="string">"发送成功"</span>+<span class="string">"\n"</span>+<span class="built_in">str</span>(text))</span><br><span class="line"></span><br><span class="line">  f.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">  f.write(<span class="string">"\n"</span>+<span class="built_in">str</span>(datetime.datetime.now()) + <span class="string">"   "</span> + <span class="built_in">str</span>(user) + <span class="string">"   "</span> + <span class="string">"发送失败"</span> + <span class="string">"\n"</span> + <span class="built_in">str</span>(text))</span><br><span class="line"></span><br><span class="line">  f.close()</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Zabbix_server.conf</p>
+<p>设置脚本路径：AlertScriptsPath=/usr/lib/zabbix/alertscripts</p>
+<p>ExternalScripts=/usr/lib/zabbix/externalscripts</p>
+<p>所监控的服务器设置监控脚本：/etc/zabbix/zabbix_agentd.conf</p>
+<p># UserParameter=</p>
+<p>UserParameter=dis.process,/usr/lib/zabbix/alertscripts/discovery_process.sh</p>
+<p>UserParameter=proc.check[*],/usr/lib/zabbix/alertscripts/process_check.sh $1 $2 $3</p>
+<p>遇到问题：邮件只能发送给admin，建立的其他用户一直没收到邮件，后来添加到admin用户以后可以收到，其他用户没收到邮件挺奇怪的事情，现在没头绪。</p>
+<p><img src="/../images/20231201_10.png"></p>
+]]></content>
+      <tags>
+        <tag>心得</tag>
       </tags>
   </entry>
   <entry>

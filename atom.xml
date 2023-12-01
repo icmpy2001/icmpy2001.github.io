@@ -6,7 +6,7 @@
   <link href="https://blog.icmpy.net/atom.xml" rel="self"/>
   
   <link href="https://blog.icmpy.net/"/>
-  <updated>2023-12-01T10:35:47.640Z</updated>
+  <updated>2023-12-01T10:39:23.448Z</updated>
   <id>https://blog.icmpy.net/</id>
   
   <author>
@@ -21,14 +21,14 @@
     <link href="https://blog.icmpy.net/2023/120119617.html"/>
     <id>https://blog.icmpy.net/2023/120119617.html</id>
     <published>2023-12-01T10:01:24.000Z</published>
-    <updated>2023-12-01T10:35:47.640Z</updated>
+    <updated>2023-12-01T10:39:23.448Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h1 id=&quot;1-测试端口是否开放：&quot;&gt;&lt;a href=&quot;#1-测试端口是否开放：&quot; class=&quot;headerlink&quot; title=&quot;1.测试端口是否开放：&quot;&gt;&lt;/a&gt;1.测试端口是否开放：&lt;/h1&gt;&lt;p&gt;nc -w 2 smtp.exmail.qq.com 465</summary>
+    <summary type="html">&lt;h2 id=&quot;1-测试端口是否开放：&quot;&gt;&lt;a href=&quot;#1-测试端口是否开放：&quot; class=&quot;headerlink&quot; title=&quot;1.测试端口是否开放：&quot;&gt;&lt;/a&gt;1.测试端口是否开放：&lt;/h2&gt;&lt;p&gt;nc -w 2 smtp.exmail.qq.com 465</summary>
         
       
     

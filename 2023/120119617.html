@@ -437,10 +437,10 @@ nc -w 2 smtp.exmail.qq.com 25 &amp;lt;">
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="1-测试端口是否开放："><a href="#1-测试端口是否开放：" class="headerlink" title="1.测试端口是否开放："></a>1.测试端口是否开放：</h1><p>nc -w 2 smtp.exmail.qq.com 465 &lt; /dev/null &amp;&amp; echo “port is ok”</p>
+                <h2 id="1-测试端口是否开放："><a href="#1-测试端口是否开放：" class="headerlink" title="1.测试端口是否开放："></a>1.测试端口是否开放：</h2><p>nc -w 2 smtp.exmail.qq.com 465 &lt; /dev/null &amp;&amp; echo “port is ok”</p>
 <p>nc -w 2 smtp.exmail.qq.com 25 &lt; /dev/null &amp;&amp; echo “port is ok”</p>
 <p>首先拿到163邮箱的授权码，邮箱设置–选择“POP/SMTP/IMAP”选项，选择“IMAP/SMTP服务”，点击开启，扫码页面可以选择扫码发送短信，或者点击下方“手动发送短信”，点击“我已发送”后，如果系统检测到用户成功发送短信，即获取到授权码。授权码可以在多个第三方客户端使用。</p>
-<h1 id="2-配置163邮箱"><a href="#2-配置163邮箱" class="headerlink" title="2.配置163邮箱"></a>2.配置163邮箱</h1><p>zabbix路径:/usr/lib/zabbix/,执行：</p>
+<h2 id="2-配置163邮箱"><a href="#2-配置163邮箱" class="headerlink" title="2.配置163邮箱"></a>2.配置163邮箱</h2><p>zabbix路径:/usr/lib/zabbix/,执行：</p>
 <p>certutil -A -n “GeoTrust SSL CA - G3” -t “Pu,Pu,Pu” -d /usr/lib/zabbix/.certs./ -i /usr/lib/zabbix/.certs./163.crt</p>
 <p>certutil:  unable to open “/usr/lib/zabbix/.certs./163.crt” for reading (-5950, 2).</p>
 <p>没有到.certs 目录下执行或者certs不可读</p>
@@ -501,7 +501,7 @@ nc -w 2 smtp.exmail.qq.com 25 &amp;lt;">
 <p>成功了；</p>
 <p>Zabbix安装，参照官网<a target="_blank" rel="noopener" href="https://www.zabbix.com/cn/download">https://www.zabbix.com/cn/download</a></p>
 <p>或者网上一大堆源码安装教程；</p>
-<h1 id="3-邮件报警配置："><a href="#3-邮件报警配置：" class="headerlink" title="3.邮件报警配置："></a>3.邮件报警配置：</h1><p>Zabbix5.0安装调试完毕，邮件系统发送，给多用户发送遇到了问题，期初创建了多个用户，用163邮件通知，也有sendmail脚本通知，钉钉通知脚本都用过，</p>
+<h2 id="3-邮件报警配置："><a href="#3-邮件报警配置：" class="headerlink" title="3.邮件报警配置："></a>3.邮件报警配置：</h2><p>Zabbix5.0安装调试完毕，邮件系统发送，给多用户发送遇到了问题，期初创建了多个用户，用163邮件通知，也有sendmail脚本通知，钉钉通知脚本都用过，</p>
 <p>设置了3种通知方式：163邮件通知，钉钉报警给机器人，sendmail脚本发送报警；</p>
 <p><img src="/../images/20231201_6.png"></p>
 <p> 1）163邮件通知：</p>
@@ -1298,33 +1298,53 @@ nc -w 2 smtp.exmail.qq.com 25 &amp;lt;">
             <br>
             
         </div>
-        <div class="col s12 m4 l4 social-link social-statis">
-    <a href="https://icmpy2001.github.io" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <div class="col s12 m4 l4 social-link social-statis"><% if (theme.socialLink.github) { %>
+    <a href="<%= theme.socialLink.github %>" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
         <i class="fab fa-github"></i>
     </a>
+<% } %>
 
-
-
-    <a href="mailto:cmpy2001@163.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+<% if (theme.socialLink.email) { %>
+    <a href="mailto:<%= theme.socialLink.email %>" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
         <i class="fas fa-envelope-open"></i>
     </a>
+<% } %>
 
+<% if (theme.socialLink.facebook) { %>
+    <a href="<%= theme.socialLink.facebook %>" class="tooltipped" target="_blank" data-tooltip="关注我的Facebook: <%= theme.socialLink.facebook %>" data-position="top" data-delay="50">
+        <i class="fab fa-facebook-f"></i>
+    </a>
+<% } %>
 
+<% if (theme.socialLink.twitter) { %>
+    <a href="<%= theme.socialLink.twitter %>" class="tooltipped" target="_blank" data-tooltip="关注我的Twitter: <%= theme.socialLink.twitter %>" data-position="top" data-delay="50">
+        <i class="fab fa-twitter"></i>
+    </a>
+<% } %>
 
+<% if (theme.socialLink.qq) { %>
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=<%= theme.socialLink.qq %>" class="tooltipped" target="_blank" data-tooltip="QQ联系我: <%= theme.socialLink.qq %>" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+<% } %>
 
+<% if (theme.socialLink.weibo) { %>
+    <a href="<%= theme.socialLink.weibo %>" class="tooltipped" target="_blank" data-tooltip="关注我的微博: <%= theme.socialLink.weibo %>" data-position="top" data-delay="50">
+        <i class="fab fa-weibo"></i>
+    </a>
+<% } %>
 
+<% if (theme.socialLink.zhihu) { %>
+    <a href="<%= theme.socialLink.zhihu %>" class="tooltipped" target="_blank" data-tooltip="关注我的知乎: <%= theme.socialLink.zhihu %>" data-position="top" data-delay="50">
+        <i class="fab fa-zhihu1">知</i>
+    </a>
+<% } %>
 
-
-
-
-
-
-
-
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+<% if (theme.socialLink.rss) { %>
+    <a href="<%- url_for('/atom.xml') %>" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
         <i class="fas fa-rss"></i>
     </a>
-
+<% } %>
 </div>
     </div>
 </footer>
