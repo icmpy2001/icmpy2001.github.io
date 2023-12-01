@@ -6,7 +6,7 @@
   <link href="https://blog.icmpy.net/atom.xml" rel="self"/>
   
   <link href="https://blog.icmpy.net/"/>
-  <updated>2023-12-01T09:09:26.396Z</updated>
+  <updated>2023-12-01T10:24:17.689Z</updated>
   <id>https://blog.icmpy.net/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>zabbix 设置163报警邮箱</title>
+    <link href="https://blog.icmpy.net/2023/120119617.html"/>
+    <id>https://blog.icmpy.net/2023/120119617.html</id>
+    <published>2023-12-01T10:01:24.000Z</published>
+    <updated>2023-12-01T10:24:17.689Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;1-测试端口是否开放：&quot;&gt;&lt;a href=&quot;#1-测试端口是否开放：&quot; class=&quot;headerlink&quot; title=&quot;1.测试端口是否开放：&quot;&gt;&lt;/a&gt;1.测试端口是否开放：&lt;/h1&gt;&lt;p&gt;nc -w 2 smtp.exmail.qq.com 465</summary>
+        
+      
+    
+    
+    
+    
+    <category term="心得" scheme="https://blog.icmpy.net/tags/%E5%BF%83%E5%BE%97/"/>
+    
+  </entry>
   
   <entry>
     <title>windows2012 RDP 连接失败</title>
@@ -470,30 +493,6 @@
     
     
     <category term="随笔" scheme="https://blog.icmpy.net/tags/%E9%9A%8F%E7%AC%94/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>zabbix 清理历史数据</title>
-    <link href="https://blog.icmpy.net/2023/071761914.html"/>
-    <id>https://blog.icmpy.net/2023/071761914.html</id>
-    <published>2023-07-17T08:21:59.000Z</published>
-    <updated>2023-11-17T08:05:38.071Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt; 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；&lt;/p&gt;
-&lt;p&gt;&amp;nbsp;</summary>
-        
-      
-    
-    
-    
-    
-    <category term="点滴" scheme="https://blog.icmpy.net/tags/%E7%82%B9%E6%BB%B4/"/>
     
   </entry>
   
