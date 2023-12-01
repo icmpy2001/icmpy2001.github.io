@@ -1852,4 +1852,24 @@
         <tag>工具</tag>
       </tags>
   </entry>
+  <entry>
+    <title>windows2012 RDP 连接失败</title>
+    <url>/2023/120114297.html</url>
+    <content><![CDATA[<p>   完美解决RDO”连接无法继续，因为未启用身份验证，并且远程计算机需要启用身份验证以进行连接” </p>
+<p><img src="/../images/20231201_1.jpg" alt="img"> </p>
+<p>解决：<br>1.先用win7自带远程工具mstsc连接到Win10 （或者 服务器Windows Server 2016 ）<br>2.开始-运行-gpedit.msc，进入组策略编辑器<br>3.找到左侧边栏 计算机配置-管理模板-Windows组件-远程桌面服务-远程桌面会话主机-【安全】项<br>4.修改“远程（RDP）连接要求使用指定的安全层”，改为启用，安全层选择RDP<br>5.修改“要求使用网络级别的身份验证对远程连接的用户进行身份验证”，改为禁用<br>6.重启计算机 （或者运行 gpupdate 更新组策略）</p>
+<p>.<img src="/../images/20231201_2.jpg" alt="img"></p>
+<p>打开【安全】项的原始状态是： (计算机配置-管理模板-Windows组件-远程桌面服务-远程桌面会话主机-【安全】)</p>
+<p>​    需要修改的是右边窗口的两项：“****远程（RDP）连接要求使用指定的安全层*<em><strong>” 、“</strong></em>*要求使用网络级别的身份验证对远程连接的用户进行身份验证****”</p>
+<p><img src="/../images/20231201_3.jpg" alt="img"> </p>
+<p>开始修改，如下方两个截图说明：</p>
+<p><img src="/../images/20231201_4.jpg" alt="img"> </p>
+<p><img src="/../images/20231201_5.jpg" alt="img"> </p>
+<p>完成。</p>
+<p>转自：<a href="https://www.579yun.cn/helparticle/44.html">https://www.579yun.cn/helparticle/44.html</a></p>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
+  </entry>
 </search>
