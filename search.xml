@@ -1248,19 +1248,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>/var/log/messages日志恢复</title>
-    <url>/2023/112018778.html</url>
-    <content><![CDATA[<p>Linux容易犯的一个错误是把日志文件给直接删除，而不是删除日志文件的内容。<br>直接删除日志文件往往导致新产生的日志记录无法被写入到日志文件中（因为它已经被删除了），而仅仅重新新建（touch）同样名字的文件是解决不了问题的。<br>本文以Unbutu系统为例，介绍如何恢复被误删除的syslog文件：<br>首先，在以root用户执行如下lsof命令，查询打开/var/log/messages文件的进程的进程ID(PID)。<br>root@zck:/var/log# lsof | grep messages<br>rsyslogd 544 syslog 7w REG 8,1 214641 134422 /var/log/messages<br>从上面命令输出可以看到，这个打开/var/log/messages文件的进程的PID是544，文件/var/log/messages的文件描述符（FD）号是7。<br>根据上述的PID和FD，可以在/proc找到对应的文件：<br>root@zck:/var/log#ls -al /proc/544/fd/7<br>l-wx—— 1 root root 64 2012-07-14 14:48 7 -&gt; /var/log/messages<br>将文件/proc/544/fd/7拷贝到/var/log/messages<br>cp /proc/544/fd/7 /var/log/messages&nbsp;</p>
-<p>然后重新启动syslog服务即可恢复被误删除的日志文件，并且新的日志记录能够继续被写入日志文件。<br>以root用户运行service命令。其中，service命令的第2个参数可能是syslog、也可能是rsyslog。<br>具体可以使用通过命令查询得知。<br>登录后复制<br>root@zck:/proc/544/fd# service –status-all<br> [ ? ] …<br> [ ? ] rc.local<br> [ ? ] rsyslog<br> [ ? ] screen-cleanup<br> [ ? ] …  #——————————-</p>
-<p>复制代码代码如下:<br>root@zck:/proc/544/fd# service rsyslog restart<br>rsyslog start/running, process 2673</p>
-<p>清空日志文件：<br>cat /dev/null&gt;/var/log/messages</p>
-<p>转自url:<a href="https://blog.51cto.com/u_11146845/6240737">https://blog.51cto.com/u_11146845/6240737</a></p>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>nginxlog切分</title>
     <url>/2023/111760549.html</url>
     <content><![CDATA[<p>1.设置日志文件存放目录，假设你的nginx的日志存在这个目录里<br>logs_path=”/data/log/nginx/“</p>
@@ -1277,6 +1264,19 @@
       </categories>
       <tags>
         <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>/var/log/messages日志恢复</title>
+    <url>/2023/112018778.html</url>
+    <content><![CDATA[<p>Linux容易犯的一个错误是把日志文件给直接删除，而不是删除日志文件的内容。<br>直接删除日志文件往往导致新产生的日志记录无法被写入到日志文件中（因为它已经被删除了），而仅仅重新新建（touch）同样名字的文件是解决不了问题的。<br>本文以Unbutu系统为例，介绍如何恢复被误删除的syslog文件：<br>首先，在以root用户执行如下lsof命令，查询打开/var/log/messages文件的进程的进程ID(PID)。<br>root@zck:/var/log# lsof | grep messages<br>rsyslogd 544 syslog 7w REG 8,1 214641 134422 /var/log/messages<br>从上面命令输出可以看到，这个打开/var/log/messages文件的进程的PID是544，文件/var/log/messages的文件描述符（FD）号是7。<br>根据上述的PID和FD，可以在/proc找到对应的文件：<br>root@zck:/var/log#ls -al /proc/544/fd/7<br>l-wx—— 1 root root 64 2012-07-14 14:48 7 -&gt; /var/log/messages<br>将文件/proc/544/fd/7拷贝到/var/log/messages<br>cp /proc/544/fd/7 /var/log/messages&nbsp;</p>
+<p>然后重新启动syslog服务即可恢复被误删除的日志文件，并且新的日志记录能够继续被写入日志文件。<br>以root用户运行service命令。其中，service命令的第2个参数可能是syslog、也可能是rsyslog。<br>具体可以使用通过命令查询得知。<br>登录后复制<br>root@zck:/proc/544/fd# service –status-all<br> [ ? ] …<br> [ ? ] rc.local<br> [ ? ] rsyslog<br> [ ? ] screen-cleanup<br> [ ? ] …  #——————————-</p>
+<p>复制代码代码如下:<br>root@zck:/proc/544/fd# service rsyslog restart<br>rsyslog start/running, process 2673</p>
+<p>清空日志文件：<br>cat /dev/null&gt;/var/log/messages</p>
+<p>转自url:<a href="https://blog.51cto.com/u_11146845/6240737">https://blog.51cto.com/u_11146845/6240737</a></p>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
       </tags>
   </entry>
   <entry>
@@ -1559,26 +1559,6 @@
       </tags>
   </entry>
   <entry>
-    <title>windows2012 RDP 连接失败</title>
-    <url>/2023/120114297.html</url>
-    <content><![CDATA[<p>   完美解决RDO”连接无法继续，因为未启用身份验证，并且远程计算机需要启用身份验证以进行连接” </p>
-<p><img src="/../images/20231201_1.jpg" alt="img"> </p>
-<p>解决：<br>1.先用win7自带远程工具mstsc连接到Win10 （或者 服务器Windows Server 2016 ）<br>2.开始-运行-gpedit.msc，进入组策略编辑器<br>3.找到左侧边栏 计算机配置-管理模板-Windows组件-远程桌面服务-远程桌面会话主机-【安全】项<br>4.修改“远程（RDP）连接要求使用指定的安全层”，改为启用，安全层选择RDP<br>5.修改“要求使用网络级别的身份验证对远程连接的用户进行身份验证”，改为禁用<br>6.重启计算机 （或者运行 gpupdate 更新组策略）</p>
-<p>.<img src="/../images/20231201_2.jpg" alt="img"></p>
-<p>打开【安全】项的原始状态是： (计算机配置-管理模板-Windows组件-远程桌面服务-远程桌面会话主机-【安全】)</p>
-<p>​    需要修改的是右边窗口的两项：“****远程（RDP）连接要求使用指定的安全层*<em><strong>” 、“</strong></em>*要求使用网络级别的身份验证对远程连接的用户进行身份验证****”</p>
-<p><img src="/../images/20231201_3.jpg" alt="img"> </p>
-<p>开始修改，如下方两个截图说明：</p>
-<p><img src="/../images/20231201_4.jpg" alt="img"> </p>
-<p><img src="/../images/20231201_5.jpg" alt="img"> </p>
-<p>完成。</p>
-<p>转自：<a href="https://www.579yun.cn/helparticle/44.html">https://www.579yun.cn/helparticle/44.html</a></p>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>xtrabackup还原mysql</title>
     <url>/2023/11284499.html</url>
     <content><![CDATA[<p>1.下载ALI平台备份包：</p>
@@ -1645,63 +1625,6 @@
 ]]></content>
       <tags>
         <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>zabbix 清理历史数据</title>
-    <url>/2023/071761914.html</url>
-    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
-<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
-<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
-<p>root@Testl]$ date +%s -d”20160929”</p>
-<p>1475078400</p>
-<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
-<p>Query OK, 36093 rows affected (43.64 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
-<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history;</p>
-<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
-<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history_uint;</p>
-<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
-<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>漫长时间等待以后看下效果：</p>
-<p>原来数据：</p>
-<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
-<p>压缩中：</p>
-<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
-<p>find -size +50M -exec ls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
-<p>最终删两个表以后数据：</p>
-<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
-<p>完了以后，重启mysql，zabbix，nginx试试；</p>
-<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
-<hr>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
       </tags>
   </entry>
   <entry>
@@ -1776,6 +1699,7 @@
 <p><img src="/../images/20231201_6.png"></p>
 <p> 1）163邮件通知：</p>
 <p><img src="/../images/20231201_7.png"></p>
+<p><img src="/../images/20231201_8.png"></p>
 <p>消息模版：</p>
 <p>问题：</p>
 <p>主题：</p>
@@ -1816,9 +1740,9 @@
 <figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">\#!/bin/bash</span><br><span class="line"></span><br><span class="line">\#export.UTF-8</span><br><span class="line"></span><br><span class="line">FILE=/var/log/zabbix/mailtmp.txt</span><br><span class="line"></span><br><span class="line">echo "$3" &gt;$FILE</span><br><span class="line"></span><br><span class="line">dos2unix -k $FILE</span><br><span class="line"></span><br><span class="line">/bin/mail -s "$2" $1 &lt; $FILE</span><br><span class="line"></span><br><span class="line">\#!/bin/bash</span><br><span class="line"></span><br><span class="line">\#messages=`echo $3 | tr '\r\n' '\n'`</span><br><span class="line"></span><br><span class="line">\#subject=`echo $2 | tr '\r\n' '\n'`</span><br><span class="line"></span><br><span class="line">\#echo "${messages}" | mail -v -s "${subject}" $1 &gt;&gt;/var/log/zabbix/mailx.log 2&gt;&amp;1</span><br></pre></td></tr></tbody></table></figure>
 
 
-<p>![../images/20231201_8.png)<br>消息模版基本一致；</p>
+<p><img src="/../images/20231201_9.png"><br>消息模版基本一致；</p>
 <p>3）钉钉告警：</p>
-<p>![../images/20231201_9.png)<br>钉钉脚本：</p>
+<p>钉钉脚本：</p>
 <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">\<span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#coding:utf-8</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#zabbix钉钉报警</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests,json,sys,os,datetime</span><br><span class="line"></span><br><span class="line">webhook=<span class="string">"https://oapi.dingtalk.com/robot/send?access_token=21211212111abcababcb..."</span>    <span class="comment">#说明：这里改为自己创建的机器人的webhook的值，钉钉个人现在不好申请了；</span></span><br><span class="line"></span><br><span class="line">user=sys.argv[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">text=sys.argv[<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">data={</span><br><span class="line"></span><br><span class="line">  <span class="string">"msgtype"</span>: <span class="string">"text"</span>,</span><br><span class="line"></span><br><span class="line">  <span class="string">"text"</span>: {</span><br><span class="line"></span><br><span class="line">​    <span class="string">"content"</span>: text</span><br><span class="line"></span><br><span class="line">  },</span><br><span class="line"></span><br><span class="line">  <span class="string">"at"</span>: {</span><br><span class="line"></span><br><span class="line">​    <span class="string">"atMobiles"</span>: [</span><br><span class="line"></span><br><span class="line">​      user</span><br><span class="line"></span><br><span class="line">​    ],</span><br><span class="line"></span><br><span class="line">​    <span class="string">"isAtAll"</span>: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">headers = {<span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>}</span><br><span class="line"></span><br><span class="line">x=requests.post(url=webhook,data=json.dumps(data),headers=headers)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> os.path.exists(<span class="string">"/usr/local/zabbix/log/ding.log"</span>):</span><br><span class="line"></span><br><span class="line">  f=<span class="built_in">open</span>(<span class="string">"/usr/local/zabbix/log/ding.log"</span>,<span class="string">"a+"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">  f=<span class="built_in">open</span>(<span class="string">"/usr/local/zabbix/log/ding.log"</span>,<span class="string">"w+"</span>)</span><br><span class="line"></span><br><span class="line">f.write(<span class="string">"\n"</span>+<span class="string">"--"</span>*<span class="number">30</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> x.json()[<span class="string">"errcode"</span>] == <span class="number">0</span>:</span><br><span class="line"></span><br><span class="line">  f.write(<span class="string">"\n"</span>+<span class="built_in">str</span>(datetime.datetime.now())+<span class="string">"   "</span>+<span class="built_in">str</span>(user)+<span class="string">"   "</span>+<span class="string">"发送成功"</span>+<span class="string">"\n"</span>+<span class="built_in">str</span>(text))</span><br><span class="line"></span><br><span class="line">  f.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">  f.write(<span class="string">"\n"</span>+<span class="built_in">str</span>(datetime.datetime.now()) + <span class="string">"   "</span> + <span class="built_in">str</span>(user) + <span class="string">"   "</span> + <span class="string">"发送失败"</span> + <span class="string">"\n"</span> + <span class="built_in">str</span>(text))</span><br><span class="line"></span><br><span class="line">  f.close()</span><br></pre></td></tr></tbody></table></figure>
 
 <p>Zabbix_server.conf</p>
@@ -1829,10 +1753,87 @@
 <p>UserParameter=dis.process,/usr/lib/zabbix/alertscripts/discovery_process.sh</p>
 <p>UserParameter=proc.check[*],/usr/lib/zabbix/alertscripts/process_check.sh $1 $2 $3</p>
 <p>遇到问题：邮件只能发送给admin，建立的其他用户一直没收到邮件，后来添加到admin用户以后可以收到，其他用户没收到邮件挺奇怪的事情，现在没头绪。</p>
-<p><img src="/../images/20231201_10.jpg"> </p>
+<p><img src="/../images/20231201_10.png"></p>
 ]]></content>
       <tags>
         <tag>心得</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>windows2012 RDP 连接失败</title>
+    <url>/2023/120114297.html</url>
+    <content><![CDATA[<p>   完美解决RDO”连接无法继续，因为未启用身份验证，并且远程计算机需要启用身份验证以进行连接” </p>
+<p><img src="/../images/20231201_1.jpg" alt="img"> </p>
+<p>解决：<br>1.先用win7自带远程工具mstsc连接到Win10 （或者 服务器Windows Server 2016 ）<br>2.开始-运行-gpedit.msc，进入组策略编辑器<br>3.找到左侧边栏 计算机配置-管理模板-Windows组件-远程桌面服务-远程桌面会话主机-【安全】项<br>4.修改“远程（RDP）连接要求使用指定的安全层”，改为启用，安全层选择RDP<br>5.修改“要求使用网络级别的身份验证对远程连接的用户进行身份验证”，改为禁用<br>6.重启计算机 （或者运行 gpupdate 更新组策略）</p>
+<p>.<img src="/../images/20231201_2.jpg" alt="img"></p>
+<p>打开【安全】项的原始状态是： (计算机配置-管理模板-Windows组件-远程桌面服务-远程桌面会话主机-【安全】)</p>
+<p>​    需要修改的是右边窗口的两项：“****远程（RDP）连接要求使用指定的安全层*<em><strong>” 、“</strong></em>*要求使用网络级别的身份验证对远程连接的用户进行身份验证****”</p>
+<p><img src="/../images/20231201_3.jpg" alt="img"> </p>
+<p>开始修改，如下方两个截图说明：</p>
+<p><img src="/../images/20231201_4.jpg" alt="img"> </p>
+<p><img src="/../images/20231201_5.jpg" alt="img"> </p>
+<p>完成。</p>
+<p>转自：<a href="https://www.579yun.cn/helparticle/44.html">https://www.579yun.cn/helparticle/44.html</a></p>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>zabbix 清理历史数据</title>
+    <url>/2023/071761914.html</url>
+    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
+<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
+<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
+<p>root@Testl]$ date +%s -d”20160929”</p>
+<p>1475078400</p>
+<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
+<p>Query OK, 36093 rows affected (43.64 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
+<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history;</p>
+<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
+<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history_uint;</p>
+<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
+<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>漫长时间等待以后看下效果：</p>
+<p>原来数据：</p>
+<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
+<p>压缩中：</p>
+<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
+<p>find -size +50M -exec ls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
+<p>最终删两个表以后数据：</p>
+<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
+<p>完了以后，重启mysql，zabbix，nginx试试；</p>
+<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
       </tags>
   </entry>
   <entry>
