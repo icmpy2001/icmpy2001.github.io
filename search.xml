@@ -375,6 +375,80 @@
       </tags>
   </entry>
   <entry>
+    <title>Tengine 安装</title>
+    <url>/2023/111458217.html</url>
+    <content><![CDATA[<p>Tengine安装</p>
+<p>Tengine 是由淘宝网发起的 Web 服务器项目。它在 Nginx 的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。Tengine 的性能和稳定性已经在大型的网站如淘宝网，天猫商城等得到了很好的检验。它的最终目标是打造一个高效、稳定、安全、易用的 Web 平台。</p>
+<p>Tengine 特性：</p>
+<p>支持 HTTP 的 CONNECT 方法，可用于正向代理场景；</p>
+<p>支持异步 OpenSSL，可使用硬件如：QAT 进行 HTTPS 的加速与卸载；</p>
+<p>增强相关运维、监控能力，比如异步打印日志及回滚，本地 DNS 缓存，内存监控等；</p>
+<p>Stream 模块支持 server_name 指令；</p>
+<p>更加强大的负载均衡能力，包括一致性 hash 模块、会话保持模块，还可以对后端的服务器进行主动健康检查，根据服务器状态自动上线下线，以及动态解析 upstream 中出现的域名；</p>
+<p>输入过滤器机制支持。通过使用这种机制 Web 应用防火墙的编写更为方便；</p>
+<p>支持设置 proxy、memcached、fastcgi、scgi、uwsgi 在后端失败时的重试次数；</p>
+<p>动态脚本语言 Lua 支持。扩展功能非常高效简单；</p>
+<p>支持按指定关键字(域名，url等)收集 Tengine 运行状态；</p>
+<p>组合多个 CSS、JavaScript 文件的访问请求变成一个请求；</p>
+<p>自动去除空白字符和注释从而减小页面的体积</p>
+<p>自动根据 CPU 数目设置进程个数和绑定 CPU 亲缘性；</p>
+<p>监控系统的负载和资源占用从而对系统进行保护；</p>
+<p>显示对运维人员更友好的出错信息，便于定位出错机器；；</p>
+<p>更强大的防攻击（访问速度限制）模块；</p>
+<p>更方便的命令行参数，如列出编译的模块列表、支持的指令等；</p>
+<p>支持 Dubbo 协议；</p>
+<p>可以根据访问文件类型设置过期时间；</p>
+<p>下载源码包：</p>
+<p>tengine 源码：<a href="http://tengine.taobao.org/download_cn.html">http://tengine.taobao.org/download_cn.html</a></p>
+<p>pcre 源码：<a href="http://www.pcre.org/">http://www.pcre.org/</a></p>
+<p>openssl 源码：<a href="https://www.openssl.org/source/">https://www.openssl.org/source/</a></p>
+<p>zlib 源码：<a href="http://www.zlib.net/">http://www.zlib.net/</a></p>
+<p>安装包：</p>
+<p>支持lua模块</p>
+<p>wget <a href="http://luajit.org/download/LuaJIT-2.0.4.tar.gz">http://luajit.org/download/LuaJIT-2.0.4.tar.gz</a></p>
+<p>#wget <a href="https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz">https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz</a></p>
+<p>#wget <a href="https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz">https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz</a></p>
+<p>安装LuaJIT</p>
+<p>tar xf LuaJIT-2.0.4.tar.gz</p>
+<p>#cd xf LuaJIT-2.0.4</p>
+<p>#make PREFIX=/usr/local/luajit</p>
+<p>#make install PREFIX=/usr/local/luajit</p>
+<p>#ln -s /usr/local/luajit/lib/libluajit-5.1.so.2 /lib64/libluajit-5.1.so.2</p>
+<p>添加环境变量</p>
+<p>export LUAJIT_LIB=/usr/local/luajit/lib</p>
+<p>export LUAJIT_INC=/usr/local/luajit/include/luajit-2.0</p>
+<p>#source /etc/profile</p>
+<p>安装tingine</p>
+<p>#tar xf v0.3.0.tar.gz</p>
+<p>#tar xf v0.10.13.tar.gz</p>
+<p>#tar xf nginx-1.12.0.tar.gz</p>
+<p>debain 环境下安装：<br>sudo apt-get install -y  openssl libssl-dev<br>sudo apt-get install  -y libpcre3 libpcre3-dev<br>apt-get install  -y zlib1g-dev<br>Centos环境下安装：<br>yum -y update &amp;&amp; yum install -y gcc wget tree pcre-devel <br>zlib-devel openssl openssl-devel <br>libxml2 libxml2-dev libxslt-devel gd-devel <br>ncurses-devel perl perl-ExtUtils-Embed <br>gperftools </p>
+<p>cd tengine-2.2.2</p>
+<p> ./configure –conf-path=/etc/nginx/nginx.conf –user=www-data –group=www-data –prefix=/etc/nginx –sbin-path=/usr/sbin/nginx –with-ipv6  –error-log-path=/var/log/nginx/error.log –http-log-path=/var/log/nginx/access.log  –pid-path=/var/run/nginx.pid –lock-path=/var/lock/nginx.lock –http-client-body-temp-path=/var/cache/nginx/client_temp  –http-proxy-temp-path=/var/cache/nginx/proxy_temp –http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp  –http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp –http-scgi-temp-path=/var/cache/nginx/scgi_temp  –without-select_module –without-http_uwsgi_module –without-http_empty_gif_module –with-http_ssl_module –with-http_addition_module  –with-http_sub_module –with-http_dav_module –with-http_flv_module –with-http_gunzip_module  –with-http_gzip_static_module –with-http_random_index_module  –with-http_secure_link_module –with-http_stub_status_module –with-http_realip_module  –with-http_concat_module=shared –with-http_sysguard_module=shared  –with-http_dyups_module –with-file-aio –add-module=../ngx_devel_kit-0.3.0/  –add-module=../lua-nginx-module-0.10.13/ \</p>
+<p>Make </p>
+<p>Make install</p>
+<p>Make会报错：cc1: all warnings being treated as errors</p>
+<p>make[1]: *** [objs/Makefile:617: objs/src/core/ngx_murmurhash.o] Error 1</p>
+<p>make[1]: Leaving directory ‘/home/tools/install/tengine-2.2.2’</p>
+<p>vim objs/Makefile：</p>
+<p>CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused -Werror -g  -DNDK_SET_VAR</p>
+<p> -Werror -g去掉</p>
+<p>CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused  -DNDK_SET_VAR</p>
+<p>sed -i “s/ -Werror -g / /g” ./objs/Makefile<br>make &amp;&amp; make install<br>echo <code>nginx -v</code></p>
+<p>#不显示版本号<br>sed -i “/server_tokens off;/a server_tag off; \n server_info off;” nginx.conf<br>mkdir -p /var/cache/nginx/scgi_temp<br>chown www-data.root /var/cache/nginx/scgi_temp</p>
+<p>添加系统服务：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat &gt;&gt;/etc/systemd/system/nginx.service &lt;&lt;EOF</span><br><span class="line">[Unit]</span><br><span class="line">Description=The nginx HTTP and reverse proxy server</span><br><span class="line">After=syslog.target network.target remote-fs.target nss-lookup.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">PIDFile=/var/run/nginx.pid</span><br><span class="line">ExecStartPre=/usr/sbin/nginx -t -c /etc/nginx/nginx.conf</span><br><span class="line">ExecStart=/usr/sbin/nginx -c /etc/nginx/nginx.conf</span><br><span class="line">ExecReload=/usr/sbin/nginx -s reload</span><br><span class="line">ExecStop=/usr/sbin/nginx -s stop</span><br><span class="line">ExecQuit=/usr/sbin/nginx -s quit</span><br><span class="line">PrivateTmp=true</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br></pre></td></tr></tbody></table></figure>
+
+<p>后续就是优化配置了。</p>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>apache多网站对应80端口</title>
     <url>/2023/062862696.html</url>
     <content><![CDATA[<p>一台服务器绑定多个域名，已经装了apache，nginx就不使用了，利用apache主机头名虚拟主机用80端口对应多个网站，万能的网络上面有文档如下：</p>
@@ -423,79 +497,6 @@
 
 
 <h2 id="这样都可以访问，apache也可以实现，做个小笔记。"><a href="#这样都可以访问，apache也可以实现，做个小笔记。" class="headerlink" title="这样都可以访问，apache也可以实现，做个小笔记。"></a>这样都可以访问，apache也可以实现，做个小笔记。</h2>]]></content>
-  </entry>
-  <entry>
-    <title>Tengine 安装</title>
-    <url>/2023/111458217.html</url>
-    <content><![CDATA[<p>Tengine安装</p>
-<p>Tengine 是由淘宝网发起的 Web 服务器项目。它在 Nginx 的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。Tengine 的性能和稳定性已经在大型的网站如淘宝网，天猫商城等得到了很好的检验。它的最终目标是打造一个高效、稳定、安全、易用的 Web 平台。</p>
-<p>Tengine 特性：</p>
-<p>支持 HTTP 的 CONNECT 方法，可用于正向代理场景；</p>
-<p>支持异步 OpenSSL，可使用硬件如：QAT 进行 HTTPS 的加速与卸载；</p>
-<p>增强相关运维、监控能力，比如异步打印日志及回滚，本地 DNS 缓存，内存监控等；</p>
-<p>Stream 模块支持 server_name 指令；</p>
-<p>更加强大的负载均衡能力，包括一致性 hash 模块、会话保持模块，还可以对后端的服务器进行主动健康检查，根据服务器状态自动上线下线，以及动态解析 upstream 中出现的域名；</p>
-<p>输入过滤器机制支持。通过使用这种机制 Web 应用防火墙的编写更为方便；</p>
-<p>支持设置 proxy、memcached、fastcgi、scgi、uwsgi 在后端失败时的重试次数；</p>
-<p>动态脚本语言 Lua 支持。扩展功能非常高效简单；</p>
-<p>支持按指定关键字(域名，url等)收集 Tengine 运行状态；</p>
-<p>组合多个 CSS、JavaScript 文件的访问请求变成一个请求；</p>
-<p>自动去除空白字符和注释从而减小页面的体积</p>
-<p>自动根据 CPU 数目设置进程个数和绑定 CPU 亲缘性；</p>
-<p>监控系统的负载和资源占用从而对系统进行保护；</p>
-<p>显示对运维人员更友好的出错信息，便于定位出错机器；；</p>
-<p>更强大的防攻击（访问速度限制）模块；</p>
-<p>更方便的命令行参数，如列出编译的模块列表、支持的指令等；</p>
-<p>支持 Dubbo 协议；</p>
-<p>可以根据访问文件类型设置过期时间；</p>
-<p>下载源码包：</p>
-<p>tengine 源码：<a href="http://tengine.taobao.org/download_cn.html">http://tengine.taobao.org/download_cn.html</a></p>
-<p>pcre 源码：<a href="http://www.pcre.org/">http://www.pcre.org/</a></p>
-<p>openssl 源码：<a href="https://www.openssl.org/source/">https://www.openssl.org/source/</a></p>
-<p>zlib 源码：<a href="http://www.zlib.net/">http://www.zlib.net/</a></p>
-<p>安装包：</p>
-<p>支持lua模块</p>
-<p>wget <a href="http://luajit.org/download/LuaJIT-2.0.4.tar.gz">http://luajit.org/download/LuaJIT-2.0.4.tar.gz</a></p>
-<p>#wget <a href="https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz">https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz</a></p>
-<p>#wget <a href="https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz">https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz</a></p>
-<p>安装LuaJIT</p>
-<p>tar xf LuaJIT-2.0.4.tar.gz</p>
-<p>#cd xf LuaJIT-2.0.4</p>
-<p>#make PREFIX=/usr/local/luajit</p>
-<p>#make install PREFIX=/usr/local/luajit</p>
-<p>#ln -s /usr/local/luajit/lib/libluajit-5.1.so.2 /lib64/libluajit-5.1.so.2</p>
-<p>添加环境变量</p>
-<p>export LUAJIT_LIB=/usr/local/luajit/lib</p>
-<p>export LUAJIT_INC=/usr/local/luajit/include/luajit-2.0</p>
-<p>#source /etc/profile</p>
-<p>安装tingine</p>
-<p>#tar xf v0.3.0.tar.gz</p>
-<p>#tar xf v0.10.13.tar.gz</p>
-<p>#tar xf nginx-1.12.0.tar.gz</p>
-<p>cd tengine-2.2.2</p>
-<p> ./configure –conf-path=/etc/nginx/nginx.conf –user=www-data –group=www-data –prefix=/etc/nginx –sbin-path=/usr/sbin/nginx –with-ipv6  –error-log-path=/var/log/nginx/error.log –http-log-path=/var/log/nginx/access.log  –pid-path=/var/run/nginx.pid –lock-path=/var/lock/nginx.lock –http-client-body-temp-path=/var/cache/nginx/client_temp  –http-proxy-temp-path=/var/cache/nginx/proxy_temp –http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp  –http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp –http-scgi-temp-path=/var/cache/nginx/scgi_temp  –without-select_module –without-http_uwsgi_module –without-http_empty_gif_module –with-http_ssl_module –with-http_addition_module  –with-http_sub_module –with-http_dav_module –with-http_flv_module –with-http_gunzip_module  –with-http_gzip_static_module –with-http_random_index_module  –with-http_secure_link_module –with-http_stub_status_module –with-http_realip_module  –with-http_concat_module=shared –with-http_sysguard_module=shared  –with-http_dyups_module –with-file-aio –add-module=../ngx_devel_kit-0.3.0/  –add-module=../lua-nginx-module-0.10.13/ \</p>
-<p>Make </p>
-<p>Make install</p>
-<p>Make会报错：cc1: all warnings being treated as errors</p>
-<p>make[1]: *** [objs/Makefile:617: objs/src/core/ngx_murmurhash.o] Error 1</p>
-<p>make[1]: Leaving directory ‘/home/tools/install/tengine-2.2.2’</p>
-<p>vim objs/Makefile：</p>
-<p>CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused -Werror -g  -DNDK_SET_VAR</p>
-<p> -Werror -g去掉</p>
-<p>CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused  -DNDK_SET_VAR</p>
-<p>sed -i “s/ -Werror -g / /g” ./objs/Makefile<br>make &amp;&amp; make install<br>echo <code>nginx -v</code></p>
-<p>#不显示版本号<br>sed -i “/server_tokens off;/a server_tag off; \n server_info off;” nginx.conf<br>mkdir -p /var/cache/nginx/scgi_temp<br>chown www-data.root /var/cache/nginx/scgi_temp</p>
-<p>添加系统服务：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat &gt;&gt;/etc/systemd/system/nginx.service &lt;&lt;EOF</span><br><span class="line">[Unit]</span><br><span class="line">Description=The nginx HTTP and reverse proxy server</span><br><span class="line">After=syslog.target network.target remote-fs.target nss-lookup.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">PIDFile=/var/run/nginx.pid</span><br><span class="line">ExecStartPre=/usr/sbin/nginx -t -c /etc/nginx/nginx.conf</span><br><span class="line">ExecStart=/usr/sbin/nginx -c /etc/nginx/nginx.conf</span><br><span class="line">ExecReload=/usr/sbin/nginx -s reload</span><br><span class="line">ExecStop=/usr/sbin/nginx -s stop</span><br><span class="line">ExecQuit=/usr/sbin/nginx -s quit</span><br><span class="line">PrivateTmp=true</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br></pre></td></tr></tbody></table></figure>
-
-<p>后续就是优化配置了。</p>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
   </entry>
   <entry>
     <title>centos U盘安装查找U盘设备名</title>
@@ -632,6 +633,341 @@
       </tags>
   </entry>
   <entry>
+    <title>frp搭建</title>
+    <url>/2023/062739776.html</url>
+    <content><![CDATA[<p> &nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。</p>
+<p>首先到官网：</p>
+<p>&nbsp;<a href="https://github.com/fatedier/frp/releases">https://github.com/fatedier/frp/releases</a></p>
+<p>下载: frp_0.16.0_linux_amd64.tar.gz服务器端</p>
+<p>解压出来ls:</p>
+<p>frpc&nbsp; frpc_full.ini&nbsp; frpc_http.ini&nbsp; frpc.ini&nbsp; frps&nbsp; frps_full.ini&nbsp; frps.ini&nbsp; LICENSE&nbsp; nohup.out</p>
+<p>服务器端只需要两个文件frps和frps.ini,其中frps为可执行文件，frps.ini为配置文件默认配置文件如下：其中bind_addr为本机IP,bind_port为frp对客户端的端口号，auto_token是客户端连接服务器端的口令。</p>
+<p>[common]</p>
+<p>Bind_addr=0.0.0.0</p>
+<p>Bind_port =4443</p>
+<p>Auto_token = frp</p>
+<p>配置好以后可以运行起来./frps -c ./frps.ini</p>
+<p>最好后台运行：nohup ./frps -c ./frps.ini &amp;</p>
+<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:4443</p>
+<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
+<p>&nbsp;需要穿透端口的服务器端开启：</p>
+<p>nohup ./frps -c ./frps.ini &amp;</p>
+<p>同样将客户端解压后有七个文件，只需要frpc和frpc.ini,配置文件如下：</p>
+<p>&nbsp;[common]</p>
+<p>Server_addr = 123.123.123.123</p>
+<p>Server_port = 4443</p>
+<p>Auto-token = frp</p>
+<p>[ssh_1]</p>
+<p>Type = tcp</p>
+<p>Local_ip = 127.0.0.1</p>
+<p>Local_port = 22</p>
+<p>Remote_port = 10085</p>
+<p>注意：server_addr是服务器端的公网IP地址，server_port是frp服务端口号，auto_token是连接服务器的口令，必须和服务器保持一致。[ssh_1]是客户端通过服务器与用户之间的通道名，每个客户端必须不一样，remote_port是服务器端对外提供本机服务的端口号，即用户连接123.123.123.123:10085，相当于连接127.0.0.1:22,即arm板上的ssh服务</p>
+<p>运行客户端：./frpc -c ./frpc.ini</p>
+<p>&nbsp;</p>
+<p>当前的配置</p>
+<p>more frpc.ini</p>
+<p>[common]</p>
+<p>server_addr = dem.abc.com</p>
+<p>server_port = 7000</p>
+<p>[game]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 9001</p>
+<p>remote_port = 6000</p>
+<p>&nbsp;</p>
+<p>[http]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 80</p>
+<p>remote_port = 6001</p>
+<p>&nbsp;</p>
+<p>[mysql]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.235</p>
+<p>local_port = 3306</p>
+<p>remote_port = 13306</p>
+<p>more frpc_http.ini</p>
+<p>[common]</p>
+<p>server_addr = dem.abc.com</p>
+<p>server_port = 7000</p>
+<p>&nbsp;</p>
+<p>[http]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 80</p>
+<p>remote_port = 6001</p>
+<p>这样demo.abc.com 的13306映射到3306,6001映射到80端口等等；</p>
+<p>在客户端开启：最好后台运行启动客户端proxy：</p>
+<p>nohup ./frpc&nbsp; -c ./frpc.ini &amp;</p>
+<p>[I] [control.go:240] [e465e02f8bad1e5b] login to server success, get run id [e465e02f8bad1e5b], server udp port [0]</p>
+<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [http] start proxy success</p>
+<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [mysql] start proxy success</p>
+<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:7000</p>
+<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
+<p>2018/05/17 10:49:11 [I] [main.go:114] PrivilegeMode is enabled, you should pay more attention to security issues</p>
+<p>&nbsp;</p>
+<p>PS：配置很简单，但是记得nohup ./frps -c ./frps.ini &amp; 在要穿透的远程服务器开启，nohup ./frpc&nbsp; -c ./frpc.ini &amp; 在内网开启，记得开放远程服务器穿透端口；</p>
+<hr>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexogit搭建个人网站</title>
+    <url>/2023/111457802.html</url>
+    <content><![CDATA[<h2 id="1-nodejs安装"><a href="#1-nodejs安装" class="headerlink" title="1. nodejs安装"></a>1. nodejs安装</h2><p> 使用Node Version Manager（nvm工具）</p>
+<p> install stable`是使用Node Version Manager（nvm）安装Node.js的命令。nvm是一个用于管理多个Node.js版本的工具，可以轻松地在同一台机器上安装、切换和管理不同版本的Node.js。</p>
+<p><code>nvm install stable</code>指令表示安装最新的稳定版本的Node.js。执行此命令后，nvm会从Node.js官方仓库下载并自动安装最新的稳定版Node.js。安装过程可能需要一些时间，具体取决于您的网络速度。</p>
+<p>在centOS上安装Node.js，您可以按照以下步骤进行操作：</p>
+<p>1). 使用以下命令更新系统软件包：</p>
+<p>sudo yum update</p>
+<p>2). 安装Node.js依赖项。使用以下命令执行：</p>
+<p>sudo yum install -y gcc-c++ make</p>
+<p>相关库</p>
+<p>3). 更新系统：</p>
+<p>sudo yum update<br>(2). 安装EPEL存储库（Extra Packages for Enterprise Linux，附加软件包）：</p>
+<p>sudo yum install epel-release<br>(3). 安装devtoolset-7工具集：</p>
+<p>sudo yum install centos-release-scl</p>
+<p>sudo yum install devtoolset-7<br>(4). 启用devtoolset-7工具集：</p>
+<p>scl enable devtoolset-7 bash</p>
+<p>sudo yum install centos-release-scl</p>
+<p>sudo yum install devtoolset-7-gcc devtoolset-7-gcc-c++ devtoolset-7-libstdc++-devel</p>
+<p>ps. 在CentOS上，您可以使用Node Version Manager（NVM）来安装和管理多个Node.js版本。首先，在CentOS上安装NVM。使用以下命令从NVM的GitHub仓库获取安装脚本：</p>
+<p>curl -o- <a href="https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh">https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh</a> | bash国内：</p>
+<p>curl -o- <a href="https://gitee.com/mirrors/nvm/raw/v0.39.0/install.sh">https://gitee.com/mirrors/nvm/raw/v0.39.0/install.sh</a> | bash</p>
+<p>注意：这是安装最新版本的NVM。您可以在NVM的GitHub页面<a href="https://github.com/nvm-sh/nvm">https://github.com/nvm-sh/nvm</a><br>上查看最新版本并使用相应的URL。</p>
+<p>4). 安装完成后，关闭并重新打开终端，或者使用以下命令重新加载终端以使NVM生效：</p>
+<p>source ~/.bashrc</p>
+<p>5). 使用NVM安装想要的Node.js版本。例如，运行以下命令安装最新的稳定版本：</p>
+<p>nvm install stable</p>
+<p>或者，您可以指定其他Node.js版本，例如：</p>
+<p>nvm install 14.17.6</p>
+<p>nvm install 16.20.2</p>
+<p>这将下载并安装指定版本的Node.js。</p>
+<p>6). 检查Node.js的安装是否成功。运行以下命令检查Node.js版本：</p>
+<p>[root@localhost /data/myblog]$npm -v<br>8.19.4<br>[root@localhost /data/myblog]$node -v<br>v16.20.2</p>
+<p>[root@mytest2 tools]# node -v</p>
+<p>node: /lib64/libm.so.6: version `GLIBC_2.27’ not found (required by node)</p>
+<p>node: /lib64/libstdc++.so.6: version `GLIBCXX_3.4.20’ not found (required by node)</p>
+<p>node: /lib64/libstdc++.so.6: version `CXXABI_1.3.9’ not found (required by node)</p>
+<p>node: /lib64/libstdc++.so.6: version `GLIBCXX_3.4.21’ not found (required by node)</p>
+<p>node: /lib64/libc.so.6: version `GLIBC_2.27’ not found (required by node)</p>
+<p>node: /lib64/libc.so.6: version `GLIBC_2.28’ not found (required by node)</p>
+<p>node: /lib64/libc.so.6: version `GLIBC_2.25’ not found (required by node)</p>
+<p>[root@mytest2 tools]# npm -v</p>
+<p>node: /lib64/libm.so.6: version `GLIBC_2.27’ not found (required by node)</p>
+<p>node: /lib64/libstdc++.so.6: version `GLIBCXX_3.4.20’ not found (required by node)</p>
+<p>node: /lib64/libstdc++.so.6: version `CXXABI_1.3.9’ not found (required by node)</p>
+<p>node: /lib64/libstdc++.so.6: version `GLIBCXX_3.4.21’ not found (required by node)</p>
+<p>node: /lib64/libc.so.6: version `GLIBC_2.27’ not found (required by node)</p>
+<p>node: /lib64/libc.so.6: version `GLIBC_2.28’ not found (required by node)</p>
+<p>node: /lib64/libc.so.6: version `GLIBC_2.25’ not found (required by node)</p>
+<p>[root@mytest2 tools]# ldd –version</p>
+<p>ldd (GNU libc) 2.17</p>
+<p>版本太高换回nvm install 16.20.2</p>
+<h2 id="2-git-repo仓库安装"><a href="#2-git-repo仓库安装" class="headerlink" title="2. git repo仓库安装"></a>2. git repo仓库安装</h2><p>github也可以注册账号，Github Pages可以直接生成页面，不过国外的网速实在是龟速，gitee也有这个功能，实名认证太麻烦，索性在自己测试机上直接建立git仓库，直接推送建立站点而已，后续国内服务器需要网站备案。</p>
+<p>1).安装git<br>ubuntu/debian:<br>sudo apt-get install git</p>
+<p>centos:<br>sudo yum install git</p>
+<p>2).创建一个git用户，用来运行git服务：</p>
+<p>$ sudo adduser git<br>3).创建证书登录实现git免密推送：</p>
+<p>收集所有需要登录的用户的公钥id_rsa.pub文件，把所有公钥导入到/home/git/.ssh/authorized_keys文件里，一行一个。</p>
+<p>4).初始化Git仓库：</p>
+<p>先选定一个目录作为Git仓库，假定git是/data/blog/blog.git，工作目录：/data/myblog 在/data/blog目录下输入命令：</p>
+<p>sudo git init  —bare blog.git<br>Git就会创建一个裸仓库，裸仓库没有工作区，因为服务器上的Git仓库纯粹是为了共享，所以不让用户直接登录到服务器上去改工作区，并且服务器上的Git仓库通常都以.git结尾。然后，把owner改为git：</p>
+<p>$ sudo chown -R git:git blog.git</p>
+<p>cd blog.git/hooks</p>
+<p>vim post-receive</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line">git --work-tree=/data/myblog --git-dir=/data/blog/blog.git checkout -f</span><br></pre></td></tr></tbody></table></figure>
+
+<p>chmod +x post-receive</p>
+<p>5).禁用shell登录：</p>
+<p>出于安全考虑，第二步创建的git用户不允许登录shell，这可以通过编辑/etc/passwd文件完成。找到类似下面的一行：</p>
+<p>gitx:1001:1001:,,,:/home/git:/bin/bash<br>改为：</p>
+<p>gitx:1001:1001:,,,:/home/git:/usr/bin/git-shell<br>这样，git用户可以正常通过ssh使用git，但无法登录shell，因为我们为git用户指定的git-shell每次一登录就自动退出。</p>
+<p>6).克隆远程仓库：</p>
+<p>现在，可以通过git clone命令克隆远程仓库了，在各自的电脑上运行：</p>
+<p>git clone ssh://git@ip:port/data/blog/blog.git<br>Cloning into ‘blog’…</p>
+<p>几个问题：</p>
+<p>a.git目录路径要看清楚，不在当前目录会报:does not appear to be a git repository<br>fatal: Could not read from remote repository.类似的错误 ；</p>
+<p>git@ip:port/data/blog/blog.git</p>
+<p>b. git ssh 连接 ： ssh://git@ip:port/data/blog/blog.git</p>
+<h2 id="3-hexo安装及推送"><a href="#3-hexo安装及推送" class="headerlink" title="3. hexo安装及推送"></a>3. hexo安装及推送</h2><h3 id="3-1-hexo安装"><a href="#3-1-hexo安装" class="headerlink" title="3.1 hexo安装"></a>3.1 hexo安装</h3><p>npm install hexo-cli -g<br> hexo init blog<br> cd blog<br>npm install<br> hexo g # 或者hexo generate<br> hexo s # 或者hexo server，可以在<a href="http://localhost:4000/">http://localhost:4000/</a> 查看</p>
+<p>也可以hexo server -p 80 -l</p>
+<p>hexo generate (hexo g) 生成静态文件，会在当前目录下生成一个新的叫做public的文件夹</p>
+<p>hexo server (hexo s) 启动本地web服务，用于博客的预览</p>
+<p>hexo deploy (hexo d) 部署播客到远端（比如github, heroku等平台）</p>
+<p>hexo new “postName” #新建文章<br> hexo new page “pageName” #新建页面</p>
+<p>简写：</p>
+<p>hexo n == hexo new<br>hexo g == hexo generate<br>hexo s == hexo server<br>hexo d == hexo deploy</p>
+<p>hexo d -g #生成部署<br>hexo s -g #生成预览</p>
+<p>经常用到：</p>
+<p>hexo clean</p>
+<p>hexo g</p>
+<p>hexo d</p>
+<h3 id="3-2使用hexo-deploy部署"><a href="#3-2使用hexo-deploy部署" class="headerlink" title="3.2使用hexo deploy部署"></a>3.2使用hexo deploy部署</h3><p>安装一个扩展：</p>
+<p>$ npm install hexo-deployer-git –save</p>
+<p>hexo deploy可以部署到很多平台，具体可以参考这个链接. 如果部署到github，需要在根目录/data/blog/配置文件_config.xml中作如下修改：</p>
+<p>deploy:<br>  type: git<br>repo: ssh://git@ip:port/data/blog/blog.git<br>  branch: master<br>然后在命令行中执行</p>
+<p>hexo d<br>即可完成部署。</p>
+<p>hexo主题很多选择一个喜欢的去修改吧</p>
+<p>比如：</p>
+<p>git clone <a href="https://github.com/next-theme/hexo-theme-next">https://github.com/next-theme/hexo-theme-next</a> themes/next</p>
+<p>下载到themes 的next 主题，或者matery大佬的主题，下载以后自己修改成自己喜欢的样式即可。</p>
+<h2 id="4-web站点搭建"><a href="#4-web站点搭建" class="headerlink" title="4. web站点搭建"></a>4. web站点搭建</h2><p>首先有一台自己的服务器，比如centos或者ubuntu，debian，安装nginx或者tengine，对于个人静态站点基本上nginx可以满足，tengine需要手动安装，喜欢的可以尝试一下。</p>
+<p>简单的yum install nginx</p>
+<p>cd /etc/nginx/</p>
+<p>vim nginx.conf</p>
+<p>server_tokens off; 隐藏版本号；</p>
+<p>也可以做好多优化；这里只说实现web功能</p>
+<p>nginx一般在/etc/nginx/conf.d/ 配置站点conf文件，tengine在/etc/nginx/sites-enabled/配置，看个人喜好。</p>
+<p>vim mybog.conf 基本配置如下：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">server {</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name blog.icmpy.net;</span><br><span class="line">    return 301 blog.icmpy.net$request_uri;</span><br><span class="line">}</span><br><span class="line">server {</span><br><span class="line">    listen 443 ssl;</span><br><span class="line">    server_name blog.icmpy.net;</span><br><span class="line">    root /data/myblog; # 根目录为web</span><br><span class="line">    index index.php index index.html index.htm;</span><br><span class="line">    ssl_certificate /etc/nginx/ssl/blog.icmpy.net.pem;</span><br><span class="line">    ssl_certificate_key /etc/nginx/ssl/blog.icmpy.net.key;</span><br><span class="line">   ssl_session_timeout  5m;</span><br><span class="line"></span><br><span class="line">    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;</span><br><span class="line">        ssl_prefer_server_ciphers  on;</span><br><span class="line">    # Log files for Debug</span><br><span class="line">    error_log  /var/log/nginx/blog_error.log;</span><br><span class="line">    access_log /var/log/nginx/blog_access.log;</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>由于做了ssl证书，80做了个跳转到443上面，域名需要到平台做解析，A记录到自己的服务器，如果流量大的话可以做cdn，Cname到平台给的记录值，ssl证书申请，主流云平台都可以免费申请，填写一些资料以后很快就可以签发证书，选择对应的证书上传即可。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>kafka Create topic 报错</title>
+    <url>/2023/071361284.html</url>
+    <content><![CDATA[<p>bin/kafka-console-consumer.sh –bootstrap-server localhost:9092 –topic kk_log<br>报错如下：<br>WARN [Consumer clientId=consumer-1, groupId=console-consumer-507] Connection to node -1 could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)</p>
+<p>配置server.confg时候设置的<br>advertised.listeners=PLAINTEXT://10.171.222.26:9092<br>此时需要用配置的IP而非localhost地址：</p>
+<p>nohup bin/zookeeper-server-start.sh config/zookeeper.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>nohup bin/kafka-server-start.sh config/server.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>netstat -ntpl|egrep “(2181|9092)”<br>运行起来再试试<br>bin/kafka-console-consumer.sh –bootstrap-server 10.171.222.26:9092 –topic kk_log<br>应该就可以了。<br>做个小笔记。</p>
+<p>PS zookeeper 报错，宕掉；</p>
+<p>[2016-06-27 12:07:14,065] INFO Closed socket connection for client /127.0.0.1:58824 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn) [2016-<br>[2016-06-27 12:07:17,351] INFO Refusing session request for client /127.0.0.1:58834 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)<br>[2016-06-27 12:07:17,351] INFO Closed socket connection for client /127.0.0.1:58834 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn)<br>[2016-06-27 12:07:19,048] INFO Accepted socket connection from /127.0.0.1:58840 (org.apache.zookeeper.server.NIOServerCnxnFactory)<br>[2016-06-27 12:07:19,048] INFO Refusing session request for client /127.0.0.1:58840 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)</p>
+<p>解决方法</p>
+<p>报错原因：服务器上还有应用在不停的向zookeeper发送请求</p>
+<p>解决方法：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用top -u [username]查看该用户下的所有进程，发现多了一个java进程在运行着；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、kill掉与java相关的进程；</p>
+<p>2、关闭zookeeper，删除zoo.cfg中的dataDir配置的文件夹；</p>
+<h2 id="3、重启zookeeper。"><a href="#3、重启zookeeper。" class="headerlink" title="3、重启zookeeper。"></a>3、重启zookeeper。</h2>]]></content>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2023/062516107.html</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>linux install shadowsocks</title>
+    <url>/2023/071659235.html</url>
+    <content><![CDATA[<h1 id="1-安装Python和pip"><a href="#1-安装Python和pip" class="headerlink" title="1. 安装Python和pip"></a>1. 安装Python和pip</h1><p>sudo apt-get update</p>
+<p>sudo apt-get install python-pip</p>
+<h1 id="2-安装Shadowsocks"><a href="#2-安装Shadowsocks" class="headerlink" title="2. 安装Shadowsocks"></a>2. 安装Shadowsocks</h1><p>sudo pip install shadowsocks</p>
+<h1 id="3-配置Shadowsocks"><a href="#3-配置Shadowsocks" class="headerlink" title="3. 配置Shadowsocks"></a>3. 配置Shadowsocks</h1><p>cat &gt;&gt; /etc/shadowsocks.json &lt;&lt;EOF<br>{</p>
+<p>“server” : “ server ip”,<br>“server_port” : server port,<br>“local_port” : 1080,<br>“password” : “passwd”,<br>“timeout” : 200,<br>“method” : “aes-256-cfb”<br>}<br>EOF<br>参数的解释:<br>server：远程服务器IP地址<br>server_port：远程服务器端口号<br>local_port：本地端口号，默认为1080<br>password：远程服务器密码，自定义<br>timeout：超时时间，默认为300秒<br>method：加密方式，推荐aes-256-cfb</p>
+<h1 id="4-启动Shadowsocks"><a href="#4-启动Shadowsocks" class="headerlink" title="4. 启动Shadowsocks"></a>4. 启动Shadowsocks</h1><p>在命令行中输入：</p>
+<p>ssserver -c /etc/shadowsocks.json</p>
+<h1 id="5-添加系统服务"><a href="#5-添加系统服务" class="headerlink" title="5.添加系统服务"></a>5.添加系统服务</h1><p>cat &gt;&gt;/etc/systemd/system/shadows.service  &lt;&lt;EOF<br>[Unit]<br>Description=shadows server<br>[Install]<br>WantedBy=multi-user.target<br>[Service]<br>User=root<br>Group=root<br>ExecStart=/usr/bin/ssserver -c /etc/shadowsocks.json start<br>Restart=on-failure<br>EOF</p>
+<p>systemctl restart shadows.service<br>systemctl enable shadows.service</p>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>linux有足够内存还使用swap</title>
+    <url>/2023/11131515.html</url>
+    <content><![CDATA[<p>一台主机内存swap报警上去以查看确实swap快耗尽；</p>
+<p>$free -m</p>
+<p>&nbsp; total&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; used&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; free&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; shared&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;buff/cache&nbsp;&nbsp; available</p>
+<p>Mem: 32012&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 8293&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 243&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 594&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 23475&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 22638</p>
+<p>Swap:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7999&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7315&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 684</p>
+<p>Linux starts swapping before the RAM is filled up. This is done to improve performance and responsiveness:</p>
+<p>Performance is increased because sometimes RAM is better used for disk cache than to store program memory. So it’s better to swap out a program that’s been inactive for a while, and instead keep often-used files in cache.</p>
+<p>Responsiveness is improved by swapping pages out when the system is idle, rather than when the memory is full and some program is running and requesting more RAM to complete a task.</p>
+<p>Swapping does slow the system down, of course — but the alternative to swapping isn’t not swapping, it’s having more RAM or using less RAM.</p>
+<p>翻译：Linux在物理内存用完之前使用swap，这样有助于提高系统性能和响应能力</p>
+<p>1 性能可以提升的原因是：一些内存放磁盘缓存比方内存更合适。所以，最好交换出暂时不使用的内存，而把经常使用的文件放内存里面</p>
+<p>2 提升响应能力通过，当系统空闲的时候swap page out，而不是当内存忙的时候，正在执行程序的时候执行swap</p>
+<p>swaping确实会是系统性能下降，当然，通过swap可以有更多的可用内存</p>
+<p>如何在有内存可用的时候，不使用swap呢？</p>
+<p>This behaviour can be configured by setting the value of&nbsp;/proc/sys/vm/swappiness. The default value is 60, setting it to 0 means “never use swap when there is still RAM left“ and 100 is swapping out memory as soon as possible.</p>
+<p>To change the value temporarily (lost on reboot):</p>
+<p>sudo sysctl vm.swappiness=10<br>1.<br>To change the value permanently: Edit the file&nbsp;/etc/sysctl.conf&nbsp;as root (e.g.&nbsp;sudo nano /etc/sysctl.conf) and change the line&nbsp;vm.swapiness=…&nbsp;to the desired value.</p>
+<p>There has been some debate on whether swapping out with free memory available is good or bad, but the Ubuntu help does indeed recommend a value of 10 for Desktop systems:&nbsp;<a href="https://help.ubuntu.com/community/SwapFaq">https://help.ubuntu.com/community/SwapFaq</a></p>
+<p>centos swappiness配置的路径 &nbsp;/proc/sys/vm/swappiness</p>
+<p>为什么不建议关闭swap</p>
+<p>It is NOT recommended to turn off swap even if you have enough memory. If your server needs more memory and it did not get it, it will crash. However, this can be prevented (to some extent) when you have a swap area.</p>
+<p>Yes, your server performance will degrade when using swap, but at least it will be operational and accessible. Then, you can plan for adding more memory when needed if your server starts using swap.</p>
+<p>I found&nbsp;&nbsp;this page&nbsp;talking about swap. Have a look at 3rd section.</p>
+<p>Instead of turning off swap, you can control the&nbsp;&nbsp;swapiness.</p>
+<p>参考</p>
+<p><a href="http://unix.stackexchange.com/questions/2658/why-use-swap-when-there-is-more-than-enough-ram">http://unix.stackexchange.com/questions/2658/why-use-swap-when-there-is-more-than-enough-ram</a></p>
+<p>swap知识 &nbsp;<a href="https://help.ubuntu.com/community/SwapFaq">https://help.ubuntu.com/community/SwapFaq</a></p>
+<p><a href="http://linux.cloudibee.com/2007/11/linux-performance-tuning-vm-swappiness/">http://linux.cloudibee.com/2007/11/linux-performance-tuning-vm-swappiness/</a></p>
+<p>转载自:&nbsp;<a href="https://blog.csdn.net/wjciayf/article/details/79913381">https://blog.csdn.net/wjciayf/article/details/79913381</a></p>
+<p>关于linux内存分配机制</p>
+<p>在linux的内存分配机制中，优先使用物理内存，当物理内存还有空闲时（还够用），不会释放其占用内存，就算占用内存的程序已经被关闭了，该程序所占用的内存用来做缓存使用，对于开启过的程序、或是读取刚存取过得数据会比较快。</p>
+<p>一．&nbsp;&nbsp;我们先来查看一个内存使用的例子：<br>[oracle@db1 ~]$ free -m<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; total&nbsp; &nbsp;&nbsp; &nbsp; used&nbsp; &nbsp;&nbsp;&nbsp; free&nbsp; &nbsp;&nbsp;&nbsp;shared&nbsp; &nbsp; buffers&nbsp;&nbsp;&nbsp;&nbsp;cached<br>Mem:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;72433&nbsp; &nbsp;&nbsp;&nbsp;67075&nbsp; &nbsp;&nbsp;&nbsp;5357&nbsp; &nbsp;&nbsp; &nbsp;0&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;558&nbsp; &nbsp;&nbsp; &nbsp; 62221<br>-/+ buffers/cache:&nbsp;&nbsp;&nbsp;&nbsp;4295&nbsp; &nbsp;&nbsp; &nbsp;68138<br>Swap:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;72096&nbsp; &nbsp;&nbsp; &nbsp;91&nbsp; &nbsp;&nbsp; &nbsp;72004<br>上述结果显示了67075M的used，但是（-/+ buffers/cache）减去buffers和cache的结果可以看到，所以当前进程实际占用内存是4296M。<br>可以这么理解：在linux的内存分配机制中，优先使用物理内存，当物理内存还有空闲时（还够用），不会释放其占用内存，就算占用内存的程序已经被关闭了，该程序所占用的内存用来做缓存使用，对于开启过的程序、或是读取刚存取过得数据会比较快。<br>如上面的例子：使用了72433M的内存，67075M被占用，但是buuffer和cached部分作为缓存，可以使用命中率的方式提高使用效率，而且这部分缓存是根据指令随时可以释放的，我们可以认为这部分内存没有实际被使用，也可以认为它是空闲的。<br>因此查看目前进程正在实际被使用的内存，是used-(buffers+cache)，也可以认为如果swap没有大量使用，mem还是够用的，只有mem被当前进程实际占用完（没有了buffers和cache），才会使用到swap的。</p>
+<p>二．&nbsp;Swap配置对性能的影响<br>分配太多的Swap空间会浪费磁盘空间，而Swap空间太少，则系统会发生错误。如果系统的物理内存用光了，系统就会跑得很慢，但仍能运行；如果Swap空间用光了，那么系统就会发生错误。例如，Web服务器能根据不同的请求数量衍生出多个服务进程（或线程），如果Swap空间用完，则服务进程无法启动，通常会出现“application is out of memory”的错误，严重时会造成服务进程的死锁。因此Swap空间的分配是很重要的。<br>通常情况下，Swap空间应大于或等于物理内存的大小，最小不应小于64M，通常Swap空间的大小应是物理内存的2-2.5倍。但根据不同的应用，应有不同的配置：如果是小的桌面系统，则只需要较小的Swap空间，而大的服务器系统则视情况不同需要不同大小的Swap空间。特别是数据库服务器和Web服务器，随着访问量的增加，对Swap空间的要求也会增加，一般来说对于4G&nbsp;以下的物理内存，配置2倍的swap，4G&nbsp;以上配置1倍。<br>另外，Swap分区的数量对性能也有很大的影响。因为Swap交换的操作是磁盘IO的操作，如果有多个Swap交换区，Swap空间的分配会以轮流的方式操作于所有的Swap，这样会大大均衡IO的负载，加快Swap交换的速度。如果只有一个交换区，所有的交换操作会使交换区变得很忙，使系统大多数时间处于等待状态，效率很低。用性能监视工具就会发现，此时的CPU并不很忙，而系统却慢。这说明，瓶颈在IO上，依靠提高CPU的速度是解决不了问题的。</p>
+<p>三.&nbsp;&nbsp;Linux&nbsp;内存机制<br>Linux支持虚拟内存(VirtualMmemory)，虚拟内存是指使用磁盘当作RAM的扩展，这样可用的内存的大小就相应地增大了。内核会将暂时不用的内存块的内容写到硬盘上，这样一来，这块内存就可用于其它目的。当需要用到原始的内容时，它们被重新读入内存。这些操作对用户来说是完全透明的;Linux下运行的程序只是看到有大量的内存可供使用而并没有注意到时不时它们的一部分是驻留在硬盘上的。当然，读写硬盘要比直接使用真实内存慢得多(要慢数千倍)，所以程序就不会象一直在内存中运行的那样快。用作虚拟内存的硬盘部分被称为交换空间(Swap Space)。<br>一般，在交换空间中的页面首先被换入内存;如果此时没有足够的物理内存来容纳它们又将被交换出来(到其他的交换空间中)。如果没有足够的虚拟内存来容纳所有这些页面，Linux就会波动而不正常;但经过一段较长的时间Linux会恢复，但此时系统已不可用了。<br>有时，尽管有许多的空闲内存，仍然会有许多的交换空间正被使用。这种情况是有可能发生的，例如如果在某一时刻有进行交换的必要，但后来一个占用很多物理内存的大进程结束并释放内存时。被交换出的数据并不会自动地交换进内存，除非有这个需要时。此时物理内存会在一段时间内保持空闲状态。对此并没有什么可担心的，但是知道了是怎么一回事，也就无所谓了。<br>许多操作系统使用了虚拟内存的方法。因为它们仅在运行时才需要交换空间，以解决不会在同一时间使用交换空间，因此，除了当前正在运行的操作系统的交换空间，其它的就是一种浪费。所以让它们共享一个交换空间将会更有效率。<br>注意：如果会有几个人同时使用这个系统，他们都将消耗内存。然而，如果两个人同时运行一个程序，内存消耗的总量并不是翻倍，因为代码页以及共享的库只存在一份。</p>
+<p>Linux系统常常动不动就使用交换空间，以保持尽可能多的空闲物理内存。即使并没有什么事情需要内存，Linux也会交换出暂时不用的内存页面。这可以避免等待交换所需的时间：当磁盘闲着，就可以提前做好交换。可以将交换空间分散在几个硬盘之上。针对相关磁盘的速度以及对磁盘的访问模式，这样做可以提高性能。</p>
+<p>与访问物理内存相比，磁盘的读写是很慢的。另外，在相应较短的时间内多次读磁盘同样的部分也是常有的事。例如，某人也许首先阅读了一段E-mail消息，然后为了答复又将这段消息读入编辑器中，然后又在将这个消息拷贝到文件夹中时，使得邮件程序又一次读入它。或者考虑一下在一个有着许多用户的系统中&nbsp;ls命令会被使用多少次。通过将信息从磁盘上仅读入一次并将其存于内存中，除了第一次读以外，可以加快所有其它读的速度。这叫作磁盘缓冲(Disk Buffering)，被用作此目的的内存称为高速缓冲(Buffer Cache)。但是，由于内存是一种有限而又不充足的资源，高速缓冲不可能做的很大(它不可能包容要用到的所有数据)。当缓冲充满了数据时，其中最长时间不用的数据将被舍弃以腾出内存空间用于新的数据。</p>
+<p>对写磁盘操作来说磁盘缓冲技术同样有效。一方面，被写入磁盘的数据常常会很快地又被读出(例如，原代码文件被保存到一个文件中，又被编译器读入)，所以将要被写的数据放入缓冲中是个好主意。另一方面，通过将数据放入缓冲中，而不是将其立刻写入磁盘，程序可以加快运行的速度。以后，写的操作可以在后台完成，而不会拖延程序的执行。<br>大多数操作系统都有高速缓冲(尽管可能称呼不同)，但是并不是都遵守上面的原理。有些是直接写(Write-Through)：数据将被立刻写入磁盘(当然，数据也被放入缓存中)。如果写操作是在以后做的，那么该缓存被称为后台写(Write-Back)。后台写比直接写更有效，但也容易出错：如果机器崩溃，或者突然掉电，缓冲中改变过的数据就被丢失了。如果仍未被写入的数据含有重要的薄记信息，这甚至可能意味着文件系统(如果有的话)已不完整。<br>针对以上的原因，出现了很多的日志文件系统，数据在缓冲区修改后，同时会被文件系统记录修改信息，这样即使此时系统掉电，系统重启后会首先从日志记录中恢复数据，保证数据不丢失。当然这些问题不再本文的叙述范围。<br>由于上述原因，在使用适当的关闭过程之前，绝对不要关掉电源，Sync命令倾空(Flushes)缓冲，也即，强迫所有未被写的数据写入磁盘，可用以确定所有的写操作都已完成。在传统的UNIX系统中，有一个叫做update的程序运行于后台，每隔30秒做一次sync操作，因此通常无需手工使用sync命令了。Linux另外有一个后台程序，Bdflush，这个程序执行更频繁的但不是全面的同步操作，以避免有时sync的大量磁盘I/O操作所带来的磁盘的突然冻结。<br>在Linux中，Bdflush是由update启动的。通常没有理由来担心此事，但如果由于某些原因bdflush进程死掉了，内核会对此作出警告，此时你就要手工地启动它了(/sbin/update)。</p>
+<p>缓存(Cache)实际并不是缓冲文件的，而是缓冲块的，块是磁盘I/O操作的最小单元(在Linux中，它们通常是1KB)。这样，目录、超级块、其它文件系统的薄记数据以及非文件系统的磁盘数据都可以被缓冲了。缓冲的效力主要是由它的大小决定的。缓冲太小的话等于没用。它只能容纳一点数据，因此在被重用时，所有缓冲的数据都将被倾空。实际的大小依赖于数据读写的频次、相同数据被访问的频率。只有用实验的方法才能知道。<br>如果缓存有固定的大小，那么缓存太大了也不好，因为这会使得空闲的内存太小而导致进行交换操作(这同样是慢的)。为了最有效地使用实际内存，Linux自动地使用所有空闲的内存作为高速缓冲，当程序需要更多的内存时，它也会自动地减小缓冲的大小。&nbsp;<br>这就是一般情况下Linux内存的一般机制，真正的Linux内存的运行机制远远比这个复杂。</p>
+<p>&nbsp;</p>
+<p>Other：</p>
+<p>swap tendency = mapped ratio / 2 + distress + swappiness</p>
+<p>The mapped ratio value is the percentage of pages in all memory zones thatbelong to User Mode address spaces (sc-&gt;nr_mapped) with respect to the totalnumber of allocatable page frames. A high value of mapped_ratio means that thedynamic memory is mostly used by User Mode processes, while a low value meansthat it is mostly used by the page cache.</p>
+<p>The distress value is a measure of how effectively the PFRA is reclaiming pageframes in this zone; it is based on the scanning priority of the zone in theprevious run of the PFRA, which is stored in the prev_priority field of thezone descriptor. The distress value depends on the zone’s previous priority asfollows:</p>
+<p>Zone prev. priority<br>12…7<br>6<br>5<br>4<br>3<br>2<br>1<br>0</p>
+<p>Distress value<br>0<br>1<br>3<br>6<br>12<br>25<br>50<br>100<br>Finally, the swappiness value is a user-defined constant, which is usually setto 60. The system administrator may tune this value by writing in the/proc/sys/vm/swappiness file or by issuing the proper sysctl( ) system call.</p>
+<p>Pages will be reclaimed from the address spaces of processes only if the zone’sswap tendency is greater than or equal to 100. Thus, if the systemadministrator sets swappiness to 0, then the PFRA never reclaims pages in theUser Mode address spaces unless the zone’s previous priority is zero (anunlikely event); if the administrator sets swappiness to 100, then the PFRAreclaims pages in the User Mode address spaces at every invocation.<br>swappiness，吃参数是得到swap tendency的一个量，而swap tendency是linux内核进行内存进行回收的一个阀值和标量。</p>
+<p><a href="https://blog.csdn.net/ly890700/article/details/73695750">https://blog.csdn.net/ly890700/article/details/73695750</a></p>
+<p>首先是,kswapd进程来定期扫描系统资源,查看内存是否够用,由两个值影响pages_high和page_low,如果现在可使用的区间在page_high&lt;x&lt;page_low,就开始检查从文件系统读入的文件,有无被修改的内存页面,如果有就写入到磁盘,但是,如果内存页面被修改了,有可能不是从文件系统读入的,即找不到回写的位置,如malloc产生的anonymous内存数据就写入swap分区,这部分当进程在次被唤醒,获得了CPU运行时间,在从swap读入。</p>
+<p>swappiness的值的大小对如何使用swap分区是有着很大的联系的。swappiness=0的时候表示最大限度使用物理内存，然后才是swap空间，swappiness＝100的时候表示积极的使用swap分区，并且把内存上的数据及时的搬运到swap空间里面。linux的基本默认设置为60，具体如下：</p>
+<p>cat /proc/sys/vm/swappiness<br>#60</p>
+<p>也就是说，你的内存在使用到100-60=40%的时候，就开始出现有交换分区的使用。大家知道，内存的速度会比磁盘快很多，这样子会加大系统IO，同时造的成大量页的换进换出，严重影响系统的性能，所以我们在操作系统层面，要尽可能使用内存，对该参数进行调整。</p>
+<p>临时调整的方法如下，我们调成10：</p>
+<p>sysctl vm.swappiness=10<br>#vm.swappiness=10</p>
+<p>cat /proc/sys/vm/swappiness</p>
+<p>#10</p>
+<p>这只是临时调整的方法，重启后会回到默认设置的.</p>
+<p>要想永久调整的话，需要在/etc/sysctl.conf修改，加上：</p>
+<p>sudo vim /etc/sysctl.conf</p>
+<p>加上</p>
+<h1 id="Controls-the-maximum-number-of-shared-memory-segments-in-pages"><a href="#Controls-the-maximum-number-of-shared-memory-segments-in-pages" class="headerlink" title="Controls the maximum number of shared memory segments, in pages"></a>Controls the maximum number of shared memory segments, in pages</h1><p>kernel.shmall = 4294967296 #这一个可以不用设置</p>
+<p>vm.swappiness = 10</p>
+<p>&nbsp;生效</p>
+<p>sudo sysctl -p</p>
+<p>这样便完成修改设置！</p>
+<p>&nbsp;</p>
+<p>Ps在服务器内存充裕的情况下尽量用内存，swap缓存设置低一些，使用swap是必要的；</p>
+<p>另外：swap可以扩充的，但是会不会影响线上业务，或者使用sysctl vm.swappiness=10命令时候会不会影响线上业务，一直纠结中。</p>
+<p>&nbsp;</p>
+<p>转自：<a href="https://www.cnblogs.com/EasonJim/p/7777904.html">https://www.cnblogs.com/EasonJim/p/7777904.html</a></p>
+<p>&nbsp;</p>
+<p>&nbsp;&nbsp;用文件增加swap：</p>
+<p>dd if=/dev/zero of=/tmp/swapadd bs=1024 count=2048000&nbsp; &nbsp; ###添加一块2G的swap文件</p>
+<p>mkswap /tmp/swapadd&nbsp; ####格式化文件</p>
+<p>swapon /tmp/swapadd ###增加swap</p>
+<p>free -m</p>
+<p>echo “/tmp/swapadd swap swap defaults 0 0” &gt;&gt; /etc/fstab&nbsp; &nbsp; ###开机自动挂载swap分区</p>
+<p>swapoff swapadd&nbsp; ###&nbsp;使用Swapoff命令收回Swap空间</p>
+<p>rm swapadd&nbsp;&nbsp; &nbsp;###从文件系统中回收此文件</p>
+<hr>
+]]></content>
+  </entry>
+  <entry>
     <title>docker 安装walle2部署项目</title>
     <url>/2023/112024358.html</url>
     <content><![CDATA[<p>​     项目从git上面拉取代码，然后打包推送到服务器，更新启动服务，开发大神需要ci/cd平台，当前开源的可能walle和蓝鲸cmdb系统比较实用，123正反面选择了walle，据说已经停了好久，不过对于项目来说够用了，开始吧。</p>
@@ -757,255 +1093,17 @@
       </tags>
   </entry>
   <entry>
-    <title>frp搭建</title>
-    <url>/2023/062739776.html</url>
-    <content><![CDATA[<p> &nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。</p>
-<p>首先到官网：</p>
-<p>&nbsp;<a href="https://github.com/fatedier/frp/releases">https://github.com/fatedier/frp/releases</a></p>
-<p>下载: frp_0.16.0_linux_amd64.tar.gz服务器端</p>
-<p>解压出来ls:</p>
-<p>frpc&nbsp; frpc_full.ini&nbsp; frpc_http.ini&nbsp; frpc.ini&nbsp; frps&nbsp; frps_full.ini&nbsp; frps.ini&nbsp; LICENSE&nbsp; nohup.out</p>
-<p>服务器端只需要两个文件frps和frps.ini,其中frps为可执行文件，frps.ini为配置文件默认配置文件如下：其中bind_addr为本机IP,bind_port为frp对客户端的端口号，auto_token是客户端连接服务器端的口令。</p>
-<p>[common]</p>
-<p>Bind_addr=0.0.0.0</p>
-<p>Bind_port =4443</p>
-<p>Auto_token = frp</p>
-<p>配置好以后可以运行起来./frps -c ./frps.ini</p>
-<p>最好后台运行：nohup ./frps -c ./frps.ini &amp;</p>
-<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:4443</p>
-<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
-<p>&nbsp;需要穿透端口的服务器端开启：</p>
-<p>nohup ./frps -c ./frps.ini &amp;</p>
-<p>同样将客户端解压后有七个文件，只需要frpc和frpc.ini,配置文件如下：</p>
-<p>&nbsp;[common]</p>
-<p>Server_addr = 123.123.123.123</p>
-<p>Server_port = 4443</p>
-<p>Auto-token = frp</p>
-<p>[ssh_1]</p>
-<p>Type = tcp</p>
-<p>Local_ip = 127.0.0.1</p>
-<p>Local_port = 22</p>
-<p>Remote_port = 10085</p>
-<p>注意：server_addr是服务器端的公网IP地址，server_port是frp服务端口号，auto_token是连接服务器的口令，必须和服务器保持一致。[ssh_1]是客户端通过服务器与用户之间的通道名，每个客户端必须不一样，remote_port是服务器端对外提供本机服务的端口号，即用户连接123.123.123.123:10085，相当于连接127.0.0.1:22,即arm板上的ssh服务</p>
-<p>运行客户端：./frpc -c ./frpc.ini</p>
-<p>&nbsp;</p>
-<p>当前的配置</p>
-<p>more frpc.ini</p>
-<p>[common]</p>
-<p>server_addr = dem.abc.com</p>
-<p>server_port = 7000</p>
-<p>[game]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.232</p>
-<p>local_port = 9001</p>
-<p>remote_port = 6000</p>
-<p>&nbsp;</p>
-<p>[http]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.232</p>
-<p>local_port = 80</p>
-<p>remote_port = 6001</p>
-<p>&nbsp;</p>
-<p>[mysql]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.235</p>
-<p>local_port = 3306</p>
-<p>remote_port = 13306</p>
-<p>more frpc_http.ini</p>
-<p>[common]</p>
-<p>server_addr = dem.abc.com</p>
-<p>server_port = 7000</p>
-<p>&nbsp;</p>
-<p>[http]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.232</p>
-<p>local_port = 80</p>
-<p>remote_port = 6001</p>
-<p>这样demo.abc.com 的13306映射到3306,6001映射到80端口等等；</p>
-<p>在客户端开启：最好后台运行启动客户端proxy：</p>
-<p>nohup ./frpc&nbsp; -c ./frpc.ini &amp;</p>
-<p>[I] [control.go:240] [e465e02f8bad1e5b] login to server success, get run id [e465e02f8bad1e5b], server udp port [0]</p>
-<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [http] start proxy success</p>
-<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [mysql] start proxy success</p>
-<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:7000</p>
-<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
-<p>2018/05/17 10:49:11 [I] [main.go:114] PrivilegeMode is enabled, you should pay more attention to security issues</p>
-<p>&nbsp;</p>
-<p>PS：配置很简单，但是记得nohup ./frps -c ./frps.ini &amp; 在要穿透的远程服务器开启，nohup ./frpc&nbsp; -c ./frpc.ini &amp; 在内网开启，记得开放远程服务器穿透端口；</p>
-<hr>
+    <title>/var/log/messages日志恢复</title>
+    <url>/2023/112018778.html</url>
+    <content><![CDATA[<p>Linux容易犯的一个错误是把日志文件给直接删除，而不是删除日志文件的内容。<br>直接删除日志文件往往导致新产生的日志记录无法被写入到日志文件中（因为它已经被删除了），而仅仅重新新建（touch）同样名字的文件是解决不了问题的。<br>本文以Unbutu系统为例，介绍如何恢复被误删除的syslog文件：<br>首先，在以root用户执行如下lsof命令，查询打开/var/log/messages文件的进程的进程ID(PID)。<br>root@zck:/var/log# lsof | grep messages<br>rsyslogd 544 syslog 7w REG 8,1 214641 134422 /var/log/messages<br>从上面命令输出可以看到，这个打开/var/log/messages文件的进程的PID是544，文件/var/log/messages的文件描述符（FD）号是7。<br>根据上述的PID和FD，可以在/proc找到对应的文件：<br>root@zck:/var/log#ls -al /proc/544/fd/7<br>l-wx—— 1 root root 64 2012-07-14 14:48 7 -&gt; /var/log/messages<br>将文件/proc/544/fd/7拷贝到/var/log/messages<br>cp /proc/544/fd/7 /var/log/messages&nbsp;</p>
+<p>然后重新启动syslog服务即可恢复被误删除的日志文件，并且新的日志记录能够继续被写入日志文件。<br>以root用户运行service命令。其中，service命令的第2个参数可能是syslog、也可能是rsyslog。<br>具体可以使用通过命令查询得知。<br>登录后复制<br>root@zck:/proc/544/fd# service –status-all<br> [ ? ] …<br> [ ? ] rc.local<br> [ ? ] rsyslog<br> [ ? ] screen-cleanup<br> [ ? ] …  #——————————-</p>
+<p>复制代码代码如下:<br>root@zck:/proc/544/fd# service rsyslog restart<br>rsyslog start/running, process 2673</p>
+<p>清空日志文件：<br>cat /dev/null&gt;/var/log/messages</p>
+<p>转自url:<a href="https://blog.51cto.com/u_11146845/6240737">https://blog.51cto.com/u_11146845/6240737</a></p>
 ]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
       <tags>
-        <tag>随笔</tag>
+        <tag>点滴</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2023/062516107.html</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>hexogit搭建个人网站</title>
-    <url>/2023/111457802.html</url>
-    <content><![CDATA[<h2 id="1-nodejs安装"><a href="#1-nodejs安装" class="headerlink" title="1. nodejs安装"></a>1. nodejs安装</h2><p> 使用Node Version Manager（nvm工具）</p>
-<p> install stable`是使用Node Version Manager（nvm）安装Node.js的命令。nvm是一个用于管理多个Node.js版本的工具，可以轻松地在同一台机器上安装、切换和管理不同版本的Node.js。</p>
-<p><code>nvm install stable</code>指令表示安装最新的稳定版本的Node.js。执行此命令后，nvm会从Node.js官方仓库下载并自动安装最新的稳定版Node.js。安装过程可能需要一些时间，具体取决于您的网络速度。</p>
-<p>在centOS上安装Node.js，您可以按照以下步骤进行操作：</p>
-<p>1). 使用以下命令更新系统软件包：</p>
-<p>sudo yum update</p>
-<p>2). 安装Node.js依赖项。使用以下命令执行：</p>
-<p>sudo yum install -y gcc-c++ make</p>
-<p>相关库</p>
-<p>3). 更新系统：</p>
-<p>sudo yum update<br>(2). 安装EPEL存储库（Extra Packages for Enterprise Linux，附加软件包）：</p>
-<p>sudo yum install epel-release<br>(3). 安装devtoolset-7工具集：</p>
-<p>sudo yum install centos-release-scl</p>
-<p>sudo yum install devtoolset-7<br>(4). 启用devtoolset-7工具集：</p>
-<p>scl enable devtoolset-7 bash</p>
-<p>sudo yum install centos-release-scl</p>
-<p>sudo yum install devtoolset-7-gcc devtoolset-7-gcc-c++ devtoolset-7-libstdc++-devel</p>
-<p>ps. 在CentOS上，您可以使用Node Version Manager（NVM）来安装和管理多个Node.js版本。首先，在CentOS上安装NVM。使用以下命令从NVM的GitHub仓库获取安装脚本：</p>
-<p>curl -o- <a href="https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh">https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh</a> | bash国内：</p>
-<p>curl -o- <a href="https://gitee.com/mirrors/nvm/raw/v0.39.0/install.sh">https://gitee.com/mirrors/nvm/raw/v0.39.0/install.sh</a> | bash</p>
-<p>注意：这是安装最新版本的NVM。您可以在NVM的GitHub页面<a href="https://github.com/nvm-sh/nvm">https://github.com/nvm-sh/nvm</a><br>上查看最新版本并使用相应的URL。</p>
-<p>4). 安装完成后，关闭并重新打开终端，或者使用以下命令重新加载终端以使NVM生效：</p>
-<p>source ~/.bashrc</p>
-<p>5). 使用NVM安装想要的Node.js版本。例如，运行以下命令安装最新的稳定版本：</p>
-<p>nvm install stable</p>
-<p>或者，您可以指定其他Node.js版本，例如：</p>
-<p>nvm install 14.17.6</p>
-<p>nvm install 16.20.2</p>
-<p>这将下载并安装指定版本的Node.js。</p>
-<p>6). 检查Node.js的安装是否成功。运行以下命令检查Node.js版本：</p>
-<p>[root@localhost /data/myblog]$npm -v<br>8.19.4<br>[root@localhost /data/myblog]$node -v<br>v16.20.2</p>
-<p>[root@mytest2 tools]# node -v</p>
-<p>node: /lib64/libm.so.6: version `GLIBC_2.27’ not found (required by node)</p>
-<p>node: /lib64/libstdc++.so.6: version `GLIBCXX_3.4.20’ not found (required by node)</p>
-<p>node: /lib64/libstdc++.so.6: version `CXXABI_1.3.9’ not found (required by node)</p>
-<p>node: /lib64/libstdc++.so.6: version `GLIBCXX_3.4.21’ not found (required by node)</p>
-<p>node: /lib64/libc.so.6: version `GLIBC_2.27’ not found (required by node)</p>
-<p>node: /lib64/libc.so.6: version `GLIBC_2.28’ not found (required by node)</p>
-<p>node: /lib64/libc.so.6: version `GLIBC_2.25’ not found (required by node)</p>
-<p>[root@mytest2 tools]# npm -v</p>
-<p>node: /lib64/libm.so.6: version `GLIBC_2.27’ not found (required by node)</p>
-<p>node: /lib64/libstdc++.so.6: version `GLIBCXX_3.4.20’ not found (required by node)</p>
-<p>node: /lib64/libstdc++.so.6: version `CXXABI_1.3.9’ not found (required by node)</p>
-<p>node: /lib64/libstdc++.so.6: version `GLIBCXX_3.4.21’ not found (required by node)</p>
-<p>node: /lib64/libc.so.6: version `GLIBC_2.27’ not found (required by node)</p>
-<p>node: /lib64/libc.so.6: version `GLIBC_2.28’ not found (required by node)</p>
-<p>node: /lib64/libc.so.6: version `GLIBC_2.25’ not found (required by node)</p>
-<p>[root@mytest2 tools]# ldd –version</p>
-<p>ldd (GNU libc) 2.17</p>
-<p>版本太高换回nvm install 16.20.2</p>
-<h2 id="2-git-repo仓库安装"><a href="#2-git-repo仓库安装" class="headerlink" title="2. git repo仓库安装"></a>2. git repo仓库安装</h2><p>github也可以注册账号，Github Pages可以直接生成页面，不过国外的网速实在是龟速，gitee也有这个功能，实名认证太麻烦，索性在自己测试机上直接建立git仓库，直接推送建立站点而已，后续国内服务器需要网站备案。</p>
-<p>1).安装git<br>ubuntu/debian:<br>sudo apt-get install git</p>
-<p>centos:<br>sudo yum install git</p>
-<p>2).创建一个git用户，用来运行git服务：</p>
-<p>$ sudo adduser git<br>3).创建证书登录实现git免密推送：</p>
-<p>收集所有需要登录的用户的公钥id_rsa.pub文件，把所有公钥导入到/home/git/.ssh/authorized_keys文件里，一行一个。</p>
-<p>4).初始化Git仓库：</p>
-<p>先选定一个目录作为Git仓库，假定git是/data/blog/blog.git，工作目录：/data/myblog 在/data/blog目录下输入命令：</p>
-<p>sudo git init  —bare blog.git<br>Git就会创建一个裸仓库，裸仓库没有工作区，因为服务器上的Git仓库纯粹是为了共享，所以不让用户直接登录到服务器上去改工作区，并且服务器上的Git仓库通常都以.git结尾。然后，把owner改为git：</p>
-<p>$ sudo chown -R git:git blog.git</p>
-<p>cd blog.git/hooks</p>
-<p>vim post-receive</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line">git --work-tree=/data/myblog --git-dir=/data/blog/blog.git checkout -f</span><br></pre></td></tr></tbody></table></figure>
-
-<p>chmod +x post-receive</p>
-<p>5).禁用shell登录：</p>
-<p>出于安全考虑，第二步创建的git用户不允许登录shell，这可以通过编辑/etc/passwd文件完成。找到类似下面的一行：</p>
-<p>gitx:1001:1001:,,,:/home/git:/bin/bash<br>改为：</p>
-<p>gitx:1001:1001:,,,:/home/git:/usr/bin/git-shell<br>这样，git用户可以正常通过ssh使用git，但无法登录shell，因为我们为git用户指定的git-shell每次一登录就自动退出。</p>
-<p>6).克隆远程仓库：</p>
-<p>现在，可以通过git clone命令克隆远程仓库了，在各自的电脑上运行：</p>
-<p>git clone ssh://git@ip:port/data/blog/blog.git<br>Cloning into ‘blog’…</p>
-<p>几个问题：</p>
-<p>a.git目录路径要看清楚，不在当前目录会报:does not appear to be a git repository<br>fatal: Could not read from remote repository.类似的错误 ；</p>
-<p>git@ip:port/data/blog/blog.git</p>
-<p>b. git ssh 连接 ： ssh://git@ip:port/data/blog/blog.git</p>
-<h2 id="3-hexo安装及推送"><a href="#3-hexo安装及推送" class="headerlink" title="3. hexo安装及推送"></a>3. hexo安装及推送</h2><h3 id="3-1-hexo安装"><a href="#3-1-hexo安装" class="headerlink" title="3.1 hexo安装"></a>3.1 hexo安装</h3><p>npm install hexo-cli -g<br> hexo init blog<br> cd blog<br>npm install<br> hexo g # 或者hexo generate<br> hexo s # 或者hexo server，可以在<a href="http://localhost:4000/">http://localhost:4000/</a> 查看</p>
-<p>也可以hexo server -p 80 -l</p>
-<p>hexo generate (hexo g) 生成静态文件，会在当前目录下生成一个新的叫做public的文件夹</p>
-<p>hexo server (hexo s) 启动本地web服务，用于博客的预览</p>
-<p>hexo deploy (hexo d) 部署播客到远端（比如github, heroku等平台）</p>
-<p>hexo new “postName” #新建文章<br> hexo new page “pageName” #新建页面</p>
-<p>简写：</p>
-<p>hexo n == hexo new<br>hexo g == hexo generate<br>hexo s == hexo server<br>hexo d == hexo deploy</p>
-<p>hexo d -g #生成部署<br>hexo s -g #生成预览</p>
-<p>经常用到：</p>
-<p>hexo clean</p>
-<p>hexo g</p>
-<p>hexo d</p>
-<h3 id="3-2使用hexo-deploy部署"><a href="#3-2使用hexo-deploy部署" class="headerlink" title="3.2使用hexo deploy部署"></a>3.2使用hexo deploy部署</h3><p>安装一个扩展：</p>
-<p>$ npm install hexo-deployer-git –save</p>
-<p>hexo deploy可以部署到很多平台，具体可以参考这个链接. 如果部署到github，需要在根目录/data/blog/配置文件_config.xml中作如下修改：</p>
-<p>deploy:<br>  type: git<br>repo: ssh://git@ip:port/data/blog/blog.git<br>  branch: master<br>然后在命令行中执行</p>
-<p>hexo d<br>即可完成部署。</p>
-<p>hexo主题很多选择一个喜欢的去修改吧</p>
-<p>比如：</p>
-<p>git clone <a href="https://github.com/next-theme/hexo-theme-next">https://github.com/next-theme/hexo-theme-next</a> themes/next</p>
-<p>下载到themes 的next 主题，或者matery大佬的主题，下载以后自己修改成自己喜欢的样式即可。</p>
-<h2 id="4-web站点搭建"><a href="#4-web站点搭建" class="headerlink" title="4. web站点搭建"></a>4. web站点搭建</h2><p>首先有一台自己的服务器，比如centos或者ubuntu，debian，安装nginx或者tengine，对于个人静态站点基本上nginx可以满足，tengine需要手动安装，喜欢的可以尝试一下。</p>
-<p>简单的yum install nginx</p>
-<p>cd /etc/nginx/</p>
-<p>vim nginx.conf</p>
-<p>server_tokens off; 隐藏版本号；</p>
-<p>也可以做好多优化；这里只说实现web功能</p>
-<p>nginx一般在/etc/nginx/conf.d/ 配置站点conf文件，tengine在/etc/nginx/sites-enabled/配置，看个人喜好。</p>
-<p>vim mybog.conf 基本配置如下：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">server {</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name blog.icmpy.net;</span><br><span class="line">    return 301 blog.icmpy.net$request_uri;</span><br><span class="line">}</span><br><span class="line">server {</span><br><span class="line">    listen 443 ssl;</span><br><span class="line">    server_name blog.icmpy.net;</span><br><span class="line">    root /data/myblog; # 根目录为web</span><br><span class="line">    index index.php index index.html index.htm;</span><br><span class="line">    ssl_certificate /etc/nginx/ssl/blog.icmpy.net.pem;</span><br><span class="line">    ssl_certificate_key /etc/nginx/ssl/blog.icmpy.net.key;</span><br><span class="line">   ssl_session_timeout  5m;</span><br><span class="line"></span><br><span class="line">    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;</span><br><span class="line">        ssl_prefer_server_ciphers  on;</span><br><span class="line">    # Log files for Debug</span><br><span class="line">    error_log  /var/log/nginx/blog_error.log;</span><br><span class="line">    access_log /var/log/nginx/blog_access.log;</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<p>由于做了ssl证书，80做了个跳转到443上面，域名需要到平台做解析，A记录到自己的服务器，如果流量大的话可以做cdn，Cname到平台给的记录值，ssl证书申请，主流云平台都可以免费申请，填写一些资料以后很快就可以签发证书，选择对应的证书上传即可。</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>linux install shadowsocks</title>
-    <url>/2023/071659235.html</url>
-    <content><![CDATA[<h1 id="1-安装Python和pip"><a href="#1-安装Python和pip" class="headerlink" title="1. 安装Python和pip"></a>1. 安装Python和pip</h1><p>sudo apt-get update</p>
-<p>sudo apt-get install python-pip</p>
-<h1 id="2-安装Shadowsocks"><a href="#2-安装Shadowsocks" class="headerlink" title="2. 安装Shadowsocks"></a>2. 安装Shadowsocks</h1><p>sudo pip install shadowsocks</p>
-<h1 id="3-配置Shadowsocks"><a href="#3-配置Shadowsocks" class="headerlink" title="3. 配置Shadowsocks"></a>3. 配置Shadowsocks</h1><p>cat &gt;&gt; /etc/shadowsocks.json &lt;&lt;EOF<br>{</p>
-<p>“server” : “ server ip”,<br>“server_port” : server port,<br>“local_port” : 1080,<br>“password” : “passwd”,<br>“timeout” : 200,<br>“method” : “aes-256-cfb”<br>}<br>EOF<br>参数的解释:<br>server：远程服务器IP地址<br>server_port：远程服务器端口号<br>local_port：本地端口号，默认为1080<br>password：远程服务器密码，自定义<br>timeout：超时时间，默认为300秒<br>method：加密方式，推荐aes-256-cfb</p>
-<h1 id="4-启动Shadowsocks"><a href="#4-启动Shadowsocks" class="headerlink" title="4. 启动Shadowsocks"></a>4. 启动Shadowsocks</h1><p>在命令行中输入：</p>
-<p>ssserver -c /etc/shadowsocks.json</p>
-<h1 id="5-添加系统服务"><a href="#5-添加系统服务" class="headerlink" title="5.添加系统服务"></a>5.添加系统服务</h1><p>cat &gt;&gt;/etc/systemd/system/shadows.service  &lt;&lt;EOF<br>[Unit]<br>Description=shadows server<br>[Install]<br>WantedBy=multi-user.target<br>[Service]<br>User=root<br>Group=root<br>ExecStart=/usr/bin/ssserver -c /etc/shadowsocks.json start<br>Restart=on-failure<br>EOF</p>
-<p>systemctl restart shadows.service<br>systemctl enable shadows.service</p>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>kafka Create topic 报错</title>
-    <url>/2023/071361284.html</url>
-    <content><![CDATA[<p>bin/kafka-console-consumer.sh –bootstrap-server localhost:9092 –topic kk_log<br>报错如下：<br>WARN [Consumer clientId=consumer-1, groupId=console-consumer-507] Connection to node -1 could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)</p>
-<p>配置server.confg时候设置的<br>advertised.listeners=PLAINTEXT://10.171.222.26:9092<br>此时需要用配置的IP而非localhost地址：</p>
-<p>nohup bin/zookeeper-server-start.sh config/zookeeper.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>nohup bin/kafka-server-start.sh config/server.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>netstat -ntpl|egrep “(2181|9092)”<br>运行起来再试试<br>bin/kafka-console-consumer.sh –bootstrap-server 10.171.222.26:9092 –topic kk_log<br>应该就可以了。<br>做个小笔记。</p>
-<p>PS zookeeper 报错，宕掉；</p>
-<p>[2016-06-27 12:07:14,065] INFO Closed socket connection for client /127.0.0.1:58824 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn) [2016-<br>[2016-06-27 12:07:17,351] INFO Refusing session request for client /127.0.0.1:58834 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)<br>[2016-06-27 12:07:17,351] INFO Closed socket connection for client /127.0.0.1:58834 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn)<br>[2016-06-27 12:07:19,048] INFO Accepted socket connection from /127.0.0.1:58840 (org.apache.zookeeper.server.NIOServerCnxnFactory)<br>[2016-06-27 12:07:19,048] INFO Refusing session request for client /127.0.0.1:58840 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)</p>
-<p>解决方法</p>
-<p>报错原因：服务器上还有应用在不停的向zookeeper发送请求</p>
-<p>解决方法：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用top -u [username]查看该用户下的所有进程，发现多了一个java进程在运行着；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、kill掉与java相关的进程；</p>
-<p>2、关闭zookeeper，删除zoo.cfg中的dataDir配置的文件夹；</p>
-<h2 id="3、重启zookeeper。"><a href="#3、重启zookeeper。" class="headerlink" title="3、重启zookeeper。"></a>3、重启zookeeper。</h2>]]></content>
   </entry>
   <entry>
     <title>linux 磁盘挂载扩充格式化</title>
@@ -1165,38 +1263,6 @@
       </tags>
   </entry>
   <entry>
-    <title>/var/log/messages日志恢复</title>
-    <url>/2023/112018778.html</url>
-    <content><![CDATA[<p>Linux容易犯的一个错误是把日志文件给直接删除，而不是删除日志文件的内容。<br>直接删除日志文件往往导致新产生的日志记录无法被写入到日志文件中（因为它已经被删除了），而仅仅重新新建（touch）同样名字的文件是解决不了问题的。<br>本文以Unbutu系统为例，介绍如何恢复被误删除的syslog文件：<br>首先，在以root用户执行如下lsof命令，查询打开/var/log/messages文件的进程的进程ID(PID)。<br>root@zck:/var/log# lsof | grep messages<br>rsyslogd 544 syslog 7w REG 8,1 214641 134422 /var/log/messages<br>从上面命令输出可以看到，这个打开/var/log/messages文件的进程的PID是544，文件/var/log/messages的文件描述符（FD）号是7。<br>根据上述的PID和FD，可以在/proc找到对应的文件：<br>root@zck:/var/log#ls -al /proc/544/fd/7<br>l-wx—— 1 root root 64 2012-07-14 14:48 7 -&gt; /var/log/messages<br>将文件/proc/544/fd/7拷贝到/var/log/messages<br>cp /proc/544/fd/7 /var/log/messages&nbsp;</p>
-<p>然后重新启动syslog服务即可恢复被误删除的日志文件，并且新的日志记录能够继续被写入日志文件。<br>以root用户运行service命令。其中，service命令的第2个参数可能是syslog、也可能是rsyslog。<br>具体可以使用通过命令查询得知。<br>登录后复制<br>root@zck:/proc/544/fd# service –status-all<br> [ ? ] …<br> [ ? ] rc.local<br> [ ? ] rsyslog<br> [ ? ] screen-cleanup<br> [ ? ] …  #——————————-</p>
-<p>复制代码代码如下:<br>root@zck:/proc/544/fd# service rsyslog restart<br>rsyslog start/running, process 2673</p>
-<p>清空日志文件：<br>cat /dev/null&gt;/var/log/messages</p>
-<p>转自url:<a href="https://blog.51cto.com/u_11146845/6240737">https://blog.51cto.com/u_11146845/6240737</a></p>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>nginxlog切分</title>
-    <url>/2023/111760549.html</url>
-    <content><![CDATA[<p>1.设置日志文件存放目录，假设你的nginx的日志存在这个目录里<br>logs_path=”/data/log/nginx/“</p>
-<p>2.设置pid文件，这个根据你自己的环境，找到nginx.pid所在目录<br>pid_path=”/var/run/nginx.pid”</p>
-<p>3.创建分割存储的日期文件目录<br>datetime=<code>date -d "yesterday" +"%Y%m%d"</code>;<br>new_log_path=$logs_path$datetime<br>mkdir -p $new_log_path</p>
-<p>4.按照日期移动所有该目录下的日志文件<br>log_file_list=<code>ls -l $logs_path</code>;<br>for log_file in $log_file_list;<br>do<br>    log_file_name=$logs_path$log_file;<br>    if [ -f $log_file_name ];<br>    then<br>        mv $log_file_name $new_log_path;<br>    fi<br>done</p>
-<p>5.向nginx主进程发信号重新打开日志<br>kill -USR1 <code>cat ${pid_path}</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">logs_path=<span class="string">"/data/log/nginx/"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pid_path=<span class="string">"/var/run/nginx.pid"</span></span><br><span class="line"></span><br><span class="line">datetime=`<span class="built_in">date</span> -d <span class="string">"yesterday"</span> +<span class="string">"%Y%m%d"</span>`;</span><br><span class="line">new_log_path=$logs_path<span class="variable">$datetime</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$new_log_path</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">log_file_list=`<span class="built_in">ls</span> -l <span class="variable">$logs_path</span>`;</span><br><span class="line"><span class="keyword">for</span> log_file <span class="keyword">in</span> <span class="variable">$log_file_list</span>;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    log_file_name=$logs_path<span class="variable">$log_file</span>;</span><br><span class="line">    <span class="keyword">if</span> [ -f <span class="variable">$log_file_name</span> ];</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">mv</span> <span class="variable">$log_file_name</span> <span class="variable">$new_log_path</span>;</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">kill</span> -USR1 `<span class="built_in">cat</span> <span class="variable">${pid_path}</span>`</span><br></pre></td></tr></tbody></table></figure>
-
-
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>nginx编译ssl模块</title>
     <url>/2023/062858442.html</url>
     <content><![CDATA[<p>几个官网在一台服务器上面，其中一台是https的，增加一个官网以，重启nginx以后，https的网站直接报错，大意是ssl 在配置文件中unknow，但是这个https网站已经运行很久了，一时间有点郁闷，掉坑里了。</p>
@@ -1228,88 +1294,23 @@
       </tags>
   </entry>
   <entry>
-    <title>linux有足够内存还使用swap</title>
-    <url>/2023/11131515.html</url>
-    <content><![CDATA[<p>一台主机内存swap报警上去以查看确实swap快耗尽；</p>
-<p>$free -m</p>
-<p>&nbsp; total&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; used&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; free&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; shared&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;buff/cache&nbsp;&nbsp; available</p>
-<p>Mem: 32012&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 8293&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 243&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 594&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 23475&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 22638</p>
-<p>Swap:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7999&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7315&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 684</p>
-<p>Linux starts swapping before the RAM is filled up. This is done to improve performance and responsiveness:</p>
-<p>Performance is increased because sometimes RAM is better used for disk cache than to store program memory. So it’s better to swap out a program that’s been inactive for a while, and instead keep often-used files in cache.</p>
-<p>Responsiveness is improved by swapping pages out when the system is idle, rather than when the memory is full and some program is running and requesting more RAM to complete a task.</p>
-<p>Swapping does slow the system down, of course — but the alternative to swapping isn’t not swapping, it’s having more RAM or using less RAM.</p>
-<p>翻译：Linux在物理内存用完之前使用swap，这样有助于提高系统性能和响应能力</p>
-<p>1 性能可以提升的原因是：一些内存放磁盘缓存比方内存更合适。所以，最好交换出暂时不使用的内存，而把经常使用的文件放内存里面</p>
-<p>2 提升响应能力通过，当系统空闲的时候swap page out，而不是当内存忙的时候，正在执行程序的时候执行swap</p>
-<p>swaping确实会是系统性能下降，当然，通过swap可以有更多的可用内存</p>
-<p>如何在有内存可用的时候，不使用swap呢？</p>
-<p>This behaviour can be configured by setting the value of&nbsp;/proc/sys/vm/swappiness. The default value is 60, setting it to 0 means “never use swap when there is still RAM left“ and 100 is swapping out memory as soon as possible.</p>
-<p>To change the value temporarily (lost on reboot):</p>
-<p>sudo sysctl vm.swappiness=10<br>1.<br>To change the value permanently: Edit the file&nbsp;/etc/sysctl.conf&nbsp;as root (e.g.&nbsp;sudo nano /etc/sysctl.conf) and change the line&nbsp;vm.swapiness=…&nbsp;to the desired value.</p>
-<p>There has been some debate on whether swapping out with free memory available is good or bad, but the Ubuntu help does indeed recommend a value of 10 for Desktop systems:&nbsp;<a href="https://help.ubuntu.com/community/SwapFaq">https://help.ubuntu.com/community/SwapFaq</a></p>
-<p>centos swappiness配置的路径 &nbsp;/proc/sys/vm/swappiness</p>
-<p>为什么不建议关闭swap</p>
-<p>It is NOT recommended to turn off swap even if you have enough memory. If your server needs more memory and it did not get it, it will crash. However, this can be prevented (to some extent) when you have a swap area.</p>
-<p>Yes, your server performance will degrade when using swap, but at least it will be operational and accessible. Then, you can plan for adding more memory when needed if your server starts using swap.</p>
-<p>I found&nbsp;&nbsp;this page&nbsp;talking about swap. Have a look at 3rd section.</p>
-<p>Instead of turning off swap, you can control the&nbsp;&nbsp;swapiness.</p>
-<p>参考</p>
-<p><a href="http://unix.stackexchange.com/questions/2658/why-use-swap-when-there-is-more-than-enough-ram">http://unix.stackexchange.com/questions/2658/why-use-swap-when-there-is-more-than-enough-ram</a></p>
-<p>swap知识 &nbsp;<a href="https://help.ubuntu.com/community/SwapFaq">https://help.ubuntu.com/community/SwapFaq</a></p>
-<p><a href="http://linux.cloudibee.com/2007/11/linux-performance-tuning-vm-swappiness/">http://linux.cloudibee.com/2007/11/linux-performance-tuning-vm-swappiness/</a></p>
-<p>转载自:&nbsp;<a href="https://blog.csdn.net/wjciayf/article/details/79913381">https://blog.csdn.net/wjciayf/article/details/79913381</a></p>
-<p>关于linux内存分配机制</p>
-<p>在linux的内存分配机制中，优先使用物理内存，当物理内存还有空闲时（还够用），不会释放其占用内存，就算占用内存的程序已经被关闭了，该程序所占用的内存用来做缓存使用，对于开启过的程序、或是读取刚存取过得数据会比较快。</p>
-<p>一．&nbsp;&nbsp;我们先来查看一个内存使用的例子：<br>[oracle@db1 ~]$ free -m<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; total&nbsp; &nbsp;&nbsp; &nbsp; used&nbsp; &nbsp;&nbsp;&nbsp; free&nbsp; &nbsp;&nbsp;&nbsp;shared&nbsp; &nbsp; buffers&nbsp;&nbsp;&nbsp;&nbsp;cached<br>Mem:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;72433&nbsp; &nbsp;&nbsp;&nbsp;67075&nbsp; &nbsp;&nbsp;&nbsp;5357&nbsp; &nbsp;&nbsp; &nbsp;0&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;558&nbsp; &nbsp;&nbsp; &nbsp; 62221<br>-/+ buffers/cache:&nbsp;&nbsp;&nbsp;&nbsp;4295&nbsp; &nbsp;&nbsp; &nbsp;68138<br>Swap:&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;72096&nbsp; &nbsp;&nbsp; &nbsp;91&nbsp; &nbsp;&nbsp; &nbsp;72004<br>上述结果显示了67075M的used，但是（-/+ buffers/cache）减去buffers和cache的结果可以看到，所以当前进程实际占用内存是4296M。<br>可以这么理解：在linux的内存分配机制中，优先使用物理内存，当物理内存还有空闲时（还够用），不会释放其占用内存，就算占用内存的程序已经被关闭了，该程序所占用的内存用来做缓存使用，对于开启过的程序、或是读取刚存取过得数据会比较快。<br>如上面的例子：使用了72433M的内存，67075M被占用，但是buuffer和cached部分作为缓存，可以使用命中率的方式提高使用效率，而且这部分缓存是根据指令随时可以释放的，我们可以认为这部分内存没有实际被使用，也可以认为它是空闲的。<br>因此查看目前进程正在实际被使用的内存，是used-(buffers+cache)，也可以认为如果swap没有大量使用，mem还是够用的，只有mem被当前进程实际占用完（没有了buffers和cache），才会使用到swap的。</p>
-<p>二．&nbsp;Swap配置对性能的影响<br>分配太多的Swap空间会浪费磁盘空间，而Swap空间太少，则系统会发生错误。如果系统的物理内存用光了，系统就会跑得很慢，但仍能运行；如果Swap空间用光了，那么系统就会发生错误。例如，Web服务器能根据不同的请求数量衍生出多个服务进程（或线程），如果Swap空间用完，则服务进程无法启动，通常会出现“application is out of memory”的错误，严重时会造成服务进程的死锁。因此Swap空间的分配是很重要的。<br>通常情况下，Swap空间应大于或等于物理内存的大小，最小不应小于64M，通常Swap空间的大小应是物理内存的2-2.5倍。但根据不同的应用，应有不同的配置：如果是小的桌面系统，则只需要较小的Swap空间，而大的服务器系统则视情况不同需要不同大小的Swap空间。特别是数据库服务器和Web服务器，随着访问量的增加，对Swap空间的要求也会增加，一般来说对于4G&nbsp;以下的物理内存，配置2倍的swap，4G&nbsp;以上配置1倍。<br>另外，Swap分区的数量对性能也有很大的影响。因为Swap交换的操作是磁盘IO的操作，如果有多个Swap交换区，Swap空间的分配会以轮流的方式操作于所有的Swap，这样会大大均衡IO的负载，加快Swap交换的速度。如果只有一个交换区，所有的交换操作会使交换区变得很忙，使系统大多数时间处于等待状态，效率很低。用性能监视工具就会发现，此时的CPU并不很忙，而系统却慢。这说明，瓶颈在IO上，依靠提高CPU的速度是解决不了问题的。</p>
-<p>三.&nbsp;&nbsp;Linux&nbsp;内存机制<br>Linux支持虚拟内存(VirtualMmemory)，虚拟内存是指使用磁盘当作RAM的扩展，这样可用的内存的大小就相应地增大了。内核会将暂时不用的内存块的内容写到硬盘上，这样一来，这块内存就可用于其它目的。当需要用到原始的内容时，它们被重新读入内存。这些操作对用户来说是完全透明的;Linux下运行的程序只是看到有大量的内存可供使用而并没有注意到时不时它们的一部分是驻留在硬盘上的。当然，读写硬盘要比直接使用真实内存慢得多(要慢数千倍)，所以程序就不会象一直在内存中运行的那样快。用作虚拟内存的硬盘部分被称为交换空间(Swap Space)。<br>一般，在交换空间中的页面首先被换入内存;如果此时没有足够的物理内存来容纳它们又将被交换出来(到其他的交换空间中)。如果没有足够的虚拟内存来容纳所有这些页面，Linux就会波动而不正常;但经过一段较长的时间Linux会恢复，但此时系统已不可用了。<br>有时，尽管有许多的空闲内存，仍然会有许多的交换空间正被使用。这种情况是有可能发生的，例如如果在某一时刻有进行交换的必要，但后来一个占用很多物理内存的大进程结束并释放内存时。被交换出的数据并不会自动地交换进内存，除非有这个需要时。此时物理内存会在一段时间内保持空闲状态。对此并没有什么可担心的，但是知道了是怎么一回事，也就无所谓了。<br>许多操作系统使用了虚拟内存的方法。因为它们仅在运行时才需要交换空间，以解决不会在同一时间使用交换空间，因此，除了当前正在运行的操作系统的交换空间，其它的就是一种浪费。所以让它们共享一个交换空间将会更有效率。<br>注意：如果会有几个人同时使用这个系统，他们都将消耗内存。然而，如果两个人同时运行一个程序，内存消耗的总量并不是翻倍，因为代码页以及共享的库只存在一份。</p>
-<p>Linux系统常常动不动就使用交换空间，以保持尽可能多的空闲物理内存。即使并没有什么事情需要内存，Linux也会交换出暂时不用的内存页面。这可以避免等待交换所需的时间：当磁盘闲着，就可以提前做好交换。可以将交换空间分散在几个硬盘之上。针对相关磁盘的速度以及对磁盘的访问模式，这样做可以提高性能。</p>
-<p>与访问物理内存相比，磁盘的读写是很慢的。另外，在相应较短的时间内多次读磁盘同样的部分也是常有的事。例如，某人也许首先阅读了一段E-mail消息，然后为了答复又将这段消息读入编辑器中，然后又在将这个消息拷贝到文件夹中时，使得邮件程序又一次读入它。或者考虑一下在一个有着许多用户的系统中&nbsp;ls命令会被使用多少次。通过将信息从磁盘上仅读入一次并将其存于内存中，除了第一次读以外，可以加快所有其它读的速度。这叫作磁盘缓冲(Disk Buffering)，被用作此目的的内存称为高速缓冲(Buffer Cache)。但是，由于内存是一种有限而又不充足的资源，高速缓冲不可能做的很大(它不可能包容要用到的所有数据)。当缓冲充满了数据时，其中最长时间不用的数据将被舍弃以腾出内存空间用于新的数据。</p>
-<p>对写磁盘操作来说磁盘缓冲技术同样有效。一方面，被写入磁盘的数据常常会很快地又被读出(例如，原代码文件被保存到一个文件中，又被编译器读入)，所以将要被写的数据放入缓冲中是个好主意。另一方面，通过将数据放入缓冲中，而不是将其立刻写入磁盘，程序可以加快运行的速度。以后，写的操作可以在后台完成，而不会拖延程序的执行。<br>大多数操作系统都有高速缓冲(尽管可能称呼不同)，但是并不是都遵守上面的原理。有些是直接写(Write-Through)：数据将被立刻写入磁盘(当然，数据也被放入缓存中)。如果写操作是在以后做的，那么该缓存被称为后台写(Write-Back)。后台写比直接写更有效，但也容易出错：如果机器崩溃，或者突然掉电，缓冲中改变过的数据就被丢失了。如果仍未被写入的数据含有重要的薄记信息，这甚至可能意味着文件系统(如果有的话)已不完整。<br>针对以上的原因，出现了很多的日志文件系统，数据在缓冲区修改后，同时会被文件系统记录修改信息，这样即使此时系统掉电，系统重启后会首先从日志记录中恢复数据，保证数据不丢失。当然这些问题不再本文的叙述范围。<br>由于上述原因，在使用适当的关闭过程之前，绝对不要关掉电源，Sync命令倾空(Flushes)缓冲，也即，强迫所有未被写的数据写入磁盘，可用以确定所有的写操作都已完成。在传统的UNIX系统中，有一个叫做update的程序运行于后台，每隔30秒做一次sync操作，因此通常无需手工使用sync命令了。Linux另外有一个后台程序，Bdflush，这个程序执行更频繁的但不是全面的同步操作，以避免有时sync的大量磁盘I/O操作所带来的磁盘的突然冻结。<br>在Linux中，Bdflush是由update启动的。通常没有理由来担心此事，但如果由于某些原因bdflush进程死掉了，内核会对此作出警告，此时你就要手工地启动它了(/sbin/update)。</p>
-<p>缓存(Cache)实际并不是缓冲文件的，而是缓冲块的，块是磁盘I/O操作的最小单元(在Linux中，它们通常是1KB)。这样，目录、超级块、其它文件系统的薄记数据以及非文件系统的磁盘数据都可以被缓冲了。缓冲的效力主要是由它的大小决定的。缓冲太小的话等于没用。它只能容纳一点数据，因此在被重用时，所有缓冲的数据都将被倾空。实际的大小依赖于数据读写的频次、相同数据被访问的频率。只有用实验的方法才能知道。<br>如果缓存有固定的大小，那么缓存太大了也不好，因为这会使得空闲的内存太小而导致进行交换操作(这同样是慢的)。为了最有效地使用实际内存，Linux自动地使用所有空闲的内存作为高速缓冲，当程序需要更多的内存时，它也会自动地减小缓冲的大小。&nbsp;<br>这就是一般情况下Linux内存的一般机制，真正的Linux内存的运行机制远远比这个复杂。</p>
-<p>&nbsp;</p>
-<p>Other：</p>
-<p>swap tendency = mapped ratio / 2 + distress + swappiness</p>
-<p>The mapped ratio value is the percentage of pages in all memory zones thatbelong to User Mode address spaces (sc-&gt;nr_mapped) with respect to the totalnumber of allocatable page frames. A high value of mapped_ratio means that thedynamic memory is mostly used by User Mode processes, while a low value meansthat it is mostly used by the page cache.</p>
-<p>The distress value is a measure of how effectively the PFRA is reclaiming pageframes in this zone; it is based on the scanning priority of the zone in theprevious run of the PFRA, which is stored in the prev_priority field of thezone descriptor. The distress value depends on the zone’s previous priority asfollows:</p>
-<p>Zone prev. priority<br>12…7<br>6<br>5<br>4<br>3<br>2<br>1<br>0</p>
-<p>Distress value<br>0<br>1<br>3<br>6<br>12<br>25<br>50<br>100<br>Finally, the swappiness value is a user-defined constant, which is usually setto 60. The system administrator may tune this value by writing in the/proc/sys/vm/swappiness file or by issuing the proper sysctl( ) system call.</p>
-<p>Pages will be reclaimed from the address spaces of processes only if the zone’sswap tendency is greater than or equal to 100. Thus, if the systemadministrator sets swappiness to 0, then the PFRA never reclaims pages in theUser Mode address spaces unless the zone’s previous priority is zero (anunlikely event); if the administrator sets swappiness to 100, then the PFRAreclaims pages in the User Mode address spaces at every invocation.<br>swappiness，吃参数是得到swap tendency的一个量，而swap tendency是linux内核进行内存进行回收的一个阀值和标量。</p>
-<p><a href="https://blog.csdn.net/ly890700/article/details/73695750">https://blog.csdn.net/ly890700/article/details/73695750</a></p>
-<p>首先是,kswapd进程来定期扫描系统资源,查看内存是否够用,由两个值影响pages_high和page_low,如果现在可使用的区间在page_high&lt;x&lt;page_low,就开始检查从文件系统读入的文件,有无被修改的内存页面,如果有就写入到磁盘,但是,如果内存页面被修改了,有可能不是从文件系统读入的,即找不到回写的位置,如malloc产生的anonymous内存数据就写入swap分区,这部分当进程在次被唤醒,获得了CPU运行时间,在从swap读入。</p>
-<p>swappiness的值的大小对如何使用swap分区是有着很大的联系的。swappiness=0的时候表示最大限度使用物理内存，然后才是swap空间，swappiness＝100的时候表示积极的使用swap分区，并且把内存上的数据及时的搬运到swap空间里面。linux的基本默认设置为60，具体如下：</p>
-<p>cat /proc/sys/vm/swappiness<br>#60</p>
-<p>也就是说，你的内存在使用到100-60=40%的时候，就开始出现有交换分区的使用。大家知道，内存的速度会比磁盘快很多，这样子会加大系统IO，同时造的成大量页的换进换出，严重影响系统的性能，所以我们在操作系统层面，要尽可能使用内存，对该参数进行调整。</p>
-<p>临时调整的方法如下，我们调成10：</p>
-<p>sysctl vm.swappiness=10<br>#vm.swappiness=10</p>
-<p>cat /proc/sys/vm/swappiness</p>
-<p>#10</p>
-<p>这只是临时调整的方法，重启后会回到默认设置的.</p>
-<p>要想永久调整的话，需要在/etc/sysctl.conf修改，加上：</p>
-<p>sudo vim /etc/sysctl.conf</p>
-<p>加上</p>
-<h1 id="Controls-the-maximum-number-of-shared-memory-segments-in-pages"><a href="#Controls-the-maximum-number-of-shared-memory-segments-in-pages" class="headerlink" title="Controls the maximum number of shared memory segments, in pages"></a>Controls the maximum number of shared memory segments, in pages</h1><p>kernel.shmall = 4294967296 #这一个可以不用设置</p>
-<p>vm.swappiness = 10</p>
-<p>&nbsp;生效</p>
-<p>sudo sysctl -p</p>
-<p>这样便完成修改设置！</p>
-<p>&nbsp;</p>
-<p>Ps在服务器内存充裕的情况下尽量用内存，swap缓存设置低一些，使用swap是必要的；</p>
-<p>另外：swap可以扩充的，但是会不会影响线上业务，或者使用sysctl vm.swappiness=10命令时候会不会影响线上业务，一直纠结中。</p>
-<p>&nbsp;</p>
-<p>转自：<a href="https://www.cnblogs.com/EasonJim/p/7777904.html">https://www.cnblogs.com/EasonJim/p/7777904.html</a></p>
-<p>&nbsp;</p>
-<p>&nbsp;&nbsp;用文件增加swap：</p>
-<p>dd if=/dev/zero of=/tmp/swapadd bs=1024 count=2048000&nbsp; &nbsp; ###添加一块2G的swap文件</p>
-<p>mkswap /tmp/swapadd&nbsp; ####格式化文件</p>
-<p>swapon /tmp/swapadd ###增加swap</p>
-<p>free -m</p>
-<p>echo “/tmp/swapadd swap swap defaults 0 0” &gt;&gt; /etc/fstab&nbsp; &nbsp; ###开机自动挂载swap分区</p>
-<p>swapoff swapadd&nbsp; ###&nbsp;使用Swapoff命令收回Swap空间</p>
-<p>rm swapadd&nbsp;&nbsp; &nbsp;###从文件系统中回收此文件</p>
-<hr>
+    <title>nginxlog切分</title>
+    <url>/2023/111760549.html</url>
+    <content><![CDATA[<p>1.设置日志文件存放目录，假设你的nginx的日志存在这个目录里<br>logs_path=”/data/log/nginx/“</p>
+<p>2.设置pid文件，这个根据你自己的环境，找到nginx.pid所在目录<br>pid_path=”/var/run/nginx.pid”</p>
+<p>3.创建分割存储的日期文件目录<br>datetime=<code>date -d "yesterday" +"%Y%m%d"</code>;<br>new_log_path=$logs_path$datetime<br>mkdir -p $new_log_path</p>
+<p>4.按照日期移动所有该目录下的日志文件<br>log_file_list=<code>ls -l $logs_path</code>;<br>for log_file in $log_file_list;<br>do<br>    log_file_name=$logs_path$log_file;<br>    if [ -f $log_file_name ];<br>    then<br>        mv $log_file_name $new_log_path;<br>    fi<br>done</p>
+<p>5.向nginx主进程发信号重新打开日志<br>kill -USR1 <code>cat ${pid_path}</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">logs_path=<span class="string">"/data/log/nginx/"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pid_path=<span class="string">"/var/run/nginx.pid"</span></span><br><span class="line"></span><br><span class="line">datetime=`<span class="built_in">date</span> -d <span class="string">"yesterday"</span> +<span class="string">"%Y%m%d"</span>`;</span><br><span class="line">new_log_path=$logs_path<span class="variable">$datetime</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$new_log_path</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">log_file_list=`<span class="built_in">ls</span> -l <span class="variable">$logs_path</span>`;</span><br><span class="line"><span class="keyword">for</span> log_file <span class="keyword">in</span> <span class="variable">$log_file_list</span>;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    log_file_name=$logs_path<span class="variable">$log_file</span>;</span><br><span class="line">    <span class="keyword">if</span> [ -f <span class="variable">$log_file_name</span> ];</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">mv</span> <span class="variable">$log_file_name</span> <span class="variable">$new_log_path</span>;</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">kill</span> -USR1 `<span class="built_in">cat</span> <span class="variable">${pid_path}</span>`</span><br></pre></td></tr></tbody></table></figure>
+
+
 ]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
   </entry>
   <entry>
     <title>php 安装redis，protobuf,mcryp扩展</title>
@@ -1431,44 +1432,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>ssh免密登录问题</title>
-    <url>/2023/071760022.html</url>
-    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
-<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
-<p>服务器A需要免密码访问服务器B：</p>
-<ol>
-<li>在A上面生成公钥密钥，执行命令</li>
-</ol>
-<p>&nbsp;</p>
-<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
-<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
-<ol start="2">
-<li>将公钥id_rsa.pub拷贝到B机器上</li>
-</ol>
-<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
-<ol start="3">
-<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
-</ol>
-<p>cd&nbsp;/home/user/.ssh</p>
-<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
-<ol start="4">
-<li>设置 authorized_keys权限</li>
-</ol>
-<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
-<hr>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>vsftp 锁定用户目录</title>
     <url>/2023/071114619.html</url>
     <content><![CDATA[<p>vsftp 安装以后给用户权限和锁定目录；</p>
@@ -1577,6 +1540,44 @@
 ]]></content>
       <tags>
         <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ssh免密登录问题</title>
+    <url>/2023/071760022.html</url>
+    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
+<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
+<p>服务器A需要免密码访问服务器B：</p>
+<ol>
+<li>在A上面生成公钥密钥，执行命令</li>
+</ol>
+<p>&nbsp;</p>
+<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
+<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
+<ol start="2">
+<li>将公钥id_rsa.pub拷贝到B机器上</li>
+</ol>
+<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
+<ol start="3">
+<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
+</ol>
+<p>cd&nbsp;/home/user/.ssh</p>
+<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
+<ol start="4">
+<li>设置 authorized_keys权限</li>
+</ol>
+<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
+<hr>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
       </tags>
   </entry>
   <entry>
@@ -1781,6 +1782,63 @@
       </tags>
   </entry>
   <entry>
+    <title>zabbix 清理历史数据</title>
+    <url>/2023/071761914.html</url>
+    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
+<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
+<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
+<p>root@Testl]$ date +%s -d”20160929”</p>
+<p>1475078400</p>
+<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
+<p>Query OK, 36093 rows affected (43.64 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
+<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history;</p>
+<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
+<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history_uint;</p>
+<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
+<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>漫长时间等待以后看下效果：</p>
+<p>原来数据：</p>
+<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
+<p>压缩中：</p>
+<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
+<p>find -size +50M -exec ls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
+<p>最终删两个表以后数据：</p>
+<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
+<p>完了以后，重启mysql，zabbix，nginx试试；</p>
+<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>zabbix3.0.1安装过程的小坑</title>
     <url>/2023/081629672.html</url>
     <content><![CDATA[<p>1.安装</p>
@@ -1917,63 +1975,6 @@
 ]]></content>
       <tags>
         <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>zabbix 清理历史数据</title>
-    <url>/2023/071761914.html</url>
-    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
-<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
-<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
-<p>root@Testl]$ date +%s -d”20160929”</p>
-<p>1475078400</p>
-<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
-<p>Query OK, 36093 rows affected (43.64 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
-<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history;</p>
-<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
-<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history_uint;</p>
-<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
-<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>漫长时间等待以后看下效果：</p>
-<p>原来数据：</p>
-<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
-<p>压缩中：</p>
-<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
-<p>find -size +50M -exec ls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
-<p>最终删两个表以后数据：</p>
-<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
-<p>完了以后，重启mysql，zabbix，nginx试试；</p>
-<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
-<hr>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
       </tags>
   </entry>
   <entry>
