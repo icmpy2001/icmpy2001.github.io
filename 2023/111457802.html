@@ -1,11 +1,71 @@
 <!DOCTYPE HTML>
 <html lang="zh-CN">
+<%
+    var title = page.title;
 
+    // tags, categories, about pages title
+    if (title == 'tags') {
+        title = __('tags');
+    } else if (title == 'categories') {
+        title = __('categories');
+    } else if (title == 'about') {
+        title = __('about');
+    }
+
+    // archives, category, tag pages title
+    if (is_archive()) {
+        title = __('archives');
+        if (is_month()) {
+            title += ': ' + page.year + '/' + page.month;
+        } else if (is_year()) {
+            title += ': ' + page.year;
+        }
+    } else if (is_category()) {
+        title = __('category') + ': ' + page.category;
+    } else if (is_tag()) {
+        title = __('tag') + ': ' + page.tag;
+    }
+
+    // final page title.
+    var pageTitle = title ? title + ' | ' + config.title : config.title;
+
+    // keywords.
+    var keyWords = config.keywords ? config.keywords : config.title;
+    if (page.keywords) {
+        keyWords = page.keywords;
+    } else {
+    	keyWords = title ? title  + ', ' + keyWords : keyWords;
+    }
+
+    // description.
+    var description = config.description ? config.description : config.title;
+    if (page.summary) {
+        description = page.summary;
+    } else if (page.hasOwnProperty('__post') && page.__post) {
+        description = strip_html(page.content).substring(0, 120);
+    }
+
+    let iconType = 'image/png'
+    let faviconExt = theme.favicon.substr(theme.favicon.lastIndexOf('.') + 1, theme.favicon.length)
+    if (faviconExt === 'png') {
+        iconType = 'image/png'
+    } else if (faviconExt === 'svg') {
+        iconType = 'image/svg+xml'
+    } else if (faviconExt === 'gif') {
+        iconType = 'image/gif'
+    } else if (faviconExt === 'jpeg') {
+        iconType = 'image/jpeg'
+    } else if (faviconExt === 'jpg') {
+        iconType = 'image/jpeg'
+    } else if (faviconExt === 'ico') {
+        iconType = 'image/x-icon, image/vnd.microsoft.icon'
+    }
+%>
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="hexogit搭建个人网站, 云上的小雨滴">
-    <meta name="description" content="1. nodejs安装1.1使用Node Version Manager（nvm工具） install stable`是使用Node Version Manager（nvm）安装Node.js的命令。nvm是一个用于管理多个Node.js版">
+    <meta name="keywords" content="<%= keyWords %>">
+    <meta name="description" content="<%= description %>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -14,43 +74,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="referrer" content="no-referrer-when-downgrade">
-    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <%- partial('_partial/google-analytics') %>
+    <title><%= pageTitle %></title>
+    <link rel="icon" type="<%= iconType %>" href="<%- theme.jsDelivr.url %><%- url_for(theme.favicon) %>">
+    <%- partial('_partial/main-style') %>
 
-
-    <title>hexogit搭建个人网站 | 云上的小雨滴</title>
-    <link rel="icon" type="image/png" href="/favicon.png">
-    
-
-
-    <!-- bg-cover style     -->
-
-
-
-<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
-<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
-<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
-<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
-<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
-<link rel="stylesheet" type="text/css" href="/css/matery.css">
-<link rel="stylesheet" type="text/css" href="/css/my.css">
-<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
-
-
-
-
-    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
-    <link rel="stylesheet" href="/css/post.css">
-
-
-
-
-    
-
-
-
-    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
-           <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
-
+    <script src="<%- theme.jsDelivr.url %><%- url_for(theme.libs.js.jquery) %>"></script>
 
 <meta name="generator" content="Hexo 7.0.0">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
@@ -432,7 +461,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="1-nodejs安装"><a href="#1-nodejs安装" class="headerlink" title="1. nodejs安装"></a>1. nodejs安装</h1><h2 id="1-1使用Node-Version-Manager（nvm工具）"><a href="#1-1使用Node-Version-Manager（nvm工具）" class="headerlink" title="1.1使用Node Version Manager（nvm工具）"></a>1.1使用Node Version Manager（nvm工具）</h2><p> install stable`是使用Node Version Manager（nvm）安装Node.js的命令。nvm是一个用于管理多个Node.js版本的工具，可以轻松地在同一台机器上安装、切换和管理不同版本的Node.js。</p>
+                <h2 id="1-nodejs安装"><a href="#1-nodejs安装" class="headerlink" title="1. nodejs安装"></a>1. nodejs安装</h2><h3 id="1-1使用Node-Version-Manager（nvm工具）"><a href="#1-1使用Node-Version-Manager（nvm工具）" class="headerlink" title="1.1使用Node Version Manager（nvm工具）"></a>1.1使用Node Version Manager（nvm工具）</h3><p> install stable`是使用Node Version Manager（nvm）安装Node.js的命令。nvm是一个用于管理多个Node.js版本的工具，可以轻松地在同一台机器上安装、切换和管理不同版本的Node.js。</p>
 <p><code>nvm install stable</code>指令表示安装最新的稳定版本的Node.js。执行此命令后，nvm会从Node.js官方仓库下载并自动安装最新的稳定版Node.js。安装过程可能需要一些时间，具体取决于您的网络速度。</p>
 <p>在centOS上安装Node.js，您可以按照以下步骤进行操作：</p>
 <p>1). 使用以下命令更新系统软件包：</p>
@@ -441,10 +470,10 @@
 <p>sudo yum install -y gcc-c++ make</p>
 <p>相关库</p>
 <p>3). 更新系统：</p>
-<p>sudo yum update2. 安装EPEL存储库（Extra Packages for Enterprise Linux，附加软件包）：</p>
-<p>sudo yum install epel-release3. 安装devtoolset-7工具集：</p>
+<p>sudo yum update<br>(2). 安装EPEL存储库（Extra Packages for Enterprise Linux，附加软件包）：</p>
+<p>sudo yum install epel-release<br>(3). 安装devtoolset-7工具集：</p>
 <p>sudo yum install centos-release-scl</p>
-<p>sudo yum install devtoolset-74. 启用devtoolset-7工具集：</p>
+<p>sudo yum install devtoolset-7<br>(4). 启用devtoolset-7工具集：</p>
 <p>scl enable devtoolset-7 bash</p>
 <p>sudo yum install centos-release-scl</p>
 <p>sudo yum install devtoolset-7-gcc devtoolset-7-gcc-c++ devtoolset-7-libstdc++-devel</p>
@@ -481,7 +510,7 @@
 <p>[root@mytest2 tools]# ldd –version</p>
 <p>ldd (GNU libc) 2.17</p>
 <p>版本太高换回nvm install 16.20.2</p>
-<h1 id="2-git-repo仓库安装"><a href="#2-git-repo仓库安装" class="headerlink" title="2. git repo仓库安装"></a>2. git repo仓库安装</h1><p>github也可以注册账号，Github Pages可以直接生成页面，不过国外的网速实在是龟速，gitee也有这个功能，实名认证太麻烦，索性在自己测试机上直接建立git仓库，直接推送建立站点而已，后续国内服务器需要网站备案。</p>
+<h2 id="2-git-repo仓库安装"><a href="#2-git-repo仓库安装" class="headerlink" title="2. git repo仓库安装"></a>2. git repo仓库安装</h2><p>github也可以注册账号，Github Pages可以直接生成页面，不过国外的网速实在是龟速，gitee也有这个功能，实名认证太麻烦，索性在自己测试机上直接建立git仓库，直接推送建立站点而已，后续国内服务器需要网站备案。</p>
 <p>1).安装git  ubuntu/debian sudo apt-get install git</p>
 <p>​               centos   sudo yum install git</p>
 <p>2).创建一个git用户，用来运行git服务：</p>
@@ -507,7 +536,7 @@
 <p>a.git目录路径要看清楚，不在当前目录会报:does not appear to be a git repository<br>fatal: Could not read from remote repository.类似的错误 ；</p>
 <p>git@ip:port/data/blog/blog.git</p>
 <p>b. git ssh 连接 ： ssh://git@ip:port/data/blog/blog.git</p>
-<h1 id="3-hexo安装及推送"><a href="#3-hexo安装及推送" class="headerlink" title="3. hexo安装及推送"></a>3. hexo安装及推送</h1><h2 id="3-1-hexo安装"><a href="#3-1-hexo安装" class="headerlink" title="3.1 hexo安装"></a>3.1 hexo安装</h2><p>npm install hexo-cli -g<br> hexo init blog<br> cd blog<br>npm install<br> hexo g # 或者hexo generate<br> hexo s # 或者hexo server，可以在<a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000/</a> 查看</p>
+<h2 id="3-hexo安装及推送"><a href="#3-hexo安装及推送" class="headerlink" title="3. hexo安装及推送"></a>3. hexo安装及推送</h2><h3 id="3-1-hexo安装"><a href="#3-1-hexo安装" class="headerlink" title="3.1 hexo安装"></a>3.1 hexo安装</h3><p>npm install hexo-cli -g<br> hexo init blog<br> cd blog<br>npm install<br> hexo g # 或者hexo generate<br> hexo s # 或者hexo server，可以在<a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000/</a> 查看</p>
 <p>也可以hexo server -p 80 -l</p>
 <p>hexo generate (hexo g) 生成静态文件，会在当前目录下生成一个新的叫做public的文件夹</p>
 <p>hexo server (hexo s) 启动本地web服务，用于博客的预览</p>
@@ -520,7 +549,7 @@
 <p>hexo clean</p>
 <p>hexo g</p>
 <p>hexo d</p>
-<h2 id="3-2使用hexo-deploy部署"><a href="#3-2使用hexo-deploy部署" class="headerlink" title="3.2使用hexo deploy部署"></a>3.2使用hexo deploy部署</h2><p>安装一个扩展：</p>
+<h3 id="3-2使用hexo-deploy部署"><a href="#3-2使用hexo-deploy部署" class="headerlink" title="3.2使用hexo deploy部署"></a>3.2使用hexo deploy部署</h3><p>安装一个扩展：</p>
 <p>$ npm install hexo-deployer-git –save</p>
 <p>hexo deploy可以部署到很多平台，具体可以参考这个链接. 如果部署到github，需要在根目录/data/blog/配置文件_config.xml中作如下修改：</p>
 <p>deploy:<br>  type: git<br>repo: ssh://git@ip:port/data/blog/blog.git<br>  branch: master<br>然后在命令行中执行</p>
@@ -529,7 +558,7 @@
 <p>比如：</p>
 <p>git clone <a target="_blank" rel="noopener" href="https://github.com/next-theme/hexo-theme-next">https://github.com/next-theme/hexo-theme-next</a> themes/next</p>
 <p>下载到themes 的next 主题，或者matery大佬的主题，下载以后自己修改成自己喜欢的样式即可。</p>
-<h1 id="4-web站点搭建"><a href="#4-web站点搭建" class="headerlink" title="4. web站点搭建"></a>4. web站点搭建</h1><p>首先有一台自己的服务器，比如centos或者ubuntu，debian，安装nginx或者tengine，对于个人静态站点基本上nginx可以满足，tengine需要手动安装，喜欢的可以尝试一下。</p>
+<h2 id="4-web站点搭建"><a href="#4-web站点搭建" class="headerlink" title="4. web站点搭建"></a>4. web站点搭建</h2><p>首先有一台自己的服务器，比如centos或者ubuntu，debian，安装nginx或者tengine，对于个人静态站点基本上nginx可以满足，tengine需要手动安装，喜欢的可以尝试一下。</p>
 <p>简单的yum install nginx</p>
 <p>cd /etc/nginx/</p>
 <p>vim nginx.conf</p>

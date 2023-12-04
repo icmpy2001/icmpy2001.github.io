@@ -874,9 +874,29 @@
 <h2 id="3、重启zookeeper。"><a href="#3、重启zookeeper。" class="headerlink" title="3、重启zookeeper。"></a>3、重启zookeeper。</h2>]]></content>
   </entry>
   <entry>
+    <title>linux install shadowsocks</title>
+    <url>/2023/071659235.html</url>
+    <content><![CDATA[<h1 id="1-安装Python和pip"><a href="#1-安装Python和pip" class="headerlink" title="1. 安装Python和pip"></a>1. 安装Python和pip</h1><p>sudo apt-get update</p>
+<p>sudo apt-get install python-pip</p>
+<h1 id="2-安装Shadowsocks"><a href="#2-安装Shadowsocks" class="headerlink" title="2. 安装Shadowsocks"></a>2. 安装Shadowsocks</h1><p>sudo pip install shadowsocks</p>
+<h1 id="3-配置Shadowsocks"><a href="#3-配置Shadowsocks" class="headerlink" title="3. 配置Shadowsocks"></a>3. 配置Shadowsocks</h1><p>cat &gt;&gt; /etc/shadowsocks.json &lt;&lt;EOF<br>{</p>
+<p>“server” : “ server ip”,<br>“server_port” : server port,<br>“local_port” : 1080,<br>“password” : “passwd”,<br>“timeout” : 200,<br>“method” : “aes-256-cfb”<br>}<br>EOF<br>参数的解释:<br>server：远程服务器IP地址<br>server_port：远程服务器端口号<br>local_port：本地端口号，默认为1080<br>password：远程服务器密码，自定义<br>timeout：超时时间，默认为300秒<br>method：加密方式，推荐aes-256-cfb</p>
+<h1 id="4-启动Shadowsocks"><a href="#4-启动Shadowsocks" class="headerlink" title="4. 启动Shadowsocks"></a>4. 启动Shadowsocks</h1><p>在命令行中输入：</p>
+<p>ssserver -c /etc/shadowsocks.json</p>
+<h1 id="5-添加系统服务"><a href="#5-添加系统服务" class="headerlink" title="5.添加系统服务"></a>5.添加系统服务</h1><p>cat &gt;&gt;/etc/systemd/system/shadows.service  &lt;&lt;EOF<br>[Unit]<br>Description=shadows server<br>[Install]<br>WantedBy=multi-user.target<br>[Service]<br>User=root<br>Group=root<br>ExecStart=/usr/bin/ssserver -c /etc/shadowsocks.json start<br>Restart=on-failure<br>EOF</p>
+<p>systemctl restart shadows.service<br>systemctl enable shadows.service</p>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>hexogit搭建个人网站</title>
     <url>/2023/111457802.html</url>
-    <content><![CDATA[<h1 id="1-nodejs安装"><a href="#1-nodejs安装" class="headerlink" title="1. nodejs安装"></a>1. nodejs安装</h1><h2 id="1-1使用Node-Version-Manager（nvm工具）"><a href="#1-1使用Node-Version-Manager（nvm工具）" class="headerlink" title="1.1使用Node Version Manager（nvm工具）"></a>1.1使用Node Version Manager（nvm工具）</h2><p> install stable`是使用Node Version Manager（nvm）安装Node.js的命令。nvm是一个用于管理多个Node.js版本的工具，可以轻松地在同一台机器上安装、切换和管理不同版本的Node.js。</p>
+    <content><![CDATA[<h2 id="1-nodejs安装"><a href="#1-nodejs安装" class="headerlink" title="1. nodejs安装"></a>1. nodejs安装</h2><h3 id="1-1使用Node-Version-Manager（nvm工具）"><a href="#1-1使用Node-Version-Manager（nvm工具）" class="headerlink" title="1.1使用Node Version Manager（nvm工具）"></a>1.1使用Node Version Manager（nvm工具）</h3><p> install stable`是使用Node Version Manager（nvm）安装Node.js的命令。nvm是一个用于管理多个Node.js版本的工具，可以轻松地在同一台机器上安装、切换和管理不同版本的Node.js。</p>
 <p><code>nvm install stable</code>指令表示安装最新的稳定版本的Node.js。执行此命令后，nvm会从Node.js官方仓库下载并自动安装最新的稳定版Node.js。安装过程可能需要一些时间，具体取决于您的网络速度。</p>
 <p>在centOS上安装Node.js，您可以按照以下步骤进行操作：</p>
 <p>1). 使用以下命令更新系统软件包：</p>
@@ -885,10 +905,10 @@
 <p>sudo yum install -y gcc-c++ make</p>
 <p>相关库</p>
 <p>3). 更新系统：</p>
-<p>sudo yum update2. 安装EPEL存储库（Extra Packages for Enterprise Linux，附加软件包）：</p>
-<p>sudo yum install epel-release3. 安装devtoolset-7工具集：</p>
+<p>sudo yum update<br>(2). 安装EPEL存储库（Extra Packages for Enterprise Linux，附加软件包）：</p>
+<p>sudo yum install epel-release<br>(3). 安装devtoolset-7工具集：</p>
 <p>sudo yum install centos-release-scl</p>
-<p>sudo yum install devtoolset-74. 启用devtoolset-7工具集：</p>
+<p>sudo yum install devtoolset-7<br>(4). 启用devtoolset-7工具集：</p>
 <p>scl enable devtoolset-7 bash</p>
 <p>sudo yum install centos-release-scl</p>
 <p>sudo yum install devtoolset-7-gcc devtoolset-7-gcc-c++ devtoolset-7-libstdc++-devel</p>
@@ -925,7 +945,7 @@
 <p>[root@mytest2 tools]# ldd –version</p>
 <p>ldd (GNU libc) 2.17</p>
 <p>版本太高换回nvm install 16.20.2</p>
-<h1 id="2-git-repo仓库安装"><a href="#2-git-repo仓库安装" class="headerlink" title="2. git repo仓库安装"></a>2. git repo仓库安装</h1><p>github也可以注册账号，Github Pages可以直接生成页面，不过国外的网速实在是龟速，gitee也有这个功能，实名认证太麻烦，索性在自己测试机上直接建立git仓库，直接推送建立站点而已，后续国内服务器需要网站备案。</p>
+<h2 id="2-git-repo仓库安装"><a href="#2-git-repo仓库安装" class="headerlink" title="2. git repo仓库安装"></a>2. git repo仓库安装</h2><p>github也可以注册账号，Github Pages可以直接生成页面，不过国外的网速实在是龟速，gitee也有这个功能，实名认证太麻烦，索性在自己测试机上直接建立git仓库，直接推送建立站点而已，后续国内服务器需要网站备案。</p>
 <p>1).安装git  ubuntu/debian sudo apt-get install git</p>
 <p>​               centos   sudo yum install git</p>
 <p>2).创建一个git用户，用来运行git服务：</p>
@@ -951,7 +971,7 @@
 <p>a.git目录路径要看清楚，不在当前目录会报:does not appear to be a git repository<br>fatal: Could not read from remote repository.类似的错误 ；</p>
 <p>git@ip:port/data/blog/blog.git</p>
 <p>b. git ssh 连接 ： ssh://git@ip:port/data/blog/blog.git</p>
-<h1 id="3-hexo安装及推送"><a href="#3-hexo安装及推送" class="headerlink" title="3. hexo安装及推送"></a>3. hexo安装及推送</h1><h2 id="3-1-hexo安装"><a href="#3-1-hexo安装" class="headerlink" title="3.1 hexo安装"></a>3.1 hexo安装</h2><p>npm install hexo-cli -g<br> hexo init blog<br> cd blog<br>npm install<br> hexo g # 或者hexo generate<br> hexo s # 或者hexo server，可以在<a href="http://localhost:4000/">http://localhost:4000/</a> 查看</p>
+<h2 id="3-hexo安装及推送"><a href="#3-hexo安装及推送" class="headerlink" title="3. hexo安装及推送"></a>3. hexo安装及推送</h2><h3 id="3-1-hexo安装"><a href="#3-1-hexo安装" class="headerlink" title="3.1 hexo安装"></a>3.1 hexo安装</h3><p>npm install hexo-cli -g<br> hexo init blog<br> cd blog<br>npm install<br> hexo g # 或者hexo generate<br> hexo s # 或者hexo server，可以在<a href="http://localhost:4000/">http://localhost:4000/</a> 查看</p>
 <p>也可以hexo server -p 80 -l</p>
 <p>hexo generate (hexo g) 生成静态文件，会在当前目录下生成一个新的叫做public的文件夹</p>
 <p>hexo server (hexo s) 启动本地web服务，用于博客的预览</p>
@@ -964,7 +984,7 @@
 <p>hexo clean</p>
 <p>hexo g</p>
 <p>hexo d</p>
-<h2 id="3-2使用hexo-deploy部署"><a href="#3-2使用hexo-deploy部署" class="headerlink" title="3.2使用hexo deploy部署"></a>3.2使用hexo deploy部署</h2><p>安装一个扩展：</p>
+<h3 id="3-2使用hexo-deploy部署"><a href="#3-2使用hexo-deploy部署" class="headerlink" title="3.2使用hexo deploy部署"></a>3.2使用hexo deploy部署</h3><p>安装一个扩展：</p>
 <p>$ npm install hexo-deployer-git –save</p>
 <p>hexo deploy可以部署到很多平台，具体可以参考这个链接. 如果部署到github，需要在根目录/data/blog/配置文件_config.xml中作如下修改：</p>
 <p>deploy:<br>  type: git<br>repo: ssh://git@ip:port/data/blog/blog.git<br>  branch: master<br>然后在命令行中执行</p>
@@ -973,7 +993,7 @@
 <p>比如：</p>
 <p>git clone <a href="https://github.com/next-theme/hexo-theme-next">https://github.com/next-theme/hexo-theme-next</a> themes/next</p>
 <p>下载到themes 的next 主题，或者matery大佬的主题，下载以后自己修改成自己喜欢的样式即可。</p>
-<h1 id="4-web站点搭建"><a href="#4-web站点搭建" class="headerlink" title="4. web站点搭建"></a>4. web站点搭建</h1><p>首先有一台自己的服务器，比如centos或者ubuntu，debian，安装nginx或者tengine，对于个人静态站点基本上nginx可以满足，tengine需要手动安装，喜欢的可以尝试一下。</p>
+<h2 id="4-web站点搭建"><a href="#4-web站点搭建" class="headerlink" title="4. web站点搭建"></a>4. web站点搭建</h2><p>首先有一台自己的服务器，比如centos或者ubuntu，debian，安装nginx或者tengine，对于个人静态站点基本上nginx可以满足，tengine需要手动安装，喜欢的可以尝试一下。</p>
 <p>简单的yum install nginx</p>
 <p>cd /etc/nginx/</p>
 <p>vim nginx.conf</p>
@@ -985,26 +1005,6 @@
 
 <p>由于做了ssl证书，80做了个跳转到443上面，域名需要到平台做解析，A记录到自己的服务器，如果流量大的话可以做cdn，Cname到平台给的记录值，ssl证书申请，主流云平台都可以免费申请，填写一些资料以后很快就可以签发证书，选择对应的证书上传即可。</p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>linux install shadowsocks</title>
-    <url>/2023/071659235.html</url>
-    <content><![CDATA[<h1 id="1-安装Python和pip"><a href="#1-安装Python和pip" class="headerlink" title="1. 安装Python和pip"></a>1. 安装Python和pip</h1><p>sudo apt-get update</p>
-<p>sudo apt-get install python-pip</p>
-<h1 id="2-安装Shadowsocks"><a href="#2-安装Shadowsocks" class="headerlink" title="2. 安装Shadowsocks"></a>2. 安装Shadowsocks</h1><p>sudo pip install shadowsocks</p>
-<h1 id="3-配置Shadowsocks"><a href="#3-配置Shadowsocks" class="headerlink" title="3. 配置Shadowsocks"></a>3. 配置Shadowsocks</h1><p>cat &gt;&gt; /etc/shadowsocks.json &lt;&lt;EOF<br>{</p>
-<p>“server” : “ server ip”,<br>“server_port” : server port,<br>“local_port” : 1080,<br>“password” : “passwd”,<br>“timeout” : 200,<br>“method” : “aes-256-cfb”<br>}<br>EOF<br>参数的解释:<br>server：远程服务器IP地址<br>server_port：远程服务器端口号<br>local_port：本地端口号，默认为1080<br>password：远程服务器密码，自定义<br>timeout：超时时间，默认为300秒<br>method：加密方式，推荐aes-256-cfb</p>
-<h1 id="4-启动Shadowsocks"><a href="#4-启动Shadowsocks" class="headerlink" title="4. 启动Shadowsocks"></a>4. 启动Shadowsocks</h1><p>在命令行中输入：</p>
-<p>ssserver -c /etc/shadowsocks.json</p>
-<h1 id="5-添加系统服务"><a href="#5-添加系统服务" class="headerlink" title="5.添加系统服务"></a>5.添加系统服务</h1><p>cat &gt;&gt;/etc/systemd/system/shadows.service  &lt;&lt;EOF<br>[Unit]<br>Description=shadows server<br>[Install]<br>WantedBy=multi-user.target<br>[Service]<br>User=root<br>Group=root<br>ExecStart=/usr/bin/ssserver -c /etc/shadowsocks.json start<br>Restart=on-failure<br>EOF</p>
-<p>systemctl restart shadows.service<br>systemctl enable shadows.service</p>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
   </entry>
   <entry>
     <title>linux 磁盘挂载扩充格式化</title>
@@ -1430,6 +1430,44 @@
 ]]></content>
   </entry>
   <entry>
+    <title>ssh免密登录问题</title>
+    <url>/2023/071760022.html</url>
+    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
+<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
+<p>服务器A需要免密码访问服务器B：</p>
+<ol>
+<li>在A上面生成公钥密钥，执行命令</li>
+</ol>
+<p>&nbsp;</p>
+<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
+<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
+<ol start="2">
+<li>将公钥id_rsa.pub拷贝到B机器上</li>
+</ol>
+<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
+<ol start="3">
+<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
+</ol>
+<p>cd&nbsp;/home/user/.ssh</p>
+<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
+<ol start="4">
+<li>设置 authorized_keys权限</li>
+</ol>
+<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
+<hr>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>vsftp 锁定用户目录</title>
     <url>/2023/071114619.html</url>
     <content><![CDATA[<p>vsftp 安装以后给用户权限和锁定目录；</p>
@@ -1518,44 +1556,6 @@
 <h2 id="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"><a href="#vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。" class="headerlink" title="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"></a>vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。</h2>]]></content>
       <tags>
         <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ssh免密登录问题</title>
-    <url>/2023/071760022.html</url>
-    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
-<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
-<p>服务器A需要免密码访问服务器B：</p>
-<ol>
-<li>在A上面生成公钥密钥，执行命令</li>
-</ol>
-<p>&nbsp;</p>
-<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
-<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
-<ol start="2">
-<li>将公钥id_rsa.pub拷贝到B机器上</li>
-</ol>
-<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
-<ol start="3">
-<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
-</ol>
-<p>cd&nbsp;/home/user/.ssh</p>
-<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
-<ol start="4">
-<li>设置 authorized_keys权限</li>
-</ol>
-<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
-<hr>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
       </tags>
   </entry>
   <entry>
