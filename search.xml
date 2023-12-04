@@ -73,94 +73,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Rsync同步文件</title>
-    <url>/2023/081064777.html</url>
-    <content><![CDATA[<p>Rsync常用的一款同步文件工具。配置也很方便。</p>
-<p>&nbsp;</p>
-<p>yum install sync -y或者apt-get install sync</p>
-<ul>
-<li>服务安装好之后，/etc下没有配置文件，一般情况可以copy示例文件到/etc下</li>
-</ul>
-<p>&nbsp;</p>
-<p>#cp&nbsp;/usr/share/doc/rsync/examples/rsyncd.conf&nbsp;/etc</p>
-<p>&nbsp;</p>
-<p>vim /etc/rsyncd.conf</p>
-<p>uid = common</p>
-<p>gid = common</p>
-<p>use chroot = no</p>
-<p>max connections = 10</p>
-<p>strict modes = yes</p>
-<p>hosts allow = 192.168.2.12&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #可以空格，允许多个</p>
-<p>hosts deny = *</p>
-<p>port = 5699&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;#默认开启端口</p>
-<p>pid file = /var/run/rsyncd.pid</p>
-<p>lock file = /var/run/rsync.lock</p>
-<p>log file = /var/log/rsyncd.log</p>
-<p>[hmt]</p>
-<p>path = /data/www/html/</p>
-<p>comment = hello</p>
-<p>ignore errors</p>
-<p>read only = no</p>
-<p>write only = no</p>
-<p>hosts allow = 192.168.2.12&nbsp;</p>
-<p>list = false</p>
-<p>auth users = hmt</p>
-<p>secrets file = /etc/rsync.password</p>
-<ul>
-<li>建立/etc/rsyncd/rsyncd.secrets文件</li>
-</ul>
-<p>#vim /etc/rsync.password</p>
-<p>#cat /etc/rsyncd/rsyncd.secrets</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;hmt:123456</p>
-<ul>
-<li>为了密码的安全性，我们必须把权限设为600</li>
-</ul>
-<p> chown root:root /etc/rsyncd/rsyncd.secrets</p>
-<p>chmod 600&nbsp;&nbsp;/etc/rsync.password</p>
-<p> chmod 600&nbsp;/etc/rsyncd/rsyncd.secrets</p>
-<p> vim /etc/rsyncd/rsyncd.motd</p>
-<p>&nbsp;</p>
-<p>启动rsync：</p>
-<p>systemctl start rsyncd.service</p>
-<p>&nbsp;lsof -i:5699</p>
-<p>lsof -i:5699</p>
-<p>COMMAND PID USER&nbsp; &nbsp;FD&nbsp; &nbsp;TYPE&nbsp; &nbsp;DEVICE SIZE/OFF NODE NAME</p>
-<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 4u&nbsp; IPv4 22661487&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
-<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 5u&nbsp; IPv6 22661488&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
-<p>至此服务器端安装完毕；</p>
-<p>客户端安装配置：</p>
-<p>&nbsp;</p>
-<p>yum -y install rsync</p>
-<p>&nbsp;客户端需要vim&nbsp;/etc/rsync.password&nbsp;</p>
-<p>cat&nbsp;&nbsp;/etc/rsync.password</p>
-<p>123456</p>
-<p>运行：</p>
-<p>rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
-<p>Password: 这里要输入rsync的密码，是服务器端提供的，在前面的例子中，我们用的是 asdf，输入的密码并不显示出来；输好后就回车；&nbsp;注：&nbsp;这个命令的意思就是说，用rsync 用户登录到服务器上，把/data/www/html&nbsp;数据，同步到本地目录/data/www/html/上。当然本地的目录是可以你自己定义的，比如 dave也是可以的；当你在客户端上，当前操作的目录下没有/tmp/test/这个目录时，系统会自动为你创建一个；当存在/tmp/test/这个目录中，你要注意它的写权限。</p>
-<p>参数说明：</p>
-<p>&nbsp;-a 参数，相当于-rlptgoD，</p>
-<p>&nbsp;&nbsp;&nbsp;-r 是递归 -l 是链接文件，意思是拷贝链接文件；</p>
-<p>&nbsp;&nbsp;&nbsp;-p 表示保持文件原有权限；</p>
-<p>&nbsp;&nbsp;&nbsp;-t 保持文件原有时间；<br>&nbsp;&nbsp;&nbsp;-g 保持文件原有用户组；</p>
-<p>&nbsp;&nbsp;&nbsp;-o 保持文件原有属主；</p>
-<p>&nbsp;&nbsp;&nbsp;-D 相当于块设备文件；</p>
-<p>&nbsp;&nbsp;&nbsp;-z 传输时压缩；</p>
-<p>&nbsp;&nbsp;&nbsp;-P 传输进度；</p>
-<p>&nbsp;&nbsp;&nbsp;-v 传输时的进度等信息，和-P有点关系</p>
-<p>&nbsp;<br>*</p>
-<p>rsync -avzP &nbsp;–delete <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools&nbsp;/tmp/test/</p>
-<p>–delete 选项，表示服务器上的数据要与客户端完全一致，如果 /tmp/test/目录中有服务器上不存在的文件，则删除。最终目的是让/tmp/test/目录上的数据完全与服务器上保持一致；用的时候要小心点，最好不要把已经有重要数所据的目录，当做本地更新目录，否则会把你的数据全部删除；
-&nbsp;</p>
-<p>计划任务同步：</p>
-<p>*/5 * * * * rsync -zvaP <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools /tmp/test/ –password-file=/etc/rsyncd/rsyncd.secrets</p>
-<p>*/5 * * * * rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
-<p>&nbsp;</p>
-]]></content>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ELK安装调试及遇到的问题</title>
     <url>/2023/111459226.html</url>
     <content><![CDATA[<h1 id="1-前期准备："><a href="#1-前期准备：" class="headerlink" title="1.前期准备："></a>1.前期准备：</h1><p>如果是es非root用户启动es，可以把*改成非root用户，例如 es soft nofile 65535修改 /etc/security/limits.conf</p>
@@ -375,6 +287,144 @@
       </tags>
   </entry>
   <entry>
+    <title>Rsync同步文件</title>
+    <url>/2023/081064777.html</url>
+    <content><![CDATA[<p>Rsync常用的一款同步文件工具。配置也很方便。</p>
+<p>&nbsp;</p>
+<p>yum install sync -y或者apt-get install sync</p>
+<ul>
+<li>服务安装好之后，/etc下没有配置文件，一般情况可以copy示例文件到/etc下</li>
+</ul>
+<p>&nbsp;</p>
+<p>#cp&nbsp;/usr/share/doc/rsync/examples/rsyncd.conf&nbsp;/etc</p>
+<p>&nbsp;</p>
+<p>vim /etc/rsyncd.conf</p>
+<p>uid = common</p>
+<p>gid = common</p>
+<p>use chroot = no</p>
+<p>max connections = 10</p>
+<p>strict modes = yes</p>
+<p>hosts allow = 192.168.2.12&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #可以空格，允许多个</p>
+<p>hosts deny = *</p>
+<p>port = 5699&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;#默认开启端口</p>
+<p>pid file = /var/run/rsyncd.pid</p>
+<p>lock file = /var/run/rsync.lock</p>
+<p>log file = /var/log/rsyncd.log</p>
+<p>[hmt]</p>
+<p>path = /data/www/html/</p>
+<p>comment = hello</p>
+<p>ignore errors</p>
+<p>read only = no</p>
+<p>write only = no</p>
+<p>hosts allow = 192.168.2.12&nbsp;</p>
+<p>list = false</p>
+<p>auth users = hmt</p>
+<p>secrets file = /etc/rsync.password</p>
+<ul>
+<li>建立/etc/rsyncd/rsyncd.secrets文件</li>
+</ul>
+<p>#vim /etc/rsync.password</p>
+<p>#cat /etc/rsyncd/rsyncd.secrets</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;hmt:123456</p>
+<ul>
+<li>为了密码的安全性，我们必须把权限设为600</li>
+</ul>
+<p> chown root:root /etc/rsyncd/rsyncd.secrets</p>
+<p>chmod 600&nbsp;&nbsp;/etc/rsync.password</p>
+<p> chmod 600&nbsp;/etc/rsyncd/rsyncd.secrets</p>
+<p> vim /etc/rsyncd/rsyncd.motd</p>
+<p>&nbsp;</p>
+<p>启动rsync：</p>
+<p>systemctl start rsyncd.service</p>
+<p>&nbsp;lsof -i:5699</p>
+<p>lsof -i:5699</p>
+<p>COMMAND PID USER&nbsp; &nbsp;FD&nbsp; &nbsp;TYPE&nbsp; &nbsp;DEVICE SIZE/OFF NODE NAME</p>
+<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 4u&nbsp; IPv4 22661487&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
+<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 5u&nbsp; IPv6 22661488&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
+<p>至此服务器端安装完毕；</p>
+<p>客户端安装配置：</p>
+<p>&nbsp;</p>
+<p>yum -y install rsync</p>
+<p>&nbsp;客户端需要vim&nbsp;/etc/rsync.password&nbsp;</p>
+<p>cat&nbsp;&nbsp;/etc/rsync.password</p>
+<p>123456</p>
+<p>运行：</p>
+<p>rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
+<p>Password: 这里要输入rsync的密码，是服务器端提供的，在前面的例子中，我们用的是 asdf，输入的密码并不显示出来；输好后就回车；&nbsp;注：&nbsp;这个命令的意思就是说，用rsync 用户登录到服务器上，把/data/www/html&nbsp;数据，同步到本地目录/data/www/html/上。当然本地的目录是可以你自己定义的，比如 dave也是可以的；当你在客户端上，当前操作的目录下没有/tmp/test/这个目录时，系统会自动为你创建一个；当存在/tmp/test/这个目录中，你要注意它的写权限。</p>
+<p>参数说明：</p>
+<p>&nbsp;-a 参数，相当于-rlptgoD，</p>
+<p>&nbsp;&nbsp;&nbsp;-r 是递归 -l 是链接文件，意思是拷贝链接文件；</p>
+<p>&nbsp;&nbsp;&nbsp;-p 表示保持文件原有权限；</p>
+<p>&nbsp;&nbsp;&nbsp;-t 保持文件原有时间；<br>&nbsp;&nbsp;&nbsp;-g 保持文件原有用户组；</p>
+<p>&nbsp;&nbsp;&nbsp;-o 保持文件原有属主；</p>
+<p>&nbsp;&nbsp;&nbsp;-D 相当于块设备文件；</p>
+<p>&nbsp;&nbsp;&nbsp;-z 传输时压缩；</p>
+<p>&nbsp;&nbsp;&nbsp;-P 传输进度；</p>
+<p>&nbsp;&nbsp;&nbsp;-v 传输时的进度等信息，和-P有点关系</p>
+<p>&nbsp;<br>*</p>
+<p>rsync -avzP &nbsp;–delete <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools&nbsp;/tmp/test/</p>
+<p>–delete 选项，表示服务器上的数据要与客户端完全一致，如果 /tmp/test/目录中有服务器上不存在的文件，则删除。最终目的是让/tmp/test/目录上的数据完全与服务器上保持一致；用的时候要小心点，最好不要把已经有重要数所据的目录，当做本地更新目录，否则会把你的数据全部删除；
+&nbsp;</p>
+<p>计划任务同步：</p>
+<p>*/5 * * * * rsync -zvaP <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools /tmp/test/ –password-file=/etc/rsyncd/rsyncd.secrets</p>
+<p>*/5 * * * * rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
+<p>&nbsp;</p>
+]]></content>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>apache多网站对应80端口</title>
+    <url>/2023/062862696.html</url>
+    <content><![CDATA[<p>一台服务器绑定多个域名，已经装了apache，nginx就不使用了，利用apache主机头名虚拟主机用80端口对应多个网站，万能的网络上面有文档如下：</p>
+<p>Aapche 如果需要绑定多个域名到一个IP上,是支持的。需要注意以下2点:</p>
+<p>1 必须要开启 NameVirtualHost开关选项，</p>
+<p>如：NameVirtualHost 220.231.220.231:80</p>
+<p>2 NameVirtualHost 需要指定具体的端口</p>
+<p>例如”:80″,跟&lt;VirtualHost 220.231.32.*:80&gt;对应，否则会报错:</p>
+<p>mixing * ports and non-* ports with a NameVirtualHost address is not supported, proceeding with undefined results。</p>
+<p>翻译过来就是: NameVirtualHost 地址，指定端口和不指定端口混合使用是不支持的，将会产生未逾期的后果。</p>
+<p>未逾期的后果就是: 第2个不起作用，仅当一个站点设置起作用。</p>
+<p>按着做下来：</p>
+<p>IncludeOptional conf.d/*.conf</p>
+<p>ServerSignature Off</p>
+<p>NameVirtualHost 220.231.220.231:80</p>
+<p>&lt;VirtualHost 220.231.220.231:80&gt;&nbsp;&nbsp;</p>
+<p>ServerAdmin&nbsp; &nbsp;<a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a>&nbsp;</p>
+<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
+<p>ServerName <a href="http://www.aaa.net/">www.aaa.net</a></p>
+<p>DocumentRoot&nbsp; /data/www/wress/</p>
+<p>&lt;Directory “/data/www/wress/“&gt;&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp;Options -Indexes&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp;Options FollowSymLinks Indexes</p>
+<p>&nbsp; &nbsp; AllowOverride All&nbsp;&nbsp;</p>
+<p>&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp; Require all granted&nbsp;&nbsp;</p>
+<p>&nbsp;&nbsp;</p>
+<p>ErrorLog logs/<a href="http://www.aaa.net-error_log/">www.aaa.net-error_log</a></p>
+<p>&nbsp;CustomLog logs/<a href="http://www.aaa.net-access_log/">www.aaa.net-access_log</a> common</p>
+<p>&nbsp;</p>
+<p>&lt;VirtualHost 220.231.220.231:80&gt;</p>
+<p>ServerAdmin&nbsp; <a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a></p>
+<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
+<p>ServerName img.aaa.net</p>
+<p>#ServerName 220.231.220.231</p>
+<p>DocumentRoot&nbsp; /data/www/html/</p>
+<p>&lt;Directory “/data/www/html/“&gt;</p>
+<p>&nbsp; &nbsp; Options -Indexes&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp; Options FollowSymLinks Indexes</p>
+<p>&nbsp; &nbsp; AllowOverride All</p>
+<p>&nbsp; &nbsp;Require all granted</p>
+
+
+<p>ErrorLog logs/img.aaa.net-error_log</p>
+<p>CustomLog logs/img.aaa.net-access_log common</p>
+
+
+<h2 id="这样都可以访问，apache也可以实现，做个小笔记。"><a href="#这样都可以访问，apache也可以实现，做个小笔记。" class="headerlink" title="这样都可以访问，apache也可以实现，做个小笔记。"></a>这样都可以访问，apache也可以实现，做个小笔记。</h2>]]></content>
+  </entry>
+  <entry>
     <title>Tengine 安装</title>
     <url>/2023/111458217.html</url>
     <content><![CDATA[<p>Tengine安装</p>
@@ -446,56 +496,6 @@
       <tags>
         <tag>随笔</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>apache多网站对应80端口</title>
-    <url>/2023/062862696.html</url>
-    <content><![CDATA[<p>一台服务器绑定多个域名，已经装了apache，nginx就不使用了，利用apache主机头名虚拟主机用80端口对应多个网站，万能的网络上面有文档如下：</p>
-<p>Aapche 如果需要绑定多个域名到一个IP上,是支持的。需要注意以下2点:</p>
-<p>1 必须要开启 NameVirtualHost开关选项，</p>
-<p>如：NameVirtualHost 220.231.220.231:80</p>
-<p>2 NameVirtualHost 需要指定具体的端口</p>
-<p>例如”:80″,跟&lt;VirtualHost 220.231.32.*:80&gt;对应，否则会报错:</p>
-<p>mixing * ports and non-* ports with a NameVirtualHost address is not supported, proceeding with undefined results。</p>
-<p>翻译过来就是: NameVirtualHost 地址，指定端口和不指定端口混合使用是不支持的，将会产生未逾期的后果。</p>
-<p>未逾期的后果就是: 第2个不起作用，仅当一个站点设置起作用。</p>
-<p>按着做下来：</p>
-<p>IncludeOptional conf.d/*.conf</p>
-<p>ServerSignature Off</p>
-<p>NameVirtualHost 220.231.220.231:80</p>
-<p>&lt;VirtualHost 220.231.220.231:80&gt;&nbsp;&nbsp;</p>
-<p>ServerAdmin&nbsp; &nbsp;<a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a>&nbsp;</p>
-<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
-<p>ServerName <a href="http://www.aaa.net/">www.aaa.net</a></p>
-<p>DocumentRoot&nbsp; /data/www/wress/</p>
-<p>&lt;Directory “/data/www/wress/“&gt;&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp;Options -Indexes&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp;Options FollowSymLinks Indexes</p>
-<p>&nbsp; &nbsp; AllowOverride All&nbsp;&nbsp;</p>
-<p>&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp; Require all granted&nbsp;&nbsp;</p>
-<p>&nbsp;&nbsp;</p>
-<p>ErrorLog logs/<a href="http://www.aaa.net-error_log/">www.aaa.net-error_log</a></p>
-<p>&nbsp;CustomLog logs/<a href="http://www.aaa.net-access_log/">www.aaa.net-access_log</a> common</p>
-<p>&nbsp;</p>
-<p>&lt;VirtualHost 220.231.220.231:80&gt;</p>
-<p>ServerAdmin&nbsp; <a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a></p>
-<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
-<p>ServerName img.aaa.net</p>
-<p>#ServerName 220.231.220.231</p>
-<p>DocumentRoot&nbsp; /data/www/html/</p>
-<p>&lt;Directory “/data/www/html/“&gt;</p>
-<p>&nbsp; &nbsp; Options -Indexes&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp; Options FollowSymLinks Indexes</p>
-<p>&nbsp; &nbsp; AllowOverride All</p>
-<p>&nbsp; &nbsp;Require all granted</p>
-
-
-<p>ErrorLog logs/img.aaa.net-error_log</p>
-<p>CustomLog logs/img.aaa.net-access_log common</p>
-
-
-<h2 id="这样都可以访问，apache也可以实现，做个小笔记。"><a href="#这样都可以访问，apache也可以实现，做个小笔记。" class="headerlink" title="这样都可以访问，apache也可以实现，做个小笔记。"></a>这样都可以访问，apache也可以实现，做个小笔记。</h2>]]></content>
   </entry>
   <entry>
     <title>centos U盘安装查找U盘设备名</title>
@@ -974,20 +974,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>kafka Create topic 报错</title>
-    <url>/2023/071361284.html</url>
-    <content><![CDATA[<p>bin/kafka-console-consumer.sh –bootstrap-server localhost:9092 –topic kk_log<br>报错如下：<br>WARN [Consumer clientId=consumer-1, groupId=console-consumer-507] Connection to node -1 could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)</p>
-<p>配置server.confg时候设置的<br>advertised.listeners=PLAINTEXT://10.171.222.26:9092<br>此时需要用配置的IP而非localhost地址：</p>
-<p>nohup bin/zookeeper-server-start.sh config/zookeeper.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>nohup bin/kafka-server-start.sh config/server.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>netstat -ntpl|egrep “(2181|9092)”<br>运行起来再试试<br>bin/kafka-console-consumer.sh –bootstrap-server 10.171.222.26:9092 –topic kk_log<br>应该就可以了。<br>做个小笔记。</p>
-<p>PS zookeeper 报错，宕掉；</p>
-<p>[2016-06-27 12:07:14,065] INFO Closed socket connection for client /127.0.0.1:58824 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn) [2016-<br>[2016-06-27 12:07:17,351] INFO Refusing session request for client /127.0.0.1:58834 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)<br>[2016-06-27 12:07:17,351] INFO Closed socket connection for client /127.0.0.1:58834 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn)<br>[2016-06-27 12:07:19,048] INFO Accepted socket connection from /127.0.0.1:58840 (org.apache.zookeeper.server.NIOServerCnxnFactory)<br>[2016-06-27 12:07:19,048] INFO Refusing session request for client /127.0.0.1:58840 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)</p>
-<p>解决方法</p>
-<p>报错原因：服务器上还有应用在不停的向zookeeper发送请求</p>
-<p>解决方法：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用top -u [username]查看该用户下的所有进程，发现多了一个java进程在运行着；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、kill掉与java相关的进程；</p>
-<p>2、关闭zookeeper，删除zoo.cfg中的dataDir配置的文件夹；</p>
-<h2 id="3、重启zookeeper。"><a href="#3、重启zookeeper。" class="headerlink" title="3、重启zookeeper。"></a>3、重启zookeeper。</h2>]]></content>
-  </entry>
-  <entry>
     <title>linux install shadowsocks</title>
     <url>/2023/071659235.html</url>
     <content><![CDATA[<h1 id="1-安装Python和pip"><a href="#1-安装Python和pip" class="headerlink" title="1. 安装Python和pip"></a>1. 安装Python和pip</h1><p>sudo apt-get update</p>
@@ -1006,6 +992,20 @@
       <tags>
         <tag>随笔</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>kafka Create topic 报错</title>
+    <url>/2023/071361284.html</url>
+    <content><![CDATA[<p>bin/kafka-console-consumer.sh –bootstrap-server localhost:9092 –topic kk_log<br>报错如下：<br>WARN [Consumer clientId=consumer-1, groupId=console-consumer-507] Connection to node -1 could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)</p>
+<p>配置server.confg时候设置的<br>advertised.listeners=PLAINTEXT://10.171.222.26:9092<br>此时需要用配置的IP而非localhost地址：</p>
+<p>nohup bin/zookeeper-server-start.sh config/zookeeper.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>nohup bin/kafka-server-start.sh config/server.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>netstat -ntpl|egrep “(2181|9092)”<br>运行起来再试试<br>bin/kafka-console-consumer.sh –bootstrap-server 10.171.222.26:9092 –topic kk_log<br>应该就可以了。<br>做个小笔记。</p>
+<p>PS zookeeper 报错，宕掉；</p>
+<p>[2016-06-27 12:07:14,065] INFO Closed socket connection for client /127.0.0.1:58824 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn) [2016-<br>[2016-06-27 12:07:17,351] INFO Refusing session request for client /127.0.0.1:58834 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)<br>[2016-06-27 12:07:17,351] INFO Closed socket connection for client /127.0.0.1:58834 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn)<br>[2016-06-27 12:07:19,048] INFO Accepted socket connection from /127.0.0.1:58840 (org.apache.zookeeper.server.NIOServerCnxnFactory)<br>[2016-06-27 12:07:19,048] INFO Refusing session request for client /127.0.0.1:58840 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)</p>
+<p>解决方法</p>
+<p>报错原因：服务器上还有应用在不停的向zookeeper发送请求</p>
+<p>解决方法：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用top -u [username]查看该用户下的所有进程，发现多了一个java进程在运行着；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、kill掉与java相关的进程；</p>
+<p>2、关闭zookeeper，删除zoo.cfg中的dataDir配置的文件夹；</p>
+<h2 id="3、重启zookeeper。"><a href="#3、重启zookeeper。" class="headerlink" title="3、重启zookeeper。"></a>3、重启zookeeper。</h2>]]></content>
   </entry>
   <entry>
     <title>linux 磁盘挂载扩充格式化</title>
@@ -1165,6 +1165,69 @@
       </tags>
   </entry>
   <entry>
+    <title>/var/log/messages日志恢复</title>
+    <url>/2023/112018778.html</url>
+    <content><![CDATA[<p>Linux容易犯的一个错误是把日志文件给直接删除，而不是删除日志文件的内容。<br>直接删除日志文件往往导致新产生的日志记录无法被写入到日志文件中（因为它已经被删除了），而仅仅重新新建（touch）同样名字的文件是解决不了问题的。<br>本文以Unbutu系统为例，介绍如何恢复被误删除的syslog文件：<br>首先，在以root用户执行如下lsof命令，查询打开/var/log/messages文件的进程的进程ID(PID)。<br>root@zck:/var/log# lsof | grep messages<br>rsyslogd 544 syslog 7w REG 8,1 214641 134422 /var/log/messages<br>从上面命令输出可以看到，这个打开/var/log/messages文件的进程的PID是544，文件/var/log/messages的文件描述符（FD）号是7。<br>根据上述的PID和FD，可以在/proc找到对应的文件：<br>root@zck:/var/log#ls -al /proc/544/fd/7<br>l-wx—— 1 root root 64 2012-07-14 14:48 7 -&gt; /var/log/messages<br>将文件/proc/544/fd/7拷贝到/var/log/messages<br>cp /proc/544/fd/7 /var/log/messages&nbsp;</p>
+<p>然后重新启动syslog服务即可恢复被误删除的日志文件，并且新的日志记录能够继续被写入日志文件。<br>以root用户运行service命令。其中，service命令的第2个参数可能是syslog、也可能是rsyslog。<br>具体可以使用通过命令查询得知。<br>登录后复制<br>root@zck:/proc/544/fd# service –status-all<br> [ ? ] …<br> [ ? ] rc.local<br> [ ? ] rsyslog<br> [ ? ] screen-cleanup<br> [ ? ] …  #——————————-</p>
+<p>复制代码代码如下:<br>root@zck:/proc/544/fd# service rsyslog restart<br>rsyslog start/running, process 2673</p>
+<p>清空日志文件：<br>cat /dev/null&gt;/var/log/messages</p>
+<p>转自url:<a href="https://blog.51cto.com/u_11146845/6240737">https://blog.51cto.com/u_11146845/6240737</a></p>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>nginxlog切分</title>
+    <url>/2023/111760549.html</url>
+    <content><![CDATA[<p>1.设置日志文件存放目录，假设你的nginx的日志存在这个目录里<br>logs_path=”/data/log/nginx/“</p>
+<p>2.设置pid文件，这个根据你自己的环境，找到nginx.pid所在目录<br>pid_path=”/var/run/nginx.pid”</p>
+<p>3.创建分割存储的日期文件目录<br>datetime=<code>date -d "yesterday" +"%Y%m%d"</code>;<br>new_log_path=$logs_path$datetime<br>mkdir -p $new_log_path</p>
+<p>4.按照日期移动所有该目录下的日志文件<br>log_file_list=<code>ls -l $logs_path</code>;<br>for log_file in $log_file_list;<br>do<br>    log_file_name=$logs_path$log_file;<br>    if [ -f $log_file_name ];<br>    then<br>        mv $log_file_name $new_log_path;<br>    fi<br>done</p>
+<p>5.向nginx主进程发信号重新打开日志<br>kill -USR1 <code>cat ${pid_path}</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">logs_path=<span class="string">"/data/log/nginx/"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pid_path=<span class="string">"/var/run/nginx.pid"</span></span><br><span class="line"></span><br><span class="line">datetime=`<span class="built_in">date</span> -d <span class="string">"yesterday"</span> +<span class="string">"%Y%m%d"</span>`;</span><br><span class="line">new_log_path=$logs_path<span class="variable">$datetime</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$new_log_path</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">log_file_list=`<span class="built_in">ls</span> -l <span class="variable">$logs_path</span>`;</span><br><span class="line"><span class="keyword">for</span> log_file <span class="keyword">in</span> <span class="variable">$log_file_list</span>;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    log_file_name=$logs_path<span class="variable">$log_file</span>;</span><br><span class="line">    <span class="keyword">if</span> [ -f <span class="variable">$log_file_name</span> ];</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">mv</span> <span class="variable">$log_file_name</span> <span class="variable">$new_log_path</span>;</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">kill</span> -USR1 `<span class="built_in">cat</span> <span class="variable">${pid_path}</span>`</span><br></pre></td></tr></tbody></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>nginx编译ssl模块</title>
+    <url>/2023/062858442.html</url>
+    <content><![CDATA[<p>几个官网在一台服务器上面，其中一台是https的，增加一个官网以，重启nginx以后，https的网站直接报错，大意是ssl 在配置文件中unknow，但是这个https网站已经运行很久了，一时间有点郁闷，掉坑里了。</p>
+<p>查看nginx信息 /usr/local/nginx/sbin/nginx -V显示不支持ssl，那就好办，重新编译下ssl，但是线上业务跑着，难免有点担心，在测试机上跑了一次，正常的，才敢到线上操作，大致如此从网上找的如下：</p>
+<p>进入nginx源码目录：</p>
+<p>cd &nbsp;nginx-1.6.2</p>
+<p>./configure –prefix=/usr/local/nginx –user=www –group=www &nbsp;–with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
+<p>只添加ssl功能模块，有别的需求继续加上；</p>
+<p>运行完以后记得是make，make，make不是make &amp; make install ，install就覆盖安装了，千万搞清楚~</p>
+<p>make以后在当前目录生成odjs目录，下面就是新的nginx；</p>
+<p>剩下就好办，备份原来的nginx，把新生成的nginx替换原来的，</p>
+<p>备份旧的nginx程序</p>
+<p>cp /usr/local/nginx/sbin/nginx/usr/local/nginx/sbin/nginx.bak</p>
+<p>把新的nginx程序覆盖旧的</p>
+<p>cp objs/nginx /usr/local/nginx/sbin/nginx</p>
+<p>测试新的nginx程序是否正确</p>
+<p>/usr/local/nginx/sbin/nginx -t</p>
+<p>nginx: theconfiguration file /usr/local/nginx/conf/nginx.conf syntax is ok</p>
+<p>nginx:configuration file /usr/local/nginx/conf/nginx.conf test issuccessful</p>
+<p>平滑重启nginx</p>
+<p>/usr/local/nginx/sbin/nginx -s reload</p>
+<p>查看ngixn版本极其编译参数</p>
+<p>/usr/local/nginx/sbin/nginx -V</p>
+<p>configure arguments: –prefix=/data/app/nginx –user=www –group=www –with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
+<h6 id="权作一个跳坑记录。"><a href="#权作一个跳坑记录。" class="headerlink" title="权作一个跳坑记录。"></a>权作一个跳坑记录。</h6><hr>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>linux有足够内存还使用swap</title>
     <url>/2023/11131515.html</url>
     <content><![CDATA[<p>一台主机内存swap报警上去以查看确实swap快耗尽；</p>
@@ -1247,69 +1310,6 @@
 <p>rm swapadd&nbsp;&nbsp; &nbsp;###从文件系统中回收此文件</p>
 <hr>
 ]]></content>
-  </entry>
-  <entry>
-    <title>/var/log/messages日志恢复</title>
-    <url>/2023/112018778.html</url>
-    <content><![CDATA[<p>Linux容易犯的一个错误是把日志文件给直接删除，而不是删除日志文件的内容。<br>直接删除日志文件往往导致新产生的日志记录无法被写入到日志文件中（因为它已经被删除了），而仅仅重新新建（touch）同样名字的文件是解决不了问题的。<br>本文以Unbutu系统为例，介绍如何恢复被误删除的syslog文件：<br>首先，在以root用户执行如下lsof命令，查询打开/var/log/messages文件的进程的进程ID(PID)。<br>root@zck:/var/log# lsof | grep messages<br>rsyslogd 544 syslog 7w REG 8,1 214641 134422 /var/log/messages<br>从上面命令输出可以看到，这个打开/var/log/messages文件的进程的PID是544，文件/var/log/messages的文件描述符（FD）号是7。<br>根据上述的PID和FD，可以在/proc找到对应的文件：<br>root@zck:/var/log#ls -al /proc/544/fd/7<br>l-wx—— 1 root root 64 2012-07-14 14:48 7 -&gt; /var/log/messages<br>将文件/proc/544/fd/7拷贝到/var/log/messages<br>cp /proc/544/fd/7 /var/log/messages&nbsp;</p>
-<p>然后重新启动syslog服务即可恢复被误删除的日志文件，并且新的日志记录能够继续被写入日志文件。<br>以root用户运行service命令。其中，service命令的第2个参数可能是syslog、也可能是rsyslog。<br>具体可以使用通过命令查询得知。<br>登录后复制<br>root@zck:/proc/544/fd# service –status-all<br> [ ? ] …<br> [ ? ] rc.local<br> [ ? ] rsyslog<br> [ ? ] screen-cleanup<br> [ ? ] …  #——————————-</p>
-<p>复制代码代码如下:<br>root@zck:/proc/544/fd# service rsyslog restart<br>rsyslog start/running, process 2673</p>
-<p>清空日志文件：<br>cat /dev/null&gt;/var/log/messages</p>
-<p>转自url:<a href="https://blog.51cto.com/u_11146845/6240737">https://blog.51cto.com/u_11146845/6240737</a></p>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>nginxlog切分</title>
-    <url>/2023/111760549.html</url>
-    <content><![CDATA[<p>1.设置日志文件存放目录，假设你的nginx的日志存在这个目录里<br>logs_path=”/data/log/nginx/“</p>
-<p>2.设置pid文件，这个根据你自己的环境，找到nginx.pid所在目录<br>pid_path=”/var/run/nginx.pid”</p>
-<p>3.创建分割存储的日期文件目录<br>datetime=<code>date -d "yesterday" +"%Y%m%d"</code>;<br>new_log_path=$logs_path$datetime<br>mkdir -p $new_log_path</p>
-<p>4.按照日期移动所有该目录下的日志文件<br>log_file_list=<code>ls -l $logs_path</code>;<br>for log_file in $log_file_list;<br>do<br>    log_file_name=$logs_path$log_file;<br>    if [ -f $log_file_name ];<br>    then<br>        mv $log_file_name $new_log_path;<br>    fi<br>done</p>
-<p>5.向nginx主进程发信号重新打开日志<br>kill -USR1 <code>cat ${pid_path}</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">logs_path=<span class="string">"/data/log/nginx/"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pid_path=<span class="string">"/var/run/nginx.pid"</span></span><br><span class="line"></span><br><span class="line">datetime=`<span class="built_in">date</span> -d <span class="string">"yesterday"</span> +<span class="string">"%Y%m%d"</span>`;</span><br><span class="line">new_log_path=$logs_path<span class="variable">$datetime</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$new_log_path</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">log_file_list=`<span class="built_in">ls</span> -l <span class="variable">$logs_path</span>`;</span><br><span class="line"><span class="keyword">for</span> log_file <span class="keyword">in</span> <span class="variable">$log_file_list</span>;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    log_file_name=$logs_path<span class="variable">$log_file</span>;</span><br><span class="line">    <span class="keyword">if</span> [ -f <span class="variable">$log_file_name</span> ];</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">mv</span> <span class="variable">$log_file_name</span> <span class="variable">$new_log_path</span>;</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">kill</span> -USR1 `<span class="built_in">cat</span> <span class="variable">${pid_path}</span>`</span><br></pre></td></tr></tbody></table></figure>
-
-
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>nginx编译ssl模块</title>
-    <url>/2023/062858442.html</url>
-    <content><![CDATA[<p>几个官网在一台服务器上面，其中一台是https的，增加一个官网以，重启nginx以后，https的网站直接报错，大意是ssl 在配置文件中unknow，但是这个https网站已经运行很久了，一时间有点郁闷，掉坑里了。</p>
-<p>查看nginx信息 /usr/local/nginx/sbin/nginx -V显示不支持ssl，那就好办，重新编译下ssl，但是线上业务跑着，难免有点担心，在测试机上跑了一次，正常的，才敢到线上操作，大致如此从网上找的如下：</p>
-<p>进入nginx源码目录：</p>
-<p>cd &nbsp;nginx-1.6.2</p>
-<p>./configure –prefix=/usr/local/nginx –user=www –group=www &nbsp;–with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
-<p>只添加ssl功能模块，有别的需求继续加上；</p>
-<p>运行完以后记得是make，make，make不是make &amp; make install ，install就覆盖安装了，千万搞清楚~</p>
-<p>make以后在当前目录生成odjs目录，下面就是新的nginx；</p>
-<p>剩下就好办，备份原来的nginx，把新生成的nginx替换原来的，</p>
-<p>备份旧的nginx程序</p>
-<p>cp /usr/local/nginx/sbin/nginx/usr/local/nginx/sbin/nginx.bak</p>
-<p>把新的nginx程序覆盖旧的</p>
-<p>cp objs/nginx /usr/local/nginx/sbin/nginx</p>
-<p>测试新的nginx程序是否正确</p>
-<p>/usr/local/nginx/sbin/nginx -t</p>
-<p>nginx: theconfiguration file /usr/local/nginx/conf/nginx.conf syntax is ok</p>
-<p>nginx:configuration file /usr/local/nginx/conf/nginx.conf test issuccessful</p>
-<p>平滑重启nginx</p>
-<p>/usr/local/nginx/sbin/nginx -s reload</p>
-<p>查看ngixn版本极其编译参数</p>
-<p>/usr/local/nginx/sbin/nginx -V</p>
-<p>configure arguments: –prefix=/data/app/nginx –user=www –group=www –with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
-<h6 id="权作一个跳坑记录。"><a href="#权作一个跳坑记录。" class="headerlink" title="权作一个跳坑记录。"></a>权作一个跳坑记录。</h6><hr>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
-      </tags>
   </entry>
   <entry>
     <title>php 安装redis，protobuf,mcryp扩展</title>
@@ -1649,63 +1649,6 @@
       </tags>
   </entry>
   <entry>
-    <title>zabbix 清理历史数据</title>
-    <url>/2023/071761914.html</url>
-    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
-<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
-<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
-<p>root@Testl]$ date +%s -d”20160929”</p>
-<p>1475078400</p>
-<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
-<p>Query OK, 36093 rows affected (43.64 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
-<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history;</p>
-<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
-<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history_uint;</p>
-<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
-<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>漫长时间等待以后看下效果：</p>
-<p>原来数据：</p>
-<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
-<p>压缩中：</p>
-<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
-<p>find -size +50M -exec ls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
-<p>最终删两个表以后数据：</p>
-<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
-<p>完了以后，重启mysql，zabbix，nginx试试；</p>
-<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
-<hr>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>zabbix 设置163报警邮箱</title>
     <url>/2023/120119617.html</url>
     <content><![CDATA[<h2 id="1-测试端口是否开放："><a href="#1-测试端口是否开放：" class="headerlink" title="1.测试端口是否开放："></a>1.测试端口是否开放：</h2><p>nc -w 2 smtp.exmail.qq.com 465 &lt; /dev/null &amp;&amp; echo “port is ok”</p>
@@ -1974,6 +1917,63 @@
 ]]></content>
       <tags>
         <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>zabbix 清理历史数据</title>
+    <url>/2023/071761914.html</url>
+    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
+<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
+<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
+<p>root@Testl]$ date +%s -d”20160929”</p>
+<p>1475078400</p>
+<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
+<p>Query OK, 36093 rows affected (43.64 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
+<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history;</p>
+<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
+<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history_uint;</p>
+<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
+<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>漫长时间等待以后看下效果：</p>
+<p>原来数据：</p>
+<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
+<p>压缩中：</p>
+<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
+<p>find -size +50M -exec ls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
+<p>最终删两个表以后数据：</p>
+<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
+<p>完了以后，重启mysql，zabbix，nginx试试；</p>
+<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
       </tags>
   </entry>
   <entry>
