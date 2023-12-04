@@ -44,6 +44,19 @@
 ]]></content>
   </entry>
   <entry>
+    <title>Debian 10挂载加swap</title>
+    <url>/2023/111727163.html</url>
+    <content><![CDATA[<p>以根目录挂载为4G例：<br>dd if=/dev/zero of=/swapfile count=4096 bs=1M</p>
+<p>ls / | grep swapfile<br>chmod 600 /swapfile<br>ls -lh /swapfile<br>-rw——- 1 root root 4.0G Aug 17 12:14 /swapfile<br>通过运行以下命令告诉服务器设置swap文件：<br>mkswap /swapfile<br>swapon /swapfile<br>free -m<br>vi /etc/fstab<br>/swapfile swap swap defaults 0 0<br>保存。</p>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Debian10 安装ossfs</title>
     <url>/2023/111750151.html</url>
     <content><![CDATA[<p>1.<br>sudo apt-get install automake autotools-dev g++  git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev  make pkg-config<br>2.<br>git clone <a href="https://github.com/aliyun/ossfs.git">https://github.com/aliyun/ossfs.git</a><br>cd ossfs/<br> ./autogen.sh<br>  ./configure<br>Sudo   make<br> Sudo make install<br>3.配置bucket信息和accessKey信息：<br>echo Bucket名称:要是用的AccessKeyId:对应的AccessKeySecret  &gt; /etc/passwd-ossfs<br>示例：<br>mkdir -p /data/ossfs<br>cosfs examplebucket-1250000000 /data/ossfs -ourl=<a href="http://cos.ap-guangzhou.myqcloud.com/">http://cos.ap-guangzhou.myqcloud.com</a> </p>
@@ -265,19 +278,6 @@
 <p>Could not find log4j2 configuration at path /usr/share/logstash/config/log4j2.properties. Using default config which logs errors to the console</p>
 <p>等等可以看日志找出这些问题；本次安装遇到最大问题是乱码，做一次点滴笔记。</p>
 <hr>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Debian 10挂载加swap</title>
-    <url>/2023/111727163.html</url>
-    <content><![CDATA[<p>以根目录挂载为4G例：<br>dd if=/dev/zero of=/swapfile count=4096 bs=1M</p>
-<p>ls / | grep swapfile<br>chmod 600 /swapfile<br>ls -lh /swapfile<br>-rw——- 1 root root 4.0G Aug 17 12:14 /swapfile<br>通过运行以下命令告诉服务器设置swap文件：<br>mkswap /swapfile<br>swapon /swapfile<br>free -m<br>vi /etc/fstab<br>/swapfile swap swap defaults 0 0<br>保存。</p>
 ]]></content>
       <categories>
         <category>系统</category>
@@ -882,7 +882,7 @@
 <p>ps. 在CentOS上，您可以使用Node Version Manager（NVM）来安装和管理多个Node.js版本。首先，在CentOS上安装NVM。使用以下命令从NVM的GitHub仓库获取安装脚本：</p>
 <p>curl -o- <a href="https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh">https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh</a> | bash国内：</p>
 <p>curl -o- <a href="https://gitee.com/mirrors/nvm/raw/v0.39.0/install.sh">https://gitee.com/mirrors/nvm/raw/v0.39.0/install.sh</a> | bash</p>
-<p>注意：这是安装最新版本的NVM。您可以在NVM的GitHub页面（<a href="https://github.com/nvm-sh/nvm%EF%BC%89%E4%B8%8A%E6%9F%A5%E7%9C%8B%E6%9C%80%E6%96%B0%E7%89%88%E6%9C%AC%E5%B9%B6%E4%BD%BF%E7%94%A8%E7%9B%B8%E5%BA%94%E7%9A%84URL%E3%80%82">https://github.com/nvm-sh/nvm）上查看最新版本并使用相应的URL。</a></p>
+<p>注意：这是安装最新版本的NVM。您可以在NVM的GitHub页面（<a href="https://github.com/nvm-sh/nvm%EF%BC%89">https://github.com/nvm-sh/nvm）</a><br>上查看最新版本并使用相应的URL。</p>
 <p>4). 安装完成后，关闭并重新打开终端，或者使用以下命令重新加载终端以使NVM生效：</p>
 <p>source ~/.bashrc</p>
 <p>5). 使用NVM安装想要的Node.js版本。例如，运行以下命令安装最新的稳定版本：</p>
@@ -1649,63 +1649,6 @@
       </tags>
   </entry>
   <entry>
-    <title>zabbix 清理历史数据</title>
-    <url>/2023/071761914.html</url>
-    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
-<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
-<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
-<p>root@Testl]$ date +%s -d”20160929”</p>
-<p>1475078400</p>
-<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
-<p>Query OK, 36093 rows affected (43.64 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
-<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history;</p>
-<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
-<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history_uint;</p>
-<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
-<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>漫长时间等待以后看下效果：</p>
-<p>原来数据：</p>
-<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
-<p>压缩中：</p>
-<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
-<p>find -size +50M -exec ls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
-<p>最终删两个表以后数据：</p>
-<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
-<p>完了以后，重启mysql，zabbix，nginx试试；</p>
-<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
-<hr>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>zabbix 设置163报警邮箱</title>
     <url>/2023/120119617.html</url>
     <content><![CDATA[<h2 id="1-测试端口是否开放："><a href="#1-测试端口是否开放：" class="headerlink" title="1.测试端口是否开放："></a>1.测试端口是否开放：</h2><p>nc -w 2 smtp.exmail.qq.com 465 &lt; /dev/null &amp;&amp; echo “port is ok”</p>
@@ -2003,6 +1946,63 @@
 ]]></content>
       <tags>
         <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>zabbix 清理历史数据</title>
+    <url>/2023/071761914.html</url>
+    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
+<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
+<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
+<p>root@Testl]$ date +%s -d”20160929”</p>
+<p>1475078400</p>
+<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
+<p>Query OK, 36093 rows affected (43.64 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
+<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history;</p>
+<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
+<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history_uint;</p>
+<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
+<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>漫长时间等待以后看下效果：</p>
+<p>原来数据：</p>
+<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
+<p>压缩中：</p>
+<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
+<p>find -size +50M -exec ls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
+<p>最终删两个表以后数据：</p>
+<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
+<p>完了以后，重启mysql，zabbix，nginx试试；</p>
+<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
       </tags>
   </entry>
 </search>
