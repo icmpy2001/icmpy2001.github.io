@@ -484,8 +484,8 @@
 <p>ldd (GNU libc) 2.17</p>
 <p>版本太高换回nvm install 16.20.2</p>
 <h2 id="2-git-repo仓库安装"><a href="#2-git-repo仓库安装" class="headerlink" title="2. git repo仓库安装"></a>2. git repo仓库安装</h2><p>github也可以注册账号，Github Pages可以直接生成页面，不过国外的网速实在是龟速，gitee也有这个功能，实名认证太麻烦，索性在自己测试机上直接建立git仓库，直接推送建立站点而已，后续国内服务器需要网站备案。</p>
-<p>1).安装git  ubuntu/debian sudo apt-get install git</p>
-<p>​               centos   sudo yum install git</p>
+<p>1).安装git<br>ubuntu/debian:<br>sudo apt-get install git</p>
+<p>centos:<br>sudo yum install git</p>
 <p>2).创建一个git用户，用来运行git服务：</p>
 <p>$ sudo adduser git<br>3).创建证书登录实现git免密推送：</p>
 <p>收集所有需要登录的用户的公钥id_rsa.pub文件，把所有公钥导入到/home/git/.ssh/authorized_keys文件里，一行一个。</p>
