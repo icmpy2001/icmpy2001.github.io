@@ -6,7 +6,7 @@
   <link href="https://blog.icmpy.net/atom.xml" rel="self"/>
   
   <link href="https://blog.icmpy.net/"/>
-  <updated>2023-12-08T09:56:30.074Z</updated>
+  <updated>2023-12-08T10:16:33.371Z</updated>
   <id>https://blog.icmpy.net/</id>
   
   <author>
@@ -17,15 +17,26 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>123</title>
-    <link href="https://blog.icmpy.net/2023/120847620.html"/>
-    <id>https://blog.icmpy.net/2023/120847620.html</id>
-    <published>2023-12-08T09:50:54.000Z</published>
-    <updated>2023-12-08T09:56:30.074Z</updated>
+    <title>debian安装gitea</title>
+    <link href="https://blog.icmpy.net/2023/120864459.html"/>
+    <id>https://blog.icmpy.net/2023/120864459.html</id>
+    <published>2023-12-08T10:04:57.000Z</published>
+    <updated>2023-12-08T10:16:33.371Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;   项目需要自己的git仓库，github，gitee，阿里云效都可以，gitea没用过，尝试装一下。&lt;/p&gt;
+&lt;h2 id=&quot;1-mariadb安装&quot;&gt;&lt;a href=&quot;#1-mariadb安装&quot; class=&quot;headerlink&quot;</summary>
+        
+      
     
     
     
     
+    <category term="git" scheme="https://blog.icmpy.net/tags/git/"/>
     
   </entry>
   

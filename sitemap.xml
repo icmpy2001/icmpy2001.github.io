@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://blog.icmpy.net/2023/120847620.html</loc>
+    <loc>https://blog.icmpy.net/2023/120864459.html</loc>
     
     <lastmod>2023-12-08</lastmod>
     
@@ -12,15 +12,6 @@
   
   <url>
     <loc>https://blog.icmpy.net/mood/index.html</loc>
-    
-    <lastmod>2023-12-08</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.icmpy.net/musics/index.html</loc>
     
     <lastmod>2023-12-08</lastmod>
     
@@ -39,6 +30,15 @@
   
   <url>
     <loc>https://blog.icmpy.net/photo/index.html</loc>
+    
+    <lastmod>2023-12-08</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.icmpy.net/musics/index.html</loc>
     
     <lastmod>2023-12-08</lastmod>
     
@@ -402,6 +402,13 @@
   
   <url>
     <loc>https://blog.icmpy.net/tags/%E5%BF%83%E5%BE%97/</loc>
+    <lastmod>2023-12-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.icmpy.net/tags/git/</loc>
     <lastmod>2023-12-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
