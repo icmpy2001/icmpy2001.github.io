@@ -633,6 +633,159 @@
       </tags>
   </entry>
   <entry>
+    <title>debian安装gitea</title>
+    <url>/2023/120864459.html</url>
+    <content><![CDATA[<p>   项目需要自己的git仓库，github，gitee，阿里云效都可以，gitea没用过，尝试装一下。</p>
+<h2 id="1-mariadb安装"><a href="#1-mariadb安装" class="headerlink" title="1.mariadb安装"></a>1.mariadb安装</h2><p> lsb_release  -a</p>
+<p>root@github:/home/tools# lsb_release  -a</p>
+<p>No LSB modules are available.</p>
+<p>Distributor ID:	Debian</p>
+<p>Description:	Debian GNU/Linux 10 (buster)</p>
+<p>Release:	10</p>
+<p>Codename:	buster</p>
+<p>apt install mariadb-server mariadb-client</p>
+<p> sudo mysql_secure_installation</p>
+<p>- Set root password? [Y/n] y</p>
+<p>-Remove anonymous users? [Y/n] y</p>
+<p>- Disallow root login remotely? [Y/n] y</p>
+<p>- Remove test database and access to it? [Y/n] y</p>
+<p>- Reload privilege tables now? [Y/n] y</p>
+<p>一路回车，Set root password? [Y/n] y</p>
+<p>Enter current password for root (enter for none): </p>
+<p>OK, successfully used password, moving on…</p>
+<p>Setting the root password ensures that nobody can log into the MariaDB</p>
+<p>root user without the proper authorisation.</p>
+<p>Set root password? [Y/n] y</p>
+<p>New password: </p>
+<p>Re-enter new password: </p>
+<p>Password updated successfully!</p>
+<p>Reloading privilege tables..</p>
+<p>接下来设置数据库</p>
+<p> MariaDB [(none)]&gt; CREATE DATABASE gitea;</p>
+<p>MariaDB [(none)]&gt; GRANT ALL PRIVILEGES ON gitea.* TO ‘giteadb‘@’localhost’ IDENTIFIED BY ‘gitea#ba1’;</p>
+<p>MariaDB [(none)]&gt; FLUSH PRIVILEGES;</p>
+<p>MariaDB [(none)]&gt; QUIT;</p>
+<h2 id="2-gitea-安装"><a href="#2-gitea-安装" class="headerlink" title="2.gitea 安装"></a>2.gitea 安装</h2><p>sudo apt install git</p>
+<p>adduser –system –shell /bin/bash –gecos ‘Git Version Control’ –group –disabled-password –home /data/gitrepo git</p>
+<p>下载gitea最新版本：120M左右<br>curl -s <a href="https://api.github.com/repos/go-gitea/gitea/releases/latest">https://api.github.com/repos/go-gitea/gitea/releases/latest</a> |grep browser_download_url | cut -d ‘“‘ -f 4 | grep ‘\linux-amd64$’ | wget -i -</p>
+<p>mv gitea-*-linux-amd64 /usr/local/bin/gitea</p>
+<p>chmod +x /usr/local/bin/gitea</p>
+<p>root@git:/home/tools/gitea# gitea –version</p>
+<p>Gitea version 1.20.0 built with GNU Make 4.1, go1.20.6 : bindata, sqlite, sqlite_unlock_notify</p>
+<p>接下来，您需要为 Gitea 创建一个目录结构。</p>
+<p>mkdir -p /etc/gitea /var/lib/gitea/{custom,data,indexers,public,log}</p>
+<p>然后，使用以下命令设置适当的权限和所有权：</p>
+<p>chown git:git /var/lib/gitea/{data,indexers,log}</p>
+<p>chmod 750 /var/lib/gitea/{data,indexers,log}</p>
+<p>chown root:git /etc/gitea</p>
+<p>chmod 770 /etc/gitea</p>
+<p>创建 Gitea Systemd 文件。 Gitea创建服务/etc/systemd/system/gitea.service:</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Gitea (Git with a cup of tea)</span><br><span class="line">After=syslog.target</span><br><span class="line">After=network.target</span><br><span class="line">After=mysql.service</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">LimitMEMLOCK=infinity</span><br><span class="line">LimitNOFILE=65535</span><br><span class="line">RestartSec=2s</span><br><span class="line">Type=simple</span><br><span class="line">User=git</span><br><span class="line">Group=git</span><br><span class="line">WorkingDirectory=/var/lib/gitea/</span><br><span class="line">ExecStart=/usr/local/bin/gitea web -c /etc/gitea/app.ini</span><br><span class="line">Restart=always</span><br><span class="line">Environment=USER=git </span><br><span class="line">HOME=/data/gitrepo</span><br><span class="line">GITEA_WORK_DIR=/var/lib/gitea</span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></tbody></table></figure>
+
+<p>systemctl daemon-reload</p>
+<p>systemctl enable  gitea.service</p>
+<p>systemctl start gitea.service</p>
+<p>初始化：</p>
+<p><img src="/../images/20231208_1.png"><br><img src="/../images/20231208_2.png"></p>
+<p>最终会生成一个/etc/gitea/app.ini文件：可以做域名，端口根据自己需求调整：</p>
+<p>cat /etc/gitea/app.ini</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">APP_NAME = Gitea: Git with a cup of tea</span><br><span class="line">RUN_USER = git</span><br><span class="line">WORK_PATH = /usr/local/bin</span><br><span class="line">RUN_MODE = prod</span><br><span class="line"> </span><br><span class="line">[server]</span><br><span class="line">SSH_DOMAIN = repo.yjzs.orlesh.com</span><br><span class="line">DOMAIN = 域名</span><br><span class="line">HTTP_PORT = gitea端口自定义10048</span><br><span class="line">ROOT_URL = https://域名</span><br><span class="line"></span><br><span class="line">APP_DATA_PATH = /usr/local/bin/data</span><br><span class="line">START_SSH_SERVER = true</span><br><span class="line">DISABLE_SSH = false</span><br><span class="line"></span><br><span class="line">\#SSH_PORT = 22</span><br><span class="line">SSH_PORT = 可以自定义</span><br><span class="line">LFS_START_SERVER = true</span><br><span class="line">LFS_JWT_SECRET = ……</span><br><span class="line">OFFLINE_MODE = false </span><br><span class="line"></span><br><span class="line">[database]</span><br><span class="line">DB_TYPE = mysql</span><br><span class="line">HOST = 127.0.0.1:3306</span><br><span class="line">NAME = gitea</span><br><span class="line">USER = gitea</span><br><span class="line">PASSWD = `passwd`</span><br><span class="line">SCHEMA = </span><br><span class="line">SSL_MODE = disable</span><br><span class="line">PATH = /usr/local/bin/data/gitea.db</span><br><span class="line">LOG_SQL = false</span><br><span class="line"></span><br><span class="line">[repository]</span><br><span class="line">ROOT = /data/gitrepo/</span><br><span class="line"></span><br><span class="line">[lfs]</span><br><span class="line">PATH = /usr/local/bin/data/lfs</span><br><span class="line">[mailer]</span><br><span class="line">ENABLED = false</span><br><span class="line">[service]</span><br><span class="line">REGISTER_EMAIL_CONFIRM = false</span><br><span class="line">ENABLE_NOTIFY_MAIL = false</span><br><span class="line">DISABLE_REGISTRATION = false</span><br><span class="line">ALLOW_ONLY_EXTERNAL_REGISTRATION = false</span><br><span class="line">ENABLE_CAPTCHA = false</span><br><span class="line">REQUIRE_SIGNIN_VIEW = false</span><br><span class="line">DEFAULT_KEEP_EMAIL_PRIVATE = false</span><br><span class="line">DEFAULT_ALLOW_CREATE_ORGANIZATION = true</span><br><span class="line">DEFAULT_ENABLE_TIMETRACKING = true</span><br><span class="line">NO_REPLY_ADDRESS = noreply.域名</span><br><span class="line"></span><br><span class="line">[openid]</span><br><span class="line">ENABLE_OPENID_SIGNIN = true</span><br><span class="line">ENABLE_OPENID_SIGNUP = true</span><br><span class="line">[cron.update_checker]</span><br><span class="line">ENABLED = false</span><br><span class="line"> </span><br><span class="line">[session]</span><br><span class="line">PROVIDER = file</span><br><span class="line"></span><br><span class="line">[log]</span><br><span class="line">MODE = console</span><br><span class="line">LEVEL = info</span><br><span class="line">ROOT_PATH = /usr/local/bin/data/log</span><br><span class="line"></span><br><span class="line">[repository.pull-request]</span><br><span class="line">DEFAULT_MERGE_STYLE = merge</span><br><span class="line"></span><br><span class="line">[repository.signing]</span><br><span class="line">DEFAULT_TRUST_MODEL = committer</span><br><span class="line">[security]</span><br><span class="line">……</span><br><span class="line"></span><br><span class="line"> </span><br></pre></td></tr></tbody></table></figure>
+
+<p>Nginx 配置转发：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line"></span><br><span class="line">server { </span><br><span class="line">   listen    80; </span><br><span class="line">   server_name  域名; </span><br><span class="line">   \# http默认重定向到https </span><br><span class="line">   return   301 https://$server_name$request_uri; </span><br><span class="line"></span><br><span class="line">} </span><br><span class="line"></span><br><span class="line">server {</span><br><span class="line"></span><br><span class="line">  listen 443 ssl;</span><br><span class="line"> server_name 域名;</span><br><span class="line">  access_log /var/log/nginx/gitea_access.log;</span><br><span class="line">  error_log /var/log/nginx/gitea_error.log;</span><br><span class="line"></span><br><span class="line">  ssl_certificate  /etc/nginx/cert/域名.pem; </span><br><span class="line">  ssl_certificate_key /etc/nginx/cert/域名.key;  </span><br><span class="line">   ssl_session_timeout 5m; </span><br><span class="line">   ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4; </span><br><span class="line">  ssl_protocols TLSv1 TLSv1.1 TLSv1.2; </span><br><span class="line">  ssl_prefer_server_ciphers on; </span><br><span class="line">   client_max_body_size 1024m; </span><br><span class="line"> </span><br><span class="line"> allow 192.168.8.10;  </span><br><span class="line">  deny all;</span><br><span class="line">  location / {</span><br><span class="line">   proxy_pass http://localhost:10048;</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="3-gitea-操作"><a href="#3-gitea-操作" class="headerlink" title="3.gitea 操作"></a>3.gitea 操作</h2><p>调试完成就可以访问配置的域名，进入gitea后台：右上角设置，设置SSH/GPGg密钥和管理后台添加账户；</p>
+<p>创建仓库：</p>
+<p><img src="/../images/20231208_3.png"></p>
+<p>本地设置：</p>
+<p>在安装完git和TortoiseGit后，使用ssh的配置如下：<br>生成ssh key<br> 运行Git Bash<br> 进到ssh目录： cd ~/.ssh/<br> 如果提示不存在，创建.ssh：mkdir ~/.ssh/<br> 配置用户名和邮箱：</p>
+<p>Git config –global user.name “your name”</p>
+<p>Git config –global user.email “<a href="mailto:your_email@example.com">your_email@example.com</a>”</p>
+<p> 生成key：ssh-keygen -t rsa -C “<a href="mailto:your_email@example.com">your_email@example.com</a>“<br> 连续按三次回车即可<br> 最后得到了两个文件：id_rsa和id_rsa.pub<br> 复制ssh内容：cat is_rsa.pub 添加到gitea 的SSH/GPGg密钥那边</p>
+<p>需要创建一个远程空仓库，可以使用GitHub、GitLab等平台创建。获取仓库的URL，以便后续推送代码时使用。</p>
+<p>克隆远程仓库</p>
+<p>在推送代码之前，首先需要将远程仓库克隆到本地。可以使用以下命令进行克隆：</p>
+<p>git remote add  origin ssh:/git url </p>
+<p>建议用ssh:/git 远程库url，https url会报一些错误：比如，</p>
+<p>error: RPC failed; curl 56 HTTP/2 stream 5 was reset</p>
+<p>send-pack: unexpected disconnect while reading sideband packet</p>
+<p>fatal: the remote end hung up unexpectedly</p>
+<p>Everything up-to-date</p>
+<p> 设置了git config –global http.postBuffer 524288000似乎效果不大</p>
+<p> Git基本操作：</p>
+<p>新建代码库：</p>
+<p># 在当前目录新建一个Git代码库</p>
+<p>$ git init</p>
+<p># 新建一个目录，将其初始化为Git代码库</p>
+<p>$ git clone [url]</p>
+<p># 列出当前所有配置， 包含本地、全局、系统配置</p>
+<p>$ git config –list</p>
+<p># 列出本地配置</p>
+<p>git config –local –list</p>
+<p># 列出全局配置</p>
+<p>git config –global –list</p>
+<p># 列出系统配置</p>
+<p>git config –system –list</p>
+<p># 添加指定文件到暂存区</p>
+<p>$ git add [file1] [file2] …</p>
+<p># 添加指定目录到暂存区，包括子目录</p>
+<p>$ git add [dir]</p>
+<p># 添加当前目录的所有文件到暂存区</p>
+<p>$ git add .</p>
+<p># 添加每个变化前，都会要求确认# 对于同一个文件的多处变化，可以实现分次提交</p>
+<p>$ git add -p</p>
+<p># 删除工作区文件，并且将这次删除放入暂存区</p>
+<p>$ git rm [file1] [file2] …</p>
+<p># 停止追踪指定文件，但该文件会保留在工作区</p>
+<p>$ git rm –cached [file]</p>
+<p># 改名文件，并且将这个改名放入暂存区</p>
+<p>$ git mv [file-original] [file-renamed]</p>
+<p># 提交暂存区到仓库区</p>
+<p>$ git commit -m [message]</p>
+<p># 提交暂存区的指定文件到仓库区</p>
+<p>$ git commit [file1] [file2] … -m [message]</p>
+<p># 提交工作区自上次commit之后的变化，直接到仓库区</p>
+<p>$ git commit -a</p>
+<p># 提交时显示所有diff信息</p>
+<p>$ git commit -v</p>
+<p># 使用一次新的commit，替代上一次提交# 如果代码没有任何新变化，则用来改写上一次commit的提交信息</p>
+<p>$ git commit –amend -m [message]</p>
+<p># 重做上一次commit，并包括指定文件的新变化</p>
+<p>$ git commit –amend [file1] [file2] …</p>
+<p># 列出所有远程分支</p>
+<p>$ git branch -r</p>
+<p># 列出所有本地分支和远程分支</p>
+<p>$ git branch -a</p>
+<p># 新建一个分支，但依然停留在当前分支</p>
+<p>$ git branch [branch-name]</p>
+<p># 新建一个分支，并切换到该分支</p>
+<p>$ git checkout -b [branch]</p>
+<p># 新建一个分支，指向指定commit</p>
+<p>$ git branch [branch] [commit]</p>
+<p># 新建一个分支，与指定的远程分支建立追踪关系</p>
+<p>$ git branch –track [branch] [remote-branch]</p>
+<p># 切换到指定分支，并更新工作区</p>
+<p>$ git checkout [branch-name]</p>
+<p># 切换到上一个分支</p>
+<p>$ git checkout -</p>
+<p># 合并指定分支到当前分支</p>
+<p>$ git merge [branch]</p>
+<p># 选择一个commit，合并进当前分支</p>
+<p>$ git cherry-pick [commit]</p>
+<p># 删除分支</p>
+<p>$ git branch -d [branch-name]</p>
+<p># 删除远程分支</p>
+<p>$ git push origin –delete [branch-name]</p>
+<p>$ git branch -dr [remote/branch]</p>
+<p>Windows系统上面的更新脚本：</p>
+<figure class="highlight bat"><table><tbody><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">::::::::::::::::::::::::::::::::::::::::::::</span><br><span class="line"></span><br><span class="line">::    Usage: ./update.bat "msg"     ::</span><br><span class="line"></span><br><span class="line">::::::::::::::::::::::::::::::::::::::::::::</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"></span><br><span class="line"><span class="built_in">setlocal</span> enabledelayedexpansion</span><br><span class="line"></span><br><span class="line">@<span class="built_in">echo</span> "<span class="built_in">start</span> update!"</span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br><span class="line"></span><br><span class="line">:: 下方设置参数</span><br><span class="line"></span><br><span class="line">@<span class="built_in">set</span> <span class="built_in">DATE</span>="<span class="variable">%date%</span> <span class="variable">%time%</span>"</span><br><span class="line"></span><br><span class="line">@<span class="built_in">set</span> FILE="%<span class="number">0</span>"</span><br><span class="line"></span><br><span class="line">@<span class="built_in">set</span> MSG="%<span class="number">1</span>"</span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br><span class="line"></span><br><span class="line">:: 下方将双引号删除</span><br><span class="line"></span><br><span class="line">@<span class="built_in">set</span> FILE=<span class="variable">%FILE:"=%</span></span><br><span class="line"></span><br><span class="line">@<span class="built_in">set</span> MSG=<span class="variable">%MSG:"=%</span></span><br><span class="line"></span><br><span class="line">@<span class="built_in">set</span> <span class="built_in">DATE</span>=<span class="variable">%DATE:"=%</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br><span class="line"></span><br><span class="line">:: 下方更新git</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> E:\work\sdk_server_release</span><br><span class="line"></span><br><span class="line"><span class="built_in">dir</span></span><br><span class="line"></span><br><span class="line">git status</span><br><span class="line"></span><br><span class="line">git remote -v</span><br><span class="line"></span><br><span class="line">:: 多人协作首先pull一下到本地</span><br><span class="line"></span><br><span class="line">git pull origin master</span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br><span class="line"></span><br><span class="line">git status</span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br><span class="line"></span><br><span class="line">git config --global http.postBuffer <span class="number">524288000</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> "<span class="built_in">set</span> postbuffer"</span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br><span class="line"></span><br><span class="line">@git add .</span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br><span class="line"></span><br><span class="line">@git commit -m "<span class="variable">%FILE%</span> : <span class="variable">%MSG%</span> <span class="variable">%DATE%</span>"</span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br><span class="line"></span><br><span class="line">@git push origin master</span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br><span class="line"></span><br><span class="line">::::::::::::::::::::::::::::::::::::::::::::</span><br><span class="line"></span><br><span class="line">::   written by -_-     ::</span><br><span class="line"></span><br><span class="line">::::::::::::::::::::::::::::::::::::::::::::</span><br></pre></td></tr></tbody></table></figure>
+
+]]></content>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>docker 安装walle2部署项目</title>
     <url>/2023/112024358.html</url>
     <content><![CDATA[<p>​     项目从git上面拉取代码，然后打包推送到服务器，更新启动服务，开发大神需要ci/cd平台，当前开源的可能walle和蓝鲸cmdb系统比较实用，123正反面选择了walle，据说已经停了好久，不过对于项目来说够用了，开始吧。</p>
@@ -1166,38 +1319,6 @@
       </tags>
   </entry>
   <entry>
-    <title>/var/log/messages日志恢复</title>
-    <url>/2023/112018778.html</url>
-    <content><![CDATA[<p>Linux容易犯的一个错误是把日志文件给直接删除，而不是删除日志文件的内容。<br>直接删除日志文件往往导致新产生的日志记录无法被写入到日志文件中（因为它已经被删除了），而仅仅重新新建（touch）同样名字的文件是解决不了问题的。<br>本文以Unbutu系统为例，介绍如何恢复被误删除的syslog文件：<br>首先，在以root用户执行如下lsof命令，查询打开/var/log/messages文件的进程的进程ID(PID)。<br>root@zck:/var/log# lsof | grep messages<br>rsyslogd 544 syslog 7w REG 8,1 214641 134422 /var/log/messages<br>从上面命令输出可以看到，这个打开/var/log/messages文件的进程的PID是544，文件/var/log/messages的文件描述符（FD）号是7。<br>根据上述的PID和FD，可以在/proc找到对应的文件：<br>root@zck:/var/log#ls -al /proc/544/fd/7<br>l-wx—— 1 root root 64 2012-07-14 14:48 7 -&gt; /var/log/messages<br>将文件/proc/544/fd/7拷贝到/var/log/messages<br>cp /proc/544/fd/7 /var/log/messages&nbsp;</p>
-<p>然后重新启动syslog服务即可恢复被误删除的日志文件，并且新的日志记录能够继续被写入日志文件。<br>以root用户运行service命令。其中，service命令的第2个参数可能是syslog、也可能是rsyslog。<br>具体可以使用通过命令查询得知。<br>登录后复制<br>root@zck:/proc/544/fd# service –status-all<br> [ ? ] …<br> [ ? ] rc.local<br> [ ? ] rsyslog<br> [ ? ] screen-cleanup<br> [ ? ] …  #——————————-</p>
-<p>复制代码代码如下:<br>root@zck:/proc/544/fd# service rsyslog restart<br>rsyslog start/running, process 2673</p>
-<p>清空日志文件：<br>cat /dev/null&gt;/var/log/messages</p>
-<p>转自url:<a href="https://blog.51cto.com/u_11146845/6240737">https://blog.51cto.com/u_11146845/6240737</a></p>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>nginxlog切分</title>
-    <url>/2023/111760549.html</url>
-    <content><![CDATA[<p>1.设置日志文件存放目录，假设你的nginx的日志存在这个目录里<br>logs_path=”/data/log/nginx/“</p>
-<p>2.设置pid文件，这个根据你自己的环境，找到nginx.pid所在目录<br>pid_path=”/var/run/nginx.pid”</p>
-<p>3.创建分割存储的日期文件目录<br>datetime=<code>date -d "yesterday" +"%Y%m%d"</code>;<br>new_log_path=$logs_path$datetime<br>mkdir -p $new_log_path</p>
-<p>4.按照日期移动所有该目录下的日志文件<br>log_file_list=<code>ls -l $logs_path</code>;<br>for log_file in $log_file_list;<br>do<br>    log_file_name=$logs_path$log_file;<br>    if [ -f $log_file_name ];<br>    then<br>        mv $log_file_name $new_log_path;<br>    fi<br>done</p>
-<p>5.向nginx主进程发信号重新打开日志<br>kill -USR1 <code>cat ${pid_path}</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">logs_path=<span class="string">"/data/log/nginx/"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pid_path=<span class="string">"/var/run/nginx.pid"</span></span><br><span class="line"></span><br><span class="line">datetime=`<span class="built_in">date</span> -d <span class="string">"yesterday"</span> +<span class="string">"%Y%m%d"</span>`;</span><br><span class="line">new_log_path=$logs_path<span class="variable">$datetime</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$new_log_path</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">log_file_list=`<span class="built_in">ls</span> -l <span class="variable">$logs_path</span>`;</span><br><span class="line"><span class="keyword">for</span> log_file <span class="keyword">in</span> <span class="variable">$log_file_list</span>;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    log_file_name=$logs_path<span class="variable">$log_file</span>;</span><br><span class="line">    <span class="keyword">if</span> [ -f <span class="variable">$log_file_name</span> ];</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">mv</span> <span class="variable">$log_file_name</span> <span class="variable">$new_log_path</span>;</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">kill</span> -USR1 `<span class="built_in">cat</span> <span class="variable">${pid_path}</span>`</span><br></pre></td></tr></tbody></table></figure>
-
-
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>linux有足够内存还使用swap</title>
     <url>/2023/11131515.html</url>
     <content><![CDATA[<p>一台主机内存swap报警上去以查看确实swap快耗尽；</p>
@@ -1280,6 +1401,38 @@
 <p>rm swapadd&nbsp;&nbsp; &nbsp;###从文件系统中回收此文件</p>
 <hr>
 ]]></content>
+  </entry>
+  <entry>
+    <title>/var/log/messages日志恢复</title>
+    <url>/2023/112018778.html</url>
+    <content><![CDATA[<p>Linux容易犯的一个错误是把日志文件给直接删除，而不是删除日志文件的内容。<br>直接删除日志文件往往导致新产生的日志记录无法被写入到日志文件中（因为它已经被删除了），而仅仅重新新建（touch）同样名字的文件是解决不了问题的。<br>本文以Unbutu系统为例，介绍如何恢复被误删除的syslog文件：<br>首先，在以root用户执行如下lsof命令，查询打开/var/log/messages文件的进程的进程ID(PID)。<br>root@zck:/var/log# lsof | grep messages<br>rsyslogd 544 syslog 7w REG 8,1 214641 134422 /var/log/messages<br>从上面命令输出可以看到，这个打开/var/log/messages文件的进程的PID是544，文件/var/log/messages的文件描述符（FD）号是7。<br>根据上述的PID和FD，可以在/proc找到对应的文件：<br>root@zck:/var/log#ls -al /proc/544/fd/7<br>l-wx—— 1 root root 64 2012-07-14 14:48 7 -&gt; /var/log/messages<br>将文件/proc/544/fd/7拷贝到/var/log/messages<br>cp /proc/544/fd/7 /var/log/messages&nbsp;</p>
+<p>然后重新启动syslog服务即可恢复被误删除的日志文件，并且新的日志记录能够继续被写入日志文件。<br>以root用户运行service命令。其中，service命令的第2个参数可能是syslog、也可能是rsyslog。<br>具体可以使用通过命令查询得知。<br>登录后复制<br>root@zck:/proc/544/fd# service –status-all<br> [ ? ] …<br> [ ? ] rc.local<br> [ ? ] rsyslog<br> [ ? ] screen-cleanup<br> [ ? ] …  #——————————-</p>
+<p>复制代码代码如下:<br>root@zck:/proc/544/fd# service rsyslog restart<br>rsyslog start/running, process 2673</p>
+<p>清空日志文件：<br>cat /dev/null&gt;/var/log/messages</p>
+<p>转自url:<a href="https://blog.51cto.com/u_11146845/6240737">https://blog.51cto.com/u_11146845/6240737</a></p>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>nginxlog切分</title>
+    <url>/2023/111760549.html</url>
+    <content><![CDATA[<p>1.设置日志文件存放目录，假设你的nginx的日志存在这个目录里<br>logs_path=”/data/log/nginx/“</p>
+<p>2.设置pid文件，这个根据你自己的环境，找到nginx.pid所在目录<br>pid_path=”/var/run/nginx.pid”</p>
+<p>3.创建分割存储的日期文件目录<br>datetime=<code>date -d "yesterday" +"%Y%m%d"</code>;<br>new_log_path=$logs_path$datetime<br>mkdir -p $new_log_path</p>
+<p>4.按照日期移动所有该目录下的日志文件<br>log_file_list=<code>ls -l $logs_path</code>;<br>for log_file in $log_file_list;<br>do<br>    log_file_name=$logs_path$log_file;<br>    if [ -f $log_file_name ];<br>    then<br>        mv $log_file_name $new_log_path;<br>    fi<br>done</p>
+<p>5.向nginx主进程发信号重新打开日志<br>kill -USR1 <code>cat ${pid_path}</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">logs_path=<span class="string">"/data/log/nginx/"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pid_path=<span class="string">"/var/run/nginx.pid"</span></span><br><span class="line"></span><br><span class="line">datetime=`<span class="built_in">date</span> -d <span class="string">"yesterday"</span> +<span class="string">"%Y%m%d"</span>`;</span><br><span class="line">new_log_path=$logs_path<span class="variable">$datetime</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$new_log_path</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">log_file_list=`<span class="built_in">ls</span> -l <span class="variable">$logs_path</span>`;</span><br><span class="line"><span class="keyword">for</span> log_file <span class="keyword">in</span> <span class="variable">$log_file_list</span>;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    log_file_name=$logs_path<span class="variable">$log_file</span>;</span><br><span class="line">    <span class="keyword">if</span> [ -f <span class="variable">$log_file_name</span> ];</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">mv</span> <span class="variable">$log_file_name</span> <span class="variable">$new_log_path</span>;</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">kill</span> -USR1 `<span class="built_in">cat</span> <span class="variable">${pid_path}</span>`</span><br></pre></td></tr></tbody></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
   </entry>
   <entry>
     <title>nginx编译ssl模块</title>
@@ -2004,159 +2157,6 @@
 ]]></content>
       <tags>
         <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>debian安装gitea</title>
-    <url>/2023/120864459.html</url>
-    <content><![CDATA[<p>   项目需要自己的git仓库，github，gitee，阿里云效都可以，gitea没用过，尝试装一下。</p>
-<h2 id="1-mariadb安装"><a href="#1-mariadb安装" class="headerlink" title="1.mariadb安装"></a>1.mariadb安装</h2><p> lsb_release  -a</p>
-<p>root@github:/home/tools# lsb_release  -a</p>
-<p>No LSB modules are available.</p>
-<p>Distributor ID:	Debian</p>
-<p>Description:	Debian GNU/Linux 10 (buster)</p>
-<p>Release:	10</p>
-<p>Codename:	buster</p>
-<p>apt install mariadb-server mariadb-client</p>
-<p> sudo mysql_secure_installation</p>
-<p>- Set root password? [Y/n] y</p>
-<p>-Remove anonymous users? [Y/n] y</p>
-<p>- Disallow root login remotely? [Y/n] y</p>
-<p>- Remove test database and access to it? [Y/n] y</p>
-<p>- Reload privilege tables now? [Y/n] y</p>
-<p>一路回车，Set root password? [Y/n] y</p>
-<p>Enter current password for root (enter for none): </p>
-<p>OK, successfully used password, moving on…</p>
-<p>Setting the root password ensures that nobody can log into the MariaDB</p>
-<p>root user without the proper authorisation.</p>
-<p>Set root password? [Y/n] y</p>
-<p>New password: </p>
-<p>Re-enter new password: </p>
-<p>Password updated successfully!</p>
-<p>Reloading privilege tables..</p>
-<p>接下来设置数据库</p>
-<p> MariaDB [(none)]&gt; CREATE DATABASE gitea;</p>
-<p>MariaDB [(none)]&gt; GRANT ALL PRIVILEGES ON gitea.* TO ‘giteadb‘@’localhost’ IDENTIFIED BY ‘gitea#ba1’;</p>
-<p>MariaDB [(none)]&gt; FLUSH PRIVILEGES;</p>
-<p>MariaDB [(none)]&gt; QUIT;</p>
-<h2 id="2-gitea-安装"><a href="#2-gitea-安装" class="headerlink" title="2.gitea 安装"></a>2.gitea 安装</h2><p>sudo apt install git</p>
-<p>adduser –system –shell /bin/bash –gecos ‘Git Version Control’ –group –disabled-password –home /data/gitrepo git</p>
-<p>下载gitea最新版本：120M左右<br>curl -s <a href="https://api.github.com/repos/go-gitea/gitea/releases/latest">https://api.github.com/repos/go-gitea/gitea/releases/latest</a> |grep browser_download_url | cut -d ‘“‘ -f 4 | grep ‘\linux-amd64$’ | wget -i -</p>
-<p>mv gitea-*-linux-amd64 /usr/local/bin/gitea</p>
-<p>chmod +x /usr/local/bin/gitea</p>
-<p>root@git:/home/tools/gitea# gitea –version</p>
-<p>Gitea version 1.20.0 built with GNU Make 4.1, go1.20.6 : bindata, sqlite, sqlite_unlock_notify</p>
-<p>接下来，您需要为 Gitea 创建一个目录结构。</p>
-<p>mkdir -p /etc/gitea /var/lib/gitea/{custom,data,indexers,public,log}</p>
-<p>然后，使用以下命令设置适当的权限和所有权：</p>
-<p>chown git:git /var/lib/gitea/{data,indexers,log}</p>
-<p>chmod 750 /var/lib/gitea/{data,indexers,log}</p>
-<p>chown root:git /etc/gitea</p>
-<p>chmod 770 /etc/gitea</p>
-<p>创建 Gitea Systemd 文件。 Gitea创建服务/etc/systemd/system/gitea.service:</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Gitea (Git with a cup of tea)</span><br><span class="line">After=syslog.target</span><br><span class="line">After=network.target</span><br><span class="line">After=mysql.service</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">LimitMEMLOCK=infinity</span><br><span class="line">LimitNOFILE=65535</span><br><span class="line">RestartSec=2s</span><br><span class="line">Type=simple</span><br><span class="line">User=git</span><br><span class="line">Group=git</span><br><span class="line">WorkingDirectory=/var/lib/gitea/</span><br><span class="line">ExecStart=/usr/local/bin/gitea web -c /etc/gitea/app.ini</span><br><span class="line">Restart=always</span><br><span class="line">Environment=USER=git </span><br><span class="line">HOME=/data/gitrepo</span><br><span class="line">GITEA_WORK_DIR=/var/lib/gitea</span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></tbody></table></figure>
-
-<p>systemctl daemon-reload</p>
-<p>systemctl enable  gitea.service</p>
-<p>systemctl start gitea.service</p>
-<p>初始化：</p>
-<p><img src="/../images/20231208_1.png"><br><img src="/../images/20231208_2.png"></p>
-<p>最终会生成一个/etc/gitea/app.ini文件：可以做域名，端口根据自己需求调整：</p>
-<p>cat /etc/gitea/app.ini</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">APP_NAME = Gitea: Git with a cup of tea</span><br><span class="line">RUN_USER = git</span><br><span class="line">WORK_PATH = /usr/local/bin</span><br><span class="line">RUN_MODE = prod</span><br><span class="line"> </span><br><span class="line">[server]</span><br><span class="line">SSH_DOMAIN = repo.yjzs.orlesh.com</span><br><span class="line">DOMAIN = 域名</span><br><span class="line">HTTP_PORT = gitea端口自定义10048</span><br><span class="line">ROOT_URL = https://域名</span><br><span class="line"></span><br><span class="line">APP_DATA_PATH = /usr/local/bin/data</span><br><span class="line">START_SSH_SERVER = true</span><br><span class="line">DISABLE_SSH = false</span><br><span class="line"></span><br><span class="line">\#SSH_PORT = 22</span><br><span class="line">SSH_PORT = 可以自定义</span><br><span class="line">LFS_START_SERVER = true</span><br><span class="line">LFS_JWT_SECRET = ……</span><br><span class="line">OFFLINE_MODE = false </span><br><span class="line"></span><br><span class="line">[database]</span><br><span class="line">DB_TYPE = mysql</span><br><span class="line">HOST = 127.0.0.1:3306</span><br><span class="line">NAME = gitea</span><br><span class="line">USER = gitea</span><br><span class="line">PASSWD = `passwd`</span><br><span class="line">SCHEMA = </span><br><span class="line">SSL_MODE = disable</span><br><span class="line">PATH = /usr/local/bin/data/gitea.db</span><br><span class="line">LOG_SQL = false</span><br><span class="line"></span><br><span class="line">[repository]</span><br><span class="line">ROOT = /data/gitrepo/</span><br><span class="line"></span><br><span class="line">[lfs]</span><br><span class="line">PATH = /usr/local/bin/data/lfs</span><br><span class="line">[mailer]</span><br><span class="line">ENABLED = false</span><br><span class="line">[service]</span><br><span class="line">REGISTER_EMAIL_CONFIRM = false</span><br><span class="line">ENABLE_NOTIFY_MAIL = false</span><br><span class="line">DISABLE_REGISTRATION = false</span><br><span class="line">ALLOW_ONLY_EXTERNAL_REGISTRATION = false</span><br><span class="line">ENABLE_CAPTCHA = false</span><br><span class="line">REQUIRE_SIGNIN_VIEW = false</span><br><span class="line">DEFAULT_KEEP_EMAIL_PRIVATE = false</span><br><span class="line">DEFAULT_ALLOW_CREATE_ORGANIZATION = true</span><br><span class="line">DEFAULT_ENABLE_TIMETRACKING = true</span><br><span class="line">NO_REPLY_ADDRESS = noreply.域名</span><br><span class="line"></span><br><span class="line">[openid]</span><br><span class="line">ENABLE_OPENID_SIGNIN = true</span><br><span class="line">ENABLE_OPENID_SIGNUP = true</span><br><span class="line">[cron.update_checker]</span><br><span class="line">ENABLED = false</span><br><span class="line"> </span><br><span class="line">[session]</span><br><span class="line">PROVIDER = file</span><br><span class="line"></span><br><span class="line">[log]</span><br><span class="line">MODE = console</span><br><span class="line">LEVEL = info</span><br><span class="line">ROOT_PATH = /usr/local/bin/data/log</span><br><span class="line"></span><br><span class="line">[repository.pull-request]</span><br><span class="line">DEFAULT_MERGE_STYLE = merge</span><br><span class="line"></span><br><span class="line">[repository.signing]</span><br><span class="line">DEFAULT_TRUST_MODEL = committer</span><br><span class="line">[security]</span><br><span class="line">……</span><br><span class="line"></span><br><span class="line"> </span><br></pre></td></tr></tbody></table></figure>
-
-<p>Nginx 配置转发：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line"></span><br><span class="line">server { </span><br><span class="line">   listen    80; </span><br><span class="line">   server_name  域名; </span><br><span class="line">   \# http默认重定向到https </span><br><span class="line">   return   301 https://$server_name$request_uri; </span><br><span class="line"></span><br><span class="line">} </span><br><span class="line"></span><br><span class="line">server {</span><br><span class="line"></span><br><span class="line">  listen 443 ssl;</span><br><span class="line"> server_name 域名;</span><br><span class="line">  access_log /var/log/nginx/gitea_access.log;</span><br><span class="line">  error_log /var/log/nginx/gitea_error.log;</span><br><span class="line"></span><br><span class="line">  ssl_certificate  /etc/nginx/cert/域名.pem; </span><br><span class="line">  ssl_certificate_key /etc/nginx/cert/域名.key;  </span><br><span class="line">   ssl_session_timeout 5m; </span><br><span class="line">   ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4; </span><br><span class="line">  ssl_protocols TLSv1 TLSv1.1 TLSv1.2; </span><br><span class="line">  ssl_prefer_server_ciphers on; </span><br><span class="line">   client_max_body_size 1024m; </span><br><span class="line"> </span><br><span class="line"> allow 192.168.8.10;  </span><br><span class="line">  deny all;</span><br><span class="line">  location / {</span><br><span class="line">   proxy_pass http://localhost:10048;</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="3-gitea-操作"><a href="#3-gitea-操作" class="headerlink" title="3.gitea 操作"></a>3.gitea 操作</h2><p>调试完成就可以访问配置的域名，进入gitea后台：右上角设置，设置SSH/GPGg密钥和管理后台添加账户；</p>
-<p>创建仓库：</p>
-<p><img src="/../images/20231208_3.png"></p>
-<p>本地设置：</p>
-<p>在安装完git和TortoiseGit后，使用ssh的配置如下：<br>生成ssh key<br> 运行Git Bash<br> 进到ssh目录： cd ~/.ssh/<br> 如果提示不存在，创建.ssh：mkdir ~/.ssh/<br> 配置用户名和邮箱：</p>
-<p>Git config –global user.name “your name”</p>
-<p>Git config –global user.email “<a href="mailto:your_email@example.com">your_email@example.com</a>”</p>
-<p> 生成key：ssh-keygen -t rsa -C “<a href="mailto:your_email@example.com">your_email@example.com</a>“<br> 连续按三次回车即可<br> 最后得到了两个文件：id_rsa和id_rsa.pub<br> 复制ssh内容：cat is_rsa.pub 添加到gitea 的SSH/GPGg密钥那边</p>
-<p>需要创建一个远程空仓库，可以使用GitHub、GitLab等平台创建。获取仓库的URL，以便后续推送代码时使用。</p>
-<p>克隆远程仓库</p>
-<p>在推送代码之前，首先需要将远程仓库克隆到本地。可以使用以下命令进行克隆：</p>
-<p>git remote add  origin ssh:/git url </p>
-<p>建议用ssh:/git 远程库url，https url会报一些错误：比如，</p>
-<p>error: RPC failed; curl 56 HTTP/2 stream 5 was reset</p>
-<p>send-pack: unexpected disconnect while reading sideband packet</p>
-<p>fatal: the remote end hung up unexpectedly</p>
-<p>Everything up-to-date</p>
-<p> 设置了git config –global http.postBuffer 524288000似乎效果不大</p>
-<p> Git基本操作：</p>
-<p>新建代码库：</p>
-<p># 在当前目录新建一个Git代码库</p>
-<p>$ git init</p>
-<p># 新建一个目录，将其初始化为Git代码库</p>
-<p>$ git clone [url]</p>
-<p># 列出当前所有配置， 包含本地、全局、系统配置</p>
-<p>$ git config –list</p>
-<p># 列出本地配置</p>
-<p>git config –local –list</p>
-<p># 列出全局配置</p>
-<p>git config –global –list</p>
-<p># 列出系统配置</p>
-<p>git config –system –list</p>
-<p># 添加指定文件到暂存区</p>
-<p>$ git add [file1] [file2] …</p>
-<p># 添加指定目录到暂存区，包括子目录</p>
-<p>$ git add [dir]</p>
-<p># 添加当前目录的所有文件到暂存区</p>
-<p>$ git add .</p>
-<p># 添加每个变化前，都会要求确认# 对于同一个文件的多处变化，可以实现分次提交</p>
-<p>$ git add -p</p>
-<p># 删除工作区文件，并且将这次删除放入暂存区</p>
-<p>$ git rm [file1] [file2] …</p>
-<p># 停止追踪指定文件，但该文件会保留在工作区</p>
-<p>$ git rm –cached [file]</p>
-<p># 改名文件，并且将这个改名放入暂存区</p>
-<p>$ git mv [file-original] [file-renamed]</p>
-<p># 提交暂存区到仓库区</p>
-<p>$ git commit -m [message]</p>
-<p># 提交暂存区的指定文件到仓库区</p>
-<p>$ git commit [file1] [file2] … -m [message]</p>
-<p># 提交工作区自上次commit之后的变化，直接到仓库区</p>
-<p>$ git commit -a</p>
-<p># 提交时显示所有diff信息</p>
-<p>$ git commit -v</p>
-<p># 使用一次新的commit，替代上一次提交# 如果代码没有任何新变化，则用来改写上一次commit的提交信息</p>
-<p>$ git commit –amend -m [message]</p>
-<p># 重做上一次commit，并包括指定文件的新变化</p>
-<p>$ git commit –amend [file1] [file2] …</p>
-<p># 列出所有远程分支</p>
-<p>$ git branch -r</p>
-<p># 列出所有本地分支和远程分支</p>
-<p>$ git branch -a</p>
-<p># 新建一个分支，但依然停留在当前分支</p>
-<p>$ git branch [branch-name]</p>
-<p># 新建一个分支，并切换到该分支</p>
-<p>$ git checkout -b [branch]</p>
-<p># 新建一个分支，指向指定commit</p>
-<p>$ git branch [branch] [commit]</p>
-<p># 新建一个分支，与指定的远程分支建立追踪关系</p>
-<p>$ git branch –track [branch] [remote-branch]</p>
-<p># 切换到指定分支，并更新工作区</p>
-<p>$ git checkout [branch-name]</p>
-<p># 切换到上一个分支</p>
-<p>$ git checkout -</p>
-<p># 合并指定分支到当前分支</p>
-<p>$ git merge [branch]</p>
-<p># 选择一个commit，合并进当前分支</p>
-<p>$ git cherry-pick [commit]</p>
-<p># 删除分支</p>
-<p>$ git branch -d [branch-name]</p>
-<p># 删除远程分支</p>
-<p>$ git push origin –delete [branch-name]</p>
-<p>$ git branch -dr [remote/branch]</p>
-<p>Windows系统上面的更新脚本：</p>
-<figure class="highlight bat"><table><tbody><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">::::::::::::::::::::::::::::::::::::::::::::</span><br><span class="line"></span><br><span class="line">::    Usage: ./update.bat "msg"     ::</span><br><span class="line"></span><br><span class="line">::::::::::::::::::::::::::::::::::::::::::::</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"></span><br><span class="line"><span class="built_in">setlocal</span> enabledelayedexpansion</span><br><span class="line"></span><br><span class="line">@<span class="built_in">echo</span> "<span class="built_in">start</span> update!"</span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br><span class="line"></span><br><span class="line">:: 下方设置参数</span><br><span class="line"></span><br><span class="line">@<span class="built_in">set</span> <span class="built_in">DATE</span>="<span class="variable">%date%</span> <span class="variable">%time%</span>"</span><br><span class="line"></span><br><span class="line">@<span class="built_in">set</span> FILE="%<span class="number">0</span>"</span><br><span class="line"></span><br><span class="line">@<span class="built_in">set</span> MSG="%<span class="number">1</span>"</span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br><span class="line"></span><br><span class="line">:: 下方将双引号删除</span><br><span class="line"></span><br><span class="line">@<span class="built_in">set</span> FILE=<span class="variable">%FILE:"=%</span></span><br><span class="line"></span><br><span class="line">@<span class="built_in">set</span> MSG=<span class="variable">%MSG:"=%</span></span><br><span class="line"></span><br><span class="line">@<span class="built_in">set</span> <span class="built_in">DATE</span>=<span class="variable">%DATE:"=%</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br><span class="line"></span><br><span class="line">:: 下方更新git</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> E:\work\sdk_server_release</span><br><span class="line"></span><br><span class="line"><span class="built_in">dir</span></span><br><span class="line"></span><br><span class="line">git status</span><br><span class="line"></span><br><span class="line">git remote -v</span><br><span class="line"></span><br><span class="line">:: 多人协作首先pull一下到本地</span><br><span class="line"></span><br><span class="line">git pull origin master</span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br><span class="line"></span><br><span class="line">git status</span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br><span class="line"></span><br><span class="line">git config --global http.postBuffer <span class="number">524288000</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> "<span class="built_in">set</span> postbuffer"</span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br><span class="line"></span><br><span class="line">@git add .</span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br><span class="line"></span><br><span class="line">@git commit -m "<span class="variable">%FILE%</span> : <span class="variable">%MSG%</span> <span class="variable">%DATE%</span>"</span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br><span class="line"></span><br><span class="line">@git push origin master</span><br><span class="line"></span><br><span class="line"><span class="built_in">pause</span></span><br><span class="line"></span><br><span class="line">::::::::::::::::::::::::::::::::::::::::::::</span><br><span class="line"></span><br><span class="line">::   written by -_-     ::</span><br><span class="line"></span><br><span class="line">::::::::::::::::::::::::::::::::::::::::::::</span><br></pre></td></tr></tbody></table></figure>
-
-]]></content>
-      <tags>
-        <tag>git</tag>
       </tags>
   </entry>
 </search>
