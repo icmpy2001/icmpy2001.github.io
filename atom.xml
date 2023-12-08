@@ -6,7 +6,7 @@
   <link href="https://blog.icmpy.net/atom.xml" rel="self"/>
   
   <link href="https://blog.icmpy.net/"/>
-  <updated>2023-12-01T10:44:49.056Z</updated>
+  <updated>2023-12-08T09:50:54.815Z</updated>
   <id>https://blog.icmpy.net/</id>
   
   <author>
@@ -17,11 +17,24 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>123</title>
+    <link href="https://blog.icmpy.net/2023/120847620.html"/>
+    <id>https://blog.icmpy.net/2023/120847620.html</id>
+    <published>2023-12-08T09:50:54.000Z</published>
+    <updated>2023-12-08T09:50:54.815Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>zabbix 设置163报警邮箱</title>
     <link href="https://blog.icmpy.net/2023/120119617.html"/>
     <id>https://blog.icmpy.net/2023/120119617.html</id>
     <published>2023-12-01T10:01:24.000Z</published>
-    <updated>2023-12-01T10:44:49.056Z</updated>
+    <updated>2023-12-01T10:44:49.000Z</updated>
     
     
       
@@ -44,7 +57,7 @@
     <link href="https://blog.icmpy.net/2023/120114297.html"/>
     <id>https://blog.icmpy.net/2023/120114297.html</id>
     <published>2023-12-01T09:03:07.000Z</published>
-    <updated>2023-12-01T09:09:26.396Z</updated>
+    <updated>2023-12-01T09:09:26.000Z</updated>
     
     
       
@@ -68,7 +81,7 @@
     <link href="https://blog.icmpy.net/2023/11284499.html"/>
     <id>https://blog.icmpy.net/2023/11284499.html</id>
     <published>2023-11-28T07:51:51.000Z</published>
-    <updated>2023-11-29T08:16:45.501Z</updated>
+    <updated>2023-11-29T08:16:45.000Z</updated>
     
     
       
@@ -92,7 +105,7 @@
     <link href="https://blog.icmpy.net/2023/112018778.html"/>
     <id>https://blog.icmpy.net/2023/112018778.html</id>
     <published>2023-11-20T10:05:05.000Z</published>
-    <updated>2023-11-20T10:11:46.009Z</updated>
+    <updated>2023-11-20T10:11:46.000Z</updated>
     
     
       
@@ -136,7 +149,7 @@
     <link href="https://blog.icmpy.net/2023/112024358.html"/>
     <id>https://blog.icmpy.net/2023/112024358.html</id>
     <published>2023-11-20T07:05:58.000Z</published>
-    <updated>2023-11-20T07:12:47.902Z</updated>
+    <updated>2023-11-20T07:12:47.000Z</updated>
     
     
       
@@ -162,7 +175,7 @@
     <link href="https://blog.icmpy.net/2023/111750151.html"/>
     <id>https://blog.icmpy.net/2023/111750151.html</id>
     <published>2023-11-17T09:16:52.000Z</published>
-    <updated>2023-11-17T09:22:46.022Z</updated>
+    <updated>2023-11-17T09:22:46.000Z</updated>
     
     
       
@@ -187,7 +200,7 @@
     <link href="https://blog.icmpy.net/2023/111727163.html"/>
     <id>https://blog.icmpy.net/2023/111727163.html</id>
     <published>2023-11-17T09:15:17.000Z</published>
-    <updated>2023-11-17T09:23:11.612Z</updated>
+    <updated>2023-11-17T09:23:11.000Z</updated>
     
     
       
@@ -213,7 +226,7 @@
     <link href="https://blog.icmpy.net/2023/111760549.html"/>
     <id>https://blog.icmpy.net/2023/111760549.html</id>
     <published>2023-11-17T07:21:51.000Z</published>
-    <updated>2023-11-17T07:55:53.119Z</updated>
+    <updated>2023-11-17T07:55:53.000Z</updated>
     
     
       
@@ -239,7 +252,7 @@
     <link href="https://blog.icmpy.net/2023/111459226.html"/>
     <id>https://blog.icmpy.net/2023/111459226.html</id>
     <published>2023-11-14T08:13:28.000Z</published>
-    <updated>2023-11-17T08:36:44.446Z</updated>
+    <updated>2023-11-17T08:36:44.000Z</updated>
     
     
       
@@ -264,7 +277,7 @@
     <link href="https://blog.icmpy.net/2023/111458217.html"/>
     <id>https://blog.icmpy.net/2023/111458217.html</id>
     <published>2023-11-14T07:06:29.000Z</published>
-    <updated>2023-12-04T07:09:53.149Z</updated>
+    <updated>2023-12-04T07:09:53.000Z</updated>
     
     
       
@@ -290,7 +303,7 @@
     <link href="https://blog.icmpy.net/2023/111420634.html"/>
     <id>https://blog.icmpy.net/2023/111420634.html</id>
     <published>2023-11-14T06:21:43.000Z</published>
-    <updated>2023-11-16T09:21:13.896Z</updated>
+    <updated>2023-11-16T09:21:13.000Z</updated>
     
     
       
@@ -314,7 +327,7 @@
     <link href="https://blog.icmpy.net/2023/111459478.html"/>
     <id>https://blog.icmpy.net/2023/111459478.html</id>
     <published>2023-11-14T06:21:07.000Z</published>
-    <updated>2023-11-14T06:21:26.254Z</updated>
+    <updated>2023-11-14T06:21:26.000Z</updated>
     
     
       
@@ -335,7 +348,7 @@
     <link href="https://blog.icmpy.net/2023/111457802.html"/>
     <id>https://blog.icmpy.net/2023/111457802.html</id>
     <published>2023-11-14T03:50:09.000Z</published>
-    <updated>2023-12-04T04:17:17.571Z</updated>
+    <updated>2023-12-04T04:17:17.000Z</updated>
     
     
       
@@ -356,7 +369,7 @@
     <link href="https://blog.icmpy.net/2023/111359213.html"/>
     <id>https://blog.icmpy.net/2023/111359213.html</id>
     <published>2023-11-13T07:57:02.000Z</published>
-    <updated>2023-11-17T02:13:06.611Z</updated>
+    <updated>2023-11-17T02:13:06.000Z</updated>
     
     
       
@@ -380,7 +393,7 @@
     <link href="https://blog.icmpy.net/2023/11131515.html"/>
     <id>https://blog.icmpy.net/2023/11131515.html</id>
     <published>2023-11-13T07:36:36.000Z</published>
-    <updated>2023-11-13T07:37:34.238Z</updated>
+    <updated>2023-11-13T07:37:34.000Z</updated>
     
     
       
@@ -403,7 +416,7 @@
     <link href="https://blog.icmpy.net/2023/11105462.html"/>
     <id>https://blog.icmpy.net/2023/11105462.html</id>
     <published>2023-11-10T09:58:10.000Z</published>
-    <updated>2023-11-17T02:13:44.644Z</updated>
+    <updated>2023-11-17T02:13:44.000Z</updated>
     
     
       
@@ -426,7 +439,7 @@
     <link href="https://blog.icmpy.net/2023/081629672.html"/>
     <id>https://blog.icmpy.net/2023/081629672.html</id>
     <published>2023-08-16T08:26:00.000Z</published>
-    <updated>2023-11-17T02:12:18.556Z</updated>
+    <updated>2023-11-17T02:12:18.000Z</updated>
     
     
       
@@ -453,7 +466,7 @@
     <link href="https://blog.icmpy.net/2023/081036272.html"/>
     <id>https://blog.icmpy.net/2023/081036272.html</id>
     <published>2023-08-10T10:00:29.000Z</published>
-    <updated>2023-11-14T09:20:33.375Z</updated>
+    <updated>2023-11-14T09:20:33.000Z</updated>
     
     
       
@@ -468,31 +481,6 @@
     
     
     
-    
-  </entry>
-  
-  <entry>
-    <title>Rsync同步文件</title>
-    <link href="https://blog.icmpy.net/2023/081064777.html"/>
-    <id>https://blog.icmpy.net/2023/081064777.html</id>
-    <published>2023-08-10T08:58:37.000Z</published>
-    <updated>2023-11-16T09:21:28.960Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;Rsync常用的一款同步文件工具。配置也很方便。&lt;/p&gt;
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-&lt;p&gt;yum install sync -y或者apt-get install</summary>
-        
-      
-    
-    
-    
-    
-    <category term="随笔" scheme="https://blog.icmpy.net/tags/%E9%9A%8F%E7%AC%94/"/>
     
   </entry>
   
