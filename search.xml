@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Debian 10挂载加swap</title>
+    <url>/2023/111727163.html</url>
+    <content><![CDATA[<p>以根目录挂载为4G例：<br>dd if=/dev/zero of=/swapfile count=4096 bs=1M</p>
+<p>ls / | grep swapfile<br>chmod 600 /swapfile<br>ls -lh /swapfile<br>-rw——- 1 root root 4.0G Aug 17 12:14 /swapfile<br>通过运行以下命令告诉服务器设置swap文件：<br>mkswap /swapfile<br>swapon /swapfile<br>free -m<br>vi /etc/fstab<br>/swapfile swap swap defaults 0 0<br>保存。</p>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Centos同时安装python2和python3</title>
     <url>/2023/11203350.html</url>
     <content><![CDATA[<p>   在centos中，自带有python2，因此需要经常安装python3。但是这里有一个坑，就是centos的yum是用python2写的，如果正常编译安装python3，那么yum就会直接挂了。为了方便以后编译安装python3，不用天天去网上找教程仅供参考。</p>
@@ -44,19 +57,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>Debian 10挂载加swap</title>
-    <url>/2023/111727163.html</url>
-    <content><![CDATA[<p>以根目录挂载为4G例：<br>dd if=/dev/zero of=/swapfile count=4096 bs=1M</p>
-<p>ls / | grep swapfile<br>chmod 600 /swapfile<br>ls -lh /swapfile<br>-rw——- 1 root root 4.0G Aug 17 12:14 /swapfile<br>通过运行以下命令告诉服务器设置swap文件：<br>mkswap /swapfile<br>swapon /swapfile<br>free -m<br>vi /etc/fstab<br>/swapfile swap swap defaults 0 0<br>保存。</p>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Debian10 安装ossfs</title>
     <url>/2023/111750151.html</url>
     <content><![CDATA[<p>1.<br>sudo apt-get install automake autotools-dev g++  git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev  make pkg-config<br>2.<br>git clone <a href="https://github.com/aliyun/ossfs.git">https://github.com/aliyun/ossfs.git</a><br>cd ossfs/<br> ./autogen.sh<br>  ./configure<br>Sudo   make<br> Sudo make install<br>3.配置bucket信息和accessKey信息：<br>echo Bucket名称:要是用的AccessKeyId:对应的AccessKeySecret  &gt; /etc/passwd-ossfs<br>示例：<br>mkdir -p /data/ossfs<br>cosfs examplebucket-1250000000 /data/ossfs -ourl=<a href="http://cos.ap-guangzhou.myqcloud.com/">http://cos.ap-guangzhou.myqcloud.com</a> </p>
@@ -68,6 +68,94 @@
       <categories>
         <category>系统</category>
       </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Rsync同步文件</title>
+    <url>/2023/081064777.html</url>
+    <content><![CDATA[<p>Rsync常用的一款同步文件工具。配置也很方便。</p>
+<p>&nbsp;</p>
+<p>yum install sync -y或者apt-get install sync</p>
+<ul>
+<li>服务安装好之后，/etc下没有配置文件，一般情况可以copy示例文件到/etc下</li>
+</ul>
+<p>&nbsp;</p>
+<p>#cp&nbsp;/usr/share/doc/rsync/examples/rsyncd.conf&nbsp;/etc</p>
+<p>&nbsp;</p>
+<p>vim /etc/rsyncd.conf</p>
+<p>uid = common</p>
+<p>gid = common</p>
+<p>use chroot = no</p>
+<p>max connections = 10</p>
+<p>strict modes = yes</p>
+<p>hosts allow = 192.168.2.12&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #可以空格，允许多个</p>
+<p>hosts deny = *</p>
+<p>port = 5699&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;#默认开启端口</p>
+<p>pid file = /var/run/rsyncd.pid</p>
+<p>lock file = /var/run/rsync.lock</p>
+<p>log file = /var/log/rsyncd.log</p>
+<p>[hmt]</p>
+<p>path = /data/www/html/</p>
+<p>comment = hello</p>
+<p>ignore errors</p>
+<p>read only = no</p>
+<p>write only = no</p>
+<p>hosts allow = 192.168.2.12&nbsp;</p>
+<p>list = false</p>
+<p>auth users = hmt</p>
+<p>secrets file = /etc/rsync.password</p>
+<ul>
+<li>建立/etc/rsyncd/rsyncd.secrets文件</li>
+</ul>
+<p>#vim /etc/rsync.password</p>
+<p>#cat /etc/rsyncd/rsyncd.secrets</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;hmt:123456</p>
+<ul>
+<li>为了密码的安全性，我们必须把权限设为600</li>
+</ul>
+<p> chown root:root /etc/rsyncd/rsyncd.secrets</p>
+<p>chmod 600&nbsp;&nbsp;/etc/rsync.password</p>
+<p> chmod 600&nbsp;/etc/rsyncd/rsyncd.secrets</p>
+<p> vim /etc/rsyncd/rsyncd.motd</p>
+<p>&nbsp;</p>
+<p>启动rsync：</p>
+<p>systemctl start rsyncd.service</p>
+<p>&nbsp;lsof -i:5699</p>
+<p>lsof -i:5699</p>
+<p>COMMAND PID USER&nbsp; &nbsp;FD&nbsp; &nbsp;TYPE&nbsp; &nbsp;DEVICE SIZE/OFF NODE NAME</p>
+<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 4u&nbsp; IPv4 22661487&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
+<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 5u&nbsp; IPv6 22661488&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
+<p>至此服务器端安装完毕；</p>
+<p>客户端安装配置：</p>
+<p>&nbsp;</p>
+<p>yum -y install rsync</p>
+<p>&nbsp;客户端需要vim&nbsp;/etc/rsync.password&nbsp;</p>
+<p>cat&nbsp;&nbsp;/etc/rsync.password</p>
+<p>123456</p>
+<p>运行：</p>
+<p>rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
+<p>Password: 这里要输入rsync的密码，是服务器端提供的，在前面的例子中，我们用的是 asdf，输入的密码并不显示出来；输好后就回车；&nbsp;注：&nbsp;这个命令的意思就是说，用rsync 用户登录到服务器上，把/data/www/html&nbsp;数据，同步到本地目录/data/www/html/上。当然本地的目录是可以你自己定义的，比如 dave也是可以的；当你在客户端上，当前操作的目录下没有/tmp/test/这个目录时，系统会自动为你创建一个；当存在/tmp/test/这个目录中，你要注意它的写权限。</p>
+<p>参数说明：</p>
+<p>&nbsp;-a 参数，相当于-rlptgoD，</p>
+<p>&nbsp;&nbsp;&nbsp;-r 是递归 -l 是链接文件，意思是拷贝链接文件；</p>
+<p>&nbsp;&nbsp;&nbsp;-p 表示保持文件原有权限；</p>
+<p>&nbsp;&nbsp;&nbsp;-t 保持文件原有时间；<br>&nbsp;&nbsp;&nbsp;-g 保持文件原有用户组；</p>
+<p>&nbsp;&nbsp;&nbsp;-o 保持文件原有属主；</p>
+<p>&nbsp;&nbsp;&nbsp;-D 相当于块设备文件；</p>
+<p>&nbsp;&nbsp;&nbsp;-z 传输时压缩；</p>
+<p>&nbsp;&nbsp;&nbsp;-P 传输进度；</p>
+<p>&nbsp;&nbsp;&nbsp;-v 传输时的进度等信息，和-P有点关系</p>
+<p>&nbsp;<br>*</p>
+<p>rsync -avzP &nbsp;–delete <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools&nbsp;/tmp/test/</p>
+<p>–delete 选项，表示服务器上的数据要与客户端完全一致，如果 /tmp/test/目录中有服务器上不存在的文件，则删除。最终目的是让/tmp/test/目录上的数据完全与服务器上保持一致；用的时候要小心点，最好不要把已经有重要数所据的目录，当做本地更新目录，否则会把你的数据全部删除；
+&nbsp;</p>
+<p>计划任务同步：</p>
+<p>*/5 * * * * rsync -zvaP <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools /tmp/test/ –password-file=/etc/rsyncd/rsyncd.secrets</p>
+<p>*/5 * * * * rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
+<p>&nbsp;</p>
+]]></content>
       <tags>
         <tag>随笔</tag>
       </tags>
@@ -282,94 +370,6 @@
       <categories>
         <category>系统</category>
       </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Rsync同步文件</title>
-    <url>/2023/081064777.html</url>
-    <content><![CDATA[<p>Rsync常用的一款同步文件工具。配置也很方便。</p>
-<p>&nbsp;</p>
-<p>yum install sync -y或者apt-get install sync</p>
-<ul>
-<li>服务安装好之后，/etc下没有配置文件，一般情况可以copy示例文件到/etc下</li>
-</ul>
-<p>&nbsp;</p>
-<p>#cp&nbsp;/usr/share/doc/rsync/examples/rsyncd.conf&nbsp;/etc</p>
-<p>&nbsp;</p>
-<p>vim /etc/rsyncd.conf</p>
-<p>uid = common</p>
-<p>gid = common</p>
-<p>use chroot = no</p>
-<p>max connections = 10</p>
-<p>strict modes = yes</p>
-<p>hosts allow = 192.168.2.12&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #可以空格，允许多个</p>
-<p>hosts deny = *</p>
-<p>port = 5699&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;#默认开启端口</p>
-<p>pid file = /var/run/rsyncd.pid</p>
-<p>lock file = /var/run/rsync.lock</p>
-<p>log file = /var/log/rsyncd.log</p>
-<p>[hmt]</p>
-<p>path = /data/www/html/</p>
-<p>comment = hello</p>
-<p>ignore errors</p>
-<p>read only = no</p>
-<p>write only = no</p>
-<p>hosts allow = 192.168.2.12&nbsp;</p>
-<p>list = false</p>
-<p>auth users = hmt</p>
-<p>secrets file = /etc/rsync.password</p>
-<ul>
-<li>建立/etc/rsyncd/rsyncd.secrets文件</li>
-</ul>
-<p>#vim /etc/rsync.password</p>
-<p>#cat /etc/rsyncd/rsyncd.secrets</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;hmt:123456</p>
-<ul>
-<li>为了密码的安全性，我们必须把权限设为600</li>
-</ul>
-<p> chown root:root /etc/rsyncd/rsyncd.secrets</p>
-<p>chmod 600&nbsp;&nbsp;/etc/rsync.password</p>
-<p> chmod 600&nbsp;/etc/rsyncd/rsyncd.secrets</p>
-<p> vim /etc/rsyncd/rsyncd.motd</p>
-<p>&nbsp;</p>
-<p>启动rsync：</p>
-<p>systemctl start rsyncd.service</p>
-<p>&nbsp;lsof -i:5699</p>
-<p>lsof -i:5699</p>
-<p>COMMAND PID USER&nbsp; &nbsp;FD&nbsp; &nbsp;TYPE&nbsp; &nbsp;DEVICE SIZE/OFF NODE NAME</p>
-<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 4u&nbsp; IPv4 22661487&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
-<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 5u&nbsp; IPv6 22661488&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
-<p>至此服务器端安装完毕；</p>
-<p>客户端安装配置：</p>
-<p>&nbsp;</p>
-<p>yum -y install rsync</p>
-<p>&nbsp;客户端需要vim&nbsp;/etc/rsync.password&nbsp;</p>
-<p>cat&nbsp;&nbsp;/etc/rsync.password</p>
-<p>123456</p>
-<p>运行：</p>
-<p>rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
-<p>Password: 这里要输入rsync的密码，是服务器端提供的，在前面的例子中，我们用的是 asdf，输入的密码并不显示出来；输好后就回车；&nbsp;注：&nbsp;这个命令的意思就是说，用rsync 用户登录到服务器上，把/data/www/html&nbsp;数据，同步到本地目录/data/www/html/上。当然本地的目录是可以你自己定义的，比如 dave也是可以的；当你在客户端上，当前操作的目录下没有/tmp/test/这个目录时，系统会自动为你创建一个；当存在/tmp/test/这个目录中，你要注意它的写权限。</p>
-<p>参数说明：</p>
-<p>&nbsp;-a 参数，相当于-rlptgoD，</p>
-<p>&nbsp;&nbsp;&nbsp;-r 是递归 -l 是链接文件，意思是拷贝链接文件；</p>
-<p>&nbsp;&nbsp;&nbsp;-p 表示保持文件原有权限；</p>
-<p>&nbsp;&nbsp;&nbsp;-t 保持文件原有时间；<br>&nbsp;&nbsp;&nbsp;-g 保持文件原有用户组；</p>
-<p>&nbsp;&nbsp;&nbsp;-o 保持文件原有属主；</p>
-<p>&nbsp;&nbsp;&nbsp;-D 相当于块设备文件；</p>
-<p>&nbsp;&nbsp;&nbsp;-z 传输时压缩；</p>
-<p>&nbsp;&nbsp;&nbsp;-P 传输进度；</p>
-<p>&nbsp;&nbsp;&nbsp;-v 传输时的进度等信息，和-P有点关系</p>
-<p>&nbsp;<br>*</p>
-<p>rsync -avzP &nbsp;–delete <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools&nbsp;/tmp/test/</p>
-<p>–delete 选项，表示服务器上的数据要与客户端完全一致，如果 /tmp/test/目录中有服务器上不存在的文件，则删除。最终目的是让/tmp/test/目录上的数据完全与服务器上保持一致；用的时候要小心点，最好不要把已经有重要数所据的目录，当做本地更新目录，否则会把你的数据全部删除；
-&nbsp;</p>
-<p>计划任务同步：</p>
-<p>*/5 * * * * rsync -zvaP <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools /tmp/test/ –password-file=/etc/rsyncd/rsyncd.secrets</p>
-<p>*/5 * * * * rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
-<p>&nbsp;</p>
-]]></content>
       <tags>
         <tag>随笔</tag>
       </tags>
@@ -786,6 +786,24 @@
       </tags>
   </entry>
   <entry>
+    <title>Hello World</title>
+    <url>/2023/062516107.html</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>docker 安装walle2部署项目</title>
     <url>/2023/112024358.html</url>
     <content><![CDATA[<p>​     项目从git上面拉取代码，然后打包推送到服务器，更新启动服务，开发大神需要ci/cd平台，当前开源的可能walle和蓝鲸cmdb系统比较实用，123正反面选择了walle，据说已经停了好久，不过对于项目来说够用了，开始吧。</p>
@@ -909,109 +927,6 @@
       <tags>
         <tag>点滴</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>frp搭建</title>
-    <url>/2023/062739776.html</url>
-    <content><![CDATA[<p> &nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。</p>
-<p>首先到官网：</p>
-<p>&nbsp;<a href="https://github.com/fatedier/frp/releases">https://github.com/fatedier/frp/releases</a></p>
-<p>下载: frp_0.16.0_linux_amd64.tar.gz服务器端</p>
-<p>解压出来ls:</p>
-<p>frpc&nbsp; frpc_full.ini&nbsp; frpc_http.ini&nbsp; frpc.ini&nbsp; frps&nbsp; frps_full.ini&nbsp; frps.ini&nbsp; LICENSE&nbsp; nohup.out</p>
-<p>服务器端只需要两个文件frps和frps.ini,其中frps为可执行文件，frps.ini为配置文件默认配置文件如下：其中bind_addr为本机IP,bind_port为frp对客户端的端口号，auto_token是客户端连接服务器端的口令。</p>
-<p>[common]</p>
-<p>Bind_addr=0.0.0.0</p>
-<p>Bind_port =4443</p>
-<p>Auto_token = frp</p>
-<p>配置好以后可以运行起来./frps -c ./frps.ini</p>
-<p>最好后台运行：nohup ./frps -c ./frps.ini &amp;</p>
-<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:4443</p>
-<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
-<p>&nbsp;需要穿透端口的服务器端开启：</p>
-<p>nohup ./frps -c ./frps.ini &amp;</p>
-<p>同样将客户端解压后有七个文件，只需要frpc和frpc.ini,配置文件如下：</p>
-<p>&nbsp;[common]</p>
-<p>Server_addr = 123.123.123.123</p>
-<p>Server_port = 4443</p>
-<p>Auto-token = frp</p>
-<p>[ssh_1]</p>
-<p>Type = tcp</p>
-<p>Local_ip = 127.0.0.1</p>
-<p>Local_port = 22</p>
-<p>Remote_port = 10085</p>
-<p>注意：server_addr是服务器端的公网IP地址，server_port是frp服务端口号，auto_token是连接服务器的口令，必须和服务器保持一致。[ssh_1]是客户端通过服务器与用户之间的通道名，每个客户端必须不一样，remote_port是服务器端对外提供本机服务的端口号，即用户连接123.123.123.123:10085，相当于连接127.0.0.1:22,即arm板上的ssh服务</p>
-<p>运行客户端：./frpc -c ./frpc.ini</p>
-<p>&nbsp;</p>
-<p>当前的配置</p>
-<p>more frpc.ini</p>
-<p>[common]</p>
-<p>server_addr = dem.abc.com</p>
-<p>server_port = 7000</p>
-<p>[game]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.232</p>
-<p>local_port = 9001</p>
-<p>remote_port = 6000</p>
-<p>&nbsp;</p>
-<p>[http]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.232</p>
-<p>local_port = 80</p>
-<p>remote_port = 6001</p>
-<p>&nbsp;</p>
-<p>[mysql]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.235</p>
-<p>local_port = 3306</p>
-<p>remote_port = 13306</p>
-<p>more frpc_http.ini</p>
-<p>[common]</p>
-<p>server_addr = dem.abc.com</p>
-<p>server_port = 7000</p>
-<p>&nbsp;</p>
-<p>[http]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.232</p>
-<p>local_port = 80</p>
-<p>remote_port = 6001</p>
-<p>这样demo.abc.com 的13306映射到3306,6001映射到80端口等等；</p>
-<p>在客户端开启：最好后台运行启动客户端proxy：</p>
-<p>nohup ./frpc&nbsp; -c ./frpc.ini &amp;</p>
-<p>[I] [control.go:240] [e465e02f8bad1e5b] login to server success, get run id [e465e02f8bad1e5b], server udp port [0]</p>
-<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [http] start proxy success</p>
-<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [mysql] start proxy success</p>
-<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:7000</p>
-<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
-<p>2018/05/17 10:49:11 [I] [main.go:114] PrivilegeMode is enabled, you should pay more attention to security issues</p>
-<p>&nbsp;</p>
-<p>PS：配置很简单，但是记得nohup ./frps -c ./frps.ini &amp; 在要穿透的远程服务器开启，nohup ./frpc&nbsp; -c ./frpc.ini &amp; 在内网开启，记得开放远程服务器穿透端口；</p>
-<hr>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2023/062516107.html</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
   </entry>
   <entry>
     <title>hexogit搭建个人网站</title>
@@ -1142,6 +1057,91 @@
 <h2 id="3、重启zookeeper。"><a href="#3、重启zookeeper。" class="headerlink" title="3、重启zookeeper。"></a>3、重启zookeeper。</h2>]]></content>
   </entry>
   <entry>
+    <title>frp搭建</title>
+    <url>/2023/062739776.html</url>
+    <content><![CDATA[<p> &nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。</p>
+<p>首先到官网：</p>
+<p>&nbsp;<a href="https://github.com/fatedier/frp/releases">https://github.com/fatedier/frp/releases</a></p>
+<p>下载: frp_0.16.0_linux_amd64.tar.gz服务器端</p>
+<p>解压出来ls:</p>
+<p>frpc&nbsp; frpc_full.ini&nbsp; frpc_http.ini&nbsp; frpc.ini&nbsp; frps&nbsp; frps_full.ini&nbsp; frps.ini&nbsp; LICENSE&nbsp; nohup.out</p>
+<p>服务器端只需要两个文件frps和frps.ini,其中frps为可执行文件，frps.ini为配置文件默认配置文件如下：其中bind_addr为本机IP,bind_port为frp对客户端的端口号，auto_token是客户端连接服务器端的口令。</p>
+<p>[common]</p>
+<p>Bind_addr=0.0.0.0</p>
+<p>Bind_port =4443</p>
+<p>Auto_token = frp</p>
+<p>配置好以后可以运行起来./frps -c ./frps.ini</p>
+<p>最好后台运行：nohup ./frps -c ./frps.ini &amp;</p>
+<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:4443</p>
+<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
+<p>&nbsp;需要穿透端口的服务器端开启：</p>
+<p>nohup ./frps -c ./frps.ini &amp;</p>
+<p>同样将客户端解压后有七个文件，只需要frpc和frpc.ini,配置文件如下：</p>
+<p>&nbsp;[common]</p>
+<p>Server_addr = 123.123.123.123</p>
+<p>Server_port = 4443</p>
+<p>Auto-token = frp</p>
+<p>[ssh_1]</p>
+<p>Type = tcp</p>
+<p>Local_ip = 127.0.0.1</p>
+<p>Local_port = 22</p>
+<p>Remote_port = 10085</p>
+<p>注意：server_addr是服务器端的公网IP地址，server_port是frp服务端口号，auto_token是连接服务器的口令，必须和服务器保持一致。[ssh_1]是客户端通过服务器与用户之间的通道名，每个客户端必须不一样，remote_port是服务器端对外提供本机服务的端口号，即用户连接123.123.123.123:10085，相当于连接127.0.0.1:22,即arm板上的ssh服务</p>
+<p>运行客户端：./frpc -c ./frpc.ini</p>
+<p>&nbsp;</p>
+<p>当前的配置</p>
+<p>more frpc.ini</p>
+<p>[common]</p>
+<p>server_addr = dem.abc.com</p>
+<p>server_port = 7000</p>
+<p>[game]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 9001</p>
+<p>remote_port = 6000</p>
+<p>&nbsp;</p>
+<p>[http]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 80</p>
+<p>remote_port = 6001</p>
+<p>&nbsp;</p>
+<p>[mysql]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.235</p>
+<p>local_port = 3306</p>
+<p>remote_port = 13306</p>
+<p>more frpc_http.ini</p>
+<p>[common]</p>
+<p>server_addr = dem.abc.com</p>
+<p>server_port = 7000</p>
+<p>&nbsp;</p>
+<p>[http]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 80</p>
+<p>remote_port = 6001</p>
+<p>这样demo.abc.com 的13306映射到3306,6001映射到80端口等等；</p>
+<p>在客户端开启：最好后台运行启动客户端proxy：</p>
+<p>nohup ./frpc&nbsp; -c ./frpc.ini &amp;</p>
+<p>[I] [control.go:240] [e465e02f8bad1e5b] login to server success, get run id [e465e02f8bad1e5b], server udp port [0]</p>
+<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [http] start proxy success</p>
+<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [mysql] start proxy success</p>
+<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:7000</p>
+<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
+<p>2018/05/17 10:49:11 [I] [main.go:114] PrivilegeMode is enabled, you should pay more attention to security issues</p>
+<p>&nbsp;</p>
+<p>PS：配置很简单，但是记得nohup ./frps -c ./frps.ini &amp; 在要穿透的远程服务器开启，nohup ./frpc&nbsp; -c ./frpc.ini &amp; 在内网开启，记得开放远程服务器穿透端口；</p>
+<hr>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>linux install shadowsocks</title>
     <url>/2023/071659235.html</url>
     <content><![CDATA[<h1 id="1-安装Python和pip"><a href="#1-安装Python和pip" class="headerlink" title="1. 安装Python和pip"></a>1. 安装Python和pip</h1><p>sudo apt-get update</p>
@@ -1159,6 +1159,19 @@
       </categories>
       <tags>
         <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>/var/log/messages日志恢复</title>
+    <url>/2023/112018778.html</url>
+    <content><![CDATA[<p>Linux容易犯的一个错误是把日志文件给直接删除，而不是删除日志文件的内容。<br>直接删除日志文件往往导致新产生的日志记录无法被写入到日志文件中（因为它已经被删除了），而仅仅重新新建（touch）同样名字的文件是解决不了问题的。<br>本文以Unbutu系统为例，介绍如何恢复被误删除的syslog文件：<br>首先，在以root用户执行如下lsof命令，查询打开/var/log/messages文件的进程的进程ID(PID)。<br>root@zck:/var/log# lsof | grep messages<br>rsyslogd 544 syslog 7w REG 8,1 214641 134422 /var/log/messages<br>从上面命令输出可以看到，这个打开/var/log/messages文件的进程的PID是544，文件/var/log/messages的文件描述符（FD）号是7。<br>根据上述的PID和FD，可以在/proc找到对应的文件：<br>root@zck:/var/log#ls -al /proc/544/fd/7<br>l-wx—— 1 root root 64 2012-07-14 14:48 7 -&gt; /var/log/messages<br>将文件/proc/544/fd/7拷贝到/var/log/messages<br>cp /proc/544/fd/7 /var/log/messages&nbsp;</p>
+<p>然后重新启动syslog服务即可恢复被误删除的日志文件，并且新的日志记录能够继续被写入日志文件。<br>以root用户运行service命令。其中，service命令的第2个参数可能是syslog、也可能是rsyslog。<br>具体可以使用通过命令查询得知。<br>登录后复制<br>root@zck:/proc/544/fd# service –status-all<br> [ ? ] …<br> [ ? ] rc.local<br> [ ? ] rsyslog<br> [ ? ] screen-cleanup<br> [ ? ] …  #——————————-</p>
+<p>复制代码代码如下:<br>root@zck:/proc/544/fd# service rsyslog restart<br>rsyslog start/running, process 2673</p>
+<p>清空日志文件：<br>cat /dev/null&gt;/var/log/messages</p>
+<p>转自url:<a href="https://blog.51cto.com/u_11146845/6240737">https://blog.51cto.com/u_11146845/6240737</a></p>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
       </tags>
   </entry>
   <entry>
@@ -1319,6 +1332,56 @@
       </tags>
   </entry>
   <entry>
+    <title>nginxlog切分</title>
+    <url>/2023/111760549.html</url>
+    <content><![CDATA[<p>1.设置日志文件存放目录，假设你的nginx的日志存在这个目录里<br>logs_path=”/data/log/nginx/“</p>
+<p>2.设置pid文件，这个根据你自己的环境，找到nginx.pid所在目录<br>pid_path=”/var/run/nginx.pid”</p>
+<p>3.创建分割存储的日期文件目录<br>datetime=<code>date -d "yesterday" +"%Y%m%d"</code>;<br>new_log_path=$logs_path$datetime<br>mkdir -p $new_log_path</p>
+<p>4.按照日期移动所有该目录下的日志文件<br>log_file_list=<code>ls -l $logs_path</code>;<br>for log_file in $log_file_list;<br>do<br>    log_file_name=$logs_path$log_file;<br>    if [ -f $log_file_name ];<br>    then<br>        mv $log_file_name $new_log_path;<br>    fi<br>done</p>
+<p>5.向nginx主进程发信号重新打开日志<br>kill -USR1 <code>cat ${pid_path}</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">logs_path=<span class="string">"/data/log/nginx/"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pid_path=<span class="string">"/var/run/nginx.pid"</span></span><br><span class="line"></span><br><span class="line">datetime=`<span class="built_in">date</span> -d <span class="string">"yesterday"</span> +<span class="string">"%Y%m%d"</span>`;</span><br><span class="line">new_log_path=$logs_path<span class="variable">$datetime</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$new_log_path</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">log_file_list=`<span class="built_in">ls</span> -l <span class="variable">$logs_path</span>`;</span><br><span class="line"><span class="keyword">for</span> log_file <span class="keyword">in</span> <span class="variable">$log_file_list</span>;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    log_file_name=$logs_path<span class="variable">$log_file</span>;</span><br><span class="line">    <span class="keyword">if</span> [ -f <span class="variable">$log_file_name</span> ];</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">mv</span> <span class="variable">$log_file_name</span> <span class="variable">$new_log_path</span>;</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">kill</span> -USR1 `<span class="built_in">cat</span> <span class="variable">${pid_path}</span>`</span><br></pre></td></tr></tbody></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>nginx编译ssl模块</title>
+    <url>/2023/062858442.html</url>
+    <content><![CDATA[<p>几个官网在一台服务器上面，其中一台是https的，增加一个官网以，重启nginx以后，https的网站直接报错，大意是ssl 在配置文件中unknow，但是这个https网站已经运行很久了，一时间有点郁闷，掉坑里了。</p>
+<p>查看nginx信息 /usr/local/nginx/sbin/nginx -V显示不支持ssl，那就好办，重新编译下ssl，但是线上业务跑着，难免有点担心，在测试机上跑了一次，正常的，才敢到线上操作，大致如此从网上找的如下：</p>
+<p>进入nginx源码目录：</p>
+<p>cd &nbsp;nginx-1.6.2</p>
+<p>./configure –prefix=/usr/local/nginx –user=www –group=www &nbsp;–with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
+<p>只添加ssl功能模块，有别的需求继续加上；</p>
+<p>运行完以后记得是make，make，make不是make &amp; make install ，install就覆盖安装了，千万搞清楚~</p>
+<p>make以后在当前目录生成odjs目录，下面就是新的nginx；</p>
+<p>剩下就好办，备份原来的nginx，把新生成的nginx替换原来的，</p>
+<p>备份旧的nginx程序</p>
+<p>cp /usr/local/nginx/sbin/nginx/usr/local/nginx/sbin/nginx.bak</p>
+<p>把新的nginx程序覆盖旧的</p>
+<p>cp objs/nginx /usr/local/nginx/sbin/nginx</p>
+<p>测试新的nginx程序是否正确</p>
+<p>/usr/local/nginx/sbin/nginx -t</p>
+<p>nginx: theconfiguration file /usr/local/nginx/conf/nginx.conf syntax is ok</p>
+<p>nginx:configuration file /usr/local/nginx/conf/nginx.conf test issuccessful</p>
+<p>平滑重启nginx</p>
+<p>/usr/local/nginx/sbin/nginx -s reload</p>
+<p>查看ngixn版本极其编译参数</p>
+<p>/usr/local/nginx/sbin/nginx -V</p>
+<p>configure arguments: –prefix=/data/app/nginx –user=www –group=www –with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
+<h6 id="权作一个跳坑记录。"><a href="#权作一个跳坑记录。" class="headerlink" title="权作一个跳坑记录。"></a>权作一个跳坑记录。</h6><hr>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>linux有足够内存还使用swap</title>
     <url>/2023/11131515.html</url>
     <content><![CDATA[<p>一台主机内存swap报警上去以查看确实swap快耗尽；</p>
@@ -1401,69 +1464,6 @@
 <p>rm swapadd&nbsp;&nbsp; &nbsp;###从文件系统中回收此文件</p>
 <hr>
 ]]></content>
-  </entry>
-  <entry>
-    <title>/var/log/messages日志恢复</title>
-    <url>/2023/112018778.html</url>
-    <content><![CDATA[<p>Linux容易犯的一个错误是把日志文件给直接删除，而不是删除日志文件的内容。<br>直接删除日志文件往往导致新产生的日志记录无法被写入到日志文件中（因为它已经被删除了），而仅仅重新新建（touch）同样名字的文件是解决不了问题的。<br>本文以Unbutu系统为例，介绍如何恢复被误删除的syslog文件：<br>首先，在以root用户执行如下lsof命令，查询打开/var/log/messages文件的进程的进程ID(PID)。<br>root@zck:/var/log# lsof | grep messages<br>rsyslogd 544 syslog 7w REG 8,1 214641 134422 /var/log/messages<br>从上面命令输出可以看到，这个打开/var/log/messages文件的进程的PID是544，文件/var/log/messages的文件描述符（FD）号是7。<br>根据上述的PID和FD，可以在/proc找到对应的文件：<br>root@zck:/var/log#ls -al /proc/544/fd/7<br>l-wx—— 1 root root 64 2012-07-14 14:48 7 -&gt; /var/log/messages<br>将文件/proc/544/fd/7拷贝到/var/log/messages<br>cp /proc/544/fd/7 /var/log/messages&nbsp;</p>
-<p>然后重新启动syslog服务即可恢复被误删除的日志文件，并且新的日志记录能够继续被写入日志文件。<br>以root用户运行service命令。其中，service命令的第2个参数可能是syslog、也可能是rsyslog。<br>具体可以使用通过命令查询得知。<br>登录后复制<br>root@zck:/proc/544/fd# service –status-all<br> [ ? ] …<br> [ ? ] rc.local<br> [ ? ] rsyslog<br> [ ? ] screen-cleanup<br> [ ? ] …  #——————————-</p>
-<p>复制代码代码如下:<br>root@zck:/proc/544/fd# service rsyslog restart<br>rsyslog start/running, process 2673</p>
-<p>清空日志文件：<br>cat /dev/null&gt;/var/log/messages</p>
-<p>转自url:<a href="https://blog.51cto.com/u_11146845/6240737">https://blog.51cto.com/u_11146845/6240737</a></p>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>nginxlog切分</title>
-    <url>/2023/111760549.html</url>
-    <content><![CDATA[<p>1.设置日志文件存放目录，假设你的nginx的日志存在这个目录里<br>logs_path=”/data/log/nginx/“</p>
-<p>2.设置pid文件，这个根据你自己的环境，找到nginx.pid所在目录<br>pid_path=”/var/run/nginx.pid”</p>
-<p>3.创建分割存储的日期文件目录<br>datetime=<code>date -d "yesterday" +"%Y%m%d"</code>;<br>new_log_path=$logs_path$datetime<br>mkdir -p $new_log_path</p>
-<p>4.按照日期移动所有该目录下的日志文件<br>log_file_list=<code>ls -l $logs_path</code>;<br>for log_file in $log_file_list;<br>do<br>    log_file_name=$logs_path$log_file;<br>    if [ -f $log_file_name ];<br>    then<br>        mv $log_file_name $new_log_path;<br>    fi<br>done</p>
-<p>5.向nginx主进程发信号重新打开日志<br>kill -USR1 <code>cat ${pid_path}</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">logs_path=<span class="string">"/data/log/nginx/"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pid_path=<span class="string">"/var/run/nginx.pid"</span></span><br><span class="line"></span><br><span class="line">datetime=`<span class="built_in">date</span> -d <span class="string">"yesterday"</span> +<span class="string">"%Y%m%d"</span>`;</span><br><span class="line">new_log_path=$logs_path<span class="variable">$datetime</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$new_log_path</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">log_file_list=`<span class="built_in">ls</span> -l <span class="variable">$logs_path</span>`;</span><br><span class="line"><span class="keyword">for</span> log_file <span class="keyword">in</span> <span class="variable">$log_file_list</span>;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    log_file_name=$logs_path<span class="variable">$log_file</span>;</span><br><span class="line">    <span class="keyword">if</span> [ -f <span class="variable">$log_file_name</span> ];</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">mv</span> <span class="variable">$log_file_name</span> <span class="variable">$new_log_path</span>;</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">kill</span> -USR1 `<span class="built_in">cat</span> <span class="variable">${pid_path}</span>`</span><br></pre></td></tr></tbody></table></figure>
-
-
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>nginx编译ssl模块</title>
-    <url>/2023/062858442.html</url>
-    <content><![CDATA[<p>几个官网在一台服务器上面，其中一台是https的，增加一个官网以，重启nginx以后，https的网站直接报错，大意是ssl 在配置文件中unknow，但是这个https网站已经运行很久了，一时间有点郁闷，掉坑里了。</p>
-<p>查看nginx信息 /usr/local/nginx/sbin/nginx -V显示不支持ssl，那就好办，重新编译下ssl，但是线上业务跑着，难免有点担心，在测试机上跑了一次，正常的，才敢到线上操作，大致如此从网上找的如下：</p>
-<p>进入nginx源码目录：</p>
-<p>cd &nbsp;nginx-1.6.2</p>
-<p>./configure –prefix=/usr/local/nginx –user=www –group=www &nbsp;–with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
-<p>只添加ssl功能模块，有别的需求继续加上；</p>
-<p>运行完以后记得是make，make，make不是make &amp; make install ，install就覆盖安装了，千万搞清楚~</p>
-<p>make以后在当前目录生成odjs目录，下面就是新的nginx；</p>
-<p>剩下就好办，备份原来的nginx，把新生成的nginx替换原来的，</p>
-<p>备份旧的nginx程序</p>
-<p>cp /usr/local/nginx/sbin/nginx/usr/local/nginx/sbin/nginx.bak</p>
-<p>把新的nginx程序覆盖旧的</p>
-<p>cp objs/nginx /usr/local/nginx/sbin/nginx</p>
-<p>测试新的nginx程序是否正确</p>
-<p>/usr/local/nginx/sbin/nginx -t</p>
-<p>nginx: theconfiguration file /usr/local/nginx/conf/nginx.conf syntax is ok</p>
-<p>nginx:configuration file /usr/local/nginx/conf/nginx.conf test issuccessful</p>
-<p>平滑重启nginx</p>
-<p>/usr/local/nginx/sbin/nginx -s reload</p>
-<p>查看ngixn版本极其编译参数</p>
-<p>/usr/local/nginx/sbin/nginx -V</p>
-<p>configure arguments: –prefix=/data/app/nginx –user=www –group=www –with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
-<h6 id="权作一个跳坑记录。"><a href="#权作一个跳坑记录。" class="headerlink" title="权作一个跳坑记录。"></a>权作一个跳坑记录。</h6><hr>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
-      </tags>
   </entry>
   <entry>
     <title>php 安装redis，protobuf,mcryp扩展</title>
@@ -1623,97 +1623,6 @@
       </tags>
   </entry>
   <entry>
-    <title>vsftp 锁定用户目录</title>
-    <url>/2023/071114619.html</url>
-    <content><![CDATA[<p>vsftp 安装以后给用户权限和锁定目录；</p>
-<p>关闭SELinux：</p>
-<p>修改/etc/selinux/config文件中的SELINUX=”” 为 disabled ，然后重启。</p>
-<p>如果不想重启系统，使用命令setenforce 0</p>
-<p>添加用户：</p>
-<p>useradd -d /var/www -s /sbin/nologin ftpuser</p>
-<p>主要是修改/etc/vsftpd/vsftpd.conf如下：</p>
-<p>chroot_local_user=NO</p>
-<p>chroot_list_enable=YES</p>
-<p>chroot_list_file=/etc/vsftpd/vsftpd.chroot_list</p>
-<p>vim chroot_list</p>
-<p>添加锁定目录用户</p>
-<p>Ftpuser</p>
-<p>Upload</p>
-<p>当然可以修改路径：</p>
-<p>usermod –d /www/html&nbsp; &nbsp;ftpuser</p>
-<p>**vsftpd.user_list：该文件里的用户账户在默认情况下也不能访问FTP服务器，仅当vsftpd .conf配置文件里启用userlist_enable=NO选项时才允许访问。</p>
-<p>/etc/vsftpd/user_list ，添加上需要阻止的本地用户，一个用户名一行&nbsp;用被阻止的用户</p>
-<p>grep -v “^#” vsftpd.conf&nbsp;</p>
-<p>anonymous_enable=NO</p>
-<p>local_enable=YES</p>
-<p>write_enable=YES</p>
-<p>local_umask=000</p>
-<p>dirmessage_enable=YES</p>
-<p>xferlog_enable=YES</p>
-<p>connect_from_port_20=YES</p>
-<p>xferlog_file=/var/log/xferlog</p>
-<p>xferlog_std_format=YES</p>
-<p>chroot_local_user=NO</p>
-<p>chroot_list_enable=YES</p>
-<p>chroot_list_file=/etc/vsftpd/chroot_list</p>
-<p>listen=YES</p>
-<p>listen_port=21</p>
-<p>pasv_address=192.168.10.123</p>
-<p>pasv_addr_resolve=yes</p>
-<p>pasv_enable=YES</p>
-<p>pasv_min_port=5000</p>
-<p>pasv_max_port=5008</p>
-<p>use_localtime=YES</p>
-<p>listen_ipv6=NO</p>
-<p>allow_writeable_chroot=YES</p>
-<p>pam_service_name=vsftpd</p>
-<p>userlist_enable=YES</p>
-<p>配置相关来源网络：</p>
-<p>登录和对匿名用户的设置</p>
-<p>write_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //是否对登录用户开启写权限。属全局性设置。默认NO<br>local_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //是否允许本地用户登录FTP服务器。默认为NO<br>anonymous_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //设置是否允许匿名用户登录FTP服务器。默认为YES<br>ftp_username=ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //定义匿名用户的账户名称，默认值为ftp。<br>no_anon_password=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //匿名用户登录时是否询问口令。设置为YES，则不询问。默&nbsp;<br>认NO<br>anon_world_readable_only=YES&nbsp;&nbsp; //匿名用户是否允许下载可阅读的文档，默认为YES。<br>&nbsp;&nbsp; anon_upload_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //是否允许匿名用户上传文件。只有在write_enable设置为<br>YES时，该配置项才有效。而且匿名用户对相应的目录必须有写权限。默认为NO。<br>anon_mkdir_write_enable=YES //是否允许匿名用户创建目录。只有在write_enable设置为&nbsp;&nbsp;&nbsp; YES时有效。且匿名用户对上层目录有写入的权限。默认为NO。<br>anon_other_write_enable=NO&nbsp;&nbsp;&nbsp; //若设置为YES，则匿名用户会被允许拥有多于<br>上传和建立目录的权限，还会拥有删除和更名权限。默认值为NO。</p>
-<p>2．设置用户登录后所在的目录&nbsp;<br>local_root=/var/ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 设置本地用户登录后所在的目录。默认配置文件中没有设置该项，此时用户登录FTP服务器后，所在的目录为该用户的主目录，对于root用户，则为/root目录。<br>anon_root=/var/ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置匿名用户登录后所在的目录。若未指定，则默认为/var/ftp目录。</p>
-<p>&nbsp;</p>
-<p>3．控制用户是否允许切换到上级目录&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 在默认配置下，用户可以使用“cd..”命名切换到上级目录。比如，若用户登录后所在的目录为/var/ftp，则在“ftp&gt;”命令行 下，执行“cd..”命令后，用户将切换到其上级目录/var，若继续执行该命令，则可进入Linux系统的根目录，从而可以对整个Linux的文件系统 进行操作。</p>
-<p>若设置了write_enable=YES，则用户还可对根目录下的文件进行改写操作，会给系统带来极大的安全隐患，因此，必须防止用户切换到Linux的根目录，相关的配置项如下：<br>chroot_list_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 设置是否启用chroot_list_file配置项指定的用户列表文件。设置为YES则除了列在j/etc/vsftpd/chroot_list文件中的的帐号外，所有登录的用户都可以进入ftp根目录之外的目录。默认NO<br>chroot_list_file=/etc/vsftpd/chroot_list&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 用于指定用户列表文件，该文件用于控制哪些用户可以切换到FTP站点根目录的上级目录。<br>chroot_local_user=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 用于指定用户列表文件中的用户，是否允许切换到上级目录。默认NO<br>注意：要对本地用户查看效果，需先设置local_root=/var/ftp</p>
-<p>具体情况有以下几种：<br>1）当chroot_list_enable=YES，chroot_local_user=YES时，在/etc/vsftpd/chroot_list文件中列出的用户，可以切换到上级目录；未在文件中列出的用户，不能切换到站点根目录的上级目录。<br>2）当chroot_list_enable=YES，chroot_local_user=NO时，在/etc/vsftpd/chroot_list文件中列出的用户，不能切换到站点根目录的上级目录；未在文件中列出的用户，可以切换到上级目录。<br>3）当chroot_list_enable=NO，chroot_local_user=YES时，所有用户均不能切换到上级目录。<br>4）当chroot_list_enable=NO，chroot_local_user=NO时，所有用户均可以切换到上级目录。<br>5）当用户不允许切换到上级目录时，登录后FTP站点的根目录“/”是该FTP账户的主目录，即文件的系统的/var/ftp目录。</p>
-<p>&nbsp;</p>
-<p>4．设置访问控制&nbsp;<br>（1）设置允许或不允许访问的主机（见TBP14）<br>tcp_wrappers=YES用来设置vsftpd服务器是否与tcp wrapper相结合，进行主机的访问控制。默认设置为YES，vsftpd服务器会检查/etc/hosts.allow和/etc /hosts.deny中的设置，以决定请求连接的主机是否允许访问该FTP服务器。这两个文件可以起到简易的防火墙功能。<br>比如，若要仅允许192.168.168.1～192.168.168.254的用户，可以访问连接vsftpd服务器，则可在/etc/hosts.allow文件中添加以下内容：<br>vsftpd：192.168.168.0/255.255.255.0 ：allow<br>all：all：deny</p>
-<p>（2）设置允许或不允许访问的用户<br>对用户的访问控制由/etc/vsftpd/user_list和/etc/vsftpd/ftpusers文件来控制实现。相关配置命令如下：<br>userlist_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 决定/etc/vsftpd/user_list文件是否启用生效。YES则生效，NO不生效。<br>userlist_deny=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 决定/etc/vsftpd/user_list文件中的用户是允许访问还是不允许访问。若设置为YES，则/etc/vsftpd/user_list 文件中的用户将不允许访问FTP服务器；若设置为NO，则只有vsftpd.user_list文件中的用户，才能访问FTP服务器。</p>
-<p>&nbsp;</p>
-<p>5．设置访问速度&nbsp;<br>anon_max_rate=0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置匿名用户所能使用的最大传输速度，单位为b/s。若设置为0，则不受速度限制，此为默认值。<br>local_max_rate=0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 设置本地用户所能使用的最大传输速度。默认为0，不受限制。</p>
-<p>&nbsp;</p>
-<p>6．定义用户配置文件&nbsp;<br>在vsftpd服务器中，不同用户还可使用不同的配置，这要通过用户配置文件来实现。<br>user_config_dir=/etc/vsftpd/userconf //用于设置用户配置文件所在的目录。<br>设置了该配置项后，当用户登录FTP服务器时，系统就会到/etc/vsftpd/userconf目录下读取与当前用户名相同的文件，并根据文件中的配 置命令，对当前用户进行更进一步的配置。比如，利用用户配置文件，可实现对不同用户进行访问的速度进行控制，在各用户配置文件中，定义 local_max_rate配置，以决定该用户允许的访问速度。</p>
-<p>&nbsp;</p>
-<p>7．与连接相关的设置&nbsp;<br>listen=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置vsftpd服务器是否以standalone模式运行。以standalone模式运行是一种较好的方式，此时listen必须设置为YES， 此为默认值，建议不要更改。很多与服务器运行相关的配置命令，需要此运行模式才有效。若设置为NO，则vsftpd不是以独立的服务运行，要受 xinetd服务的管理控制，功能上会受限制。</p>
-<p>max_clients=0<br>//设置vsftpd允许的最大连接数，默认为0，表示不受限制。若设置为150时，则同时允许有150个连接，超出的将拒绝建立连接。只有在以standalone模式运行时才有效。</p>
-<p>max_per_ip=0<br>// 设置每个IP地址允许与FTP服务器同时建立连接的数目。默认为0，不受限制。通常可对此配置进行设置，防止同一个用户建立太多的连接。只有在以standalone模式运行时才有效。</p>
-<p>listen_address=IP地址&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置在指定的IP地址上侦听用户的FTP请求。若不设置，则对服务器所绑定的所有IP地址进行侦听。只有在以standalone模式运行时才有效。 对于只绑定了一个IP地址的服务器，不需要配置该项，默认情况下，配置文件中没有该配置项。若服务器同时绑定了多个IP地址，则应通过该配置项，指定在哪 个IP地址上提供FTP服务，即指定FTP服务器所使用的IP地址。<br>注意：设置此值前后，可以通过netstat -tnl对比端口的监听情况</p>
-<p>accept_timeout=60&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置建立被动（PASV）数据连接的超时时间，单位为秒，默认值为60。<br>connect_timeout=60&nbsp;&nbsp;&nbsp;&nbsp;<br>// PORT方式下建立数据连接的超时时间，单位为秒。<br>data_connection_timeout=300&nbsp;&nbsp;&nbsp;<br>//设置建立FTP数据连接的超时时间，默认为300秒。</p>
-<p>idle_session_timeout＝600&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置多长时间不对FTP服务器进行任何操作，则断开该FTP连接，单位为秒，默认为600秒。即设置发呆的逾时时间，在这个时间内，若没有数据传送或指令的输入，则会强行断开连接。<br>pam_service_name=vsftpd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置在PAM所使用的名称，默认值为vsftpd。</p>
-<p>setproctitle_enable=NO|YES&nbsp;&nbsp;&nbsp;<br>//设置每个与FTP服务器的连接，是否以不同的进程表现出来，默认值为NO，此时只有一个名为vsftpd的进程。若设置为YES，则每个连接都会有一个vsftpd进程，使用“ps -ef|grep ftp”命令可查看到详细的FTP连接信息。安全起见，建议关闭。</p>
-<p>&nbsp;PS:有时候不能上传文件，查看锁定目录权限和allow_writeable_chroot=YES 还可以查看下</p>
-<p>getsebool -a|grep ftp</p>
-<p>输入setsebool -P ftpd_full_access=on打开权限即可：</p>
-<p>getsebool -a|grep ftp查看：</p>
-<p>getsebool -a|grep ftp</p>
-<p>ftpd_anon_write –&gt; off</p>
-<p>ftpd_connect_all_unreserved –&gt; off</p>
-<p>ftpd_connect_db –&gt; off</p>
-<p>ftpd_full_access –&gt; on</p>
-<p>ftpd_use_cifs –&gt; off</p>
-<p>ftpd_use_fusefs –&gt; off</p>
-<p>ftpd_use_nfs –&gt; off</p>
-<p>ftpd_use_passive_mode –&gt; off</p>
-<p>httpd_can_connect_ftp –&gt; off</p>
-<p>httpd_enable_ftp_server –&gt; off</p>
-<p>tftp_anon_write –&gt; off</p>
-<p>tftp_home_dir –&gt; off</p>
-<h2 id="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"><a href="#vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。" class="headerlink" title="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"></a>vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。</h2>]]></content>
-      <tags>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>windows2012 RDP 连接失败</title>
     <url>/2023/120114297.html</url>
     <content><![CDATA[<p>   完美解决RDO”连接无法继续，因为未启用身份验证，并且远程计算机需要启用身份验证以进行连接” </p>
@@ -1860,6 +1769,97 @@
       </tags>
   </entry>
   <entry>
+    <title>vsftp 锁定用户目录</title>
+    <url>/2023/071114619.html</url>
+    <content><![CDATA[<p>vsftp 安装以后给用户权限和锁定目录；</p>
+<p>关闭SELinux：</p>
+<p>修改/etc/selinux/config文件中的SELINUX=”” 为 disabled ，然后重启。</p>
+<p>如果不想重启系统，使用命令setenforce 0</p>
+<p>添加用户：</p>
+<p>useradd -d /var/www -s /sbin/nologin ftpuser</p>
+<p>主要是修改/etc/vsftpd/vsftpd.conf如下：</p>
+<p>chroot_local_user=NO</p>
+<p>chroot_list_enable=YES</p>
+<p>chroot_list_file=/etc/vsftpd/vsftpd.chroot_list</p>
+<p>vim chroot_list</p>
+<p>添加锁定目录用户</p>
+<p>Ftpuser</p>
+<p>Upload</p>
+<p>当然可以修改路径：</p>
+<p>usermod –d /www/html&nbsp; &nbsp;ftpuser</p>
+<p>**vsftpd.user_list：该文件里的用户账户在默认情况下也不能访问FTP服务器，仅当vsftpd .conf配置文件里启用userlist_enable=NO选项时才允许访问。</p>
+<p>/etc/vsftpd/user_list ，添加上需要阻止的本地用户，一个用户名一行&nbsp;用被阻止的用户</p>
+<p>grep -v “^#” vsftpd.conf&nbsp;</p>
+<p>anonymous_enable=NO</p>
+<p>local_enable=YES</p>
+<p>write_enable=YES</p>
+<p>local_umask=000</p>
+<p>dirmessage_enable=YES</p>
+<p>xferlog_enable=YES</p>
+<p>connect_from_port_20=YES</p>
+<p>xferlog_file=/var/log/xferlog</p>
+<p>xferlog_std_format=YES</p>
+<p>chroot_local_user=NO</p>
+<p>chroot_list_enable=YES</p>
+<p>chroot_list_file=/etc/vsftpd/chroot_list</p>
+<p>listen=YES</p>
+<p>listen_port=21</p>
+<p>pasv_address=192.168.10.123</p>
+<p>pasv_addr_resolve=yes</p>
+<p>pasv_enable=YES</p>
+<p>pasv_min_port=5000</p>
+<p>pasv_max_port=5008</p>
+<p>use_localtime=YES</p>
+<p>listen_ipv6=NO</p>
+<p>allow_writeable_chroot=YES</p>
+<p>pam_service_name=vsftpd</p>
+<p>userlist_enable=YES</p>
+<p>配置相关来源网络：</p>
+<p>登录和对匿名用户的设置</p>
+<p>write_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //是否对登录用户开启写权限。属全局性设置。默认NO<br>local_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //是否允许本地用户登录FTP服务器。默认为NO<br>anonymous_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //设置是否允许匿名用户登录FTP服务器。默认为YES<br>ftp_username=ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //定义匿名用户的账户名称，默认值为ftp。<br>no_anon_password=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //匿名用户登录时是否询问口令。设置为YES，则不询问。默&nbsp;<br>认NO<br>anon_world_readable_only=YES&nbsp;&nbsp; //匿名用户是否允许下载可阅读的文档，默认为YES。<br>&nbsp;&nbsp; anon_upload_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //是否允许匿名用户上传文件。只有在write_enable设置为<br>YES时，该配置项才有效。而且匿名用户对相应的目录必须有写权限。默认为NO。<br>anon_mkdir_write_enable=YES //是否允许匿名用户创建目录。只有在write_enable设置为&nbsp;&nbsp;&nbsp; YES时有效。且匿名用户对上层目录有写入的权限。默认为NO。<br>anon_other_write_enable=NO&nbsp;&nbsp;&nbsp; //若设置为YES，则匿名用户会被允许拥有多于<br>上传和建立目录的权限，还会拥有删除和更名权限。默认值为NO。</p>
+<p>2．设置用户登录后所在的目录&nbsp;<br>local_root=/var/ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 设置本地用户登录后所在的目录。默认配置文件中没有设置该项，此时用户登录FTP服务器后，所在的目录为该用户的主目录，对于root用户，则为/root目录。<br>anon_root=/var/ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置匿名用户登录后所在的目录。若未指定，则默认为/var/ftp目录。</p>
+<p>&nbsp;</p>
+<p>3．控制用户是否允许切换到上级目录&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 在默认配置下，用户可以使用“cd..”命名切换到上级目录。比如，若用户登录后所在的目录为/var/ftp，则在“ftp&gt;”命令行 下，执行“cd..”命令后，用户将切换到其上级目录/var，若继续执行该命令，则可进入Linux系统的根目录，从而可以对整个Linux的文件系统 进行操作。</p>
+<p>若设置了write_enable=YES，则用户还可对根目录下的文件进行改写操作，会给系统带来极大的安全隐患，因此，必须防止用户切换到Linux的根目录，相关的配置项如下：<br>chroot_list_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 设置是否启用chroot_list_file配置项指定的用户列表文件。设置为YES则除了列在j/etc/vsftpd/chroot_list文件中的的帐号外，所有登录的用户都可以进入ftp根目录之外的目录。默认NO<br>chroot_list_file=/etc/vsftpd/chroot_list&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 用于指定用户列表文件，该文件用于控制哪些用户可以切换到FTP站点根目录的上级目录。<br>chroot_local_user=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 用于指定用户列表文件中的用户，是否允许切换到上级目录。默认NO<br>注意：要对本地用户查看效果，需先设置local_root=/var/ftp</p>
+<p>具体情况有以下几种：<br>1）当chroot_list_enable=YES，chroot_local_user=YES时，在/etc/vsftpd/chroot_list文件中列出的用户，可以切换到上级目录；未在文件中列出的用户，不能切换到站点根目录的上级目录。<br>2）当chroot_list_enable=YES，chroot_local_user=NO时，在/etc/vsftpd/chroot_list文件中列出的用户，不能切换到站点根目录的上级目录；未在文件中列出的用户，可以切换到上级目录。<br>3）当chroot_list_enable=NO，chroot_local_user=YES时，所有用户均不能切换到上级目录。<br>4）当chroot_list_enable=NO，chroot_local_user=NO时，所有用户均可以切换到上级目录。<br>5）当用户不允许切换到上级目录时，登录后FTP站点的根目录“/”是该FTP账户的主目录，即文件的系统的/var/ftp目录。</p>
+<p>&nbsp;</p>
+<p>4．设置访问控制&nbsp;<br>（1）设置允许或不允许访问的主机（见TBP14）<br>tcp_wrappers=YES用来设置vsftpd服务器是否与tcp wrapper相结合，进行主机的访问控制。默认设置为YES，vsftpd服务器会检查/etc/hosts.allow和/etc /hosts.deny中的设置，以决定请求连接的主机是否允许访问该FTP服务器。这两个文件可以起到简易的防火墙功能。<br>比如，若要仅允许192.168.168.1～192.168.168.254的用户，可以访问连接vsftpd服务器，则可在/etc/hosts.allow文件中添加以下内容：<br>vsftpd：192.168.168.0/255.255.255.0 ：allow<br>all：all：deny</p>
+<p>（2）设置允许或不允许访问的用户<br>对用户的访问控制由/etc/vsftpd/user_list和/etc/vsftpd/ftpusers文件来控制实现。相关配置命令如下：<br>userlist_enable=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 决定/etc/vsftpd/user_list文件是否启用生效。YES则生效，NO不生效。<br>userlist_deny=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 决定/etc/vsftpd/user_list文件中的用户是允许访问还是不允许访问。若设置为YES，则/etc/vsftpd/user_list 文件中的用户将不允许访问FTP服务器；若设置为NO，则只有vsftpd.user_list文件中的用户，才能访问FTP服务器。</p>
+<p>&nbsp;</p>
+<p>5．设置访问速度&nbsp;<br>anon_max_rate=0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置匿名用户所能使用的最大传输速度，单位为b/s。若设置为0，则不受速度限制，此为默认值。<br>local_max_rate=0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>// 设置本地用户所能使用的最大传输速度。默认为0，不受限制。</p>
+<p>&nbsp;</p>
+<p>6．定义用户配置文件&nbsp;<br>在vsftpd服务器中，不同用户还可使用不同的配置，这要通过用户配置文件来实现。<br>user_config_dir=/etc/vsftpd/userconf //用于设置用户配置文件所在的目录。<br>设置了该配置项后，当用户登录FTP服务器时，系统就会到/etc/vsftpd/userconf目录下读取与当前用户名相同的文件，并根据文件中的配 置命令，对当前用户进行更进一步的配置。比如，利用用户配置文件，可实现对不同用户进行访问的速度进行控制，在各用户配置文件中，定义 local_max_rate配置，以决定该用户允许的访问速度。</p>
+<p>&nbsp;</p>
+<p>7．与连接相关的设置&nbsp;<br>listen=YES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置vsftpd服务器是否以standalone模式运行。以standalone模式运行是一种较好的方式，此时listen必须设置为YES， 此为默认值，建议不要更改。很多与服务器运行相关的配置命令，需要此运行模式才有效。若设置为NO，则vsftpd不是以独立的服务运行，要受 xinetd服务的管理控制，功能上会受限制。</p>
+<p>max_clients=0<br>//设置vsftpd允许的最大连接数，默认为0，表示不受限制。若设置为150时，则同时允许有150个连接，超出的将拒绝建立连接。只有在以standalone模式运行时才有效。</p>
+<p>max_per_ip=0<br>// 设置每个IP地址允许与FTP服务器同时建立连接的数目。默认为0，不受限制。通常可对此配置进行设置，防止同一个用户建立太多的连接。只有在以standalone模式运行时才有效。</p>
+<p>listen_address=IP地址&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置在指定的IP地址上侦听用户的FTP请求。若不设置，则对服务器所绑定的所有IP地址进行侦听。只有在以standalone模式运行时才有效。 对于只绑定了一个IP地址的服务器，不需要配置该项，默认情况下，配置文件中没有该配置项。若服务器同时绑定了多个IP地址，则应通过该配置项，指定在哪 个IP地址上提供FTP服务，即指定FTP服务器所使用的IP地址。<br>注意：设置此值前后，可以通过netstat -tnl对比端口的监听情况</p>
+<p>accept_timeout=60&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置建立被动（PASV）数据连接的超时时间，单位为秒，默认值为60。<br>connect_timeout=60&nbsp;&nbsp;&nbsp;&nbsp;<br>// PORT方式下建立数据连接的超时时间，单位为秒。<br>data_connection_timeout=300&nbsp;&nbsp;&nbsp;<br>//设置建立FTP数据连接的超时时间，默认为300秒。</p>
+<p>idle_session_timeout＝600&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置多长时间不对FTP服务器进行任何操作，则断开该FTP连接，单位为秒，默认为600秒。即设置发呆的逾时时间，在这个时间内，若没有数据传送或指令的输入，则会强行断开连接。<br>pam_service_name=vsftpd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>//设置在PAM所使用的名称，默认值为vsftpd。</p>
+<p>setproctitle_enable=NO|YES&nbsp;&nbsp;&nbsp;<br>//设置每个与FTP服务器的连接，是否以不同的进程表现出来，默认值为NO，此时只有一个名为vsftpd的进程。若设置为YES，则每个连接都会有一个vsftpd进程，使用“ps -ef|grep ftp”命令可查看到详细的FTP连接信息。安全起见，建议关闭。</p>
+<p>&nbsp;PS:有时候不能上传文件，查看锁定目录权限和allow_writeable_chroot=YES 还可以查看下</p>
+<p>getsebool -a|grep ftp</p>
+<p>输入setsebool -P ftpd_full_access=on打开权限即可：</p>
+<p>getsebool -a|grep ftp查看：</p>
+<p>getsebool -a|grep ftp</p>
+<p>ftpd_anon_write –&gt; off</p>
+<p>ftpd_connect_all_unreserved –&gt; off</p>
+<p>ftpd_connect_db –&gt; off</p>
+<p>ftpd_full_access –&gt; on</p>
+<p>ftpd_use_cifs –&gt; off</p>
+<p>ftpd_use_fusefs –&gt; off</p>
+<p>ftpd_use_nfs –&gt; off</p>
+<p>ftpd_use_passive_mode –&gt; off</p>
+<p>httpd_can_connect_ftp –&gt; off</p>
+<p>httpd_enable_ftp_server –&gt; off</p>
+<p>tftp_anon_write –&gt; off</p>
+<p>tftp_home_dir –&gt; off</p>
+<h2 id="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"><a href="#vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。" class="headerlink" title="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"></a>vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。</h2>]]></content>
+      <tags>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>zabbix 设置163报警邮箱</title>
     <url>/2023/120119617.html</url>
     <content><![CDATA[<h2 id="1-测试端口是否开放："><a href="#1-测试端口是否开放：" class="headerlink" title="1.测试端口是否开放："></a>1.测试端口是否开放：</h2><p>nc -w 2 smtp.exmail.qq.com 465 &lt; /dev/null &amp;&amp; echo “port is ok”</p>
@@ -1989,6 +1989,35 @@
 ]]></content>
       <tags>
         <tag>心得</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>zabbix监控业务进程变动</title>
+    <url>/2023/111359213.html</url>
+    <content><![CDATA[<p>Zabbix 监控进程宕机</p>
+<p>  业务需求后端进程宕机以后能在短时间内迅速拉起，业务影响不大，但是开发需要查看coredump，要求能监控到pid变化；在现有构架下zabbix能监控并报警；</p>
+<p>当然zabbix设置报警设置就不再一一</p>
+<p>在每台服务器/etc/zabbix/zabbix_agentd.conf设置路径：此例只需要piddiff.sh</p>
+<p>UserParameter=checkpid,sh /usr/local/script/piddiff.sh</p>
+<p>UserParameter=test,sh /usr/local/script/test.sh</p>
+<p>UserParameter=discovery.process,/usr/local/script/disprocess.sh</p>
+<p>UserParameter=process.check[*],/usr/local/script/proc_check.sh $1 $2 $3</p>
+<p>/usr/local/script下面存放脚本</p>
+<p>Vim piddiff.sh</p>
+<p>aapid为业务监控id 取值根据业务需求；</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#/bin/sh</span></span><br><span class="line"></span><br><span class="line">onl_ok=1</span><br><span class="line"></span><br><span class="line">onl_cored=3</span><br><span class="line"></span><br><span class="line"><span class="built_in">dir</span>=/usr/local/script</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ ! -f <span class="string">"<span class="variable">$dir</span>/old.txt"</span> ]];<span class="keyword">then</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/old.txt</span><br><span class="line"></span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">         <span class="built_in">sleep</span> 1s           </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/now.txt</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ! diff -q <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; /dev/null; <span class="keyword">then</span></span><br><span class="line"></span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_cored</span></span><br><span class="line">    </span><br><span class="line">          diff -c <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; <span class="variable">$dir</span>/`<span class="built_in">date</span> <span class="string">"+%Y%m%d%H%M"</span>`_diff.txt</span><br><span class="line">    </span><br><span class="line">          <span class="built_in">cat</span> <span class="variable">$dir</span>/now.txt &gt;<span class="variable">$dir</span>/old.txt</span><br><span class="line">    </span><br><span class="line">     <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_ok</span>    </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>一个简单的判断脚本；</p>
+<p>Zabbix30秒会抓取一次，正常没变化为1，有变化为3，那么zabbix抓取数值为3则表示pid有变化，会发出警报；</p>
+<p>Zabbix设置：</p>
+<p>监控项模板添加如下：</p>
+<p><img src="/../images/20231113-1.png"></p>
+<p>触发器：{Template OS Linux:checkpid.last()}=3</p>
+<p><img src="/../images/20231113-2.png"></p>
+<hr>
+]]></content>
+      <tags>
+        <tag>工具</tag>
       </tags>
   </entry>
   <entry>
@@ -2125,35 +2154,6 @@
 <p>dos2unix -k $FILE</p>
 <p>/bin/mail -s “$2” $1 &lt; $FILE</p>
 <p>zabbix-管理–示警媒介类型–定制脚本-sendmail脚本，–添加联系人邮件。。</p>
-]]></content>
-      <tags>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>zabbix监控业务进程变动</title>
-    <url>/2023/111359213.html</url>
-    <content><![CDATA[<p>Zabbix 监控进程宕机</p>
-<p>  业务需求后端进程宕机以后能在短时间内迅速拉起，业务影响不大，但是开发需要查看coredump，要求能监控到pid变化；在现有构架下zabbix能监控并报警；</p>
-<p>当然zabbix设置报警设置就不再一一</p>
-<p>在每台服务器/etc/zabbix/zabbix_agentd.conf设置路径：此例只需要piddiff.sh</p>
-<p>UserParameter=checkpid,sh /usr/local/script/piddiff.sh</p>
-<p>UserParameter=test,sh /usr/local/script/test.sh</p>
-<p>UserParameter=discovery.process,/usr/local/script/disprocess.sh</p>
-<p>UserParameter=process.check[*],/usr/local/script/proc_check.sh $1 $2 $3</p>
-<p>/usr/local/script下面存放脚本</p>
-<p>Vim piddiff.sh</p>
-<p>aapid为业务监控id 取值根据业务需求；</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#/bin/sh</span></span><br><span class="line"></span><br><span class="line">onl_ok=1</span><br><span class="line"></span><br><span class="line">onl_cored=3</span><br><span class="line"></span><br><span class="line"><span class="built_in">dir</span>=/usr/local/script</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ ! -f <span class="string">"<span class="variable">$dir</span>/old.txt"</span> ]];<span class="keyword">then</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/old.txt</span><br><span class="line"></span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">         <span class="built_in">sleep</span> 1s           </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/now.txt</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ! diff -q <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; /dev/null; <span class="keyword">then</span></span><br><span class="line"></span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_cored</span></span><br><span class="line">    </span><br><span class="line">          diff -c <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; <span class="variable">$dir</span>/`<span class="built_in">date</span> <span class="string">"+%Y%m%d%H%M"</span>`_diff.txt</span><br><span class="line">    </span><br><span class="line">          <span class="built_in">cat</span> <span class="variable">$dir</span>/now.txt &gt;<span class="variable">$dir</span>/old.txt</span><br><span class="line">    </span><br><span class="line">     <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_ok</span>    </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>一个简单的判断脚本；</p>
-<p>Zabbix30秒会抓取一次，正常没变化为1，有变化为3，那么zabbix抓取数值为3则表示pid有变化，会发出警报；</p>
-<p>Zabbix设置：</p>
-<p>监控项模板添加如下：</p>
-<p><img src="/../images/20231113-1.png"></p>
-<p>触发器：{Template OS Linux:checkpid.last()}=3</p>
-<p><img src="/../images/20231113-2.png"></p>
-<hr>
 ]]></content>
       <tags>
         <tag>工具</tag>
