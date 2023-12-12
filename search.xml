@@ -786,91 +786,6 @@
       </tags>
   </entry>
   <entry>
-    <title>frp搭建</title>
-    <url>/2023/062739776.html</url>
-    <content><![CDATA[<p> &nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。</p>
-<p>首先到官网：</p>
-<p>&nbsp;<a href="https://github.com/fatedier/frp/releases">https://github.com/fatedier/frp/releases</a></p>
-<p>下载: frp_0.16.0_linux_amd64.tar.gz服务器端</p>
-<p>解压出来ls:</p>
-<p>frpc&nbsp; frpc_full.ini&nbsp; frpc_http.ini&nbsp; frpc.ini&nbsp; frps&nbsp; frps_full.ini&nbsp; frps.ini&nbsp; LICENSE&nbsp; nohup.out</p>
-<p>服务器端只需要两个文件frps和frps.ini,其中frps为可执行文件，frps.ini为配置文件默认配置文件如下：其中bind_addr为本机IP,bind_port为frp对客户端的端口号，auto_token是客户端连接服务器端的口令。</p>
-<p>[common]</p>
-<p>Bind_addr=0.0.0.0</p>
-<p>Bind_port =4443</p>
-<p>Auto_token = frp</p>
-<p>配置好以后可以运行起来./frps -c ./frps.ini</p>
-<p>最好后台运行：nohup ./frps -c ./frps.ini &amp;</p>
-<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:4443</p>
-<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
-<p>&nbsp;需要穿透端口的服务器端开启：</p>
-<p>nohup ./frps -c ./frps.ini &amp;</p>
-<p>同样将客户端解压后有七个文件，只需要frpc和frpc.ini,配置文件如下：</p>
-<p>&nbsp;[common]</p>
-<p>Server_addr = 123.123.123.123</p>
-<p>Server_port = 4443</p>
-<p>Auto-token = frp</p>
-<p>[ssh_1]</p>
-<p>Type = tcp</p>
-<p>Local_ip = 127.0.0.1</p>
-<p>Local_port = 22</p>
-<p>Remote_port = 10085</p>
-<p>注意：server_addr是服务器端的公网IP地址，server_port是frp服务端口号，auto_token是连接服务器的口令，必须和服务器保持一致。[ssh_1]是客户端通过服务器与用户之间的通道名，每个客户端必须不一样，remote_port是服务器端对外提供本机服务的端口号，即用户连接123.123.123.123:10085，相当于连接127.0.0.1:22,即arm板上的ssh服务</p>
-<p>运行客户端：./frpc -c ./frpc.ini</p>
-<p>&nbsp;</p>
-<p>当前的配置</p>
-<p>more frpc.ini</p>
-<p>[common]</p>
-<p>server_addr = dem.abc.com</p>
-<p>server_port = 7000</p>
-<p>[game]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.232</p>
-<p>local_port = 9001</p>
-<p>remote_port = 6000</p>
-<p>&nbsp;</p>
-<p>[http]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.232</p>
-<p>local_port = 80</p>
-<p>remote_port = 6001</p>
-<p>&nbsp;</p>
-<p>[mysql]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.235</p>
-<p>local_port = 3306</p>
-<p>remote_port = 13306</p>
-<p>more frpc_http.ini</p>
-<p>[common]</p>
-<p>server_addr = dem.abc.com</p>
-<p>server_port = 7000</p>
-<p>&nbsp;</p>
-<p>[http]</p>
-<p>type = tcp</p>
-<p>local_ip = 192.168.1.232</p>
-<p>local_port = 80</p>
-<p>remote_port = 6001</p>
-<p>这样demo.abc.com 的13306映射到3306,6001映射到80端口等等；</p>
-<p>在客户端开启：最好后台运行启动客户端proxy：</p>
-<p>nohup ./frpc&nbsp; -c ./frpc.ini &amp;</p>
-<p>[I] [control.go:240] [e465e02f8bad1e5b] login to server success, get run id [e465e02f8bad1e5b], server udp port [0]</p>
-<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [http] start proxy success</p>
-<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [mysql] start proxy success</p>
-<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:7000</p>
-<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
-<p>2018/05/17 10:49:11 [I] [main.go:114] PrivilegeMode is enabled, you should pay more attention to security issues</p>
-<p>&nbsp;</p>
-<p>PS：配置很简单，但是记得nohup ./frps -c ./frps.ini &amp; 在要穿透的远程服务器开启，nohup ./frpc&nbsp; -c ./frpc.ini &amp; 在内网开启，记得开放远程服务器穿透端口；</p>
-<hr>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>docker 安装walle2部署项目</title>
     <url>/2023/112024358.html</url>
     <content><![CDATA[<p>​     项目从git上面拉取代码，然后打包推送到服务器，更新启动服务，开发大神需要ci/cd平台，当前开源的可能walle和蓝鲸cmdb系统比较实用，123正反面选择了walle，据说已经停了好久，不过对于项目来说够用了，开始吧。</p>
@@ -993,6 +908,91 @@
       </categories>
       <tags>
         <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>frp搭建</title>
+    <url>/2023/062739776.html</url>
+    <content><![CDATA[<p> &nbsp; 开发不在公司需要连到公司内网调试业务，有点周折，frp内网穿透来帮忙。网上很多文章，自己做个小笔记。</p>
+<p>首先到官网：</p>
+<p>&nbsp;<a href="https://github.com/fatedier/frp/releases">https://github.com/fatedier/frp/releases</a></p>
+<p>下载: frp_0.16.0_linux_amd64.tar.gz服务器端</p>
+<p>解压出来ls:</p>
+<p>frpc&nbsp; frpc_full.ini&nbsp; frpc_http.ini&nbsp; frpc.ini&nbsp; frps&nbsp; frps_full.ini&nbsp; frps.ini&nbsp; LICENSE&nbsp; nohup.out</p>
+<p>服务器端只需要两个文件frps和frps.ini,其中frps为可执行文件，frps.ini为配置文件默认配置文件如下：其中bind_addr为本机IP,bind_port为frp对客户端的端口号，auto_token是客户端连接服务器端的口令。</p>
+<p>[common]</p>
+<p>Bind_addr=0.0.0.0</p>
+<p>Bind_port =4443</p>
+<p>Auto_token = frp</p>
+<p>配置好以后可以运行起来./frps -c ./frps.ini</p>
+<p>最好后台运行：nohup ./frps -c ./frps.ini &amp;</p>
+<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:4443</p>
+<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
+<p>&nbsp;需要穿透端口的服务器端开启：</p>
+<p>nohup ./frps -c ./frps.ini &amp;</p>
+<p>同样将客户端解压后有七个文件，只需要frpc和frpc.ini,配置文件如下：</p>
+<p>&nbsp;[common]</p>
+<p>Server_addr = 123.123.123.123</p>
+<p>Server_port = 4443</p>
+<p>Auto-token = frp</p>
+<p>[ssh_1]</p>
+<p>Type = tcp</p>
+<p>Local_ip = 127.0.0.1</p>
+<p>Local_port = 22</p>
+<p>Remote_port = 10085</p>
+<p>注意：server_addr是服务器端的公网IP地址，server_port是frp服务端口号，auto_token是连接服务器的口令，必须和服务器保持一致。[ssh_1]是客户端通过服务器与用户之间的通道名，每个客户端必须不一样，remote_port是服务器端对外提供本机服务的端口号，即用户连接123.123.123.123:10085，相当于连接127.0.0.1:22,即arm板上的ssh服务</p>
+<p>运行客户端：./frpc -c ./frpc.ini</p>
+<p>&nbsp;</p>
+<p>当前的配置</p>
+<p>more frpc.ini</p>
+<p>[common]</p>
+<p>server_addr = dem.abc.com</p>
+<p>server_port = 7000</p>
+<p>[game]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 9001</p>
+<p>remote_port = 6000</p>
+<p>&nbsp;</p>
+<p>[http]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 80</p>
+<p>remote_port = 6001</p>
+<p>&nbsp;</p>
+<p>[mysql]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.235</p>
+<p>local_port = 3306</p>
+<p>remote_port = 13306</p>
+<p>more frpc_http.ini</p>
+<p>[common]</p>
+<p>server_addr = dem.abc.com</p>
+<p>server_port = 7000</p>
+<p>&nbsp;</p>
+<p>[http]</p>
+<p>type = tcp</p>
+<p>local_ip = 192.168.1.232</p>
+<p>local_port = 80</p>
+<p>remote_port = 6001</p>
+<p>这样demo.abc.com 的13306映射到3306,6001映射到80端口等等；</p>
+<p>在客户端开启：最好后台运行启动客户端proxy：</p>
+<p>nohup ./frpc&nbsp; -c ./frpc.ini &amp;</p>
+<p>[I] [control.go:240] [e465e02f8bad1e5b] login to server success, get run id [e465e02f8bad1e5b], server udp port [0]</p>
+<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [http] start proxy success</p>
+<p>2018/05/17 10:48:16 [I] [control.go:165] [e465e02f8bad1e5b] [mysql] start proxy success</p>
+<p>2018/05/17 10:49:11 [I] [service.go:96] frps tcp listen on 0.0.0.0:7000</p>
+<p>2018/05/17 10:49:11 [I] [main.go:112] Start frps success</p>
+<p>2018/05/17 10:49:11 [I] [main.go:114] PrivilegeMode is enabled, you should pay more attention to security issues</p>
+<p>&nbsp;</p>
+<p>PS：配置很简单，但是记得nohup ./frps -c ./frps.ini &amp; 在要穿透的远程服务器开启，nohup ./frpc&nbsp; -c ./frpc.ini &amp; 在内网开启，记得开放远程服务器穿透端口；</p>
+<hr>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
       </tags>
   </entry>
   <entry>
@@ -1416,6 +1416,25 @@
       </tags>
   </entry>
   <entry>
+    <title>nginxlog切分</title>
+    <url>/2023/111760549.html</url>
+    <content><![CDATA[<p>1.设置日志文件存放目录，假设你的nginx的日志存在这个目录里<br>logs_path=”/data/log/nginx/“</p>
+<p>2.设置pid文件，这个根据你自己的环境，找到nginx.pid所在目录<br>pid_path=”/var/run/nginx.pid”</p>
+<p>3.创建分割存储的日期文件目录<br>datetime=<code>date -d "yesterday" +"%Y%m%d"</code>;<br>new_log_path=$logs_path$datetime<br>mkdir -p $new_log_path</p>
+<p>4.按照日期移动所有该目录下的日志文件<br>log_file_list=<code>ls -l $logs_path</code>;<br>for log_file in $log_file_list;<br>do<br>    log_file_name=$logs_path$log_file;<br>    if [ -f $log_file_name ];<br>    then<br>        mv $log_file_name $new_log_path;<br>    fi<br>done</p>
+<p>5.向nginx主进程发信号重新打开日志<br>kill -USR1 <code>cat ${pid_path}</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">logs_path=<span class="string">"/data/log/nginx/"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pid_path=<span class="string">"/var/run/nginx.pid"</span></span><br><span class="line"></span><br><span class="line">datetime=`<span class="built_in">date</span> -d <span class="string">"yesterday"</span> +<span class="string">"%Y%m%d"</span>`;</span><br><span class="line">new_log_path=$logs_path<span class="variable">$datetime</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$new_log_path</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">log_file_list=`<span class="built_in">ls</span> -l <span class="variable">$logs_path</span>`;</span><br><span class="line"><span class="keyword">for</span> log_file <span class="keyword">in</span> <span class="variable">$log_file_list</span>;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    log_file_name=$logs_path<span class="variable">$log_file</span>;</span><br><span class="line">    <span class="keyword">if</span> [ -f <span class="variable">$log_file_name</span> ];</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">mv</span> <span class="variable">$log_file_name</span> <span class="variable">$new_log_path</span>;</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">kill</span> -USR1 `<span class="built_in">cat</span> <span class="variable">${pid_path}</span>`</span><br></pre></td></tr></tbody></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>nginx编译ssl模块</title>
     <url>/2023/062858442.html</url>
     <content><![CDATA[<p>几个官网在一台服务器上面，其中一台是https的，增加一个官网以，重启nginx以后，https的网站直接报错，大意是ssl 在配置文件中unknow，但是这个https网站已经运行很久了，一时间有点郁闷，掉坑里了。</p>
@@ -1444,25 +1463,6 @@
 ]]></content>
       <tags>
         <tag>点滴</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>nginxlog切分</title>
-    <url>/2023/111760549.html</url>
-    <content><![CDATA[<p>1.设置日志文件存放目录，假设你的nginx的日志存在这个目录里<br>logs_path=”/data/log/nginx/“</p>
-<p>2.设置pid文件，这个根据你自己的环境，找到nginx.pid所在目录<br>pid_path=”/var/run/nginx.pid”</p>
-<p>3.创建分割存储的日期文件目录<br>datetime=<code>date -d "yesterday" +"%Y%m%d"</code>;<br>new_log_path=$logs_path$datetime<br>mkdir -p $new_log_path</p>
-<p>4.按照日期移动所有该目录下的日志文件<br>log_file_list=<code>ls -l $logs_path</code>;<br>for log_file in $log_file_list;<br>do<br>    log_file_name=$logs_path$log_file;<br>    if [ -f $log_file_name ];<br>    then<br>        mv $log_file_name $new_log_path;<br>    fi<br>done</p>
-<p>5.向nginx主进程发信号重新打开日志<br>kill -USR1 <code>cat ${pid_path}</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">logs_path=<span class="string">"/data/log/nginx/"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pid_path=<span class="string">"/var/run/nginx.pid"</span></span><br><span class="line"></span><br><span class="line">datetime=`<span class="built_in">date</span> -d <span class="string">"yesterday"</span> +<span class="string">"%Y%m%d"</span>`;</span><br><span class="line">new_log_path=$logs_path<span class="variable">$datetime</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$new_log_path</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">log_file_list=`<span class="built_in">ls</span> -l <span class="variable">$logs_path</span>`;</span><br><span class="line"><span class="keyword">for</span> log_file <span class="keyword">in</span> <span class="variable">$log_file_list</span>;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    log_file_name=$logs_path<span class="variable">$log_file</span>;</span><br><span class="line">    <span class="keyword">if</span> [ -f <span class="variable">$log_file_name</span> ];</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">mv</span> <span class="variable">$log_file_name</span> <span class="variable">$new_log_path</span>;</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">kill</span> -USR1 `<span class="built_in">cat</span> <span class="variable">${pid_path}</span>`</span><br></pre></td></tr></tbody></table></figure>
-
-
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
       </tags>
   </entry>
   <entry>
@@ -1585,44 +1585,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>ssh免密登录问题</title>
-    <url>/2023/071760022.html</url>
-    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
-<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
-<p>服务器A需要免密码访问服务器B：</p>
-<ol>
-<li>在A上面生成公钥密钥，执行命令</li>
-</ol>
-<p>&nbsp;</p>
-<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
-<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
-<ol start="2">
-<li>将公钥id_rsa.pub拷贝到B机器上</li>
-</ol>
-<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
-<ol start="3">
-<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
-</ol>
-<p>cd&nbsp;/home/user/.ssh</p>
-<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
-<ol start="4">
-<li>设置 authorized_keys权限</li>
-</ol>
-<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
-<hr>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>vsftp 锁定用户目录</title>
     <url>/2023/071114619.html</url>
     <content><![CDATA[<p>vsftp 安装以后给用户权限和锁定目录；</p>
@@ -1711,6 +1673,44 @@
 <h2 id="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"><a href="#vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。" class="headerlink" title="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"></a>vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。</h2>]]></content>
       <tags>
         <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ssh免密登录问题</title>
+    <url>/2023/071760022.html</url>
+    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
+<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
+<p>服务器A需要免密码访问服务器B：</p>
+<ol>
+<li>在A上面生成公钥密钥，执行命令</li>
+</ol>
+<p>&nbsp;</p>
+<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
+<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
+<ol start="2">
+<li>将公钥id_rsa.pub拷贝到B机器上</li>
+</ol>
+<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
+<ol start="3">
+<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
+</ol>
+<p>cd&nbsp;/home/user/.ssh</p>
+<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
+<ol start="4">
+<li>设置 authorized_keys权限</li>
+</ol>
+<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
+<hr>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
       </tags>
   </entry>
   <entry>
