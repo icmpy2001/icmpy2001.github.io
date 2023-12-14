@@ -1006,7 +1006,7 @@
 <p>Ubuntu 16.04 LTS (“Xenial”)/Debian 9 “Stretch”：</p>
 <p>sudo apt-get install libcurl3 openssl</p>
 <p>MongoDB 源码下载地址：<a href="https://www.mongodb.com/try/download/community">https://www.mongodb.com/try/download/community</a></p>
-<p><img src="/../images/20231214-1.png"></p>
+<p><img src="/../images/20231214_1.png"></p>
 <p>Server 是下载了rpm包直接 yum localinstall 安装；以后自动生成mongodbservice</p>
 <p> /usr/lib/systemd/system/mongod.service </p>
 <p>-rw-r–r– 1 root root 811 Nov 16 07:05 /usr/lib/systemd/system/mongod.service</p>
@@ -1038,7 +1038,7 @@
 <p>需要到官网下一个mongosh，</p>
 <p>wget <a href="https://downloads.mongodb.com/compass/mongodb-mongosh-2.1.1.x86_64.rpm">https://downloads.mongodb.com/compass/mongodb-mongosh-2.1.1.x86_64.rpm</a></p>
 <p>yum localinstall mongodb-mongosh-2.1.1.x86_64.rpm</p>
-<p><img src="/../images/20231214-2.png"></p>
+<p><img src="/../images/20231214_2.png"></p>
 <p>进入以后设置管理员账号，</p>
 <p>test&gt; use admin</p>
 <p>switched to db admin</p>
@@ -1046,7 +1046,7 @@
 <p>{ ok: 1 }</p>
 <p>修改mongodb.conf auth = true 开启授权模式；</p>
 <p>普通用户授权：</p>
-<p><img src="/../images/20231214-3.png"></p>
+<p><img src="/../images/20231214_3.png"></p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">jary_test&gt; db.createUser({user:"jary",pwd:"abc123",roles:[{role:"readWrite",db:"jary_test"}]})</span><br><span class="line"></span><br><span class="line">{ ok: 1 }</span><br><span class="line"></span><br><span class="line">jary_test&gt; show users</span><br><span class="line"></span><br><span class="line">[</span><br><span class="line"></span><br><span class="line"> {</span><br><span class="line"></span><br><span class="line">  _id: 'jary_test.jary',</span><br><span class="line"></span><br><span class="line">  userId: UUID('64e3c53b-652e-424c-abe7-1c981d603287'),</span><br><span class="line"></span><br><span class="line">  user: 'jary',</span><br><span class="line"></span><br><span class="line">  db: 'jary_test',</span><br><span class="line"></span><br><span class="line">  roles: [ { role: 'readWrite', db: 'jary_test' } ],</span><br><span class="line"></span><br><span class="line">  mechanisms: [ 'SCRAM-SHA-1', 'SCRAM-SHA-256' ]</span><br><span class="line"></span><br><span class="line"> }</span><br><span class="line"></span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
 
 <p>查看用户：</p>
@@ -1058,7 +1058,7 @@
 <p>db.system.users.deleteOne({user:”jary2”})</p>
 <p>admin&gt; db.system.users.deleteOne({user:”jary2”})</p>
 <p>{ acknowledged: true, deletedCount: 1 }</p>
-<p><img src="/../images/20231214-4.png"></p>
+<p><img src="/../images/20231214_4.png"></p>
 <p>建立数据库：</p>
 <p>admin&gt; use jary_test</p>
 <p>switched to db jary_test</p>
@@ -2223,7 +2223,7 @@
 <p>post_max_size = 16M</p>
 <p>max_execution_time = 300</p>
 <p>max_input_time = 300</p>
-<p><img src="/../images/20231114-1.png"></p>
+<p><img src="/../images/20231114_1.png"></p>
 <p>/etc/php.ini修改以后还是这样，可能php.ini路径修改了，</p>
 <p>本例中就是到</p>
 <p>-rw-r–r– 1 root root 73930 Mar 27 18:19php.ini</p>
