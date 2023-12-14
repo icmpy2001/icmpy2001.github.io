@@ -6,7 +6,7 @@
   <link href="https://blog.icmpy.net/atom.xml" rel="self"/>
   
   <link href="https://blog.icmpy.net/"/>
-  <updated>2023-12-08T10:16:40.000Z</updated>
+  <updated>2023-12-14T09:23:20.640Z</updated>
   <id>https://blog.icmpy.net/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>hello,mongodb</title>
+    <link href="https://blog.icmpy.net/2023/12146947.html"/>
+    <id>https://blog.icmpy.net/2023/12146947.html</id>
+    <published>2023-12-14T09:13:51.000Z</published>
+    <updated>2023-12-14T09:23:20.640Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;Mongodb 安装：&lt;/p&gt;
+&lt;p&gt;Red Hat/CentOS：&lt;/p&gt;
+&lt;p&gt;sudo yum install libcurl openssl&lt;/p&gt;
+&lt;p&gt;Ubuntu 18.04 LTS (“Bionic”)/Debian 10</summary>
+        
+      
+    
+    
+    
+    
+    <category term="mongodb" scheme="https://blog.icmpy.net/tags/mongodb/"/>
+    
+  </entry>
   
   <entry>
     <title>debian安装gitea</title>
@@ -469,29 +495,6 @@
     
     
     <category term="工具" scheme="https://blog.icmpy.net/tags/%E5%B7%A5%E5%85%B7/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>php 安装redis，protobuf,mcryp扩展</title>
-    <link href="https://blog.icmpy.net/2023/081036272.html"/>
-    <id>https://blog.icmpy.net/2023/081036272.html</id>
-    <published>2023-08-10T10:00:29.000Z</published>
-    <updated>2023-11-14T09:20:33.000Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;&amp;nbsp; 测试机上测试一些数据需要用到redis扩展，偷懒yum安装的php，以前yum install php-pecl-redis.x86_64可以安装扩展，这次找不到安装包，不折腾手动安装下。&lt;/p&gt;
-&lt;p&gt;1.下载phpredis&lt;/p&gt;
-&lt;p&gt;cd</summary>
-        
-      
-    
-    
-    
     
   </entry>
   
