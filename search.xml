@@ -514,6 +514,39 @@
 ]]></content>
   </entry>
   <entry>
+    <title>centos7 改网卡名eth0</title>
+    <url>/2023/111420634.html</url>
+    <content><![CDATA[<p>安装完Centos7系统，网卡命名跟之前发生了变化,不是eth0，虽然唯一好确定但是作为centos6.X过来的还是不好记，那就把网卡名字重新命名为eth0吧。</p>
+<p>1.先编辑网卡的配置文件将里面的NAME DEVICE项修改为eth0，vim /etc/sysconfig/network-scripts/ifcfg-enp2s0</p>
+<p>NAME=enp2s0 改为eth0</p>
+<p>DEVICE=enp2s0 改为 eth0</p>
+<p>2.cd /etc/sysconfig/network-scripts/ mv&nbsp;ifcfg-enp2s0 ifcfg-eth0</p>
+<p>3.禁用该可预测命名规则。对于这一点，你可以在启动时传递“net.ifnames=0 biosdevname=0 ”的内核参数。这是通过编辑/etc/default/grub并加入“net.ifnames=0 biosdevname=0 ”到GRUBCMDLINELINUX变量来实现的。</p>
+<p>&nbsp;vim /etc/default/grub&nbsp;添加红色部分；</p>
+<p>GRUB_CMDLINE_LINUX=”crashkernel=auto rd.lvm.lv=cl/root&nbsp;net.ifnames=0 biosdevname=0&nbsp;&nbsp;rd.lvm.lv=cl/swap rhgb quiet” &nbsp;</p>
+<p>4.运行命令grub2-mkconfig -o /boot/grub2/grub.cfg&nbsp;来重新生成GRUB配置并更新内核参数。</p>
+<p>&nbsp;grub2-mkconfig -o /boot/grub2/grub.cfg</p>
+<p>Generating grub configuration file …</p>
+<p>Found linux image: /boot/vmlinuz-3.10.0-514.el7.x86_64</p>
+<p>Found initrd image: /boot/initramfs-3.10.0-514.el7.x86_64.img</p>
+<p>Found linux image: /boot/vmlinuz-0-rescue-50b1d05808e44d898bef511aa2945d76</p>
+<p>Found initrd image: /boot/initramfs-0-rescue-50b1d05808e44d898bef511aa2945d76.img</p>
+<p>done</p>
+<p>5.重启机器改名eth0生效；</p>
+<p>PS:有时候重启以后会自动生成一个不是我们指定的ip，这个时候需要把网卡mac地址加进去 ifcfg-eth0中：HWADDR=30:5a:3a:e0:90:3c</p>
+<p>也可以修改</p>
+<p>cd /etc/udev/rules.d/</p>
+<p>vim&nbsp;70-persistent-net.rules</p>
+<p>注释掉原来的，添加新或者修改：</p>
+<p>SUBSYSTEM==”net”, ACTION==”add”, DRIVERS==”?<em>“, ATTR{address}==”00:0c:29:1f:1a:f5”, KERNEL==”eth</em>“, NAME=”eth0”</p>
+<p>修改为：</p>
+<p>SUBSYSTEM==”net”, ACTION==”add”, DRIVERS==”?<em>“, ATTR{address}==”30:5a:3a:e0:90:3c”, KERNEL==”eth</em>“, NAME=”eth0”</p>
+<h2 id="重启机器试试"><a href="#重启机器试试" class="headerlink" title="重启机器试试~"></a>重启机器试试~</h2>]]></content>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>coredump 路径格式</title>
     <url>/2023/062743960.html</url>
     <content><![CDATA[<p>Coredump</p>
@@ -597,39 +630,6 @@
 ]]></content>
       <tags>
         <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>centos7 改网卡名eth0</title>
-    <url>/2023/111420634.html</url>
-    <content><![CDATA[<p>安装完Centos7系统，网卡命名跟之前发生了变化,不是eth0，虽然唯一好确定但是作为centos6.X过来的还是不好记，那就把网卡名字重新命名为eth0吧。</p>
-<p>1.先编辑网卡的配置文件将里面的NAME DEVICE项修改为eth0，vim /etc/sysconfig/network-scripts/ifcfg-enp2s0</p>
-<p>NAME=enp2s0 改为eth0</p>
-<p>DEVICE=enp2s0 改为 eth0</p>
-<p>2.cd /etc/sysconfig/network-scripts/ mv&nbsp;ifcfg-enp2s0 ifcfg-eth0</p>
-<p>3.禁用该可预测命名规则。对于这一点，你可以在启动时传递“net.ifnames=0 biosdevname=0 ”的内核参数。这是通过编辑/etc/default/grub并加入“net.ifnames=0 biosdevname=0 ”到GRUBCMDLINELINUX变量来实现的。</p>
-<p>&nbsp;vim /etc/default/grub&nbsp;添加红色部分；</p>
-<p>GRUB_CMDLINE_LINUX=”crashkernel=auto rd.lvm.lv=cl/root&nbsp;net.ifnames=0 biosdevname=0&nbsp;&nbsp;rd.lvm.lv=cl/swap rhgb quiet” &nbsp;</p>
-<p>4.运行命令grub2-mkconfig -o /boot/grub2/grub.cfg&nbsp;来重新生成GRUB配置并更新内核参数。</p>
-<p>&nbsp;grub2-mkconfig -o /boot/grub2/grub.cfg</p>
-<p>Generating grub configuration file …</p>
-<p>Found linux image: /boot/vmlinuz-3.10.0-514.el7.x86_64</p>
-<p>Found initrd image: /boot/initramfs-3.10.0-514.el7.x86_64.img</p>
-<p>Found linux image: /boot/vmlinuz-0-rescue-50b1d05808e44d898bef511aa2945d76</p>
-<p>Found initrd image: /boot/initramfs-0-rescue-50b1d05808e44d898bef511aa2945d76.img</p>
-<p>done</p>
-<p>5.重启机器改名eth0生效；</p>
-<p>PS:有时候重启以后会自动生成一个不是我们指定的ip，这个时候需要把网卡mac地址加进去 ifcfg-eth0中：HWADDR=30:5a:3a:e0:90:3c</p>
-<p>也可以修改</p>
-<p>cd /etc/udev/rules.d/</p>
-<p>vim&nbsp;70-persistent-net.rules</p>
-<p>注释掉原来的，添加新或者修改：</p>
-<p>SUBSYSTEM==”net”, ACTION==”add”, DRIVERS==”?<em>“, ATTR{address}==”00:0c:29:1f:1a:f5”, KERNEL==”eth</em>“, NAME=”eth0”</p>
-<p>修改为：</p>
-<p>SUBSYSTEM==”net”, ACTION==”add”, DRIVERS==”?<em>“, ATTR{address}==”30:5a:3a:e0:90:3c”, KERNEL==”eth</em>“, NAME=”eth0”</p>
-<h2 id="重启机器试试"><a href="#重启机器试试" class="headerlink" title="重启机器试试~"></a>重启机器试试~</h2>]]></content>
-      <tags>
-        <tag>点滴</tag>
       </tags>
   </entry>
   <entry>
@@ -1918,6 +1918,63 @@
       </tags>
   </entry>
   <entry>
+    <title>zabbix 清理历史数据</title>
+    <url>/2023/071761914.html</url>
+    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
+<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
+<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
+<p>root@Testl]$ date +%s -d”20160929”</p>
+<p>1475078400</p>
+<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
+<p>Query OK, 36093 rows affected (43.64 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
+<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history;</p>
+<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
+<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history_uint;</p>
+<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
+<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>漫长时间等待以后看下效果：</p>
+<p>原来数据：</p>
+<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
+<p>压缩中：</p>
+<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
+<p>find -size +50M -exec ls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
+<p>最终删两个表以后数据：</p>
+<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
+<p>完了以后，重启mysql，zabbix，nginx试试；</p>
+<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>zabbix 设置163报警邮箱</title>
     <url>/2023/120119617.html</url>
     <content><![CDATA[<h2 id="1-测试端口是否开放："><a href="#1-测试端口是否开放：" class="headerlink" title="1.测试端口是否开放："></a>1.测试端口是否开放：</h2><p>nc -w 2 smtp.exmail.qq.com 465 &lt; /dev/null &amp;&amp; echo “port is ok”</p>
@@ -2047,92 +2104,6 @@
 ]]></content>
       <tags>
         <tag>心得</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>zabbix 清理历史数据</title>
-    <url>/2023/071761914.html</url>
-    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
-<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
-<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
-<p>root@Testl]$ date +%s -d”20160929”</p>
-<p>1475078400</p>
-<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
-<p>Query OK, 36093 rows affected (43.64 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
-<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history;</p>
-<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
-<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history_uint;</p>
-<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
-<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>漫长时间等待以后看下效果：</p>
-<p>原来数据：</p>
-<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
-<p>压缩中：</p>
-<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
-<p>find -size +50M -exec ls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
-<p>最终删两个表以后数据：</p>
-<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
-<p>完了以后，重启mysql，zabbix，nginx试试；</p>
-<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
-<hr>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>zabbix监控业务进程变动</title>
-    <url>/2023/111359213.html</url>
-    <content><![CDATA[<p>Zabbix 监控进程宕机</p>
-<p>  业务需求后端进程宕机以后能在短时间内迅速拉起，业务影响不大，但是开发需要查看coredump，要求能监控到pid变化；在现有构架下zabbix能监控并报警；</p>
-<p>当然zabbix设置报警设置就不再一一</p>
-<p>在每台服务器/etc/zabbix/zabbix_agentd.conf设置路径：此例只需要piddiff.sh</p>
-<p>UserParameter=checkpid,sh /usr/local/script/piddiff.sh</p>
-<p>UserParameter=test,sh /usr/local/script/test.sh</p>
-<p>UserParameter=discovery.process,/usr/local/script/disprocess.sh</p>
-<p>UserParameter=process.check[*],/usr/local/script/proc_check.sh $1 $2 $3</p>
-<p>/usr/local/script下面存放脚本</p>
-<p>Vim piddiff.sh</p>
-<p>aapid为业务监控id 取值根据业务需求；</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#/bin/sh</span></span><br><span class="line"></span><br><span class="line">onl_ok=1</span><br><span class="line"></span><br><span class="line">onl_cored=3</span><br><span class="line"></span><br><span class="line"><span class="built_in">dir</span>=/usr/local/script</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ ! -f <span class="string">"<span class="variable">$dir</span>/old.txt"</span> ]];<span class="keyword">then</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/old.txt</span><br><span class="line"></span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">         <span class="built_in">sleep</span> 1s           </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/now.txt</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ! diff -q <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; /dev/null; <span class="keyword">then</span></span><br><span class="line"></span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_cored</span></span><br><span class="line">    </span><br><span class="line">          diff -c <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; <span class="variable">$dir</span>/`<span class="built_in">date</span> <span class="string">"+%Y%m%d%H%M"</span>`_diff.txt</span><br><span class="line">    </span><br><span class="line">          <span class="built_in">cat</span> <span class="variable">$dir</span>/now.txt &gt;<span class="variable">$dir</span>/old.txt</span><br><span class="line">    </span><br><span class="line">     <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_ok</span>    </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>一个简单的判断脚本；</p>
-<p>Zabbix30秒会抓取一次，正常没变化为1，有变化为3，那么zabbix抓取数值为3则表示pid有变化，会发出警报；</p>
-<p>Zabbix设置：</p>
-<p>监控项模板添加如下：</p>
-<p><img src="/../images/20231113-1.png"></p>
-<p>触发器：{Template OS Linux:checkpid.last()}=3</p>
-<p><img src="/../images/20231113-2.png"></p>
-<hr>
-]]></content>
-      <tags>
-        <tag>工具</tag>
       </tags>
   </entry>
   <entry>
@@ -2269,6 +2240,35 @@
 <p>dos2unix -k $FILE</p>
 <p>/bin/mail -s “$2” $1 &lt; $FILE</p>
 <p>zabbix-管理–示警媒介类型–定制脚本-sendmail脚本，–添加联系人邮件。。</p>
+]]></content>
+      <tags>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>zabbix监控业务进程变动</title>
+    <url>/2023/111359213.html</url>
+    <content><![CDATA[<p>Zabbix 监控进程宕机</p>
+<p>  业务需求后端进程宕机以后能在短时间内迅速拉起，业务影响不大，但是开发需要查看coredump，要求能监控到pid变化；在现有构架下zabbix能监控并报警；</p>
+<p>当然zabbix设置报警设置就不再一一</p>
+<p>在每台服务器/etc/zabbix/zabbix_agentd.conf设置路径：此例只需要piddiff.sh</p>
+<p>UserParameter=checkpid,sh /usr/local/script/piddiff.sh</p>
+<p>UserParameter=test,sh /usr/local/script/test.sh</p>
+<p>UserParameter=discovery.process,/usr/local/script/disprocess.sh</p>
+<p>UserParameter=process.check[*],/usr/local/script/proc_check.sh $1 $2 $3</p>
+<p>/usr/local/script下面存放脚本</p>
+<p>Vim piddiff.sh</p>
+<p>aapid为业务监控id 取值根据业务需求；</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#/bin/sh</span></span><br><span class="line"></span><br><span class="line">onl_ok=1</span><br><span class="line"></span><br><span class="line">onl_cored=3</span><br><span class="line"></span><br><span class="line"><span class="built_in">dir</span>=/usr/local/script</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ ! -f <span class="string">"<span class="variable">$dir</span>/old.txt"</span> ]];<span class="keyword">then</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/old.txt</span><br><span class="line"></span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">         <span class="built_in">sleep</span> 1s           </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/now.txt</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ! diff -q <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; /dev/null; <span class="keyword">then</span></span><br><span class="line"></span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_cored</span></span><br><span class="line">    </span><br><span class="line">          diff -c <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; <span class="variable">$dir</span>/`<span class="built_in">date</span> <span class="string">"+%Y%m%d%H%M"</span>`_diff.txt</span><br><span class="line">    </span><br><span class="line">          <span class="built_in">cat</span> <span class="variable">$dir</span>/now.txt &gt;<span class="variable">$dir</span>/old.txt</span><br><span class="line">    </span><br><span class="line">     <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_ok</span>    </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>一个简单的判断脚本；</p>
+<p>Zabbix30秒会抓取一次，正常没变化为1，有变化为3，那么zabbix抓取数值为3则表示pid有变化，会发出警报；</p>
+<p>Zabbix设置：</p>
+<p>监控项模板添加如下：</p>
+<p><img src="/../images/20231113-1.png"></p>
+<p>触发器：{Template OS Linux:checkpid.last()}=3</p>
+<p><img src="/../images/20231113-2.png"></p>
+<hr>
 ]]></content>
       <tags>
         <tag>工具</tag>
