@@ -73,6 +73,144 @@
       </tags>
   </entry>
   <entry>
+    <title>Rsync同步文件</title>
+    <url>/2023/081064777.html</url>
+    <content><![CDATA[<p>Rsync常用的一款同步文件工具。配置也很方便。</p>
+<p>&nbsp;</p>
+<p>yum install sync -y或者apt-get install sync</p>
+<ul>
+<li>服务安装好之后，/etc下没有配置文件，一般情况可以copy示例文件到/etc下</li>
+</ul>
+<p>&nbsp;</p>
+<p>#cp&nbsp;/usr/share/doc/rsync/examples/rsyncd.conf&nbsp;/etc</p>
+<p>&nbsp;</p>
+<p>vim /etc/rsyncd.conf</p>
+<p>uid = common</p>
+<p>gid = common</p>
+<p>use chroot = no</p>
+<p>max connections = 10</p>
+<p>strict modes = yes</p>
+<p>hosts allow = 192.168.2.12&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #可以空格，允许多个</p>
+<p>hosts deny = *</p>
+<p>port = 5699&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;#默认开启端口</p>
+<p>pid file = /var/run/rsyncd.pid</p>
+<p>lock file = /var/run/rsync.lock</p>
+<p>log file = /var/log/rsyncd.log</p>
+<p>[hmt]</p>
+<p>path = /data/www/html/</p>
+<p>comment = hello</p>
+<p>ignore errors</p>
+<p>read only = no</p>
+<p>write only = no</p>
+<p>hosts allow = 192.168.2.12&nbsp;</p>
+<p>list = false</p>
+<p>auth users = hmt</p>
+<p>secrets file = /etc/rsync.password</p>
+<ul>
+<li>建立/etc/rsyncd/rsyncd.secrets文件</li>
+</ul>
+<p>#vim /etc/rsync.password</p>
+<p>#cat /etc/rsyncd/rsyncd.secrets</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;hmt:123456</p>
+<ul>
+<li>为了密码的安全性，我们必须把权限设为600</li>
+</ul>
+<p> chown root:root /etc/rsyncd/rsyncd.secrets</p>
+<p>chmod 600&nbsp;&nbsp;/etc/rsync.password</p>
+<p> chmod 600&nbsp;/etc/rsyncd/rsyncd.secrets</p>
+<p> vim /etc/rsyncd/rsyncd.motd</p>
+<p>&nbsp;</p>
+<p>启动rsync：</p>
+<p>systemctl start rsyncd.service</p>
+<p>&nbsp;lsof -i:5699</p>
+<p>lsof -i:5699</p>
+<p>COMMAND PID USER&nbsp; &nbsp;FD&nbsp; &nbsp;TYPE&nbsp; &nbsp;DEVICE SIZE/OFF NODE NAME</p>
+<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 4u&nbsp; IPv4 22661487&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
+<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 5u&nbsp; IPv6 22661488&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
+<p>至此服务器端安装完毕；</p>
+<p>客户端安装配置：</p>
+<p>&nbsp;</p>
+<p>yum -y install rsync</p>
+<p>&nbsp;客户端需要vim&nbsp;/etc/rsync.password&nbsp;</p>
+<p>cat&nbsp;&nbsp;/etc/rsync.password</p>
+<p>123456</p>
+<p>运行：</p>
+<p>rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
+<p>Password: 这里要输入rsync的密码，是服务器端提供的，在前面的例子中，我们用的是 asdf，输入的密码并不显示出来；输好后就回车；&nbsp;注：&nbsp;这个命令的意思就是说，用rsync 用户登录到服务器上，把/data/www/html&nbsp;数据，同步到本地目录/data/www/html/上。当然本地的目录是可以你自己定义的，比如 dave也是可以的；当你在客户端上，当前操作的目录下没有/tmp/test/这个目录时，系统会自动为你创建一个；当存在/tmp/test/这个目录中，你要注意它的写权限。</p>
+<p>参数说明：</p>
+<p>&nbsp;-a 参数，相当于-rlptgoD，</p>
+<p>&nbsp;&nbsp;&nbsp;-r 是递归 -l 是链接文件，意思是拷贝链接文件；</p>
+<p>&nbsp;&nbsp;&nbsp;-p 表示保持文件原有权限；</p>
+<p>&nbsp;&nbsp;&nbsp;-t 保持文件原有时间；<br>&nbsp;&nbsp;&nbsp;-g 保持文件原有用户组；</p>
+<p>&nbsp;&nbsp;&nbsp;-o 保持文件原有属主；</p>
+<p>&nbsp;&nbsp;&nbsp;-D 相当于块设备文件；</p>
+<p>&nbsp;&nbsp;&nbsp;-z 传输时压缩；</p>
+<p>&nbsp;&nbsp;&nbsp;-P 传输进度；</p>
+<p>&nbsp;&nbsp;&nbsp;-v 传输时的进度等信息，和-P有点关系</p>
+<p>&nbsp;<br>*</p>
+<p>rsync -avzP &nbsp;–delete <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools&nbsp;/tmp/test/</p>
+<p>–delete 选项，表示服务器上的数据要与客户端完全一致，如果 /tmp/test/目录中有服务器上不存在的文件，则删除。最终目的是让/tmp/test/目录上的数据完全与服务器上保持一致；用的时候要小心点，最好不要把已经有重要数所据的目录，当做本地更新目录，否则会把你的数据全部删除；
+&nbsp;</p>
+<p>计划任务同步：</p>
+<p>*/5 * * * * rsync -zvaP <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools /tmp/test/ –password-file=/etc/rsyncd/rsyncd.secrets</p>
+<p>*/5 * * * * rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
+<p>&nbsp;</p>
+]]></content>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>apache多网站对应80端口</title>
+    <url>/2023/062862696.html</url>
+    <content><![CDATA[<p>一台服务器绑定多个域名，已经装了apache，nginx就不使用了，利用apache主机头名虚拟主机用80端口对应多个网站，万能的网络上面有文档如下：</p>
+<p>Aapche 如果需要绑定多个域名到一个IP上,是支持的。需要注意以下2点:</p>
+<p>1 必须要开启 NameVirtualHost开关选项，</p>
+<p>如：NameVirtualHost 220.231.220.231:80</p>
+<p>2 NameVirtualHost 需要指定具体的端口</p>
+<p>例如”:80″,跟&lt;VirtualHost 220.231.32.*:80&gt;对应，否则会报错:</p>
+<p>mixing * ports and non-* ports with a NameVirtualHost address is not supported, proceeding with undefined results。</p>
+<p>翻译过来就是: NameVirtualHost 地址，指定端口和不指定端口混合使用是不支持的，将会产生未逾期的后果。</p>
+<p>未逾期的后果就是: 第2个不起作用，仅当一个站点设置起作用。</p>
+<p>按着做下来：</p>
+<p>IncludeOptional conf.d/*.conf</p>
+<p>ServerSignature Off</p>
+<p>NameVirtualHost 220.231.220.231:80</p>
+<p>&lt;VirtualHost 220.231.220.231:80&gt;&nbsp;&nbsp;</p>
+<p>ServerAdmin&nbsp; &nbsp;<a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a>&nbsp;</p>
+<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
+<p>ServerName <a href="http://www.aaa.net/">www.aaa.net</a></p>
+<p>DocumentRoot&nbsp; /data/www/wress/</p>
+<p>&lt;Directory “/data/www/wress/“&gt;&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp;Options -Indexes&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp;Options FollowSymLinks Indexes</p>
+<p>&nbsp; &nbsp; AllowOverride All&nbsp;&nbsp;</p>
+<p>&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp; Require all granted&nbsp;&nbsp;</p>
+<p>&nbsp;&nbsp;</p>
+<p>ErrorLog logs/<a href="http://www.aaa.net-error_log/">www.aaa.net-error_log</a></p>
+<p>&nbsp;CustomLog logs/<a href="http://www.aaa.net-access_log/">www.aaa.net-access_log</a> common</p>
+<p>&nbsp;</p>
+<p>&lt;VirtualHost 220.231.220.231:80&gt;</p>
+<p>ServerAdmin&nbsp; <a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a></p>
+<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
+<p>ServerName img.aaa.net</p>
+<p>#ServerName 220.231.220.231</p>
+<p>DocumentRoot&nbsp; /data/www/html/</p>
+<p>&lt;Directory “/data/www/html/“&gt;</p>
+<p>&nbsp; &nbsp; Options -Indexes&nbsp;&nbsp;</p>
+<p>&nbsp; &nbsp; Options FollowSymLinks Indexes</p>
+<p>&nbsp; &nbsp; AllowOverride All</p>
+<p>&nbsp; &nbsp;Require all granted</p>
+
+
+<p>ErrorLog logs/img.aaa.net-error_log</p>
+<p>CustomLog logs/img.aaa.net-access_log common</p>
+
+
+<h2 id="这样都可以访问，apache也可以实现，做个小笔记。"><a href="#这样都可以访问，apache也可以实现，做个小笔记。" class="headerlink" title="这样都可以访问，apache也可以实现，做个小笔记。"></a>这样都可以访问，apache也可以实现，做个小笔记。</h2>]]></content>
+  </entry>
+  <entry>
     <title>ELK安装调试及遇到的问题</title>
     <url>/2023/111459226.html</url>
     <content><![CDATA[<h1 id="1-前期准备："><a href="#1-前期准备：" class="headerlink" title="1.前期准备："></a>1.前期准备：</h1><p>如果是es非root用户启动es，可以把*改成非root用户，例如 es soft nofile 65535修改 /etc/security/limits.conf</p>
@@ -287,92 +425,19 @@
       </tags>
   </entry>
   <entry>
-    <title>Rsync同步文件</title>
-    <url>/2023/081064777.html</url>
-    <content><![CDATA[<p>Rsync常用的一款同步文件工具。配置也很方便。</p>
-<p>&nbsp;</p>
-<p>yum install sync -y或者apt-get install sync</p>
-<ul>
-<li>服务安装好之后，/etc下没有配置文件，一般情况可以copy示例文件到/etc下</li>
-</ul>
-<p>&nbsp;</p>
-<p>#cp&nbsp;/usr/share/doc/rsync/examples/rsyncd.conf&nbsp;/etc</p>
-<p>&nbsp;</p>
-<p>vim /etc/rsyncd.conf</p>
-<p>uid = common</p>
-<p>gid = common</p>
-<p>use chroot = no</p>
-<p>max connections = 10</p>
-<p>strict modes = yes</p>
-<p>hosts allow = 192.168.2.12&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #可以空格，允许多个</p>
-<p>hosts deny = *</p>
-<p>port = 5699&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;#默认开启端口</p>
-<p>pid file = /var/run/rsyncd.pid</p>
-<p>lock file = /var/run/rsync.lock</p>
-<p>log file = /var/log/rsyncd.log</p>
-<p>[hmt]</p>
-<p>path = /data/www/html/</p>
-<p>comment = hello</p>
-<p>ignore errors</p>
-<p>read only = no</p>
-<p>write only = no</p>
-<p>hosts allow = 192.168.2.12&nbsp;</p>
-<p>list = false</p>
-<p>auth users = hmt</p>
-<p>secrets file = /etc/rsync.password</p>
-<ul>
-<li>建立/etc/rsyncd/rsyncd.secrets文件</li>
-</ul>
-<p>#vim /etc/rsync.password</p>
-<p>#cat /etc/rsyncd/rsyncd.secrets</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;hmt:123456</p>
-<ul>
-<li>为了密码的安全性，我们必须把权限设为600</li>
-</ul>
-<p> chown root:root /etc/rsyncd/rsyncd.secrets</p>
-<p>chmod 600&nbsp;&nbsp;/etc/rsync.password</p>
-<p> chmod 600&nbsp;/etc/rsyncd/rsyncd.secrets</p>
-<p> vim /etc/rsyncd/rsyncd.motd</p>
-<p>&nbsp;</p>
-<p>启动rsync：</p>
-<p>systemctl start rsyncd.service</p>
-<p>&nbsp;lsof -i:5699</p>
-<p>lsof -i:5699</p>
-<p>COMMAND PID USER&nbsp; &nbsp;FD&nbsp; &nbsp;TYPE&nbsp; &nbsp;DEVICE SIZE/OFF NODE NAME</p>
-<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 4u&nbsp; IPv4 22661487&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
-<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 5u&nbsp; IPv6 22661488&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
-<p>至此服务器端安装完毕；</p>
-<p>客户端安装配置：</p>
-<p>&nbsp;</p>
-<p>yum -y install rsync</p>
-<p>&nbsp;客户端需要vim&nbsp;/etc/rsync.password&nbsp;</p>
-<p>cat&nbsp;&nbsp;/etc/rsync.password</p>
-<p>123456</p>
-<p>运行：</p>
-<p>rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
-<p>Password: 这里要输入rsync的密码，是服务器端提供的，在前面的例子中，我们用的是 asdf，输入的密码并不显示出来；输好后就回车；&nbsp;注：&nbsp;这个命令的意思就是说，用rsync 用户登录到服务器上，把/data/www/html&nbsp;数据，同步到本地目录/data/www/html/上。当然本地的目录是可以你自己定义的，比如 dave也是可以的；当你在客户端上，当前操作的目录下没有/tmp/test/这个目录时，系统会自动为你创建一个；当存在/tmp/test/这个目录中，你要注意它的写权限。</p>
-<p>参数说明：</p>
-<p>&nbsp;-a 参数，相当于-rlptgoD，</p>
-<p>&nbsp;&nbsp;&nbsp;-r 是递归 -l 是链接文件，意思是拷贝链接文件；</p>
-<p>&nbsp;&nbsp;&nbsp;-p 表示保持文件原有权限；</p>
-<p>&nbsp;&nbsp;&nbsp;-t 保持文件原有时间；<br>&nbsp;&nbsp;&nbsp;-g 保持文件原有用户组；</p>
-<p>&nbsp;&nbsp;&nbsp;-o 保持文件原有属主；</p>
-<p>&nbsp;&nbsp;&nbsp;-D 相当于块设备文件；</p>
-<p>&nbsp;&nbsp;&nbsp;-z 传输时压缩；</p>
-<p>&nbsp;&nbsp;&nbsp;-P 传输进度；</p>
-<p>&nbsp;&nbsp;&nbsp;-v 传输时的进度等信息，和-P有点关系</p>
-<p>&nbsp;<br>*</p>
-<p>rsync -avzP &nbsp;–delete <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools&nbsp;/tmp/test/</p>
-<p>–delete 选项，表示服务器上的数据要与客户端完全一致，如果 /tmp/test/目录中有服务器上不存在的文件，则删除。最终目的是让/tmp/test/目录上的数据完全与服务器上保持一致；用的时候要小心点，最好不要把已经有重要数所据的目录，当做本地更新目录，否则会把你的数据全部删除；
-&nbsp;</p>
-<p>计划任务同步：</p>
-<p>*/5 * * * * rsync -zvaP <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools /tmp/test/ –password-file=/etc/rsyncd/rsyncd.secrets</p>
-<p>*/5 * * * * rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
-<p>&nbsp;</p>
+    <title>centos U盘安装查找U盘设备名</title>
+    <url>/2023/111459478.html</url>
+    <content><![CDATA[<p>制作启动盘：UltraISO.exe 打开镜像文件，–启动—写入硬盘镜像—默认—开始大概7分钟后就制作完成。 这样制作以后U盘原数据就没了当心。</p>
+<p>主板del进cmos选择Usb首启动，看到3个选项：安装，测试&amp;安装,trouble修复，移动到第一项Install&nbsp;centos7</p>
+<p>很多时候卡到这边过不去，<br>按tab键编辑路径，将&nbsp;<br>vmlinuz initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 quiet&nbsp;<br>改成&nbsp;<br>vmlinuz initrd=initrd.img&nbsp;linux dd&nbsp;quiet&nbsp;<br>回车&nbsp;<br>然后就能在显示出的列表中 查看你的硬盘信息，很清晰就能知道哪一个是你的U盘（一般显示的几个 格式为NTFS的都是你电脑自身的盘符，另外的一个就是你的U盘，记下你的U盘的盘符名字 我的就是sdb4）&nbsp;</p>
+<p>系统会显示当前块设备：</p>
+<p>Sda1&nbsp; nfs&nbsp;</p>
+<p>Sda2&nbsp; nfs</p>
+<p>Sdb4&nbsp;&nbsp; vfat</p>
+<p>类似这些提示ccontinue 或者r reflush刷下块设备</p>
+<p>起初u盘没刷出来，刷新出来的sdb4<br>重新启动电脑，重复上面的步骤 这一次 将&nbsp;<br>vmlinuz initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 quiet&nbsp;<br>改成&nbsp;<br>vmlinuz initrd=initrd.img&nbsp;inst.stage2=hd:/dev/sdb4（你自己的U盘盘符）&nbsp;quiet&nbsp;<br>回车 等待安装程序启动，进行CentOS的安装</p>
+<hr>
 ]]></content>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
   </entry>
   <entry>
     <title>Tengine 安装</title>
@@ -444,190 +509,6 @@
       <categories>
         <category>系统</category>
       </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>apache多网站对应80端口</title>
-    <url>/2023/062862696.html</url>
-    <content><![CDATA[<p>一台服务器绑定多个域名，已经装了apache，nginx就不使用了，利用apache主机头名虚拟主机用80端口对应多个网站，万能的网络上面有文档如下：</p>
-<p>Aapche 如果需要绑定多个域名到一个IP上,是支持的。需要注意以下2点:</p>
-<p>1 必须要开启 NameVirtualHost开关选项，</p>
-<p>如：NameVirtualHost 220.231.220.231:80</p>
-<p>2 NameVirtualHost 需要指定具体的端口</p>
-<p>例如”:80″,跟&lt;VirtualHost 220.231.32.*:80&gt;对应，否则会报错:</p>
-<p>mixing * ports and non-* ports with a NameVirtualHost address is not supported, proceeding with undefined results。</p>
-<p>翻译过来就是: NameVirtualHost 地址，指定端口和不指定端口混合使用是不支持的，将会产生未逾期的后果。</p>
-<p>未逾期的后果就是: 第2个不起作用，仅当一个站点设置起作用。</p>
-<p>按着做下来：</p>
-<p>IncludeOptional conf.d/*.conf</p>
-<p>ServerSignature Off</p>
-<p>NameVirtualHost 220.231.220.231:80</p>
-<p>&lt;VirtualHost 220.231.220.231:80&gt;&nbsp;&nbsp;</p>
-<p>ServerAdmin&nbsp; &nbsp;<a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a>&nbsp;</p>
-<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
-<p>ServerName <a href="http://www.aaa.net/">www.aaa.net</a></p>
-<p>DocumentRoot&nbsp; /data/www/wress/</p>
-<p>&lt;Directory “/data/www/wress/“&gt;&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp;Options -Indexes&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp;Options FollowSymLinks Indexes</p>
-<p>&nbsp; &nbsp; AllowOverride All&nbsp;&nbsp;</p>
-<p>&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp; Require all granted&nbsp;&nbsp;</p>
-<p>&nbsp;&nbsp;</p>
-<p>ErrorLog logs/<a href="http://www.aaa.net-error_log/">www.aaa.net-error_log</a></p>
-<p>&nbsp;CustomLog logs/<a href="http://www.aaa.net-access_log/">www.aaa.net-access_log</a> common</p>
-<p>&nbsp;</p>
-<p>&lt;VirtualHost 220.231.220.231:80&gt;</p>
-<p>ServerAdmin&nbsp; <a href="mailto:postmaster@aaa.net">postmaster@aaa.net</a></p>
-<p>directoryIndex&nbsp; index.html index.php index.htm&nbsp;&nbsp;</p>
-<p>ServerName img.aaa.net</p>
-<p>#ServerName 220.231.220.231</p>
-<p>DocumentRoot&nbsp; /data/www/html/</p>
-<p>&lt;Directory “/data/www/html/“&gt;</p>
-<p>&nbsp; &nbsp; Options -Indexes&nbsp;&nbsp;</p>
-<p>&nbsp; &nbsp; Options FollowSymLinks Indexes</p>
-<p>&nbsp; &nbsp; AllowOverride All</p>
-<p>&nbsp; &nbsp;Require all granted</p>
-
-
-<p>ErrorLog logs/img.aaa.net-error_log</p>
-<p>CustomLog logs/img.aaa.net-access_log common</p>
-
-
-<h2 id="这样都可以访问，apache也可以实现，做个小笔记。"><a href="#这样都可以访问，apache也可以实现，做个小笔记。" class="headerlink" title="这样都可以访问，apache也可以实现，做个小笔记。"></a>这样都可以访问，apache也可以实现，做个小笔记。</h2>]]></content>
-  </entry>
-  <entry>
-    <title>centos7 改网卡名eth0</title>
-    <url>/2023/111420634.html</url>
-    <content><![CDATA[<p>安装完Centos7系统，网卡命名跟之前发生了变化,不是eth0，虽然唯一好确定但是作为centos6.X过来的还是不好记，那就把网卡名字重新命名为eth0吧。</p>
-<p>1.先编辑网卡的配置文件将里面的NAME DEVICE项修改为eth0，vim /etc/sysconfig/network-scripts/ifcfg-enp2s0</p>
-<p>NAME=enp2s0 改为eth0</p>
-<p>DEVICE=enp2s0 改为 eth0</p>
-<p>2.cd /etc/sysconfig/network-scripts/ mv&nbsp;ifcfg-enp2s0 ifcfg-eth0</p>
-<p>3.禁用该可预测命名规则。对于这一点，你可以在启动时传递“net.ifnames=0 biosdevname=0 ”的内核参数。这是通过编辑/etc/default/grub并加入“net.ifnames=0 biosdevname=0 ”到GRUBCMDLINELINUX变量来实现的。</p>
-<p>&nbsp;vim /etc/default/grub&nbsp;添加红色部分；</p>
-<p>GRUB_CMDLINE_LINUX=”crashkernel=auto rd.lvm.lv=cl/root&nbsp;net.ifnames=0 biosdevname=0&nbsp;&nbsp;rd.lvm.lv=cl/swap rhgb quiet” &nbsp;</p>
-<p>4.运行命令grub2-mkconfig -o /boot/grub2/grub.cfg&nbsp;来重新生成GRUB配置并更新内核参数。</p>
-<p>&nbsp;grub2-mkconfig -o /boot/grub2/grub.cfg</p>
-<p>Generating grub configuration file …</p>
-<p>Found linux image: /boot/vmlinuz-3.10.0-514.el7.x86_64</p>
-<p>Found initrd image: /boot/initramfs-3.10.0-514.el7.x86_64.img</p>
-<p>Found linux image: /boot/vmlinuz-0-rescue-50b1d05808e44d898bef511aa2945d76</p>
-<p>Found initrd image: /boot/initramfs-0-rescue-50b1d05808e44d898bef511aa2945d76.img</p>
-<p>done</p>
-<p>5.重启机器改名eth0生效；</p>
-<p>PS:有时候重启以后会自动生成一个不是我们指定的ip，这个时候需要把网卡mac地址加进去 ifcfg-eth0中：HWADDR=30:5a:3a:e0:90:3c</p>
-<p>也可以修改</p>
-<p>cd /etc/udev/rules.d/</p>
-<p>vim&nbsp;70-persistent-net.rules</p>
-<p>注释掉原来的，添加新或者修改：</p>
-<p>SUBSYSTEM==”net”, ACTION==”add”, DRIVERS==”?<em>“, ATTR{address}==”00:0c:29:1f:1a:f5”, KERNEL==”eth</em>“, NAME=”eth0”</p>
-<p>修改为：</p>
-<p>SUBSYSTEM==”net”, ACTION==”add”, DRIVERS==”?<em>“, ATTR{address}==”30:5a:3a:e0:90:3c”, KERNEL==”eth</em>“, NAME=”eth0”</p>
-<h2 id="重启机器试试"><a href="#重启机器试试" class="headerlink" title="重启机器试试~"></a>重启机器试试~</h2>]]></content>
-      <tags>
-        <tag>点滴</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>centos U盘安装查找U盘设备名</title>
-    <url>/2023/111459478.html</url>
-    <content><![CDATA[<p>制作启动盘：UltraISO.exe 打开镜像文件，–启动—写入硬盘镜像—默认—开始大概7分钟后就制作完成。 这样制作以后U盘原数据就没了当心。</p>
-<p>主板del进cmos选择Usb首启动，看到3个选项：安装，测试&amp;安装,trouble修复，移动到第一项Install&nbsp;centos7</p>
-<p>很多时候卡到这边过不去，<br>按tab键编辑路径，将&nbsp;<br>vmlinuz initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 quiet&nbsp;<br>改成&nbsp;<br>vmlinuz initrd=initrd.img&nbsp;linux dd&nbsp;quiet&nbsp;<br>回车&nbsp;<br>然后就能在显示出的列表中 查看你的硬盘信息，很清晰就能知道哪一个是你的U盘（一般显示的几个 格式为NTFS的都是你电脑自身的盘符，另外的一个就是你的U盘，记下你的U盘的盘符名字 我的就是sdb4）&nbsp;</p>
-<p>系统会显示当前块设备：</p>
-<p>Sda1&nbsp; nfs&nbsp;</p>
-<p>Sda2&nbsp; nfs</p>
-<p>Sdb4&nbsp;&nbsp; vfat</p>
-<p>类似这些提示ccontinue 或者r reflush刷下块设备</p>
-<p>起初u盘没刷出来，刷新出来的sdb4<br>重新启动电脑，重复上面的步骤 这一次 将&nbsp;<br>vmlinuz initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 quiet&nbsp;<br>改成&nbsp;<br>vmlinuz initrd=initrd.img&nbsp;inst.stage2=hd:/dev/sdb4（你自己的U盘盘符）&nbsp;quiet&nbsp;<br>回车 等待安装程序启动，进行CentOS的安装</p>
-<hr>
-]]></content>
-  </entry>
-  <entry>
-    <title>coredump 路径格式</title>
-    <url>/2023/062743960.html</url>
-    <content><![CDATA[<p>Coredump</p>
-<p>业务进程宕机以后开发需要查看dump查找定位问题，所有服务器初始化环境时候统一定制coredump路径；</p>
-<p>1.Core文件简介</p>
-<p>Core文件其实就是内存的映像，当程序崩溃时，存储内存的相应信息，主用用于对程序进行调试。当程序崩溃时便会产生core文件，其实准确的应该说是core dump 文件,默认生成位置与可执行程序位于同一目录下，文件名为core,其中是某一数字。</p>
-<p>2.开启或关闭Core文件的生成</p>
-<p>关闭或阻止core文件生成：</p>
-<p>$ulimit -c 0</p>
-<p>打开core文件生成：</p>
-<p>$ulimit -c unlimited</p>
-<p>检查core文件的选项是否打开：</p>
-<p>$ulimit -a</p>
-<p>ulimit参数含义如下：&nbsp;</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -a&nbsp;&nbsp;&nbsp;&nbsp; All current limits are reported<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -c&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of core files created<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -d&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of a process data segment<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -e&nbsp;&nbsp;&nbsp;&nbsp; The maximum scheduling priority (“nice”)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -f&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of files written by the shell and its children<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -i&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of pending signals<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -l&nbsp;&nbsp;&nbsp;&nbsp; The maximum size that may be locked into memory<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -m&nbsp;&nbsp;&nbsp;&nbsp; The maximum resident set size (has no effect on Linux)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -n&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of open file descriptors (most systems do not allow this value to be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -p&nbsp;&nbsp;&nbsp;&nbsp; The pipe size in 512-byte blocks (this may not be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -q&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of bytes in POSIX message queues<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -r&nbsp;&nbsp;&nbsp;&nbsp; The maximum real-time scheduling priority<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -s&nbsp;&nbsp;&nbsp;&nbsp; The maximum stack size<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -t&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of cpu time in seconds<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -u&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of processes available to a single user<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -v&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of virtual memory available to the shell<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -x&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of file locks</p>
-<p>&nbsp;</p>
-<p>#ulimit -a</p>
-<p>core file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -c) unlimited</p>
-<p>data seg size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -d) unlimited</p>
-<p>scheduling priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-e) 0</p>
-<p>file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -f) unlimited</p>
-<p>pending signals&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-i) 127974</p>
-<p>max locked memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -l) 64</p>
-<p>max memory size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -m) unlimited</p>
-<p>open files&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-n) 100000</p>
-<p>pipe size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (512 bytes, -p) 8</p>
-<p>POSIX message queues&nbsp;&nbsp;&nbsp;&nbsp; (bytes, -q) 819200</p>
-<p>real-time priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-r) 0</p>
-<p>stack size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -s) 8192</p>
-<p>cpu time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (seconds, -t) unlimited</p>
-<p>max user processes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-u) 655360</p>
-<p>virtual memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -v) unlimited</p>
-<p>file locks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-x) unlimited而我们需要修改的是open files (-n) 1024的值</p>
-<p>于是命令就是limit -n 2048(随各自需要设置)</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>以上配置只对当前会话起作用，下次重新登陆后，还是得重新配置。要想配置永久生效，得在/etc/profile或者/etc/security/limits.conf文件中进行配置。</p>
-<p>首先以root权限登陆，然后打开/etc/security/limits.conf文件，进行配置：</p>
-<p>#vim /etc/security/limits.conf</p>
-<p><domain> &nbsp; &nbsp;<type> &nbsp; &nbsp;<item> &nbsp; &nbsp; &nbsp; &nbsp;<value></value></item></type></domain></p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp;* &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;soft &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;core &nbsp; &nbsp; &nbsp; &nbsp; unlimited</p>
-<p>或者在/etc/profile中作如下配置：</p>
-<p>#vim /etc/profile</p>
-<p>ulimit -S -c unlimited &gt;/dev/null 2&gt;&amp;1</p>
-<p>或者想配置只针对某一用户有效，则修改此用户的<del>/.bashrc或者</del>/.bash_profile文件：</p>
-<p>limit -c unlimited</p>
-<p>ulimit -c 0 是禁止产生core文件，而ulimit -c 1024则限制产生的core文件的大小不能超过1024kb</p>
-<p>3.设置Core Dump的核心转储文件目录和命名规则</p>
-<p>/proc/sys/kernel/core_uses_pid可以控制产生的core文件的文件名中是否添加pid作为扩展，如果添加则文件内容为1，否则为0<br>/proc/sys/kernel/core_pattern可以设置格式化的core文件保存位置或文件名，比如原来文件内容是core-%e<br>可以这样修改:<br>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern<br>将会控制所产生的core文件会存放到/data/common/coredump目录下，产生的文件名为core-进程名-pid-时间戳<br>以下是参数列表:<br>&nbsp;&nbsp;&nbsp; %p - insert pid into filename 添加pid<br>&nbsp;&nbsp;&nbsp; %u - insert current uid into filename 添加当前uid<br>&nbsp;&nbsp;&nbsp; %g - insert current gid into filename 添加当前gid<br>&nbsp;&nbsp;&nbsp; %s - insert signal that caused the coredump into the filename 添加导致产生core的信号<br>&nbsp;&nbsp;&nbsp; %t - insert UNIX time that the coredump occurred into filename 添加core文件生成时的unix时间<br>&nbsp;&nbsp;&nbsp; %h - insert hostname where the coredump happened into filename 添加主机名<br>&nbsp;&nbsp;&nbsp; %e - insert coredumping executable name into filename 添加命令名</p>
-<p>4.core文件的使用</p>
-<p>在core文件所在目录下键入:<br>gdb -c core &nbsp; （-c指定core文件）<br>它会启动GNU的调试器，来调试core文件，并且会显示生成此core文件的程序名，中止此程序的信号等等<br>如果你已经知道是由什么程序生成此core文件的，比如MyServer崩溃了生成core.12345，那么用此指令调试:<br>gdb -c core MyServer</p>
-<p>&nbsp;源：<a href="https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html">https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html</a>&nbsp;</p>
-<p>5.永久生效：<br>当前不重启生效：<br>你可以用下列方式来完成<br>sysctl -w kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
-<p>或</p>
-<p>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern</p>
-<p>这些操作一旦计算机重启，则会丢失，如果你想持久化这些操作，可以在 /etc/sysctl.conf文件中增加：<br>kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
-<p>加好后，如果你想不重启看看效果的话，则用下面的命令：<br>sysctl -p<br>vim /etc/sysctl.conf</p>
-<p>net.ipv4.ip_forward = 0</p>
-<p>net.ipv4.conf.default.rp_filter = 1</p>
-<p>net.ipv4.conf.default.accept_source_route = 0</p>
-<p>kernel.core_uses_pid = 1</p>
-<p>net.ipv4.tcp_syncookies = 1</p>
-<p>kernel.msgmnb = 65536</p>
-<p>kernel.msgmax = 65536</p>
-<p>net.ipv6.conf.lo.disable_ipv6 = 1</p>
-<p>net.ipv4.conf.all.promote_secondaries = 1</p>
-<p>net.ipv4.conf.default.promote_secondaries = 1</p>
-<p>net.ipv6.neigh.default.gc_thresh3 = 4096</p>
-<p>net.ipv4.neigh.default.gc_thresh3 = 4096</p>
-<p>kernel.softlockup_panic = 1</p>
-<p>kernel.sysrq = 1</p>
-<p>net.ipv6.conf.all.disable_ipv6 = 1</p>
-<p>net.ipv6.conf.default.disable_ipv6 = 1</p>
-<p>vm.overcommit_memory = 1</p>
-<p>kernel.numa_balancing = 0</p>
-<p>kernel.shmmax = 68719476736</p>
-<p>kernel.printk = 5</p>
-<p>kernel.core_pattern = /data/common/coredump/core-%e-%p-%t</p>
-<hr>
-]]></content>
       <tags>
         <tag>随笔</tag>
       </tags>
@@ -783,6 +664,125 @@
 ]]></content>
       <tags>
         <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>centos7 改网卡名eth0</title>
+    <url>/2023/111420634.html</url>
+    <content><![CDATA[<p>安装完Centos7系统，网卡命名跟之前发生了变化,不是eth0，虽然唯一好确定但是作为centos6.X过来的还是不好记，那就把网卡名字重新命名为eth0吧。</p>
+<p>1.先编辑网卡的配置文件将里面的NAME DEVICE项修改为eth0，vim /etc/sysconfig/network-scripts/ifcfg-enp2s0</p>
+<p>NAME=enp2s0 改为eth0</p>
+<p>DEVICE=enp2s0 改为 eth0</p>
+<p>2.cd /etc/sysconfig/network-scripts/ mv&nbsp;ifcfg-enp2s0 ifcfg-eth0</p>
+<p>3.禁用该可预测命名规则。对于这一点，你可以在启动时传递“net.ifnames=0 biosdevname=0 ”的内核参数。这是通过编辑/etc/default/grub并加入“net.ifnames=0 biosdevname=0 ”到GRUBCMDLINELINUX变量来实现的。</p>
+<p>&nbsp;vim /etc/default/grub&nbsp;添加红色部分；</p>
+<p>GRUB_CMDLINE_LINUX=”crashkernel=auto rd.lvm.lv=cl/root&nbsp;net.ifnames=0 biosdevname=0&nbsp;&nbsp;rd.lvm.lv=cl/swap rhgb quiet” &nbsp;</p>
+<p>4.运行命令grub2-mkconfig -o /boot/grub2/grub.cfg&nbsp;来重新生成GRUB配置并更新内核参数。</p>
+<p>&nbsp;grub2-mkconfig -o /boot/grub2/grub.cfg</p>
+<p>Generating grub configuration file …</p>
+<p>Found linux image: /boot/vmlinuz-3.10.0-514.el7.x86_64</p>
+<p>Found initrd image: /boot/initramfs-3.10.0-514.el7.x86_64.img</p>
+<p>Found linux image: /boot/vmlinuz-0-rescue-50b1d05808e44d898bef511aa2945d76</p>
+<p>Found initrd image: /boot/initramfs-0-rescue-50b1d05808e44d898bef511aa2945d76.img</p>
+<p>done</p>
+<p>5.重启机器改名eth0生效；</p>
+<p>PS:有时候重启以后会自动生成一个不是我们指定的ip，这个时候需要把网卡mac地址加进去 ifcfg-eth0中：HWADDR=30:5a:3a:e0:90:3c</p>
+<p>也可以修改</p>
+<p>cd /etc/udev/rules.d/</p>
+<p>vim&nbsp;70-persistent-net.rules</p>
+<p>注释掉原来的，添加新或者修改：</p>
+<p>SUBSYSTEM==”net”, ACTION==”add”, DRIVERS==”?<em>“, ATTR{address}==”00:0c:29:1f:1a:f5”, KERNEL==”eth</em>“, NAME=”eth0”</p>
+<p>修改为：</p>
+<p>SUBSYSTEM==”net”, ACTION==”add”, DRIVERS==”?<em>“, ATTR{address}==”30:5a:3a:e0:90:3c”, KERNEL==”eth</em>“, NAME=”eth0”</p>
+<h2 id="重启机器试试"><a href="#重启机器试试" class="headerlink" title="重启机器试试~"></a>重启机器试试~</h2>]]></content>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>coredump 路径格式</title>
+    <url>/2023/062743960.html</url>
+    <content><![CDATA[<p>Coredump</p>
+<p>业务进程宕机以后开发需要查看dump查找定位问题，所有服务器初始化环境时候统一定制coredump路径；</p>
+<p>1.Core文件简介</p>
+<p>Core文件其实就是内存的映像，当程序崩溃时，存储内存的相应信息，主用用于对程序进行调试。当程序崩溃时便会产生core文件，其实准确的应该说是core dump 文件,默认生成位置与可执行程序位于同一目录下，文件名为core,其中是某一数字。</p>
+<p>2.开启或关闭Core文件的生成</p>
+<p>关闭或阻止core文件生成：</p>
+<p>$ulimit -c 0</p>
+<p>打开core文件生成：</p>
+<p>$ulimit -c unlimited</p>
+<p>检查core文件的选项是否打开：</p>
+<p>$ulimit -a</p>
+<p>ulimit参数含义如下：&nbsp;</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -a&nbsp;&nbsp;&nbsp;&nbsp; All current limits are reported<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -c&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of core files created<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -d&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of a process data segment<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -e&nbsp;&nbsp;&nbsp;&nbsp; The maximum scheduling priority (“nice”)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -f&nbsp;&nbsp;&nbsp;&nbsp; The maximum size of files written by the shell and its children<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -i&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of pending signals<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -l&nbsp;&nbsp;&nbsp;&nbsp; The maximum size that may be locked into memory<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -m&nbsp;&nbsp;&nbsp;&nbsp; The maximum resident set size (has no effect on Linux)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -n&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of open file descriptors (most systems do not allow this value to be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -p&nbsp;&nbsp;&nbsp;&nbsp; The pipe size in 512-byte blocks (this may not be set)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -q&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of bytes in POSIX message queues<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -r&nbsp;&nbsp;&nbsp;&nbsp; The maximum real-time scheduling priority<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -s&nbsp;&nbsp;&nbsp;&nbsp; The maximum stack size<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -t&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of cpu time in seconds<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -u&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of processes available to a single user<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -v&nbsp;&nbsp;&nbsp;&nbsp; The maximum amount of virtual memory available to the shell<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -x&nbsp;&nbsp;&nbsp;&nbsp; The maximum number of file locks</p>
+<p>&nbsp;</p>
+<p>#ulimit -a</p>
+<p>core file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -c) unlimited</p>
+<p>data seg size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -d) unlimited</p>
+<p>scheduling priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-e) 0</p>
+<p>file size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (blocks, -f) unlimited</p>
+<p>pending signals&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-i) 127974</p>
+<p>max locked memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -l) 64</p>
+<p>max memory size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -m) unlimited</p>
+<p>open files&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-n) 100000</p>
+<p>pipe size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (512 bytes, -p) 8</p>
+<p>POSIX message queues&nbsp;&nbsp;&nbsp;&nbsp; (bytes, -q) 819200</p>
+<p>real-time priority&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-r) 0</p>
+<p>stack size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -s) 8192</p>
+<p>cpu time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (seconds, -t) unlimited</p>
+<p>max user processes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-u) 655360</p>
+<p>virtual memory&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (kbytes, -v) unlimited</p>
+<p>file locks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-x) unlimited而我们需要修改的是open files (-n) 1024的值</p>
+<p>于是命令就是limit -n 2048(随各自需要设置)</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>以上配置只对当前会话起作用，下次重新登陆后，还是得重新配置。要想配置永久生效，得在/etc/profile或者/etc/security/limits.conf文件中进行配置。</p>
+<p>首先以root权限登陆，然后打开/etc/security/limits.conf文件，进行配置：</p>
+<p>#vim /etc/security/limits.conf</p>
+<p><domain> &nbsp; &nbsp;<type> &nbsp; &nbsp;<item> &nbsp; &nbsp; &nbsp; &nbsp;<value></value></item></type></domain></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;* &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;soft &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;core &nbsp; &nbsp; &nbsp; &nbsp; unlimited</p>
+<p>或者在/etc/profile中作如下配置：</p>
+<p>#vim /etc/profile</p>
+<p>ulimit -S -c unlimited &gt;/dev/null 2&gt;&amp;1</p>
+<p>或者想配置只针对某一用户有效，则修改此用户的<del>/.bashrc或者</del>/.bash_profile文件：</p>
+<p>limit -c unlimited</p>
+<p>ulimit -c 0 是禁止产生core文件，而ulimit -c 1024则限制产生的core文件的大小不能超过1024kb</p>
+<p>3.设置Core Dump的核心转储文件目录和命名规则</p>
+<p>/proc/sys/kernel/core_uses_pid可以控制产生的core文件的文件名中是否添加pid作为扩展，如果添加则文件内容为1，否则为0<br>/proc/sys/kernel/core_pattern可以设置格式化的core文件保存位置或文件名，比如原来文件内容是core-%e<br>可以这样修改:<br>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern<br>将会控制所产生的core文件会存放到/data/common/coredump目录下，产生的文件名为core-进程名-pid-时间戳<br>以下是参数列表:<br>&nbsp;&nbsp;&nbsp; %p - insert pid into filename 添加pid<br>&nbsp;&nbsp;&nbsp; %u - insert current uid into filename 添加当前uid<br>&nbsp;&nbsp;&nbsp; %g - insert current gid into filename 添加当前gid<br>&nbsp;&nbsp;&nbsp; %s - insert signal that caused the coredump into the filename 添加导致产生core的信号<br>&nbsp;&nbsp;&nbsp; %t - insert UNIX time that the coredump occurred into filename 添加core文件生成时的unix时间<br>&nbsp;&nbsp;&nbsp; %h - insert hostname where the coredump happened into filename 添加主机名<br>&nbsp;&nbsp;&nbsp; %e - insert coredumping executable name into filename 添加命令名</p>
+<p>4.core文件的使用</p>
+<p>在core文件所在目录下键入:<br>gdb -c core &nbsp; （-c指定core文件）<br>它会启动GNU的调试器，来调试core文件，并且会显示生成此core文件的程序名，中止此程序的信号等等<br>如果你已经知道是由什么程序生成此core文件的，比如MyServer崩溃了生成core.12345，那么用此指令调试:<br>gdb -c core MyServer</p>
+<p>&nbsp;源：<a href="https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html">https://www.cnblogs.com/xiaodoujiaohome/p/6222895.html</a>&nbsp;</p>
+<p>5.永久生效：<br>当前不重启生效：<br>你可以用下列方式来完成<br>sysctl -w kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
+<p>或</p>
+<p>echo “/data/common/coredump/core-%e-%p-%t” &gt;/proc/sys/kernel/core_pattern</p>
+<p>这些操作一旦计算机重启，则会丢失，如果你想持久化这些操作，可以在 /etc/sysctl.conf文件中增加：<br>kernel.core_pattern=/data/common/coredump/core-%e-%p-%t&nbsp;</p>
+<p>加好后，如果你想不重启看看效果的话，则用下面的命令：<br>sysctl -p<br>vim /etc/sysctl.conf</p>
+<p>net.ipv4.ip_forward = 0</p>
+<p>net.ipv4.conf.default.rp_filter = 1</p>
+<p>net.ipv4.conf.default.accept_source_route = 0</p>
+<p>kernel.core_uses_pid = 1</p>
+<p>net.ipv4.tcp_syncookies = 1</p>
+<p>kernel.msgmnb = 65536</p>
+<p>kernel.msgmax = 65536</p>
+<p>net.ipv6.conf.lo.disable_ipv6 = 1</p>
+<p>net.ipv4.conf.all.promote_secondaries = 1</p>
+<p>net.ipv4.conf.default.promote_secondaries = 1</p>
+<p>net.ipv6.neigh.default.gc_thresh3 = 4096</p>
+<p>net.ipv4.neigh.default.gc_thresh3 = 4096</p>
+<p>kernel.softlockup_panic = 1</p>
+<p>kernel.sysrq = 1</p>
+<p>net.ipv6.conf.all.disable_ipv6 = 1</p>
+<p>net.ipv6.conf.default.disable_ipv6 = 1</p>
+<p>vm.overcommit_memory = 1</p>
+<p>kernel.numa_balancing = 0</p>
+<p>kernel.shmmax = 68719476736</p>
+<p>kernel.printk = 5</p>
+<p>kernel.core_pattern = /data/common/coredump/core-%e-%p-%t</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>随笔</tag>
       </tags>
   </entry>
   <entry>
@@ -993,121 +993,6 @@
       </categories>
       <tags>
         <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hello,mongodb</title>
-    <url>/2023/12146947.html</url>
-    <content><![CDATA[<p>Mongodb 安装：</p>
-<p>Red Hat/CentOS：</p>
-<p>sudo yum install libcurl openssl</p>
-<p>Ubuntu 18.04 LTS (“Bionic”)/Debian 10 “Buster”：</p>
-<p>sudo apt-get install libcurl4 openssl</p>
-<p>Ubuntu 16.04 LTS (“Xenial”)/Debian 9 “Stretch”：</p>
-<p>sudo apt-get install libcurl3 openssl</p>
-<p>MongoDB 源码下载地址：<a href="https://www.mongodb.com/try/download/community">https://www.mongodb.com/try/download/community</a></p>
-<p><img src="/../images/20231214_1.png"></p>
-<p>Server 是下载了rpm包直接 yum localinstall 安装；以后自动生成mongodbservice</p>
-<p> /usr/lib/systemd/system/mongod.service </p>
-<p>-rw-r–r– 1 root root 811 Nov 16 07:05 /usr/lib/systemd/system/mongod.service</p>
-<p>我们下载了tgz包，Copy link 复制下载包url</p>
-<p>wget <a href="https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-7.0.4.tgz">https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-7.0.4.tgz</a></p>
-<p>tar xvf mongodb-linux-x86_64-rhel70-7.0.4.tgz</p>
-<p>mv f mongodb-linux-x86_64-rhel70-7.0.4 mongodb &amp;&amp; mv mongodb /usr/local/</p>
-<p>vi /etc/profile</p>
-<p>export PATH=$PATH:/usr/local/mongodb/bin</p>
-<p>source /etc/profile</p>
-<p>在需要的数据盘下面建文件夹，</p>
-<p>Cd /data &amp;&amp; mkdir -p mongo log</p>
-<p>Touch log/mongodb.log</p>
-<p>vi mongodb.conf</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">dbpath = /usr/local/mongodb/data  \# mongodb数据文件存储路径（指定数据库目录）</span><br><span class="line">logpath = /usr/local/mongodb/logs/mongodb.log  \# mongodb的日志路径(指定日志文件目录)</span><br><span class="line">logappend = true  \# 日志使用追加代替覆盖</span><br><span class="line">port = 27017  \# 端口</span><br><span class="line">fork = true  \# 以守护程序的方式启用，即在后台运行</span><br><span class="line">auth = false \# 认证模式，需要设置账号和密码(下一步设置)</span><br><span class="line">bind_ip = 127.0.0.1 \# 远程连接</span><br></pre></td></tr></tbody></table></figure>
-
-<p>启动：mongod -f mongodb.conf</p>
-<p>mongod  -f mongodb.conf </p>
-<p>about to fork child process, waiting until server is ready for connections.</p>
-<p>forked process: 26741</p>
-<p>child process started successfully, parent exiting</p>
-<p>添加系统服务：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=MongoDB Database Server</span><br><span class="line">Documentation=https://docs.mongodb.org/manual</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">ExecStart=/usr/local/mongodb/bin/mongod --config /data/mongo/mongodb.conf</span><br><span class="line">ExecReload=/bin/kill -s HUP $MAINPID</span><br><span class="line">ExecStop=/usr/local/mongodb/bin/mongod --shundown --config /data/mongo/mongodb.conf</span><br><span class="line">ExecReload=/bin/kill -s HUP $MAINPID</span><br><span class="line">Restart=always</span><br><span class="line">PrivateTmp=true</span><br><span class="line">LimitNOFILE=64000</span><br><span class="line">LimitNPROC=64000</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<p> systemctl daemon-reload &amp;&amp; systemctl start mongod</p>
-<p>进入mongodb时候报错了，mongo：command not found；</p>
-<p>/usr/local/mongodb/bin下面没有mongo；</p>
-<p><a href="https://www.mongodb.com/try/download/shell">https://www.mongodb.com/try/download/shell</a></p>
-<p>需要到官网下一个mongosh，</p>
-<p>wget <a href="https://downloads.mongodb.com/compass/mongodb-mongosh-2.1.1.x86_64.rpm">https://downloads.mongodb.com/compass/mongodb-mongosh-2.1.1.x86_64.rpm</a></p>
-<p>yum localinstall mongodb-mongosh-2.1.1.x86_64.rpm</p>
-<p><img src="/../images/20231214_2.png"></p>
-<p>进入以后设置管理员账号，</p>
-<p>test&gt; use admin</p>
-<p>switched to db admin</p>
-<p>admin&gt; db.createUser({user:”root”,pwd:”admin123”,roles:[{role:”root”,db:”admin”}]})</p>
-<p>{ ok: 1 }</p>
-<p>修改mongodb.conf auth = true 开启授权模式；</p>
-<p>普通用户授权：</p>
-<p><img src="/../images/20231214_3.png"></p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">jary_test&gt; db.createUser({user:"jary",pwd:"abc123",roles:[{role:"readWrite",db:"jary_test"}]})</span><br><span class="line"></span><br><span class="line">{ ok: 1 }</span><br><span class="line"></span><br><span class="line">jary_test&gt; show users</span><br><span class="line"></span><br><span class="line">[</span><br><span class="line"></span><br><span class="line"> {</span><br><span class="line"></span><br><span class="line">  _id: 'jary_test.jary',</span><br><span class="line"></span><br><span class="line">  userId: UUID('64e3c53b-652e-424c-abe7-1c981d603287'),</span><br><span class="line"></span><br><span class="line">  user: 'jary',</span><br><span class="line"></span><br><span class="line">  db: 'jary_test',</span><br><span class="line"></span><br><span class="line">  roles: [ { role: 'readWrite', db: 'jary_test' } ],</span><br><span class="line"></span><br><span class="line">  mechanisms: [ 'SCRAM-SHA-1', 'SCRAM-SHA-256' ]</span><br><span class="line"></span><br><span class="line"> }</span><br><span class="line"></span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
-
-<p>查看用户：</p>
-<p>#切换到admin数据库</p>
-<p>use admin</p>
-<p>#查看所有用户</p>
-<p>db.system.users.find()</p>
-<p>#删除用户</p>
-<p>db.system.users.deleteOne({user:”jary2”})</p>
-<p>admin&gt; db.system.users.deleteOne({user:”jary2”})</p>
-<p>{ acknowledged: true, deletedCount: 1 }</p>
-<p><img src="/../images/20231214_4.png"></p>
-<p>建立数据库：</p>
-<p>admin&gt; use jary_test</p>
-<p>switched to db jary_test</p>
-<p>jary_test&gt; db</p>
-<p>jary_test</p>
-<p>插入数据：</p>
-<p>jary_test&gt; db.jary_test.insertOne({“name”:”zhr”,”age”:”31”,”online”:”true”})</p>
-<p>{</p>
-<p> acknowledged: true,</p>
-<p> insertedId: ObjectId(‘657ab816940239e3d1eaeb07’)</p>
-<p>}</p>
-<p>jary_test&gt; show dbs</p>
-<p>admin    148.00 KiB</p>
-<p>config    60.00 KiB</p>
-<p>jary_test   8.00 KiB</p>
-<p>local    72.00 KiB</p>
-<p>use jary_test2</p>
-<p>switched to db jary_test2</p>
-<p>jary_test2&gt; show dbs</p>
-<p>admin    180.00 KiB</p>
-<p>config   108.00 KiB</p>
-<p>jary_test  40.00 KiB</p>
-<p>local    72.00 KiB</p>
-<p>刚创建的库不在数据库列表里面，需要插入数据。</p>
-<p>jary_test2&gt; db.jary_test2.insertOne({“name”:”zruo”,”score”:”98”})</p>
-<p>{</p>
-<p> acknowledged: true,</p>
-<p> insertedId: ObjectId(‘657abb6c940239e3d1eaeb08’)</p>
-<p>}</p>
-<p>jary_test2&gt; show dbs</p>
-<p>admin    180.00 KiB</p>
-<p>config    108.00 KiB</p>
-<p>jary_test   40.00 KiB</p>
-<p>jary_test2  40.00 KiB</p>
-<p>local     72.00 KiB</p>
-<p>删除数据库：</p>
-<p>jary_test2&gt; use jary_test2</p>
-<p>already on db jary_test2</p>
-<p>jary_test2&gt; db.dropDatabase()</p>
-<p>{ ok: 1, dropped: ‘jary_test2’ }</p>
-<p>jary_test2&gt; show dbs</p>
-<p>admin    180.00 KiB</p>
-<p>config   108.00 KiB</p>
-<p>jary_test  40.00 KiB</p>
-<p>local    72.00 KiB</p>
-<p><img src="/../images/20231214_5.png"></p>
-]]></content>
-      <tags>
-        <tag>mongodb</tag>
       </tags>
   </entry>
   <entry>
@@ -1550,34 +1435,118 @@
       </tags>
   </entry>
   <entry>
-    <title>nginx编译ssl模块</title>
-    <url>/2023/062858442.html</url>
-    <content><![CDATA[<p>几个官网在一台服务器上面，其中一台是https的，增加一个官网以，重启nginx以后，https的网站直接报错，大意是ssl 在配置文件中unknow，但是这个https网站已经运行很久了，一时间有点郁闷，掉坑里了。</p>
-<p>查看nginx信息 /usr/local/nginx/sbin/nginx -V显示不支持ssl，那就好办，重新编译下ssl，但是线上业务跑着，难免有点担心，在测试机上跑了一次，正常的，才敢到线上操作，大致如此从网上找的如下：</p>
-<p>进入nginx源码目录：</p>
-<p>cd &nbsp;nginx-1.6.2</p>
-<p>./configure –prefix=/usr/local/nginx –user=www –group=www &nbsp;–with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
-<p>只添加ssl功能模块，有别的需求继续加上；</p>
-<p>运行完以后记得是make，make，make不是make &amp; make install ，install就覆盖安装了，千万搞清楚~</p>
-<p>make以后在当前目录生成odjs目录，下面就是新的nginx；</p>
-<p>剩下就好办，备份原来的nginx，把新生成的nginx替换原来的，</p>
-<p>备份旧的nginx程序</p>
-<p>cp /usr/local/nginx/sbin/nginx/usr/local/nginx/sbin/nginx.bak</p>
-<p>把新的nginx程序覆盖旧的</p>
-<p>cp objs/nginx /usr/local/nginx/sbin/nginx</p>
-<p>测试新的nginx程序是否正确</p>
-<p>/usr/local/nginx/sbin/nginx -t</p>
-<p>nginx: theconfiguration file /usr/local/nginx/conf/nginx.conf syntax is ok</p>
-<p>nginx:configuration file /usr/local/nginx/conf/nginx.conf test issuccessful</p>
-<p>平滑重启nginx</p>
-<p>/usr/local/nginx/sbin/nginx -s reload</p>
-<p>查看ngixn版本极其编译参数</p>
-<p>/usr/local/nginx/sbin/nginx -V</p>
-<p>configure arguments: –prefix=/data/app/nginx –user=www –group=www –with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
-<h6 id="权作一个跳坑记录。"><a href="#权作一个跳坑记录。" class="headerlink" title="权作一个跳坑记录。"></a>权作一个跳坑记录。</h6><hr>
+    <title>hello,mongodb</title>
+    <url>/2023/12146947.html</url>
+    <content><![CDATA[<p>Mongodb 安装：</p>
+<p>Red Hat/CentOS：</p>
+<p>sudo yum install libcurl openssl</p>
+<p>Ubuntu 18.04 LTS (“Bionic”)/Debian 10 “Buster”：</p>
+<p>sudo apt-get install libcurl4 openssl</p>
+<p>Ubuntu 16.04 LTS (“Xenial”)/Debian 9 “Stretch”：</p>
+<p>sudo apt-get install libcurl3 openssl</p>
+<p>MongoDB 源码下载地址：<a href="https://www.mongodb.com/try/download/community">https://www.mongodb.com/try/download/community</a></p>
+<p><img src="/../images/20231214_1.png"></p>
+<p>Server 是下载了rpm包直接 yum localinstall 安装；以后自动生成mongodbservice</p>
+<p> /usr/lib/systemd/system/mongod.service </p>
+<p>-rw-r–r– 1 root root 811 Nov 16 07:05 /usr/lib/systemd/system/mongod.service</p>
+<p>我们下载了tgz包，Copy link 复制下载包url</p>
+<p>wget <a href="https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-7.0.4.tgz">https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-7.0.4.tgz</a></p>
+<p>tar xvf mongodb-linux-x86_64-rhel70-7.0.4.tgz</p>
+<p>mv f mongodb-linux-x86_64-rhel70-7.0.4 mongodb &amp;&amp; mv mongodb /usr/local/</p>
+<p>vi /etc/profile</p>
+<p>export PATH=$PATH:/usr/local/mongodb/bin</p>
+<p>source /etc/profile</p>
+<p>在需要的数据盘下面建文件夹，</p>
+<p>Cd /data &amp;&amp; mkdir -p mongo log</p>
+<p>Touch log/mongodb.log</p>
+<p>vi mongodb.conf</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">dbpath = /usr/local/mongodb/data  \# mongodb数据文件存储路径（指定数据库目录）</span><br><span class="line">logpath = /usr/local/mongodb/logs/mongodb.log  \# mongodb的日志路径(指定日志文件目录)</span><br><span class="line">logappend = true  \# 日志使用追加代替覆盖</span><br><span class="line">port = 27017  \# 端口</span><br><span class="line">fork = true  \# 以守护程序的方式启用，即在后台运行</span><br><span class="line">auth = false \# 认证模式，需要设置账号和密码(下一步设置)</span><br><span class="line">bind_ip = 127.0.0.1 \# 远程连接</span><br></pre></td></tr></tbody></table></figure>
+
+<p>启动：mongod -f mongodb.conf</p>
+<p>mongod  -f mongodb.conf </p>
+<p>about to fork child process, waiting until server is ready for connections.</p>
+<p>forked process: 26741</p>
+<p>child process started successfully, parent exiting</p>
+<p>添加系统服务：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=MongoDB Database Server</span><br><span class="line">Documentation=https://docs.mongodb.org/manual</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">ExecStart=/usr/local/mongodb/bin/mongod --config /data/mongo/mongodb.conf</span><br><span class="line">ExecReload=/bin/kill -s HUP $MAINPID</span><br><span class="line">ExecStop=/usr/local/mongodb/bin/mongod --shundown --config /data/mongo/mongodb.conf</span><br><span class="line">ExecReload=/bin/kill -s HUP $MAINPID</span><br><span class="line">Restart=always</span><br><span class="line">PrivateTmp=true</span><br><span class="line">LimitNOFILE=64000</span><br><span class="line">LimitNPROC=64000</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p> systemctl daemon-reload &amp;&amp; systemctl start mongod</p>
+<p>进入mongodb时候报错了，mongo：command not found；</p>
+<p>/usr/local/mongodb/bin下面没有mongo；</p>
+<p><a href="https://www.mongodb.com/try/download/shell">https://www.mongodb.com/try/download/shell</a></p>
+<p>需要到官网下一个mongosh，</p>
+<p>wget <a href="https://downloads.mongodb.com/compass/mongodb-mongosh-2.1.1.x86_64.rpm">https://downloads.mongodb.com/compass/mongodb-mongosh-2.1.1.x86_64.rpm</a></p>
+<p>yum localinstall mongodb-mongosh-2.1.1.x86_64.rpm</p>
+<p><img src="/../images/20231214_2.png"></p>
+<p>进入以后设置管理员账号，</p>
+<p>test&gt; use admin</p>
+<p>switched to db admin</p>
+<p>admin&gt; db.createUser({user:”root”,pwd:”admin123”,roles:[{role:”root”,db:”admin”}]})</p>
+<p>{ ok: 1 }</p>
+<p>修改mongodb.conf auth = true 开启授权模式；</p>
+<p>普通用户授权：</p>
+<p><img src="/../images/20231214_3.png"></p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">jary_test&gt; db.createUser({user:"jary",pwd:"abc123",roles:[{role:"readWrite",db:"jary_test"}]})</span><br><span class="line"></span><br><span class="line">{ ok: 1 }</span><br><span class="line"></span><br><span class="line">jary_test&gt; show users</span><br><span class="line"></span><br><span class="line">[</span><br><span class="line"></span><br><span class="line"> {</span><br><span class="line"></span><br><span class="line">  _id: 'jary_test.jary',</span><br><span class="line"></span><br><span class="line">  userId: UUID('64e3c53b-652e-424c-abe7-1c981d603287'),</span><br><span class="line"></span><br><span class="line">  user: 'jary',</span><br><span class="line"></span><br><span class="line">  db: 'jary_test',</span><br><span class="line"></span><br><span class="line">  roles: [ { role: 'readWrite', db: 'jary_test' } ],</span><br><span class="line"></span><br><span class="line">  mechanisms: [ 'SCRAM-SHA-1', 'SCRAM-SHA-256' ]</span><br><span class="line"></span><br><span class="line"> }</span><br><span class="line"></span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
+
+<p>查看用户：</p>
+<p>#切换到admin数据库</p>
+<p>use admin</p>
+<p>#查看所有用户</p>
+<p>db.system.users.find()</p>
+<p>#删除用户</p>
+<p>db.system.users.deleteOne({user:”jary2”})</p>
+<p>admin&gt; db.system.users.deleteOne({user:”jary2”})</p>
+<p>{ acknowledged: true, deletedCount: 1 }</p>
+<p><img src="/../images/20231214_4.png"></p>
+<p>建立数据库：</p>
+<p>admin&gt; use jary_test</p>
+<p>switched to db jary_test</p>
+<p>jary_test&gt; db</p>
+<p>jary_test</p>
+<p>插入数据：</p>
+<p>jary_test&gt; db.jary_test.insertOne({“name”:”zhr”,”age”:”31”,”online”:”true”})</p>
+<p>{</p>
+<p> acknowledged: true,</p>
+<p> insertedId: ObjectId(‘657ab816940239e3d1eaeb07’)</p>
+<p>}</p>
+<p>jary_test&gt; show dbs</p>
+<p>admin    148.00 KiB</p>
+<p>config    60.00 KiB</p>
+<p>jary_test   8.00 KiB</p>
+<p>local    72.00 KiB</p>
+<p>use jary_test2</p>
+<p>switched to db jary_test2</p>
+<p>jary_test2&gt; show dbs</p>
+<p>admin    180.00 KiB</p>
+<p>config   108.00 KiB</p>
+<p>jary_test  40.00 KiB</p>
+<p>local    72.00 KiB</p>
+<p>刚创建的库不在数据库列表里面，需要插入数据。</p>
+<p>jary_test2&gt; db.jary_test2.insertOne({“name”:”zruo”,”score”:”98”})</p>
+<p>{</p>
+<p> acknowledged: true,</p>
+<p> insertedId: ObjectId(‘657abb6c940239e3d1eaeb08’)</p>
+<p>}</p>
+<p>jary_test2&gt; show dbs</p>
+<p>admin    180.00 KiB</p>
+<p>config    108.00 KiB</p>
+<p>jary_test   40.00 KiB</p>
+<p>jary_test2  40.00 KiB</p>
+<p>local     72.00 KiB</p>
+<p>删除数据库：</p>
+<p>jary_test2&gt; use jary_test2</p>
+<p>already on db jary_test2</p>
+<p>jary_test2&gt; db.dropDatabase()</p>
+<p>{ ok: 1, dropped: ‘jary_test2’ }</p>
+<p>jary_test2&gt; show dbs</p>
+<p>admin    180.00 KiB</p>
+<p>config   108.00 KiB</p>
+<p>jary_test  40.00 KiB</p>
+<p>local    72.00 KiB</p>
+<p><img src="/../images/20231214_5.png"></p>
 ]]></content>
       <tags>
-        <tag>点滴</tag>
+        <tag>mongodb</tag>
       </tags>
   </entry>
   <entry>
@@ -2015,6 +1984,63 @@
       </tags>
   </entry>
   <entry>
+    <title>zabbix 清理历史数据</title>
+    <url>/2023/071761914.html</url>
+    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
+<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
+<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
+<p>root@Testl]$ date +%s -d”20160929”</p>
+<p>1475078400</p>
+<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
+<p>Query OK, 36093 rows affected (43.64 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
+<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history;</p>
+<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
+<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history_uint;</p>
+<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
+<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>漫长时间等待以后看下效果：</p>
+<p>原来数据：</p>
+<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
+<p>压缩中：</p>
+<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
+<p>find -size +50M -exec ls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
+<p>最终删两个表以后数据：</p>
+<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
+<p>完了以后，重启mysql，zabbix，nginx试试；</p>
+<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>xtrabackup还原mysql</title>
     <url>/2023/11284499.html</url>
     <content><![CDATA[<p>1.下载ALI平台备份包：</p>
@@ -2081,63 +2107,6 @@
 ]]></content>
       <tags>
         <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>zabbix 清理历史数据</title>
-    <url>/2023/071761914.html</url>
-    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
-<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
-<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
-<p>root@Testl]$ date +%s -d”20160929”</p>
-<p>1475078400</p>
-<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
-<p>Query OK, 36093 rows affected (43.64 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
-<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history;</p>
-<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
-<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history_uint;</p>
-<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
-<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>漫长时间等待以后看下效果：</p>
-<p>原来数据：</p>
-<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
-<p>压缩中：</p>
-<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
-<p>find -size +50M -exec ls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
-<p>最终删两个表以后数据：</p>
-<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
-<p>完了以后，重启mysql，zabbix，nginx试试；</p>
-<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
-<hr>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
       </tags>
   </entry>
   <entry>
@@ -2438,6 +2407,37 @@
 ]]></content>
       <tags>
         <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>nginx编译ssl模块</title>
+    <url>/2023/062858442.html</url>
+    <content><![CDATA[<p>几个官网在一台服务器上面，其中一台是https的，增加一个官网以，重启nginx以后，https的网站直接报错，大意是ssl 在配置文件中unknow，但是这个https网站已经运行很久了，一时间有点郁闷，掉坑里了。</p>
+<p>查看nginx信息 /usr/local/nginx/sbin/nginx -V显示不支持ssl，那就好办，重新编译下ssl，但是线上业务跑着，难免有点担心，在测试机上跑了一次，正常的，才敢到线上操作，大致如此从网上找的如下：</p>
+<p>进入nginx源码目录：</p>
+<p>cd &nbsp;nginx-1.6.2</p>
+<p>./configure –prefix=/usr/local/nginx –user=www –group=www &nbsp;–with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
+<p>只添加ssl功能模块，有别的需求继续加上；</p>
+<p>运行完以后记得是make，make，make不是make &amp; make install ，install就覆盖安装了，千万搞清楚~</p>
+<p>make以后在当前目录生成odjs目录，下面就是新的nginx；</p>
+<p>剩下就好办，备份原来的nginx，把新生成的nginx替换原来的，</p>
+<p>备份旧的nginx程序</p>
+<p>cp /usr/local/nginx/sbin/nginx/usr/local/nginx/sbin/nginx.bak</p>
+<p>把新的nginx程序覆盖旧的</p>
+<p>cp objs/nginx /usr/local/nginx/sbin/nginx</p>
+<p>测试新的nginx程序是否正确</p>
+<p>/usr/local/nginx/sbin/nginx -t</p>
+<p>nginx: theconfiguration file /usr/local/nginx/conf/nginx.conf syntax is ok</p>
+<p>nginx:configuration file /usr/local/nginx/conf/nginx.conf test issuccessful</p>
+<p>平滑重启nginx</p>
+<p>/usr/local/nginx/sbin/nginx -s reload</p>
+<p>查看ngixn版本极其编译参数</p>
+<p>/usr/local/nginx/sbin/nginx -V</p>
+<p>configure arguments: –prefix=/data/app/nginx –user=www –group=www –with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
+<h6 id="权作一个跳坑记录。"><a href="#权作一个跳坑记录。" class="headerlink" title="权作一个跳坑记录。"></a>权作一个跳坑记录。</h6><hr>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
       </tags>
   </entry>
 </search>
