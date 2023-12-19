@@ -48,7 +48,7 @@
     <link href="https://blog.icmpy.net/2023/12146947.html"/>
     <id>https://blog.icmpy.net/2023/12146947.html</id>
     <published>2023-12-14T09:13:51.000Z</published>
-    <updated>2023-12-19T09:14:26.810Z</updated>
+    <updated>2023-12-19T09:28:35.013Z</updated>
     
     
       
@@ -56,7 +56,7 @@
         
         
     <summary type="html">&lt;p&gt;Mongodb 安装：&lt;/p&gt;
-&lt;p&gt;debian安装:&lt;/p&gt;
+&lt;p&gt;##一. debian安装:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;导入apt包管理系统需要使用的公钥。&lt;br&gt;在终端执行以下命令以从&amp;nbsp;&lt;a</summary>
         
