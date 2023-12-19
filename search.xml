@@ -1866,44 +1866,6 @@
       </categories>
   </entry>
   <entry>
-    <title>ssh免密登录问题</title>
-    <url>/2023/071760022.html</url>
-    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
-<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
-<p>服务器A需要免密码访问服务器B：</p>
-<ol>
-<li>在A上面生成公钥密钥，执行命令</li>
-</ol>
-<p>&nbsp;</p>
-<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
-<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
-<ol start="2">
-<li>将公钥id_rsa.pub拷贝到B机器上</li>
-</ol>
-<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
-<ol start="3">
-<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
-</ol>
-<p>cd&nbsp;/home/user/.ssh</p>
-<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
-<ol start="4">
-<li>设置 authorized_keys权限</li>
-</ol>
-<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
-<hr>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>vsftp 锁定用户目录</title>
     <url>/2023/071114619.html</url>
     <content><![CDATA[<p>vsftp 安装以后给用户权限和锁定目录；</p>
@@ -1992,6 +1954,44 @@
 <h2 id="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"><a href="#vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。" class="headerlink" title="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"></a>vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。</h2>]]></content>
       <tags>
         <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ssh免密登录问题</title>
+    <url>/2023/071760022.html</url>
+    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
+<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
+<p>服务器A需要免密码访问服务器B：</p>
+<ol>
+<li>在A上面生成公钥密钥，执行命令</li>
+</ol>
+<p>&nbsp;</p>
+<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
+<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
+<ol start="2">
+<li>将公钥id_rsa.pub拷贝到B机器上</li>
+</ol>
+<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
+<ol start="3">
+<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
+</ol>
+<p>cd&nbsp;/home/user/.ssh</p>
+<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
+<ol start="4">
+<li>设置 authorized_keys权限</li>
+</ol>
+<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
+<hr>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
       </tags>
   </entry>
   <entry>
@@ -2141,138 +2141,6 @@
       </tags>
   </entry>
   <entry>
-    <title>zabbix 设置163报警邮箱</title>
-    <url>/2023/120119617.html</url>
-    <content><![CDATA[<h2 id="1-测试端口是否开放："><a href="#1-测试端口是否开放：" class="headerlink" title="1.测试端口是否开放："></a>1.测试端口是否开放：</h2><p>nc -w 2 smtp.exmail.qq.com 465 &lt; /dev/null &amp;&amp; echo “port is ok”</p>
-<p>nc -w 2 smtp.exmail.qq.com 25 &lt; /dev/null &amp;&amp; echo “port is ok”</p>
-<p>首先拿到163邮箱的授权码，邮箱设置–选择“POP/SMTP/IMAP”选项，选择“IMAP/SMTP服务”，点击开启，扫码页面可以选择扫码发送短信，或者点击下方“手动发送短信”，点击“我已发送”后，如果系统检测到用户成功发送短信，即获取到授权码。授权码可以在多个第三方客户端使用。</p>
-<h2 id="2-配置163邮箱"><a href="#2-配置163邮箱" class="headerlink" title="2.配置163邮箱"></a>2.配置163邮箱</h2><p>zabbix路径:/usr/lib/zabbix/,执行：</p>
-<p>certutil -A -n “GeoTrust SSL CA - G3” -t “Pu,Pu,Pu” -d /usr/lib/zabbix/.certs./ -i /usr/lib/zabbix/.certs./163.crt</p>
-<p>certutil:  unable to open “/usr/lib/zabbix/.certs./163.crt” for reading (-5950, 2).</p>
-<p>没有到.certs 目录下执行或者certs不可读</p>
-<p>cd .certs/</p>
-<p> certutil -A -n “GeoTrust SSL CA - G3” -t “Pu,Pu,Pu” -d ./ -i 163.crt</p>
-<p>Notice: Trust flag u is set automatically if the private key is present.</p>
-<p>依然报错；</p>
-<p> echo “hehe” | mail -v -s “test”  <a href="mailto:abc1@qq.com">abc1@qq.com</a></p>
-<p>Resolving host smtp.163.com . . .Could not resolve host: smtp.163.com</p>
-<p>Vim /etc/mail.rc</p>
-<p>set from=邮箱地址</p>
-<p>set smtp=smtps://smtp.163.com:465</p>
-<p>set smtp-auth-user=账号名不要加@</p>
-<p>set smtp-auth-password=授权码</p>
-<p>set smtp-auth=login</p>
-<p>set ssl-verify=ignore</p>
-<p>=后面不要“”</p>
-<p>测试发邮件：</p>
-<p> echo “邮件正文” | mail -s “ZABBIX-TEST” <a href="mailto:cxxx@163.com">cxxx@163.com</a></p>
-<p>Resolving host smtp.163.com . . . done.</p>
-<p>Connecting to 103.74.29.40:465 . . . connected.</p>
-<p>Error initializing NSS: Unknown error -8015.</p>
-<p>Error initializing NSS: Unknown error -8015.</p>
-<p>“/root/dead.letter” 11/320</p>
-<p>. . . message not sent.</p>
-<p>很莫名奇妙，最终在root下面生产.certs，首先在/root下生成相应文件，在copy到zabbix路径下面；</p>
-<p>cd /root</p>
-<p> mkdir .certs</p>
-<p> echo -n | openssl s_client -connect smtp.163.com:465 | sed -ne ‘/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p’ &gt; /root/.certs/163.crt</p>
-<p>depth=2 C = US, O = DigiCert Inc, OU = <a href="http://www.digicert.com/">www.digicert.com</a>, CN = DigiCert Global Root CA</p>
-<p>verify return:1</p>
-<p>depth=1 C = US, O = DigiCert Inc, CN = GeoTrust RSA CN CA G2</p>
-<p>verify return:1</p>
-<p>depth=0 C = CN, ST = zhejiang, L = hangzhou, O = “NetEase (Hangzhou) Network Co., Ltd”, CN = *.163.com</p>
-<p>verify return:1</p>
-<p>DONE</p>
-<p>certutil -A -n “GeoTrust SSL CA” -t “C,,” -d /root/.certs -i /root/.certs/163.crt</p>
-<p>certutil -A -n “GeoTrust Global CA” -t “C,,” -d /root/.certs -i /root/.certs/163.crt</p>
-<p>Cd .certs</p>
-<p>certutil -A -n “GeoTrust SSL CA - G3” -t “Pu,Pu,Pu” -d /root/.certs/./ -i /root/.certs/163.crt</p>
-<p>Notice: Trust flag u is set automatically if the private key is present.</p>
-<p> ls /root/.certs/</p>
-<p>163.crt  cert8.db  key3.db  secmod.db</p>
-<p>certutil -L -d /root/.certs</p>
-<p>Certificate Nickname                     Trust Attributes</p>
-<p>​                               SSL,S/MIME,JAR/XPI</p>
-<p>GeoTrust SSL CA                        P,P,P</p>
-<p>cp -a /root/.certs/ /etc/zabbix/ &amp;&amp; cd /etc/zabbix &amp;&amp; chmod 777 -R .certs</p>
-<p> tail -10f /etc/mail.rc</p>
-<p>set from=<a href="mailto:email@163.com">email@163.com</a></p>
-<p>set smtp=smtps://smtp.163.com:465</p>
-<p>set smtp-auth-user=用户名不带@</p>
-<p>set smtp-auth-password=授权码</p>
-<p>set smtp-auth=login</p>
-<p>set ssl-verify=ignore</p>
-<p>set nss-config-dir=/etc/zabbix/.certs</p>
-<p> echo “邮件正文” | mail -s “ZABBIX-TEST” <a href="mailto:cxxx@163.com">cxxx@163.com</a></p>
-<p>成功了；</p>
-<p>Zabbix安装，参照官网<a href="https://www.zabbix.com/cn/download">https://www.zabbix.com/cn/download</a></p>
-<p>或者网上一大堆源码安装教程；</p>
-<h2 id="3-邮件报警配置："><a href="#3-邮件报警配置：" class="headerlink" title="3.邮件报警配置："></a>3.邮件报警配置：</h2><p>Zabbix5.0安装调试完毕，邮件系统发送，给多用户发送遇到了问题，期初创建了多个用户，用163邮件通知，也有sendmail脚本通知，钉钉通知脚本都用过，</p>
-<p>设置了3种通知方式：163邮件通知，钉钉报警给机器人，sendmail脚本发送报警；</p>
-<p><img src="/../images/20231201_6.png"></p>
-<p> 1）163邮件通知：</p>
-<p><img src="/../images/20231201_7.png"></p>
-<p><img src="/../images/20231201_8.png"></p>
-<p>消息模版：</p>
-<p>问题：</p>
-<p>主题：</p>
-<p>TRIGGER.STATUS,服务器:HOSTNAME1,发生:TRIGGER.NAME</p>
-<p>消息：</p>
-<p>告警主机:HOST.NAME</p>
-<p>告警IP:HOST.IP</p>
-<p>告警时间:EVENT.DATE-EVENT.TIME</p>
-<p>告警等级:TRIGGER.SEVERITY</p>
-<p>告警信息:TRIGGER.NAME:ITEM.VALUE</p>
-<p>问题详情:ITEM.NAME:ITEM.VALUE</p>
-<p>当前状态:TRIGGER.STATUS:ITEM.VALUE</p>
-<p>事件ID:EVENT.ID</p>
-<p>——-FROM ZABBIX 平台——-163邮局—-</p>
-<p>问题恢复：</p>
-<p>主题：</p>
-<p>恢复{TRIGGER.STATUS}, 服务器:{HOSTNAME1}: {TRIGGER.NAME} 已恢复！</p>
-<p>消息：</p>
-<p>告警主机: {HOSTNAME1}</p>
-<p>主机地址: {HOST.IP}</p>
-<p>告警等级: {TRIGGER.SEVERITY}</p>
-<p>监控项目: {TRIGGER.KEY1}</p>
-<p>问题详情: {ITEM.NAME}:{ITEM.VALUE}</p>
-<p>当前状态: {TRIGGER.STATUS}: {ITEM.VALUE1}</p>
-<p>告警信息: {TRIGGER.NAME}</p>
-<p>告警时间: {EVENT.DATE} {EVENT.TIME}</p>
-<p>事件ID: {EVENT.ID}</p>
-<p>——来自zabbix监控平台–163邮局—–</p>
-<p>问题更新：</p>
-<p>Updated problem in {EVENT.AGE}: {EVENT.NAME}</p>
-<p>消息：</p>
-<p>{USER.FULLNAME} {EVENT.UPDATE.ACTION} problem at {EVENT.UPDATE.DATE} {EVENT.UPDATE.TIME}.</p>
-<p>{EVENT.UPDATE.MESSAGE}</p>
-<p>Current problem status is {EVENT.STATUS}, age is {EVENT.AGE}, acknowledged: {EVENT.ACK.STATUS}.</p>
-<p>——来自zabbix监控平台–163邮局—–</p>
-<p> 2）Sendmail.sh</p>
-<p>脚本：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">\#!/bin/bash</span><br><span class="line"></span><br><span class="line">\#export.UTF-8</span><br><span class="line"></span><br><span class="line">FILE=/var/log/zabbix/mailtmp.txt</span><br><span class="line"></span><br><span class="line">echo "$3" &gt;$FILE</span><br><span class="line"></span><br><span class="line">dos2unix -k $FILE</span><br><span class="line"></span><br><span class="line">/bin/mail -s "$2" $1 &lt; $FILE</span><br><span class="line"></span><br><span class="line">\#!/bin/bash</span><br><span class="line"></span><br><span class="line">\#messages=`echo $3 | tr '\r\n' '\n'`</span><br><span class="line"></span><br><span class="line">\#subject=`echo $2 | tr '\r\n' '\n'`</span><br><span class="line"></span><br><span class="line">\#echo "${messages}" | mail -v -s "${subject}" $1 &gt;&gt;/var/log/zabbix/mailx.log 2&gt;&amp;1</span><br></pre></td></tr></tbody></table></figure>
-
-
-<p>消息模版基本一致；</p>
-<p>3）钉钉告警：</p>
-<p>钉钉脚本：</p>
-<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">\<span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#coding:utf-8</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#zabbix钉钉报警</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests,json,sys,os,datetime</span><br><span class="line"></span><br><span class="line">webhook=<span class="string">"https://oapi.dingtalk.com/robot/send?access_token=21211212111abcababcb..."</span>    <span class="comment">#说明：这里改为自己创建的机器人的webhook的值，钉钉个人现在不好申请了；</span></span><br><span class="line"></span><br><span class="line">user=sys.argv[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">text=sys.argv[<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">data={</span><br><span class="line"></span><br><span class="line">  <span class="string">"msgtype"</span>: <span class="string">"text"</span>,</span><br><span class="line"></span><br><span class="line">  <span class="string">"text"</span>: {</span><br><span class="line"></span><br><span class="line">​    <span class="string">"content"</span>: text</span><br><span class="line"></span><br><span class="line">  },</span><br><span class="line"></span><br><span class="line">  <span class="string">"at"</span>: {</span><br><span class="line"></span><br><span class="line">​    <span class="string">"atMobiles"</span>: [</span><br><span class="line"></span><br><span class="line">​      user</span><br><span class="line"></span><br><span class="line">​    ],</span><br><span class="line"></span><br><span class="line">​    <span class="string">"isAtAll"</span>: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">headers = {<span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>}</span><br><span class="line"></span><br><span class="line">x=requests.post(url=webhook,data=json.dumps(data),headers=headers)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> os.path.exists(<span class="string">"/usr/local/zabbix/log/ding.log"</span>):</span><br><span class="line"></span><br><span class="line">  f=<span class="built_in">open</span>(<span class="string">"/usr/local/zabbix/log/ding.log"</span>,<span class="string">"a+"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">  f=<span class="built_in">open</span>(<span class="string">"/usr/local/zabbix/log/ding.log"</span>,<span class="string">"w+"</span>)</span><br><span class="line"></span><br><span class="line">f.write(<span class="string">"\n"</span>+<span class="string">"--"</span>*<span class="number">30</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> x.json()[<span class="string">"errcode"</span>] == <span class="number">0</span>:</span><br><span class="line"></span><br><span class="line">  f.write(<span class="string">"\n"</span>+<span class="built_in">str</span>(datetime.datetime.now())+<span class="string">"   "</span>+<span class="built_in">str</span>(user)+<span class="string">"   "</span>+<span class="string">"发送成功"</span>+<span class="string">"\n"</span>+<span class="built_in">str</span>(text))</span><br><span class="line"></span><br><span class="line">  f.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">  f.write(<span class="string">"\n"</span>+<span class="built_in">str</span>(datetime.datetime.now()) + <span class="string">"   "</span> + <span class="built_in">str</span>(user) + <span class="string">"   "</span> + <span class="string">"发送失败"</span> + <span class="string">"\n"</span> + <span class="built_in">str</span>(text))</span><br><span class="line"></span><br><span class="line">  f.close()</span><br></pre></td></tr></tbody></table></figure>
-
-<p>Zabbix_server.conf</p>
-<p>设置脚本路径：AlertScriptsPath=/usr/lib/zabbix/alertscripts</p>
-<p>ExternalScripts=/usr/lib/zabbix/externalscripts</p>
-<p>所监控的服务器设置监控脚本：/etc/zabbix/zabbix_agentd.conf</p>
-<p># UserParameter=</p>
-<p>UserParameter=dis.process,/usr/lib/zabbix/alertscripts/discovery_process.sh</p>
-<p>UserParameter=proc.check[*],/usr/lib/zabbix/alertscripts/process_check.sh $1 $2 $3</p>
-<p>遇到问题：邮件只能发送给admin，建立的其他用户一直没收到邮件，后来添加到admin用户以后可以收到，其他用户没收到邮件挺奇怪的事情，现在没头绪。</p>
-<p><img src="/../images/20231201_9.png"></p>
-]]></content>
-      <tags>
-        <tag>心得</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>zabbix3.0.1安装过程的小坑</title>
     <url>/2023/081629672.html</url>
     <content><![CDATA[<p>1.安装</p>
@@ -2409,6 +2277,138 @@
 ]]></content>
       <tags>
         <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>zabbix 设置163报警邮箱</title>
+    <url>/2023/120119617.html</url>
+    <content><![CDATA[<h2 id="1-测试端口是否开放："><a href="#1-测试端口是否开放：" class="headerlink" title="1.测试端口是否开放："></a>1.测试端口是否开放：</h2><p>nc -w 2 smtp.exmail.qq.com 465 &lt; /dev/null &amp;&amp; echo “port is ok”</p>
+<p>nc -w 2 smtp.exmail.qq.com 25 &lt; /dev/null &amp;&amp; echo “port is ok”</p>
+<p>首先拿到163邮箱的授权码，邮箱设置–选择“POP/SMTP/IMAP”选项，选择“IMAP/SMTP服务”，点击开启，扫码页面可以选择扫码发送短信，或者点击下方“手动发送短信”，点击“我已发送”后，如果系统检测到用户成功发送短信，即获取到授权码。授权码可以在多个第三方客户端使用。</p>
+<h2 id="2-配置163邮箱"><a href="#2-配置163邮箱" class="headerlink" title="2.配置163邮箱"></a>2.配置163邮箱</h2><p>zabbix路径:/usr/lib/zabbix/,执行：</p>
+<p>certutil -A -n “GeoTrust SSL CA - G3” -t “Pu,Pu,Pu” -d /usr/lib/zabbix/.certs./ -i /usr/lib/zabbix/.certs./163.crt</p>
+<p>certutil:  unable to open “/usr/lib/zabbix/.certs./163.crt” for reading (-5950, 2).</p>
+<p>没有到.certs 目录下执行或者certs不可读</p>
+<p>cd .certs/</p>
+<p> certutil -A -n “GeoTrust SSL CA - G3” -t “Pu,Pu,Pu” -d ./ -i 163.crt</p>
+<p>Notice: Trust flag u is set automatically if the private key is present.</p>
+<p>依然报错；</p>
+<p> echo “hehe” | mail -v -s “test”  <a href="mailto:abc1@qq.com">abc1@qq.com</a></p>
+<p>Resolving host smtp.163.com . . .Could not resolve host: smtp.163.com</p>
+<p>Vim /etc/mail.rc</p>
+<p>set from=邮箱地址</p>
+<p>set smtp=smtps://smtp.163.com:465</p>
+<p>set smtp-auth-user=账号名不要加@</p>
+<p>set smtp-auth-password=授权码</p>
+<p>set smtp-auth=login</p>
+<p>set ssl-verify=ignore</p>
+<p>=后面不要“”</p>
+<p>测试发邮件：</p>
+<p> echo “邮件正文” | mail -s “ZABBIX-TEST” <a href="mailto:cxxx@163.com">cxxx@163.com</a></p>
+<p>Resolving host smtp.163.com . . . done.</p>
+<p>Connecting to 103.74.29.40:465 . . . connected.</p>
+<p>Error initializing NSS: Unknown error -8015.</p>
+<p>Error initializing NSS: Unknown error -8015.</p>
+<p>“/root/dead.letter” 11/320</p>
+<p>. . . message not sent.</p>
+<p>很莫名奇妙，最终在root下面生产.certs，首先在/root下生成相应文件，在copy到zabbix路径下面；</p>
+<p>cd /root</p>
+<p> mkdir .certs</p>
+<p> echo -n | openssl s_client -connect smtp.163.com:465 | sed -ne ‘/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p’ &gt; /root/.certs/163.crt</p>
+<p>depth=2 C = US, O = DigiCert Inc, OU = <a href="http://www.digicert.com/">www.digicert.com</a>, CN = DigiCert Global Root CA</p>
+<p>verify return:1</p>
+<p>depth=1 C = US, O = DigiCert Inc, CN = GeoTrust RSA CN CA G2</p>
+<p>verify return:1</p>
+<p>depth=0 C = CN, ST = zhejiang, L = hangzhou, O = “NetEase (Hangzhou) Network Co., Ltd”, CN = *.163.com</p>
+<p>verify return:1</p>
+<p>DONE</p>
+<p>certutil -A -n “GeoTrust SSL CA” -t “C,,” -d /root/.certs -i /root/.certs/163.crt</p>
+<p>certutil -A -n “GeoTrust Global CA” -t “C,,” -d /root/.certs -i /root/.certs/163.crt</p>
+<p>Cd .certs</p>
+<p>certutil -A -n “GeoTrust SSL CA - G3” -t “Pu,Pu,Pu” -d /root/.certs/./ -i /root/.certs/163.crt</p>
+<p>Notice: Trust flag u is set automatically if the private key is present.</p>
+<p> ls /root/.certs/</p>
+<p>163.crt  cert8.db  key3.db  secmod.db</p>
+<p>certutil -L -d /root/.certs</p>
+<p>Certificate Nickname                     Trust Attributes</p>
+<p>​                               SSL,S/MIME,JAR/XPI</p>
+<p>GeoTrust SSL CA                        P,P,P</p>
+<p>cp -a /root/.certs/ /etc/zabbix/ &amp;&amp; cd /etc/zabbix &amp;&amp; chmod 777 -R .certs</p>
+<p> tail -10f /etc/mail.rc</p>
+<p>set from=<a href="mailto:email@163.com">email@163.com</a></p>
+<p>set smtp=smtps://smtp.163.com:465</p>
+<p>set smtp-auth-user=用户名不带@</p>
+<p>set smtp-auth-password=授权码</p>
+<p>set smtp-auth=login</p>
+<p>set ssl-verify=ignore</p>
+<p>set nss-config-dir=/etc/zabbix/.certs</p>
+<p> echo “邮件正文” | mail -s “ZABBIX-TEST” <a href="mailto:cxxx@163.com">cxxx@163.com</a></p>
+<p>成功了；</p>
+<p>Zabbix安装，参照官网<a href="https://www.zabbix.com/cn/download">https://www.zabbix.com/cn/download</a></p>
+<p>或者网上一大堆源码安装教程；</p>
+<h2 id="3-邮件报警配置："><a href="#3-邮件报警配置：" class="headerlink" title="3.邮件报警配置："></a>3.邮件报警配置：</h2><p>Zabbix5.0安装调试完毕，邮件系统发送，给多用户发送遇到了问题，期初创建了多个用户，用163邮件通知，也有sendmail脚本通知，钉钉通知脚本都用过，</p>
+<p>设置了3种通知方式：163邮件通知，钉钉报警给机器人，sendmail脚本发送报警；</p>
+<p><img src="/../images/20231201_6.png"></p>
+<p> 1）163邮件通知：</p>
+<p><img src="/../images/20231201_7.png"></p>
+<p><img src="/../images/20231201_8.png"></p>
+<p>消息模版：</p>
+<p>问题：</p>
+<p>主题：</p>
+<p>TRIGGER.STATUS,服务器:HOSTNAME1,发生:TRIGGER.NAME</p>
+<p>消息：</p>
+<p>告警主机:HOST.NAME</p>
+<p>告警IP:HOST.IP</p>
+<p>告警时间:EVENT.DATE-EVENT.TIME</p>
+<p>告警等级:TRIGGER.SEVERITY</p>
+<p>告警信息:TRIGGER.NAME:ITEM.VALUE</p>
+<p>问题详情:ITEM.NAME:ITEM.VALUE</p>
+<p>当前状态:TRIGGER.STATUS:ITEM.VALUE</p>
+<p>事件ID:EVENT.ID</p>
+<p>——-FROM ZABBIX 平台——-163邮局—-</p>
+<p>问题恢复：</p>
+<p>主题：</p>
+<p>恢复{TRIGGER.STATUS}, 服务器:{HOSTNAME1}: {TRIGGER.NAME} 已恢复！</p>
+<p>消息：</p>
+<p>告警主机: {HOSTNAME1}</p>
+<p>主机地址: {HOST.IP}</p>
+<p>告警等级: {TRIGGER.SEVERITY}</p>
+<p>监控项目: {TRIGGER.KEY1}</p>
+<p>问题详情: {ITEM.NAME}:{ITEM.VALUE}</p>
+<p>当前状态: {TRIGGER.STATUS}: {ITEM.VALUE1}</p>
+<p>告警信息: {TRIGGER.NAME}</p>
+<p>告警时间: {EVENT.DATE} {EVENT.TIME}</p>
+<p>事件ID: {EVENT.ID}</p>
+<p>——来自zabbix监控平台–163邮局—–</p>
+<p>问题更新：</p>
+<p>Updated problem in {EVENT.AGE}: {EVENT.NAME}</p>
+<p>消息：</p>
+<p>{USER.FULLNAME} {EVENT.UPDATE.ACTION} problem at {EVENT.UPDATE.DATE} {EVENT.UPDATE.TIME}.</p>
+<p>{EVENT.UPDATE.MESSAGE}</p>
+<p>Current problem status is {EVENT.STATUS}, age is {EVENT.AGE}, acknowledged: {EVENT.ACK.STATUS}.</p>
+<p>——来自zabbix监控平台–163邮局—–</p>
+<p> 2）Sendmail.sh</p>
+<p>脚本：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">\#!/bin/bash</span><br><span class="line"></span><br><span class="line">\#export.UTF-8</span><br><span class="line"></span><br><span class="line">FILE=/var/log/zabbix/mailtmp.txt</span><br><span class="line"></span><br><span class="line">echo "$3" &gt;$FILE</span><br><span class="line"></span><br><span class="line">dos2unix -k $FILE</span><br><span class="line"></span><br><span class="line">/bin/mail -s "$2" $1 &lt; $FILE</span><br><span class="line"></span><br><span class="line">\#!/bin/bash</span><br><span class="line"></span><br><span class="line">\#messages=`echo $3 | tr '\r\n' '\n'`</span><br><span class="line"></span><br><span class="line">\#subject=`echo $2 | tr '\r\n' '\n'`</span><br><span class="line"></span><br><span class="line">\#echo "${messages}" | mail -v -s "${subject}" $1 &gt;&gt;/var/log/zabbix/mailx.log 2&gt;&amp;1</span><br></pre></td></tr></tbody></table></figure>
+
+
+<p>消息模版基本一致；</p>
+<p>3）钉钉告警：</p>
+<p>钉钉脚本：</p>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">\<span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#coding:utf-8</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#zabbix钉钉报警</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests,json,sys,os,datetime</span><br><span class="line"></span><br><span class="line">webhook=<span class="string">"https://oapi.dingtalk.com/robot/send?access_token=21211212111abcababcb..."</span>    <span class="comment">#说明：这里改为自己创建的机器人的webhook的值，钉钉个人现在不好申请了；</span></span><br><span class="line"></span><br><span class="line">user=sys.argv[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">text=sys.argv[<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">data={</span><br><span class="line"></span><br><span class="line">  <span class="string">"msgtype"</span>: <span class="string">"text"</span>,</span><br><span class="line"></span><br><span class="line">  <span class="string">"text"</span>: {</span><br><span class="line"></span><br><span class="line">​    <span class="string">"content"</span>: text</span><br><span class="line"></span><br><span class="line">  },</span><br><span class="line"></span><br><span class="line">  <span class="string">"at"</span>: {</span><br><span class="line"></span><br><span class="line">​    <span class="string">"atMobiles"</span>: [</span><br><span class="line"></span><br><span class="line">​      user</span><br><span class="line"></span><br><span class="line">​    ],</span><br><span class="line"></span><br><span class="line">​    <span class="string">"isAtAll"</span>: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">headers = {<span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>}</span><br><span class="line"></span><br><span class="line">x=requests.post(url=webhook,data=json.dumps(data),headers=headers)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> os.path.exists(<span class="string">"/usr/local/zabbix/log/ding.log"</span>):</span><br><span class="line"></span><br><span class="line">  f=<span class="built_in">open</span>(<span class="string">"/usr/local/zabbix/log/ding.log"</span>,<span class="string">"a+"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">  f=<span class="built_in">open</span>(<span class="string">"/usr/local/zabbix/log/ding.log"</span>,<span class="string">"w+"</span>)</span><br><span class="line"></span><br><span class="line">f.write(<span class="string">"\n"</span>+<span class="string">"--"</span>*<span class="number">30</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> x.json()[<span class="string">"errcode"</span>] == <span class="number">0</span>:</span><br><span class="line"></span><br><span class="line">  f.write(<span class="string">"\n"</span>+<span class="built_in">str</span>(datetime.datetime.now())+<span class="string">"   "</span>+<span class="built_in">str</span>(user)+<span class="string">"   "</span>+<span class="string">"发送成功"</span>+<span class="string">"\n"</span>+<span class="built_in">str</span>(text))</span><br><span class="line"></span><br><span class="line">  f.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">  f.write(<span class="string">"\n"</span>+<span class="built_in">str</span>(datetime.datetime.now()) + <span class="string">"   "</span> + <span class="built_in">str</span>(user) + <span class="string">"   "</span> + <span class="string">"发送失败"</span> + <span class="string">"\n"</span> + <span class="built_in">str</span>(text))</span><br><span class="line"></span><br><span class="line">  f.close()</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Zabbix_server.conf</p>
+<p>设置脚本路径：AlertScriptsPath=/usr/lib/zabbix/alertscripts</p>
+<p>ExternalScripts=/usr/lib/zabbix/externalscripts</p>
+<p>所监控的服务器设置监控脚本：/etc/zabbix/zabbix_agentd.conf</p>
+<p># UserParameter=</p>
+<p>UserParameter=dis.process,/usr/lib/zabbix/alertscripts/discovery_process.sh</p>
+<p>UserParameter=proc.check[*],/usr/lib/zabbix/alertscripts/process_check.sh $1 $2 $3</p>
+<p>遇到问题：邮件只能发送给admin，建立的其他用户一直没收到邮件，后来添加到admin用户以后可以收到，其他用户没收到邮件挺奇怪的事情，现在没头绪。</p>
+<p><img src="/../images/20231201_9.png"></p>
+]]></content>
+      <tags>
+        <tag>心得</tag>
       </tags>
   </entry>
   <entry>
