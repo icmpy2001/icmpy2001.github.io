@@ -1111,24 +1111,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Hello World</title>
-    <url>/2023/062516107.html</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>hexogit搭建个人网站</title>
     <url>/2023/111457802.html</url>
     <content><![CDATA[<h2 id="1-nodejs安装"><a href="#1-nodejs安装" class="headerlink" title="1. nodejs安装"></a>1. nodejs安装</h2><p> 使用Node Version Manager（nvm工具）</p>
@@ -1240,6 +1222,24 @@
 <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">server {</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name blog.icmpy.net;</span><br><span class="line">    return 301 blog.icmpy.net$request_uri;</span><br><span class="line">}</span><br><span class="line">server {</span><br><span class="line">    listen 443 ssl;</span><br><span class="line">    server_name blog.icmpy.net;</span><br><span class="line">    root /data/myblog; # 根目录为web</span><br><span class="line">    index index.php index index.html index.htm;</span><br><span class="line">    ssl_certificate /etc/nginx/ssl/blog.icmpy.net.pem;</span><br><span class="line">    ssl_certificate_key /etc/nginx/ssl/blog.icmpy.net.key;</span><br><span class="line">   ssl_session_timeout  5m;</span><br><span class="line"></span><br><span class="line">    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;</span><br><span class="line">        ssl_prefer_server_ciphers  on;</span><br><span class="line">    # Log files for Debug</span><br><span class="line">    error_log  /var/log/nginx/blog_error.log;</span><br><span class="line">    access_log /var/log/nginx/blog_access.log;</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
 <p>由于做了ssl证书，80做了个跳转到443上面，域名需要到平台做解析，A记录到自己的服务器，如果流量大的话可以做cdn，Cname到平台给的记录值，ssl证书申请，主流云平台都可以免费申请，填写一些资料以后很快就可以签发证书，选择对应的证书上传即可。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2023/062516107.html</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
   </entry>
   <entry>
@@ -1581,125 +1581,6 @@
       </tags>
   </entry>
   <entry>
-    <title>php 安装redis，protobuf,mcryp扩展</title>
-    <url>/2023/081036272.html</url>
-    <content><![CDATA[<p>&nbsp; 测试机上测试一些数据需要用到redis扩展，偷懒yum安装的php，以前yum install php-pecl-redis.x86_64可以安装扩展，这次找不到安装包，不折腾手动安装下。</p>
-<p>1.下载phpredis</p>
-<p>cd /usr/local/src</p>
-<p>wget <a href="https://github.com/nicolasff/phpredis/archive/2.2.4.tar.gz">https://github.com/nicolasff/phpredis/archive/2.2.4.tar.gz</a></p>
-<p>tar -zxvf 2.2.4.tar.gz</p>
-<p>cd phpredis-2.2.4/</p>
-<p>2.用phpize生成configure配置文件</p>
-<p>/usr/bin/phpize&nbsp; #会生成几个新文件，默认安装路径自定义的按照自定义路径；</p>
-<p>./configure –with-php-config=/usr/bin/php-config</p>
-<p>make #编译</p>
-<p>make install #安装</p>
-<p>make test #测试</p>
-<p>3.配置php支持</p>
-<p>vim /usr/local/php/etc/php.ini #编辑配置文件，在最后一行添加以下内容</p>
-<p>extension=”redis.so”</p>
-<ol start="4">
-<li></li>
-</ol>
-<p>重启http加载查看phpinfo信息：</p>
-<p>redis</p>
-<p>Redis Supportenabled</p>
-<p>Redis Version2.2.4</p>
-<p>成功！</p>
-<p>php扩展Protobuf</p>
-<p>下载protobuf扩展包：wget <a href="https://github.com/allegro/php-protobuf/archive/master.zip%E8%BF%99%E4%B8%AAmaster.zip%E4%BC%9A%E6%8A%A5%E9%94%99%EF%BC%9B">https://github.com/allegro/php-protobuf/archive/master.zip这个master.zip会报错；</a></p>
-<p>master.zip</p>
-<p>cd /home/tools/php-protobuf-master/</p>
-<p>phpize</p>
-<p>可能会报错php-devel</p>
-<p>yum install php-devel</p>
-<p>./configure<br>1.<br>make&nbsp;&amp;&amp;&nbsp;make&nbsp;install<br>1.</p>
-<p>If you ever happen to want to link against installed libraries</p>
-<p>in a given directory, LIBDIR, you must either use libtool, and</p>
-<p>specify the full pathname of the library, or use the `-LLIBDIR’</p>
-<p>flag during linking and do at least one of the following:</p>
-<p>&nbsp;&nbsp; - add LIBDIR to the `LD_LIBRARY_PATH’ environment variable</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp; during execution</p>
-<p>&nbsp;&nbsp; - add LIBDIR to the `LD_RUN_PATH’ environment variable</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp; during linking</p>
-<p>&nbsp;&nbsp; - use the `-Wl,-rpath -Wl,LIBDIR’ linker flag</p>
-<p>&nbsp;&nbsp; - have your system administrator add LIBDIR to `/etc/ld.so.conf’</p>
-<p>&nbsp;</p>
-<p>See any operating system documentation about shared libraries for</p>
-<p>more information, such as the ld(1) and ld.so(8) manual pages.</p>
-<hr>
-<p>&nbsp;</p>
-<p>Build complete.</p>
-<p>Don’t forget to run ‘make test’.</p>
-<p>&nbsp;</p>
-<p>Installing shared extensions:&nbsp;&nbsp;&nbsp;&nbsp; /usr/lib64/php/modules/</p>
-<p>然后再php.ini增加</p>
-<p>extension = protocolbuffers.so</p>
-<p>重启下http就可以了；</p>
-<p>装载protobuff库：</p>
-<p>&nbsp;pear&nbsp;channel-discover&nbsp;pear.pollinimini.net&nbsp;</p>
-<p>pear&nbsp;install&nbsp;drslump/Protobuf-beta&nbsp;</p>
-<p>mcryp扩展：</p>
-<p>yum install libmcrypt libmcrypt-devel mcrypt mhash 如果报错找不到补丁的话手动安装；</p>
-<p>下载Libmcrypt,mhash,mcrypt安装包</p>
-<p>Libmcrypt(libmcrypt-2.5.8.tar.gz)：<a href="http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91774&amp;release_id=487459">http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91774&amp;release_id=487459</a></p>
-<p>mcrypt(mcrypt-2.6.8.tar.gz ):<a href="http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91948&amp;release_id=642101">http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91948&amp;release_id=642101</a></p>
-<p>mhash(mhash-0.9.9.9.tar.gz):<a href="http://sourceforge.net/project/showfiles.php?group_id=4286&amp;package_id=4300&amp;release_id=645636">http://sourceforge.net/project/showfiles.php?group_id=4286&amp;package_id=4300&amp;release_id=645636</a></p>
-<p>2.先安装Libmcrypt</p>
-<p>tar -zxvf libmcrypt-2.5.8.tar.gz</p>
-<p>cd libmcrypt-2.5.8</p>
-<p>./configure</p>
-<p>make</p>
-<p>make install</p>
-<p>说明：libmcript默认安装在/usr/local&nbsp;</p>
-<p>3.再安装mhash</p>
-<p>tar -zxvf mhash-0.9.9.9.tar.gz</p>
-<p>cd mhash-0.9.9.9</p>
-<p>./configure</p>
-<p>make &amp;&amp; make install</p>
-<p>4.最后安装mcrypt</p>
-<p>tar -zxvf mcrypt-2.6.8.tar.gz</p>
-<p>cd mcrypt-2.6.8</p>
-<p>LD_LIBRARY_PATH=/usr/local/lib ./configure</p>
-<p>make &amp;&amp; make install</p>
-<p>说明：由于在配置Mcrypt时，会找不到libmcrypt的链接库，导致无法编译，因为Libmcrypt的链接库在/usr/local/lib文件夹下。</p>
-<p>因次，在配置mcrypt时要加入LD_LIBRARY_PATH=/usr/local/lib导入键接库。</p>
-<p>到&nbsp;<a href="http://cn.php.net/releases/">http://cn.php.net/releases/</a>&nbsp;网页下找到自己对应php版本，下载后解压</p>
-<p>cd php-5.4.16/ext/mcrypt/</p>
-<p>phpize (执行phpize命令（phpize是用来扩展php扩展模块的，通过phpize可以建立php的外挂模块，如果没有？yum install php-devel)</p>
-<p>phpize&nbsp;</p>
-<p>Configuring for:</p>
-<p>PHP Api Version:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;20100412</p>
-<p>Zend Module Api No:&nbsp; &nbsp; &nbsp; 20100525</p>
-<p>Zend Extension Api No:&nbsp; &nbsp;220100525</p>
-<p>yum 安装php./configure就可以，定制的需要自己的路径如比：./configure –with-php-config=/usr/bin/php-config</p>
-<p>./configure</p>
-<p>make &amp;&amp; make install</p>
-<p>Libraries have been installed in:</p>
-<p>&nbsp; &nbsp;/home/tools/php-5.4.16/ext/mcrypt/modules</p>
-<p>If you ever happen to want to link against installed libraries</p>
-<p>in a given directory, LIBDIR, you must either use libtool, and</p>
-<p>specify the full pathname of the library, or use the `-LLIBDIR’</p>
-<p>flag during linking and do at least one of the following:</p>
-<p>&nbsp; &nbsp;- add LIBDIR to the `LD_LIBRARY_PATH’ environment variable</p>
-<p>&nbsp; &nbsp; &nbsp;during execution</p>
-<p>&nbsp; &nbsp;- add LIBDIR to the `LD_RUN_PATH’ environment variable</p>
-<p>&nbsp; &nbsp; &nbsp;during linking</p>
-<p>&nbsp; &nbsp;- use the `-Wl,-rpath -Wl,LIBDIR’ linker flag</p>
-<p>&nbsp; &nbsp;- have your system administrator add LIBDIR to `/etc/ld.so.conf’</p>
-<p>See any operating system documentation about shared libraries for</p>
-<p>more information, such as the ld(1) and ld.so(8) manual pages.</p>
-<hr>
-<p>Build complete.</p>
-<p>Don’t forget to run ‘make test’.</p>
-<p>Installing shared extensions:&nbsp; &nbsp; &nbsp;/usr/lib64/php/modules/</p>
-<p>php.ini添加一条extension=mcrypt.so</p>
-<p>extension = protocolbuffers.so</p>
-<p>extension = mcrypt.so</p>
-<hr>
-]]></content>
-  </entry>
-  <entry>
     <title>ps-top</title>
     <url>/2023/121939275.html</url>
     <content><![CDATA[<p>经常用到的命令，详细的命令参数确实掌握的不牢，复习一下~</p>
@@ -1864,6 +1745,125 @@
       <categories>
         <category>系统</category>
       </categories>
+  </entry>
+  <entry>
+    <title>php 安装redis，protobuf,mcryp扩展</title>
+    <url>/2023/081036272.html</url>
+    <content><![CDATA[<p>&nbsp; 测试机上测试一些数据需要用到redis扩展，偷懒yum安装的php，以前yum install php-pecl-redis.x86_64可以安装扩展，这次找不到安装包，不折腾手动安装下。</p>
+<p>1.下载phpredis</p>
+<p>cd /usr/local/src</p>
+<p>wget <a href="https://github.com/nicolasff/phpredis/archive/2.2.4.tar.gz">https://github.com/nicolasff/phpredis/archive/2.2.4.tar.gz</a></p>
+<p>tar -zxvf 2.2.4.tar.gz</p>
+<p>cd phpredis-2.2.4/</p>
+<p>2.用phpize生成configure配置文件</p>
+<p>/usr/bin/phpize&nbsp; #会生成几个新文件，默认安装路径自定义的按照自定义路径；</p>
+<p>./configure –with-php-config=/usr/bin/php-config</p>
+<p>make #编译</p>
+<p>make install #安装</p>
+<p>make test #测试</p>
+<p>3.配置php支持</p>
+<p>vim /usr/local/php/etc/php.ini #编辑配置文件，在最后一行添加以下内容</p>
+<p>extension=”redis.so”</p>
+<ol start="4">
+<li></li>
+</ol>
+<p>重启http加载查看phpinfo信息：</p>
+<p>redis</p>
+<p>Redis Supportenabled</p>
+<p>Redis Version2.2.4</p>
+<p>成功！</p>
+<p>php扩展Protobuf</p>
+<p>下载protobuf扩展包：wget <a href="https://github.com/allegro/php-protobuf/archive/master.zip%E8%BF%99%E4%B8%AAmaster.zip%E4%BC%9A%E6%8A%A5%E9%94%99%EF%BC%9B">https://github.com/allegro/php-protobuf/archive/master.zip这个master.zip会报错；</a></p>
+<p>master.zip</p>
+<p>cd /home/tools/php-protobuf-master/</p>
+<p>phpize</p>
+<p>可能会报错php-devel</p>
+<p>yum install php-devel</p>
+<p>./configure<br>1.<br>make&nbsp;&amp;&amp;&nbsp;make&nbsp;install<br>1.</p>
+<p>If you ever happen to want to link against installed libraries</p>
+<p>in a given directory, LIBDIR, you must either use libtool, and</p>
+<p>specify the full pathname of the library, or use the `-LLIBDIR’</p>
+<p>flag during linking and do at least one of the following:</p>
+<p>&nbsp;&nbsp; - add LIBDIR to the `LD_LIBRARY_PATH’ environment variable</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; during execution</p>
+<p>&nbsp;&nbsp; - add LIBDIR to the `LD_RUN_PATH’ environment variable</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; during linking</p>
+<p>&nbsp;&nbsp; - use the `-Wl,-rpath -Wl,LIBDIR’ linker flag</p>
+<p>&nbsp;&nbsp; - have your system administrator add LIBDIR to `/etc/ld.so.conf’</p>
+<p>&nbsp;</p>
+<p>See any operating system documentation about shared libraries for</p>
+<p>more information, such as the ld(1) and ld.so(8) manual pages.</p>
+<hr>
+<p>&nbsp;</p>
+<p>Build complete.</p>
+<p>Don’t forget to run ‘make test’.</p>
+<p>&nbsp;</p>
+<p>Installing shared extensions:&nbsp;&nbsp;&nbsp;&nbsp; /usr/lib64/php/modules/</p>
+<p>然后再php.ini增加</p>
+<p>extension = protocolbuffers.so</p>
+<p>重启下http就可以了；</p>
+<p>装载protobuff库：</p>
+<p>&nbsp;pear&nbsp;channel-discover&nbsp;pear.pollinimini.net&nbsp;</p>
+<p>pear&nbsp;install&nbsp;drslump/Protobuf-beta&nbsp;</p>
+<p>mcryp扩展：</p>
+<p>yum install libmcrypt libmcrypt-devel mcrypt mhash 如果报错找不到补丁的话手动安装；</p>
+<p>下载Libmcrypt,mhash,mcrypt安装包</p>
+<p>Libmcrypt(libmcrypt-2.5.8.tar.gz)：<a href="http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91774&amp;release_id=487459">http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91774&amp;release_id=487459</a></p>
+<p>mcrypt(mcrypt-2.6.8.tar.gz ):<a href="http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91948&amp;release_id=642101">http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91948&amp;release_id=642101</a></p>
+<p>mhash(mhash-0.9.9.9.tar.gz):<a href="http://sourceforge.net/project/showfiles.php?group_id=4286&amp;package_id=4300&amp;release_id=645636">http://sourceforge.net/project/showfiles.php?group_id=4286&amp;package_id=4300&amp;release_id=645636</a></p>
+<p>2.先安装Libmcrypt</p>
+<p>tar -zxvf libmcrypt-2.5.8.tar.gz</p>
+<p>cd libmcrypt-2.5.8</p>
+<p>./configure</p>
+<p>make</p>
+<p>make install</p>
+<p>说明：libmcript默认安装在/usr/local&nbsp;</p>
+<p>3.再安装mhash</p>
+<p>tar -zxvf mhash-0.9.9.9.tar.gz</p>
+<p>cd mhash-0.9.9.9</p>
+<p>./configure</p>
+<p>make &amp;&amp; make install</p>
+<p>4.最后安装mcrypt</p>
+<p>tar -zxvf mcrypt-2.6.8.tar.gz</p>
+<p>cd mcrypt-2.6.8</p>
+<p>LD_LIBRARY_PATH=/usr/local/lib ./configure</p>
+<p>make &amp;&amp; make install</p>
+<p>说明：由于在配置Mcrypt时，会找不到libmcrypt的链接库，导致无法编译，因为Libmcrypt的链接库在/usr/local/lib文件夹下。</p>
+<p>因次，在配置mcrypt时要加入LD_LIBRARY_PATH=/usr/local/lib导入键接库。</p>
+<p>到&nbsp;<a href="http://cn.php.net/releases/">http://cn.php.net/releases/</a>&nbsp;网页下找到自己对应php版本，下载后解压</p>
+<p>cd php-5.4.16/ext/mcrypt/</p>
+<p>phpize (执行phpize命令（phpize是用来扩展php扩展模块的，通过phpize可以建立php的外挂模块，如果没有？yum install php-devel)</p>
+<p>phpize&nbsp;</p>
+<p>Configuring for:</p>
+<p>PHP Api Version:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;20100412</p>
+<p>Zend Module Api No:&nbsp; &nbsp; &nbsp; 20100525</p>
+<p>Zend Extension Api No:&nbsp; &nbsp;220100525</p>
+<p>yum 安装php./configure就可以，定制的需要自己的路径如比：./configure –with-php-config=/usr/bin/php-config</p>
+<p>./configure</p>
+<p>make &amp;&amp; make install</p>
+<p>Libraries have been installed in:</p>
+<p>&nbsp; &nbsp;/home/tools/php-5.4.16/ext/mcrypt/modules</p>
+<p>If you ever happen to want to link against installed libraries</p>
+<p>in a given directory, LIBDIR, you must either use libtool, and</p>
+<p>specify the full pathname of the library, or use the `-LLIBDIR’</p>
+<p>flag during linking and do at least one of the following:</p>
+<p>&nbsp; &nbsp;- add LIBDIR to the `LD_LIBRARY_PATH’ environment variable</p>
+<p>&nbsp; &nbsp; &nbsp;during execution</p>
+<p>&nbsp; &nbsp;- add LIBDIR to the `LD_RUN_PATH’ environment variable</p>
+<p>&nbsp; &nbsp; &nbsp;during linking</p>
+<p>&nbsp; &nbsp;- use the `-Wl,-rpath -Wl,LIBDIR’ linker flag</p>
+<p>&nbsp; &nbsp;- have your system administrator add LIBDIR to `/etc/ld.so.conf’</p>
+<p>See any operating system documentation about shared libraries for</p>
+<p>more information, such as the ld(1) and ld.so(8) manual pages.</p>
+<hr>
+<p>Build complete.</p>
+<p>Don’t forget to run ‘make test’.</p>
+<p>Installing shared extensions:&nbsp; &nbsp; &nbsp;/usr/lib64/php/modules/</p>
+<p>php.ini添加一条extension=mcrypt.so</p>
+<p>extension = protocolbuffers.so</p>
+<p>extension = mcrypt.so</p>
+<hr>
+]]></content>
   </entry>
   <entry>
     <title>ssh免密登录问题</title>
