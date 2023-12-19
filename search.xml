@@ -73,168 +73,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Rsync同步文件</title>
-    <url>/2023/081064777.html</url>
-    <content><![CDATA[<p>Rsync常用的一款同步文件工具。配置也很方便。</p>
-<p>&nbsp;</p>
-<p>yum install sync -y或者apt-get install sync</p>
-<ul>
-<li>服务安装好之后，/etc下没有配置文件，一般情况可以copy示例文件到/etc下</li>
-</ul>
-<p>&nbsp;</p>
-<p>#cp&nbsp;/usr/share/doc/rsync/examples/rsyncd.conf&nbsp;/etc</p>
-<p>&nbsp;</p>
-<p>vim /etc/rsyncd.conf</p>
-<p>uid = common</p>
-<p>gid = common</p>
-<p>use chroot = no</p>
-<p>max connections = 10</p>
-<p>strict modes = yes</p>
-<p>hosts allow = 192.168.2.12&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #可以空格，允许多个</p>
-<p>hosts deny = *</p>
-<p>port = 5699&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;#默认开启端口</p>
-<p>pid file = /var/run/rsyncd.pid</p>
-<p>lock file = /var/run/rsync.lock</p>
-<p>log file = /var/log/rsyncd.log</p>
-<p>[hmt]</p>
-<p>path = /data/www/html/</p>
-<p>comment = hello</p>
-<p>ignore errors</p>
-<p>read only = no</p>
-<p>write only = no</p>
-<p>hosts allow = 192.168.2.12&nbsp;</p>
-<p>list = false</p>
-<p>auth users = hmt</p>
-<p>secrets file = /etc/rsync.password</p>
-<ul>
-<li>建立/etc/rsyncd/rsyncd.secrets文件</li>
-</ul>
-<p>#vim /etc/rsync.password</p>
-<p>#cat /etc/rsyncd/rsyncd.secrets</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;hmt:123456</p>
-<ul>
-<li>为了密码的安全性，我们必须把权限设为600</li>
-</ul>
-<p> chown root:root /etc/rsyncd/rsyncd.secrets</p>
-<p>chmod 600&nbsp;&nbsp;/etc/rsync.password</p>
-<p> chmod 600&nbsp;/etc/rsyncd/rsyncd.secrets</p>
-<p> vim /etc/rsyncd/rsyncd.motd</p>
-<p>&nbsp;</p>
-<p>启动rsync：</p>
-<p>systemctl start rsyncd.service</p>
-<p>&nbsp;lsof -i:5699</p>
-<p>lsof -i:5699</p>
-<p>COMMAND PID USER&nbsp; &nbsp;FD&nbsp; &nbsp;TYPE&nbsp; &nbsp;DEVICE SIZE/OFF NODE NAME</p>
-<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 4u&nbsp; IPv4 22661487&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
-<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 5u&nbsp; IPv6 22661488&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
-<p>至此服务器端安装完毕；</p>
-<p>客户端安装配置：</p>
-<p>&nbsp;</p>
-<p>yum -y install rsync</p>
-<p>&nbsp;客户端需要vim&nbsp;/etc/rsync.password&nbsp;</p>
-<p>cat&nbsp;&nbsp;/etc/rsync.password</p>
-<p>123456</p>
-<p>运行：</p>
-<p>rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
-<p>Password: 这里要输入rsync的密码，是服务器端提供的，在前面的例子中，我们用的是 asdf，输入的密码并不显示出来；输好后就回车；&nbsp;注：&nbsp;这个命令的意思就是说，用rsync 用户登录到服务器上，把/data/www/html&nbsp;数据，同步到本地目录/data/www/html/上。当然本地的目录是可以你自己定义的，比如 dave也是可以的；当你在客户端上，当前操作的目录下没有/tmp/test/这个目录时，系统会自动为你创建一个；当存在/tmp/test/这个目录中，你要注意它的写权限。</p>
-<p>参数说明：</p>
-<p>&nbsp;-a 参数，相当于-rlptgoD，</p>
-<p>&nbsp;&nbsp;&nbsp;-r 是递归 -l 是链接文件，意思是拷贝链接文件；</p>
-<p>&nbsp;&nbsp;&nbsp;-p 表示保持文件原有权限；</p>
-<p>&nbsp;&nbsp;&nbsp;-t 保持文件原有时间；<br>&nbsp;&nbsp;&nbsp;-g 保持文件原有用户组；</p>
-<p>&nbsp;&nbsp;&nbsp;-o 保持文件原有属主；</p>
-<p>&nbsp;&nbsp;&nbsp;-D 相当于块设备文件；</p>
-<p>&nbsp;&nbsp;&nbsp;-z 传输时压缩；</p>
-<p>&nbsp;&nbsp;&nbsp;-P 传输进度；</p>
-<p>&nbsp;&nbsp;&nbsp;-v 传输时的进度等信息，和-P有点关系</p>
-<p>&nbsp;<br>*</p>
-<p>rsync -avzP &nbsp;–delete <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools&nbsp;/tmp/test/</p>
-<p>–delete 选项，表示服务器上的数据要与客户端完全一致，如果 /tmp/test/目录中有服务器上不存在的文件，则删除。最终目的是让/tmp/test/目录上的数据完全与服务器上保持一致；用的时候要小心点，最好不要把已经有重要数所据的目录，当做本地更新目录，否则会把你的数据全部删除；
-&nbsp;</p>
-<p>计划任务同步：</p>
-<p>*/5 * * * * rsync -zvaP <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools /tmp/test/ –password-file=/etc/rsyncd/rsyncd.secrets</p>
-<p>*/5 * * * * rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
-<p>&nbsp;</p>
-]]></content>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Tengine 安装</title>
-    <url>/2023/111458217.html</url>
-    <content><![CDATA[<p>Tengine安装</p>
-<p>Tengine 是由淘宝网发起的 Web 服务器项目。它在 Nginx 的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。Tengine 的性能和稳定性已经在大型的网站如淘宝网，天猫商城等得到了很好的检验。它的最终目标是打造一个高效、稳定、安全、易用的 Web 平台。</p>
-<p>Tengine 特性：</p>
-<p>支持 HTTP 的 CONNECT 方法，可用于正向代理场景；</p>
-<p>支持异步 OpenSSL，可使用硬件如：QAT 进行 HTTPS 的加速与卸载；</p>
-<p>增强相关运维、监控能力，比如异步打印日志及回滚，本地 DNS 缓存，内存监控等；</p>
-<p>Stream 模块支持 server_name 指令；</p>
-<p>更加强大的负载均衡能力，包括一致性 hash 模块、会话保持模块，还可以对后端的服务器进行主动健康检查，根据服务器状态自动上线下线，以及动态解析 upstream 中出现的域名；</p>
-<p>输入过滤器机制支持。通过使用这种机制 Web 应用防火墙的编写更为方便；</p>
-<p>支持设置 proxy、memcached、fastcgi、scgi、uwsgi 在后端失败时的重试次数；</p>
-<p>动态脚本语言 Lua 支持。扩展功能非常高效简单；</p>
-<p>支持按指定关键字(域名，url等)收集 Tengine 运行状态；</p>
-<p>组合多个 CSS、JavaScript 文件的访问请求变成一个请求；</p>
-<p>自动去除空白字符和注释从而减小页面的体积</p>
-<p>自动根据 CPU 数目设置进程个数和绑定 CPU 亲缘性；</p>
-<p>监控系统的负载和资源占用从而对系统进行保护；</p>
-<p>显示对运维人员更友好的出错信息，便于定位出错机器；；</p>
-<p>更强大的防攻击（访问速度限制）模块；</p>
-<p>更方便的命令行参数，如列出编译的模块列表、支持的指令等；</p>
-<p>支持 Dubbo 协议；</p>
-<p>可以根据访问文件类型设置过期时间；</p>
-<p>下载源码包：</p>
-<p>tengine 源码：<a href="http://tengine.taobao.org/download_cn.html">http://tengine.taobao.org/download_cn.html</a></p>
-<p>pcre 源码：<a href="http://www.pcre.org/">http://www.pcre.org/</a></p>
-<p>openssl 源码：<a href="https://www.openssl.org/source/">https://www.openssl.org/source/</a></p>
-<p>zlib 源码：<a href="http://www.zlib.net/">http://www.zlib.net/</a></p>
-<p>安装包：</p>
-<p>支持lua模块</p>
-<p>wget <a href="http://luajit.org/download/LuaJIT-2.0.4.tar.gz">http://luajit.org/download/LuaJIT-2.0.4.tar.gz</a></p>
-<p>#wget <a href="https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz">https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz</a></p>
-<p>#wget <a href="https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz">https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz</a></p>
-<p>安装LuaJIT</p>
-<p>tar xf LuaJIT-2.0.4.tar.gz</p>
-<p>#cd xf LuaJIT-2.0.4</p>
-<p>#make PREFIX=/usr/local/luajit</p>
-<p>#make install PREFIX=/usr/local/luajit</p>
-<p>#ln -s /usr/local/luajit/lib/libluajit-5.1.so.2 /lib64/libluajit-5.1.so.2</p>
-<p>添加环境变量</p>
-<p>export LUAJIT_LIB=/usr/local/luajit/lib</p>
-<p>export LUAJIT_INC=/usr/local/luajit/include/luajit-2.0</p>
-<p>#source /etc/profile</p>
-<p>安装tingine</p>
-<p>#tar xf v0.3.0.tar.gz</p>
-<p>#tar xf v0.10.13.tar.gz</p>
-<p>#tar xf nginx-1.12.0.tar.gz</p>
-<p>debain 环境下安装：<br>sudo apt-get install -y  openssl libssl-dev<br>sudo apt-get install  -y libpcre3 libpcre3-dev<br>apt-get install  -y zlib1g-dev<br>Centos环境下安装：<br>yum -y update &amp;&amp; yum install -y gcc wget tree pcre-devel <br>zlib-devel openssl openssl-devel <br>libxml2 libxml2-dev libxslt-devel gd-devel <br>ncurses-devel perl perl-ExtUtils-Embed <br>gperftools </p>
-<p>cd tengine-2.2.2</p>
-<p> ./configure –conf-path=/etc/nginx/nginx.conf –user=www-data –group=www-data –prefix=/etc/nginx –sbin-path=/usr/sbin/nginx –with-ipv6  –error-log-path=/var/log/nginx/error.log –http-log-path=/var/log/nginx/access.log  –pid-path=/var/run/nginx.pid –lock-path=/var/lock/nginx.lock –http-client-body-temp-path=/var/cache/nginx/client_temp  –http-proxy-temp-path=/var/cache/nginx/proxy_temp –http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp  –http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp –http-scgi-temp-path=/var/cache/nginx/scgi_temp  –without-select_module –without-http_uwsgi_module –without-http_empty_gif_module –with-http_ssl_module –with-http_addition_module  –with-http_sub_module –with-http_dav_module –with-http_flv_module –with-http_gunzip_module  –with-http_gzip_static_module –with-http_random_index_module  –with-http_secure_link_module –with-http_stub_status_module –with-http_realip_module  –with-http_concat_module=shared –with-http_sysguard_module=shared  –with-http_dyups_module –with-file-aio –add-module=../ngx_devel_kit-0.3.0/  –add-module=../lua-nginx-module-0.10.13/ \</p>
-<p>Make </p>
-<p>Make install</p>
-<p>Make会报错：cc1: all warnings being treated as errors</p>
-<p>make[1]: *** [objs/Makefile:617: objs/src/core/ngx_murmurhash.o] Error 1</p>
-<p>make[1]: Leaving directory ‘/home/tools/install/tengine-2.2.2’</p>
-<p>vim objs/Makefile：</p>
-<p>CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused -Werror -g  -DNDK_SET_VAR</p>
-<p> -Werror -g去掉</p>
-<p>CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused  -DNDK_SET_VAR</p>
-<p>sed -i “s/ -Werror -g / /g” ./objs/Makefile<br>make &amp;&amp; make install<br>echo <code>nginx -v</code></p>
-<p>#不显示版本号<br>sed -i “/server_tokens off;/a server_tag off; \n server_info off;” nginx.conf<br>mkdir -p /var/cache/nginx/scgi_temp<br>chown www-data.root /var/cache/nginx/scgi_temp</p>
-<p>添加系统服务：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat &gt;&gt;/etc/systemd/system/nginx.service &lt;&lt;EOF</span><br><span class="line">[Unit]</span><br><span class="line">Description=The nginx HTTP and reverse proxy server</span><br><span class="line">After=syslog.target network.target remote-fs.target nss-lookup.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">PIDFile=/var/run/nginx.pid</span><br><span class="line">ExecStartPre=/usr/sbin/nginx -t -c /etc/nginx/nginx.conf</span><br><span class="line">ExecStart=/usr/sbin/nginx -c /etc/nginx/nginx.conf</span><br><span class="line">ExecReload=/usr/sbin/nginx -s reload</span><br><span class="line">ExecStop=/usr/sbin/nginx -s stop</span><br><span class="line">ExecQuit=/usr/sbin/nginx -s quit</span><br><span class="line">PrivateTmp=true</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br></pre></td></tr></tbody></table></figure>
-
-<p>后续就是优化配置了。</p>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ELK安装调试及遇到的问题</title>
     <url>/2023/111459226.html</url>
     <content><![CDATA[<h1 id="1-前期准备："><a href="#1-前期准备：" class="headerlink" title="1.前期准备："></a>1.前期准备：</h1><p>如果是es非root用户启动es，可以把*改成非root用户，例如 es soft nofile 65535修改 /etc/security/limits.conf</p>
@@ -440,6 +278,168 @@
 <p>Could not find log4j2 configuration at path /usr/share/logstash/config/log4j2.properties. Using default config which logs errors to the console</p>
 <p>等等可以看日志找出这些问题；本次安装遇到最大问题是乱码，做一次点滴笔记。</p>
 <hr>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Rsync同步文件</title>
+    <url>/2023/081064777.html</url>
+    <content><![CDATA[<p>Rsync常用的一款同步文件工具。配置也很方便。</p>
+<p>&nbsp;</p>
+<p>yum install sync -y或者apt-get install sync</p>
+<ul>
+<li>服务安装好之后，/etc下没有配置文件，一般情况可以copy示例文件到/etc下</li>
+</ul>
+<p>&nbsp;</p>
+<p>#cp&nbsp;/usr/share/doc/rsync/examples/rsyncd.conf&nbsp;/etc</p>
+<p>&nbsp;</p>
+<p>vim /etc/rsyncd.conf</p>
+<p>uid = common</p>
+<p>gid = common</p>
+<p>use chroot = no</p>
+<p>max connections = 10</p>
+<p>strict modes = yes</p>
+<p>hosts allow = 192.168.2.12&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #可以空格，允许多个</p>
+<p>hosts deny = *</p>
+<p>port = 5699&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;#默认开启端口</p>
+<p>pid file = /var/run/rsyncd.pid</p>
+<p>lock file = /var/run/rsync.lock</p>
+<p>log file = /var/log/rsyncd.log</p>
+<p>[hmt]</p>
+<p>path = /data/www/html/</p>
+<p>comment = hello</p>
+<p>ignore errors</p>
+<p>read only = no</p>
+<p>write only = no</p>
+<p>hosts allow = 192.168.2.12&nbsp;</p>
+<p>list = false</p>
+<p>auth users = hmt</p>
+<p>secrets file = /etc/rsync.password</p>
+<ul>
+<li>建立/etc/rsyncd/rsyncd.secrets文件</li>
+</ul>
+<p>#vim /etc/rsync.password</p>
+<p>#cat /etc/rsyncd/rsyncd.secrets</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;hmt:123456</p>
+<ul>
+<li>为了密码的安全性，我们必须把权限设为600</li>
+</ul>
+<p> chown root:root /etc/rsyncd/rsyncd.secrets</p>
+<p>chmod 600&nbsp;&nbsp;/etc/rsync.password</p>
+<p> chmod 600&nbsp;/etc/rsyncd/rsyncd.secrets</p>
+<p> vim /etc/rsyncd/rsyncd.motd</p>
+<p>&nbsp;</p>
+<p>启动rsync：</p>
+<p>systemctl start rsyncd.service</p>
+<p>&nbsp;lsof -i:5699</p>
+<p>lsof -i:5699</p>
+<p>COMMAND PID USER&nbsp; &nbsp;FD&nbsp; &nbsp;TYPE&nbsp; &nbsp;DEVICE SIZE/OFF NODE NAME</p>
+<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 4u&nbsp; IPv4 22661487&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
+<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 5u&nbsp; IPv6 22661488&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
+<p>至此服务器端安装完毕；</p>
+<p>客户端安装配置：</p>
+<p>&nbsp;</p>
+<p>yum -y install rsync</p>
+<p>&nbsp;客户端需要vim&nbsp;/etc/rsync.password&nbsp;</p>
+<p>cat&nbsp;&nbsp;/etc/rsync.password</p>
+<p>123456</p>
+<p>运行：</p>
+<p>rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
+<p>Password: 这里要输入rsync的密码，是服务器端提供的，在前面的例子中，我们用的是 asdf，输入的密码并不显示出来；输好后就回车；&nbsp;注：&nbsp;这个命令的意思就是说，用rsync 用户登录到服务器上，把/data/www/html&nbsp;数据，同步到本地目录/data/www/html/上。当然本地的目录是可以你自己定义的，比如 dave也是可以的；当你在客户端上，当前操作的目录下没有/tmp/test/这个目录时，系统会自动为你创建一个；当存在/tmp/test/这个目录中，你要注意它的写权限。</p>
+<p>参数说明：</p>
+<p>&nbsp;-a 参数，相当于-rlptgoD，</p>
+<p>&nbsp;&nbsp;&nbsp;-r 是递归 -l 是链接文件，意思是拷贝链接文件；</p>
+<p>&nbsp;&nbsp;&nbsp;-p 表示保持文件原有权限；</p>
+<p>&nbsp;&nbsp;&nbsp;-t 保持文件原有时间；<br>&nbsp;&nbsp;&nbsp;-g 保持文件原有用户组；</p>
+<p>&nbsp;&nbsp;&nbsp;-o 保持文件原有属主；</p>
+<p>&nbsp;&nbsp;&nbsp;-D 相当于块设备文件；</p>
+<p>&nbsp;&nbsp;&nbsp;-z 传输时压缩；</p>
+<p>&nbsp;&nbsp;&nbsp;-P 传输进度；</p>
+<p>&nbsp;&nbsp;&nbsp;-v 传输时的进度等信息，和-P有点关系</p>
+<p>&nbsp;<br>*</p>
+<p>rsync -avzP &nbsp;–delete <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools&nbsp;/tmp/test/</p>
+<p>–delete 选项，表示服务器上的数据要与客户端完全一致，如果 /tmp/test/目录中有服务器上不存在的文件，则删除。最终目的是让/tmp/test/目录上的数据完全与服务器上保持一致；用的时候要小心点，最好不要把已经有重要数所据的目录，当做本地更新目录，否则会把你的数据全部删除；
+&nbsp;</p>
+<p>计划任务同步：</p>
+<p>*/5 * * * * rsync -zvaP <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools /tmp/test/ –password-file=/etc/rsyncd/rsyncd.secrets</p>
+<p>*/5 * * * * rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
+<p>&nbsp;</p>
+]]></content>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Tengine 安装</title>
+    <url>/2023/111458217.html</url>
+    <content><![CDATA[<p>Tengine安装</p>
+<p>Tengine 是由淘宝网发起的 Web 服务器项目。它在 Nginx 的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。Tengine 的性能和稳定性已经在大型的网站如淘宝网，天猫商城等得到了很好的检验。它的最终目标是打造一个高效、稳定、安全、易用的 Web 平台。</p>
+<p>Tengine 特性：</p>
+<p>支持 HTTP 的 CONNECT 方法，可用于正向代理场景；</p>
+<p>支持异步 OpenSSL，可使用硬件如：QAT 进行 HTTPS 的加速与卸载；</p>
+<p>增强相关运维、监控能力，比如异步打印日志及回滚，本地 DNS 缓存，内存监控等；</p>
+<p>Stream 模块支持 server_name 指令；</p>
+<p>更加强大的负载均衡能力，包括一致性 hash 模块、会话保持模块，还可以对后端的服务器进行主动健康检查，根据服务器状态自动上线下线，以及动态解析 upstream 中出现的域名；</p>
+<p>输入过滤器机制支持。通过使用这种机制 Web 应用防火墙的编写更为方便；</p>
+<p>支持设置 proxy、memcached、fastcgi、scgi、uwsgi 在后端失败时的重试次数；</p>
+<p>动态脚本语言 Lua 支持。扩展功能非常高效简单；</p>
+<p>支持按指定关键字(域名，url等)收集 Tengine 运行状态；</p>
+<p>组合多个 CSS、JavaScript 文件的访问请求变成一个请求；</p>
+<p>自动去除空白字符和注释从而减小页面的体积</p>
+<p>自动根据 CPU 数目设置进程个数和绑定 CPU 亲缘性；</p>
+<p>监控系统的负载和资源占用从而对系统进行保护；</p>
+<p>显示对运维人员更友好的出错信息，便于定位出错机器；；</p>
+<p>更强大的防攻击（访问速度限制）模块；</p>
+<p>更方便的命令行参数，如列出编译的模块列表、支持的指令等；</p>
+<p>支持 Dubbo 协议；</p>
+<p>可以根据访问文件类型设置过期时间；</p>
+<p>下载源码包：</p>
+<p>tengine 源码：<a href="http://tengine.taobao.org/download_cn.html">http://tengine.taobao.org/download_cn.html</a></p>
+<p>pcre 源码：<a href="http://www.pcre.org/">http://www.pcre.org/</a></p>
+<p>openssl 源码：<a href="https://www.openssl.org/source/">https://www.openssl.org/source/</a></p>
+<p>zlib 源码：<a href="http://www.zlib.net/">http://www.zlib.net/</a></p>
+<p>安装包：</p>
+<p>支持lua模块</p>
+<p>wget <a href="http://luajit.org/download/LuaJIT-2.0.4.tar.gz">http://luajit.org/download/LuaJIT-2.0.4.tar.gz</a></p>
+<p>#wget <a href="https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz">https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz</a></p>
+<p>#wget <a href="https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz">https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz</a></p>
+<p>安装LuaJIT</p>
+<p>tar xf LuaJIT-2.0.4.tar.gz</p>
+<p>#cd xf LuaJIT-2.0.4</p>
+<p>#make PREFIX=/usr/local/luajit</p>
+<p>#make install PREFIX=/usr/local/luajit</p>
+<p>#ln -s /usr/local/luajit/lib/libluajit-5.1.so.2 /lib64/libluajit-5.1.so.2</p>
+<p>添加环境变量</p>
+<p>export LUAJIT_LIB=/usr/local/luajit/lib</p>
+<p>export LUAJIT_INC=/usr/local/luajit/include/luajit-2.0</p>
+<p>#source /etc/profile</p>
+<p>安装tingine</p>
+<p>#tar xf v0.3.0.tar.gz</p>
+<p>#tar xf v0.10.13.tar.gz</p>
+<p>#tar xf nginx-1.12.0.tar.gz</p>
+<p>debain 环境下安装：<br>sudo apt-get install -y  openssl libssl-dev<br>sudo apt-get install  -y libpcre3 libpcre3-dev<br>apt-get install  -y zlib1g-dev<br>Centos环境下安装：<br>yum -y update &amp;&amp; yum install -y gcc wget tree pcre-devel <br>zlib-devel openssl openssl-devel <br>libxml2 libxml2-dev libxslt-devel gd-devel <br>ncurses-devel perl perl-ExtUtils-Embed <br>gperftools </p>
+<p>cd tengine-2.2.2</p>
+<p> ./configure –conf-path=/etc/nginx/nginx.conf –user=www-data –group=www-data –prefix=/etc/nginx –sbin-path=/usr/sbin/nginx –with-ipv6  –error-log-path=/var/log/nginx/error.log –http-log-path=/var/log/nginx/access.log  –pid-path=/var/run/nginx.pid –lock-path=/var/lock/nginx.lock –http-client-body-temp-path=/var/cache/nginx/client_temp  –http-proxy-temp-path=/var/cache/nginx/proxy_temp –http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp  –http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp –http-scgi-temp-path=/var/cache/nginx/scgi_temp  –without-select_module –without-http_uwsgi_module –without-http_empty_gif_module –with-http_ssl_module –with-http_addition_module  –with-http_sub_module –with-http_dav_module –with-http_flv_module –with-http_gunzip_module  –with-http_gzip_static_module –with-http_random_index_module  –with-http_secure_link_module –with-http_stub_status_module –with-http_realip_module  –with-http_concat_module=shared –with-http_sysguard_module=shared  –with-http_dyups_module –with-file-aio –add-module=../ngx_devel_kit-0.3.0/  –add-module=../lua-nginx-module-0.10.13/ \</p>
+<p>Make </p>
+<p>Make install</p>
+<p>Make会报错：cc1: all warnings being treated as errors</p>
+<p>make[1]: *** [objs/Makefile:617: objs/src/core/ngx_murmurhash.o] Error 1</p>
+<p>make[1]: Leaving directory ‘/home/tools/install/tengine-2.2.2’</p>
+<p>vim objs/Makefile：</p>
+<p>CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused -Werror -g  -DNDK_SET_VAR</p>
+<p> -Werror -g去掉</p>
+<p>CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused  -DNDK_SET_VAR</p>
+<p>sed -i “s/ -Werror -g / /g” ./objs/Makefile<br>make &amp;&amp; make install<br>echo <code>nginx -v</code></p>
+<p>#不显示版本号<br>sed -i “/server_tokens off;/a server_tag off; \n server_info off;” nginx.conf<br>mkdir -p /var/cache/nginx/scgi_temp<br>chown www-data.root /var/cache/nginx/scgi_temp</p>
+<p>添加系统服务：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat &gt;&gt;/etc/systemd/system/nginx.service &lt;&lt;EOF</span><br><span class="line">[Unit]</span><br><span class="line">Description=The nginx HTTP and reverse proxy server</span><br><span class="line">After=syslog.target network.target remote-fs.target nss-lookup.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">PIDFile=/var/run/nginx.pid</span><br><span class="line">ExecStartPre=/usr/sbin/nginx -t -c /etc/nginx/nginx.conf</span><br><span class="line">ExecStart=/usr/sbin/nginx -c /etc/nginx/nginx.conf</span><br><span class="line">ExecReload=/usr/sbin/nginx -s reload</span><br><span class="line">ExecStop=/usr/sbin/nginx -s stop</span><br><span class="line">ExecQuit=/usr/sbin/nginx -s quit</span><br><span class="line">PrivateTmp=true</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br></pre></td></tr></tbody></table></figure>
+
+<p>后续就是优化配置了。</p>
 ]]></content>
       <categories>
         <category>系统</category>
@@ -999,6 +999,18 @@
     <title>hello,mongodb</title>
     <url>/2023/12146947.html</url>
     <content><![CDATA[<p>Mongodb 安装：</p>
+<p>debian安装:</p>
+<ol>
+<li>导入apt包管理系统需要使用的公钥。<br>在终端执行以下命令以从&nbsp;<a href="https://www.mongodb.org/static/pgp/server-5.0.asc">https://www.mongodb.org/static/pgp/server-5.0.asc</a>&nbsp;导入 MongoDB GPG 公钥。<br>wget -qO - <a href="https://www.mongodb.org/static/pgp/server-5.0.asc">https://www.mongodb.org/static/pgp/server-5.0.asc</a> | sudo apt-key add -<br>该操作应该会以OK响应。<br>但是，如果你收到错误提示未安装gnupg的错误，则需要：<br>安装gnupg及其所需的库：<br>  sudo apt-get install gnupg<br>安装完成后，再次导入密钥<br>  wget -qO - <a href="https://www.mongodb.org/static/pgp/server-5.0.asc">https://www.mongodb.org/static/pgp/server-5.0.asc</a> | sudo apt-key add -</li>
+<li>为 MongoDB 创建/etc/apt/sources.list.d/mongodb-org-5.0.list文件<br>Debian 10:<br>echo “deb <a href="http://repo.mongodb.org/apt/debian">http://repo.mongodb.org/apt/debian</a> buster/mongodb-org/5.0 main” | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list</li>
+<li>更新apt源<br>sudo apt-get update</li>
+<li>安装 MongoDB 包<br>sudo apt-get install -y mongodb-org</li>
+<li>运行MongoDB<br>默认情况下，MongoDB实例存储位置：<br>其数据文件位于&nbsp;/var/lib/mongodb<br>其日志文件在&nbsp;/var/log/mongodb<br>如果通过程序包管理器安装，则这些默认目录是在安装过程中创建的。<br>如果通过下载tarball手动安装，则可以使用mkdir -p <directory>或sudo mkdir -p <directory>来创建目录<br>默认情况下，MongoDB使用mongodb用户帐户运行。如果更改运行MongoDB进程的用户，则还必须修改对/var/lib/mongodb和/var/log/mongodb&nbsp;目录的权限，以使该用户可以访问这些目录。<br>要指定其他日志文件目录和数据文件目录，请在/etc/mongod.conf中编辑systemLog.path和storage.dbPath。确保运行MongoDB的用户有权访问这些目录。<br>启动流程：<br>按照以下步骤在运行 MongoDB社区版。 此处假设你使用的是官方的mongodb-org包，而不是 Debian 提供的非官方的mongodb包，并且使用的是默认设置。<br>初始化系统：<br>要运行和管理mongod进程，需要使用操作系统的内置init系统。 最新版本的 Linux 倾向于使用systemd(&nbsp;systemctl命令 )，而旧版本的 Linux 倾向于使用System V init(service命令)。<br>如果你不确定你的平台使用哪个初始化系统，请运行以下命令：<br>ps –no-headers -o comm 1<br>systemd(systemctl):<br>.启动MongoDB<br>sudo systemctl start mongod<br>如果在启动 mongod 时出现类似以下的错误：<br>Failed to start mongod.service: Unit mongod.service not found.<br>首先运行以下命令：<br>sudo systemctl daemon-reload<br>然后再次运行上面的启动命令。</directory></directory></li>
+<li>验证MongoDB是否已成功启动<br>sudo systemctl status mongod<br>可以选择通过以下命令来确保 MongoDB 将在系统重新启动后启动：<br>sudo systemctl enable mongod</li>
+<li>终止MongoDB<br>sudo systemctl stop mongod</li>
+<li>重启MongoDB<br>sudo systemctl restart mongod<br>可以通过查看/var/log/mongodb/mongod.log文件中的输出来跟踪错误或重要消息的进程状态。</li>
+<li>开始使用MongoDB<br>在与mongod相同的主机上启动mongosh会话。 在没有命令行选项时运行mongosh，会连接到localhost:27017上的mongod实例。<br>mongosh<br>有关使用 mongosh 进行连接的更多信息，例如连接到在不同主机和(或)端口上运行的 mongod 实例，请参阅mongosh文档。</li>
+</ol>
 <p>Red Hat/CentOS：</p>
 <p>sudo yum install libcurl openssl</p>
 <p>Ubuntu 18.04 LTS (“Bionic”)/Debian 10 “Buster”：</p>
@@ -1866,44 +1878,6 @@
       </categories>
   </entry>
   <entry>
-    <title>ssh免密登录问题</title>
-    <url>/2023/071760022.html</url>
-    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
-<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
-<p>服务器A需要免密码访问服务器B：</p>
-<ol>
-<li>在A上面生成公钥密钥，执行命令</li>
-</ol>
-<p>&nbsp;</p>
-<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
-<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
-<ol start="2">
-<li>将公钥id_rsa.pub拷贝到B机器上</li>
-</ol>
-<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
-<ol start="3">
-<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
-</ol>
-<p>cd&nbsp;/home/user/.ssh</p>
-<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
-<ol start="4">
-<li>设置 authorized_keys权限</li>
-</ol>
-<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
-<hr>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>vsftp 锁定用户目录</title>
     <url>/2023/071114619.html</url>
     <content><![CDATA[<p>vsftp 安装以后给用户权限和锁定目录；</p>
@@ -1992,6 +1966,44 @@
 <h2 id="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"><a href="#vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。" class="headerlink" title="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"></a>vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。</h2>]]></content>
       <tags>
         <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ssh免密登录问题</title>
+    <url>/2023/071760022.html</url>
+    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
+<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
+<p>服务器A需要免密码访问服务器B：</p>
+<ol>
+<li>在A上面生成公钥密钥，执行命令</li>
+</ol>
+<p>&nbsp;</p>
+<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
+<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
+<ol start="2">
+<li>将公钥id_rsa.pub拷贝到B机器上</li>
+</ol>
+<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
+<ol start="3">
+<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
+</ol>
+<p>cd&nbsp;/home/user/.ssh</p>
+<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
+<ol start="4">
+<li>设置 authorized_keys权限</li>
+</ol>
+<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
+<hr>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
       </tags>
   </entry>
   <entry>
