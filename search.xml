@@ -1531,6 +1531,25 @@
       </tags>
   </entry>
   <entry>
+    <title>nginxlog切分</title>
+    <url>/2023/111760549.html</url>
+    <content><![CDATA[<p>1.设置日志文件存放目录，假设你的nginx的日志存在这个目录里<br>logs_path=”/data/log/nginx/“</p>
+<p>2.设置pid文件，这个根据你自己的环境，找到nginx.pid所在目录<br>pid_path=”/var/run/nginx.pid”</p>
+<p>3.创建分割存储的日期文件目录<br>datetime=<code>date -d "yesterday" +"%Y%m%d"</code>;<br>new_log_path=$logs_path$datetime<br>mkdir -p $new_log_path</p>
+<p>4.按照日期移动所有该目录下的日志文件<br>log_file_list=<code>ls -l $logs_path</code>;<br>for log_file in $log_file_list;<br>do<br>    log_file_name=$logs_path$log_file;<br>    if [ -f $log_file_name ];<br>    then<br>        mv $log_file_name $new_log_path;<br>    fi<br>done</p>
+<p>5.向nginx主进程发信号重新打开日志<br>kill -USR1 <code>cat ${pid_path}</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">logs_path=<span class="string">"/data/log/nginx/"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pid_path=<span class="string">"/var/run/nginx.pid"</span></span><br><span class="line"></span><br><span class="line">datetime=`<span class="built_in">date</span> -d <span class="string">"yesterday"</span> +<span class="string">"%Y%m%d"</span>`;</span><br><span class="line">new_log_path=$logs_path<span class="variable">$datetime</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$new_log_path</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">log_file_list=`<span class="built_in">ls</span> -l <span class="variable">$logs_path</span>`;</span><br><span class="line"><span class="keyword">for</span> log_file <span class="keyword">in</span> <span class="variable">$log_file_list</span>;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    log_file_name=$logs_path<span class="variable">$log_file</span>;</span><br><span class="line">    <span class="keyword">if</span> [ -f <span class="variable">$log_file_name</span> ];</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">mv</span> <span class="variable">$log_file_name</span> <span class="variable">$new_log_path</span>;</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">kill</span> -USR1 `<span class="built_in">cat</span> <span class="variable">${pid_path}</span>`</span><br></pre></td></tr></tbody></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>nginx编译ssl模块</title>
     <url>/2023/062858442.html</url>
     <content><![CDATA[<p>几个官网在一台服务器上面，其中一台是https的，增加一个官网以，重启nginx以后，https的网站直接报错，大意是ssl 在配置文件中unknow，但是这个https网站已经运行很久了，一时间有点郁闷，掉坑里了。</p>
@@ -1556,64 +1575,6 @@
 <p>/usr/local/nginx/sbin/nginx -V</p>
 <p>configure arguments: –prefix=/data/app/nginx –user=www –group=www –with-http_stub_status_module –with-http_ssl_module –with-file-aio –with-http_realip_module</p>
 <h6 id="权作一个跳坑记录。"><a href="#权作一个跳坑记录。" class="headerlink" title="权作一个跳坑记录。"></a>权作一个跳坑记录。</h6><hr>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ssh免密登录问题</title>
-    <url>/2023/071760022.html</url>
-    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
-<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
-<p>服务器A需要免密码访问服务器B：</p>
-<ol>
-<li>在A上面生成公钥密钥，执行命令</li>
-</ol>
-<p>&nbsp;</p>
-<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
-<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
-<ol start="2">
-<li>将公钥id_rsa.pub拷贝到B机器上</li>
-</ol>
-<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
-<ol start="3">
-<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
-</ol>
-<p>cd&nbsp;/home/user/.ssh</p>
-<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
-<ol start="4">
-<li>设置 authorized_keys权限</li>
-</ol>
-<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
-<hr>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>windows2012 RDP 连接失败</title>
-    <url>/2023/120114297.html</url>
-    <content><![CDATA[<p>   完美解决RDO”连接无法继续，因为未启用身份验证，并且远程计算机需要启用身份验证以进行连接” </p>
-<p><img src="/../images/20231201_1.jpg" alt="img"> </p>
-<p>解决：<br>1.先用win7自带远程工具mstsc连接到Win10 （或者 服务器Windows Server 2016 ）<br>2.开始-运行-gpedit.msc，进入组策略编辑器<br>3.找到左侧边栏 计算机配置-管理模板-Windows组件-远程桌面服务-远程桌面会话主机-【安全】项<br>4.修改“远程（RDP）连接要求使用指定的安全层”，改为启用，安全层选择RDP<br>5.修改“要求使用网络级别的身份验证对远程连接的用户进行身份验证”，改为禁用<br>6.重启计算机 （或者运行 gpupdate 更新组策略）</p>
-<p>.<img src="/../images/20231201_2.jpg" alt="img"></p>
-<p>打开【安全】项的原始状态是： (计算机配置-管理模板-Windows组件-远程桌面服务-远程桌面会话主机-【安全】)</p>
-<p>​    需要修改的是右边窗口的两项：“****远程（RDP）连接要求使用指定的安全层*<em><strong>” 、“</strong></em>*要求使用网络级别的身份验证对远程连接的用户进行身份验证****”</p>
-<p><img src="/../images/20231201_3.jpg" alt="img"> </p>
-<p>开始修改，如下方两个截图说明：</p>
-<p><img src="/../images/20231201_4.jpg" alt="img"> </p>
-<p><img src="/../images/20231201_5.jpg" alt="img"> </p>
-<p>完成。</p>
-<p>转自：<a href="https://www.579yun.cn/helparticle/44.html">https://www.579yun.cn/helparticle/44.html</a></p>
 ]]></content>
       <tags>
         <tag>点滴</tag>
@@ -1739,146 +1700,205 @@
 ]]></content>
   </entry>
   <entry>
-    <title>nginxlog切分</title>
-    <url>/2023/111760549.html</url>
-    <content><![CDATA[<p>1.设置日志文件存放目录，假设你的nginx的日志存在这个目录里<br>logs_path=”/data/log/nginx/“</p>
-<p>2.设置pid文件，这个根据你自己的环境，找到nginx.pid所在目录<br>pid_path=”/var/run/nginx.pid”</p>
-<p>3.创建分割存储的日期文件目录<br>datetime=<code>date -d "yesterday" +"%Y%m%d"</code>;<br>new_log_path=$logs_path$datetime<br>mkdir -p $new_log_path</p>
-<p>4.按照日期移动所有该目录下的日志文件<br>log_file_list=<code>ls -l $logs_path</code>;<br>for log_file in $log_file_list;<br>do<br>    log_file_name=$logs_path$log_file;<br>    if [ -f $log_file_name ];<br>    then<br>        mv $log_file_name $new_log_path;<br>    fi<br>done</p>
-<p>5.向nginx主进程发信号重新打开日志<br>kill -USR1 <code>cat ${pid_path}</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">logs_path=<span class="string">"/data/log/nginx/"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pid_path=<span class="string">"/var/run/nginx.pid"</span></span><br><span class="line"></span><br><span class="line">datetime=`<span class="built_in">date</span> -d <span class="string">"yesterday"</span> +<span class="string">"%Y%m%d"</span>`;</span><br><span class="line">new_log_path=$logs_path<span class="variable">$datetime</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$new_log_path</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">log_file_list=`<span class="built_in">ls</span> -l <span class="variable">$logs_path</span>`;</span><br><span class="line"><span class="keyword">for</span> log_file <span class="keyword">in</span> <span class="variable">$log_file_list</span>;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    log_file_name=$logs_path<span class="variable">$log_file</span>;</span><br><span class="line">    <span class="keyword">if</span> [ -f <span class="variable">$log_file_name</span> ];</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">mv</span> <span class="variable">$log_file_name</span> <span class="variable">$new_log_path</span>;</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">kill</span> -USR1 `<span class="built_in">cat</span> <span class="variable">${pid_path}</span>`</span><br></pre></td></tr></tbody></table></figure>
-
-
+    <title>ps-top</title>
+    <url>/2023/121939275.html</url>
+    <content><![CDATA[<p>经常用到的命令，详细的命令参数确实掌握的不牢，复习一下~</p>
+<p><strong>一</strong>.进程概念</p>
+<p>　　进程就是系统未完成并且正在进行的工作</p>
+<p>二.查看进程</p>
+<p>【1】图形方式查看：gnome-system-monitor</p>
+<p>【2】命令方式：ps</p>
+<p>参数：-A 　表示所有进程   -a  表示在当前环境中运行的进程，不包含环境信息</p>
+<p>　　　　　　-u  显示进程用户信息　　a  在当前环境中运行的进程　　x  列出系统中所有运行包含tty输出设</p>
+<p>　　　　　　f   显示进程的父子关系　　e  显示进程的详细信息（系统资源的调用）</p>
+<p>显示部分结果如下：</p>
+<p> 示例：显示进程所有信息（只显示了部分截图）</p>
+<p>[root@localhost mnt]# ps -A<br> PID TTY     TIME CMD<br>  1 ?    00:00:03 systemd<br>  2 ?    00:00:00 kthreadd<br>  3 ?    00:00:00 ksoftirqd/0<br>  5 ?    00:00:00 kworker/0:0H<br>  7 ?    00:00:00 migration/0<br>  8 ?    00:00:00 rcu_bh<br>  9 ?    00:00:00 rcuob/0<br>  10 ?    00:00:01 rcu_sched<br>  11 ?    00:00:01 rcuos/0<br>  12 ?    00:00:00 watchdog/0<br>  13 ?    00:00:00 khelper<br>  14 ?    00:00:00 kdevtmpfs</p>
+<p> 示例：显示当前环境中运行的进程，没有进程的环境信息</p>
+<p>[root@localhost mnt]# ps -a</p>
+<p> PID TTY     TIME CMD<br> 7873 pts/0  00:00:00 ps</p>
+<p>示例：显示当前进程的所属关系</p>
+<p>[root@localhost mnt]# ps f<br> PID TTY   STAT  TIME COMMAND<br> 2180 pts/0  Ss   0:01 -bash<br> 7912 pts/0  R+   0:00 _ ps f<br> 590 tty1   Ss+  0:56 /usr/bin/Xorg :0 -background none -verbose -auth /run<br> 1210 ttyS0  Ss+  0:00 /sbin/agetty –keep-baud ttyS0 115200 38400 9600</p>
+<p>ps常用组合：</p>
+<p>　　　　　　ps aux 　　　　 ##显示系统中所有进程并显示进程用户<br>　　　　　　ps ef 　　　　 ##显示进程详细信息并显示进程父子关系<br>　　　　　　ps ax 　　　　 ##显示当前系统中的所有进程</p>
+<p>[root@localhost mnt]# ps ef<br> PID TTY   STAT  TIME COMMAND<br> 2180 pts/0  Ss   0:01 -bash XMODIFIERS=@im=ibus LANG=en_US.UTF-8 USER=root<br> 7947 pts/0  R+   0:00 _ ps ef XDG_SESSION_ID=2 HOSTNAME=localhost TERM=x<br> 590 tty1   Ss+  0:56 /usr/bin/Xorg :0 -background none -verbose -auth /ru<br> 1210 ttyS0  Ss+  0:00 /sbin/agetty –keep-baud ttyS0 115200 38400 9600 PAT</p>
+<p>显示进程指定信息：ps -o xxx </p>
+<p>　　参数： comm  　 ##进程名称</p>
+<p>　　　　　 user　　   ##进程所有人</p>
+<p>　　　　　 group　　 ##进程所有组</p>
+<p>　　　　　 %cpu ##进程cpu使用率</p>
+<p>　　　　　 %mem ##进程内存使用率</p>
+<p>　　　　　　pid ##进程id</p>
+<p>　　　　　 nice ##进程优先级</p>
+<p>[root@localhost mnt]# ps -o %cpu,%mem,pid,user,group,nice,comm<br>%CPU %MEM  PID USER   GROUP   NI COMMAND<br> 0.0 0.3 2180 root   root    0 bash<br> 0.0 0.1 7965 root   root    0 ps</p>
+<p>进程排序 ：–sort=</p>
+<p>　　　　ps ax –sort=+%cpu|-%cpu　　　　##表示对cpu的使用率进行排序（+有小到大；-由大到小）<br>　　　　ps ax –sort=+%mem|-%mem　　　## 对内存的占用大小排序</p>
+<p>[root@localhost mnt]# ps ax –sort=-%mem -o %mem,user,uid,comm<br>%MEM USER    UID COMMAND<br>16.1 root     0 gnome-shell<br> 3.4 root     0 Xorg<br> 2.5 root     0 nautilus<br> 2.3 root     0 gnome-settings-<br> 2.1 root     0 firewalld<br> 1.9 root     0 goa-daemon<br> 1.8 root     0 tuned<br> 1.6 polkitd  999 polkitd</p>
+<p>stat中显示的信息 ：</p>
+<p>　　　S  ##进程状态　　　　l  ##内存中有锁定空间<br>　　　N  ##优先级低　　　　 &lt;  ##优先级高<br>　　　+  ##前台运行　　　　s  ##顶级进程</p>
+<p>三.进程优先级<br>【1】进程的优先级范围：-20～19<br>【2】优先级查看：ps ax -o pid,nice,comm　</p>
+<p>[root@localhost mnt]# ps a -o pid,nice,comm<br> PID NI COMMAND<br> 590  0 Xorg<br> 1210  0 agetty<br> 2180  0 bash<br> 8053  0 ps</p>
+<p>【3】指定某个优先级开启进程</p>
+<p>　　　nice -n　 优先级数字 进程名称<br> 示例：开启vim并且指定程序优先级为-5</p>
+<p>[root@localhost mnt]# nice -n -5 vim &amp;<br>[1] 8056<br>[root@localhost mnt]# ps a -o pid,nice,comm<br> PID NI COMMAND<br> 590  0 Xorg<br> 1210  0 agetty<br> 2180  0 bash<br> 8056 -5 vim<br> 8065  0 ps<br>[1]+ Stopped         nice -n -5 vim</p>
+<p>【4】改变进程优先级<br>　　renice -n 优先级数字 进程pid<br> 示例：改变1806进程的优先级为-5</p>
+<p> 8056 -5 vim<br> 8065  0 ps </p>
+<p>[root@localhost mnt]# renice -n -20 8056<br>8056 (process ID) old priority -5, new priority -2</p>
+<p>四.环境中进程的前后台调用</p>
+<p>　　jobs　　　　 　　 ##查看被打入环境后台的进程<br>　　ctrl+z　　　　　　 ##把占用终端的进程打入后台<br>　　fg jobsnum 　　  ##把后台进程调回前台<br>　　bg jobsnum 　　  ##把后台暂停的进程运行<br>　　comm &amp; 　　　　 ##让命令直接在后台运行</p>
+<p>五.进程信号</p>
+<p>【1】常用信号等级<br>　　　　1 　　　　 ##进程重新加载配置<br>　　　　2 　　　　 ##删除进程在内存中的数据<br>　　　　3 　　　　 ##删除鼠标在内存中的数据<br>　　　　9 　　　　 ##强行结束单个进程(不能被阻塞)<br>　　　　15 　　　  ##正常关闭进程 （可能会被阻塞）<br>　　　　18 　　　  ##运行暂停的进程<br>　　　　19 　　    ##暂停某个进程 （不能被阻塞）<br>　　　　20 　　　  ##把进程打入后台 （可以被阻塞）<br>　　　　man 7 signal ##查看信号详细信息</p>
+<p>【2】kill的使用</p>
+<p> kill -信号 进程pid<br> killall -信号 进程名字<br> pkill -u student -信号</p>
+<p>6.用户登记审查</p>
+<p> w   查看当前使用系统的用户有哪些 </p>
+<p> w -f 查看使用地点</p>
+<p> last 查看用户登录成功历史</p>
+<p>[root@localhost mnt]# w</p>
+<p> 11:14:08 up 2:58, 2 users, load average: 0.02, 0.02, 0.05<br>USER   TTY    LOGIN@  IDLE  JCPU  PCPU WHAT<br>root   :0    08:17  ?xdm?  8:12  0.11s gdm-session-worker [pam/gdm-<br>root   pts/0   08:39  0.00s 1.96s 0.00s w</p>
+<p>[root@localhost mnt]# w -f<br> 11:15:15 up 2:59, 2 users, load average: 0.01, 0.02, 0.05<br>USER   TTY   FROM       LOGIN@  IDLE  JCPU  PCPU WHAT<br>root   :0    :0        08:17  ?xdm?  8:12  0.11s gdm-session-<br>root   pts/0  172.25.254.77  08:39  3.00s 1.96s 0.00s w -f</p>
+<p>[root@localhost mnt]# last<br>root   pts/3    172.25.254.77  Wed Jul 25 09:54 - 09:59 (00:04)<br>root   pts/2    :0        Wed Jul 25 09:34 - 09:58 (00:24)<br>root   pts/1    :0        Wed Jul 25 08:39 - 09:58 (01:18)<br>root   pts/0    172.25.254.77  Wed Jul 25 08:39  still logged in<br>root   :0      :0        Wed Jul 25 08:17  still logged in<br>(unknown :0      :0        Wed Jul 25 08:16 - 08:17 (00:00)<br>reboot  system boot 3.10.0-123.el7.x Wed Jul 25 08:16 - 11:15 (02:59)<br>root   pts/2    172.25.254.77  Tue Jul 24 22:40 - 22:54 (00:13)<br>root   pts/1    :0        Tue Jul 24 21:09 - crash (11:06)<br>root   pts/0    :0        Tue Jul 24 20:01 - crash (12:14)<br>root   :0      :0        Tue Jul 24 20:01 - crash (12:15)</p>
+<p>7.进程的动态监控</p>
+<p>【1】命令：top</p>
+<p>　　　　1. 　　　　##显示cpu每个核的负载</p>
+<p>　　　　s 　　　　##调整刷新频率<br>　　　　c 　　　　##CPU负载排序<br>　　　　m 　　　　##内存使用量排序<br>　　　　h 　　　　##查看帮助<br>　　　　u 　　　　##查看指定用户进程<br>　　　　k 　　　　##对指定进程发起信号<br>　　　　q 　　　　##退出</p>
+<p>[root@localhost mnt]# top</p>
+<p>top - 11:16:24 up 3:00, 2 users, load average: 0.00, 0.01, 0.05<br>Tasks: 146 total,  2 running, 143 sleeping,  1 stopped,  0 zombie<br>%Cpu(s): 0.3 us, 0.3 sy, 0.0 ni, 99.3 id, 0.0 wa, 0.0 hi, 0.0 si, 0.0<br>KiB Mem:  969416 total,  833532 used,  135884 free,   884 buffers<br>KiB Swap:    0 total,    0 used,    0 free.  369560 cached Mem</p>
+<p> PID USER   PR NI  VIRT  RES  SHR S %CPU %MEM   TIME+ COMMAND<br> 8148 root   20  0 123632  1556  1096 R 0.3 0.2  0:00.02 top<br>  1 root   20  0  50468  3984  2208 S 0.0 0.4  0:03.37 systemd<br>  2 root   20  0    0   0   0 S 0.0 0.0  0:00.00 kthreadd<br>  3 root   20  0    0   0   0 S 0.0 0.0  0:00.04 ksoftirq+<br>  5 root    0 -20    0   0   0 S 0.0 0.0  0:00.00 kworker/+<br>  7 root   rt  0    0   0   0 S 0.0 0.0  0:00.00 migratio+<br>  8 root   20  0    0   0   0 S 0.0 0.0  0:00.00 rcu_bh<br>  9 root   20  0    0   0   0 S 0.0 0.0  0:00.00 rcuob/0<br>  10 root   20  0    0   0   0 S 0.0 0.0  0:01.21 rcu_sched<br>  11 root   20  0    0   0   0 R 0.0 0.0  0:02.01 rcuos/0<br>  12 root   rt  0    0   0   0 S 0.0 0.0  0:00.17 watchdog+<br>  13 root    0 -20    0   0   0 S 0.0 0.0  0:00.00 khelper<br>  14 root   20  0    0   0   0 S 0.0 0.0  0:00.00 kdevtmpfs<br>  15 root    0 -20    0   0   0 S 0.0 0.0  0:00.00 netns<br>  16 root    0 -20    0   0   0 S 0.0 0.0  0:00.00 writeback<br>  17 root    0 -20    0   0   0 S 0.0 0.0  0:00.00 kintegri+</p>
+<p>From：<a href="https://www.cnblogs.com/uthnb/p/9367848.html">https://www.cnblogs.com/uthnb/p/9367848.html</a></p>
+<p>top命令经常用来监控linux的系统状况，是常用的性能分析工具，能够实时显示系统中各个进程的资源占用情况。</p>
+<p>top的使用方式 top [-d number] | top [-bnp]</p>
+<p><strong>参数解释：</strong></p>
+<p>-d：number代表秒数，表示top命令显示的页面更新一次的间隔。默认是5秒。-b：以批次的方式执行top。-n：与-b配合使用，表示需要进行几次top命令的输出结果。-p：指定特定的pid进程号进行观察。</p>
+<p><strong>在top命令显示的页面还可以输入以下按键执行相应的功能（注意大小写区分的）：</strong></p>
+<p>?：显示在top当中可以输入的命令 </p>
+<p>P：以CPU的使用资源排序显示 </p>
+<p>M：以内存的使用资源排序显示 </p>
+<p>N：以pid排序显示 </p>
+<p>T：由进程使用的时间累计排序显示 </p>
+<p>k：给某一个pid一个信号。可以用来杀死进程 </p>
+<p>r：给某个pid重新定制一个nice值（即优先级） </p>
+<p>q：退出top（用ctrl+c也可以退出top）</p>
+<p>Centos：</p>
+<p><img src="/../images/20231219_1.png"> </p>
+<p>Debian：</p>
+<p><img src="/../images/20231219_2.png"> </p>
+<p><strong>01 top前5行统计信息</strong></p>
+<p>第1行：top - 05:43:27 up 4:52, 2 users, load average: 0.58, 0.41, 0.30 </p>
+<p>第1行是任务队列信息，其参数如下：</p>
+<p><img src="/../images/20231219_3.png"> </p>
+<p>load average: 如果这个数除以逻辑CPU的数量，结果高于5的时候就表明系统在超负荷运转了。 </p>
+<p>第2行：Tasks: 159 total, 1 running, 158 sleeping, 0 stopped, 0 zombie</p>
+<p>第3行：%Cpu(s): 37.0 us, 3.7 sy, 0.0 ni, 59.3 id, 0.0 wa, 0.0 hi, 0.0 si, 0.0 st</p>
+<p>第2、3行为进程和CPU的信息 </p>
+<p>当有多个CPU时，这些内容可能会超过两行，其参数如下：</p>
+<p><img src="/../images/20231219_4.png"> </p>
+<p>第4行：KiB Mem: 1530752 total, 1481968 used, 48784 free, 70988 buffers</p>
+<p>第5行：KiB Swap: 3905532 total, 267544 used, 3637988 free. 617312 cached Mem</p>
+<p>第4、5行为内存信息 </p>
+<p>其参数如下：</p>
+<p><img src="/../images/20231219_5.png"> </p>
+<p>上述最后提到的缓冲的交换区总量，这里解释一下，所谓缓冲的交换区总量，即内存中的内容被换出到交换区，而后又被换入到内存，但使用过的交换区尚未被覆盖，该数值即为这些内容已存在于内存中的交换区的大小。</p>
+<p>相应的内存再次被换出时可不必再对交换区写入。 </p>
+<p>计算可用内存数有一个近似的公式： </p>
+<p>第四行的free + 第四行的buffers + 第五行的cached</p>
+<p><strong>02 进程信息</strong></p>
+<p><img src="/../images/20231219_6.png"> </p>
+<p> 默认进入top时，各进程是按照CPU的占用量来排序的。</p>
+<p><img src="/../images/20231219_7.png"> </p>
+<p>击键盘‘x’（打开/关闭排序列的加亮效果）可以看到现在是按”%CPU”进行排序的，可以按”shift+&gt;”或者”shift+&lt;”左右改变排序序列。</p>
+<p>在Linux终端上输入top命令出现的结果及其表示的含义如下图：</p>
+<p><img src="/../images/20231219_8.png"> </p>
+<p>top命令的用法</p>
+<p>顺便说一下uptime命令</p>
+<p><img src="/../images/20231219_9.png"> </p>
+<p>top命令的用法「建议收藏」</p>
+<p>3、以上是默认的显示内容，可以通过快捷键来更改显示的内容：</p>
+<p>&lt;1&gt;按f键：会显示如下列表</p>
+<p><img src="/../images/20231219_10.png"> </p>
+<p>top命令的用法「建议收藏」</p>
+<p>选a-z键就可以显示或者隐藏对应的列，按回车键确定。</p>
+<p>&lt;2&gt;按o键可以改变列的显示顺序。按a-z将相应的列向后移；按A-Z将相应的列向左移。</p>
+<p>&lt;3&gt;按F或者O键，然后按照a-z可以将进程按照相应的列进行排序，大写的R键可以将当前的排序倒转。</p>
+<p>4、参数选项：</p>
+<p>****top -d 秒数****：表示进程界面更新时间（默认5秒）</p>
+<p><em><strong>*top -b p 2&gt;/tmp/top.txt*</strong></em> 表示将top进程表在/tmp/top.txt中打印两次。</p>
+<p><em><strong>*top -p 1*</strong></em> 查看进程号为1的进程</p>
+<p><em><strong>*-q*</strong></em> top没有任何延迟时间的进行刷新。如果调用程序有超级用户权限，top将会以尽可能高的优先级运行。</p>
+<p><em><strong>*-S*</strong></em> 指定累计模式</p>
+<p><em><strong>*-s*</strong></em> 使top命令在安全模式中运行。将去除交互命令带来的潜在危险。</p>
+<p><em><strong>*-i*</strong></em> 使top不显示任何闲置或者僵死的进程。</p>
+<p><em><strong>*-c*</strong></em> 显示整个命令行而不是整个命令名</p>
+<p><img src="/../images/20231219_11.png"> </p>
+<p>top命令的用法</p>
+<p>5、使用情况举例；</p>
+<p>&lt;1&gt;2000毫秒刷新一次，总共5次，输出内容存放在cur.txt中。</p>
+<p>#<em><strong>*top -b -d 2.5 -n 5&gt;cur.txt*</strong></em></p>
+<p>&lt;2&gt;快速按%CPU列排序：大写字母P</p>
+<p>快速按%MEM列排序：大写字母M</p>
+<p>快速按%TIME+列排序：大写字母T</p>
+<p>（默认降序，升序可使用R）</p>
+<p>&lt;3&gt;选择显示列或者其他列：小写字母f</p>
+<p>交换列显示顺序：小写字母o</p>
+<p>选择需要排序的列：大写字母F</p>
+<p>6、top命令显示过程中使用一些交互命令：</p>
+<p>****Ctrl L****：擦除并且重写屏幕</p>
+<p><em><strong>*h*<em><strong>或者</strong></em>*？*</strong></em> ：显示帮助画面</p>
+<p><em><strong>*k*</strong></em> :终止一个进程；默认使用15信号，可以使用信号9来强制结束该进程。但是在安全模式下此命令被屏蔽。</p>
+<p><em><strong>*i*</strong></em> :忽略闲置和僵死进程，开关式命令。</p>
+<p><em><strong>*q*</strong></em> :退出程序。</p>
+<p><em><strong>*r*</strong></em> :重新安排一个进程的优先级。默认值是10，输入一个正值使优先级降低；输入一个负值使优先级升高。</p>
+<p><em><strong>*S*</strong></em> ：切换到累计模式。</p>
+<p><em><strong>*s*</strong></em> :改变两次刷新的延迟时间。单位为秒，如果有小数，切换为ms，输入0则系统不断的刷新，默认值是5.</p>
+<p><em><strong>*f*<em><strong>或者</strong></em>*F*</strong></em> ：从当前显示中添加或者删除项目。</p>
+<p><em><strong>*o*<em><strong>或者</strong></em>*O*</strong></em> ：改变显示项目的顺序。</p>
+<p><em><strong>*t*</strong></em> ：切换显示进程和CPU状态信息。</p>
+<p><em><strong>*m*</strong></em> :切换显示内存信息。</p>
+<p><em><strong>*I*</strong></em> :切换显示平均负载和CPU状态信息。</p>
+<p><em><strong>*M*</strong></em> ：根据驻留内存大小进行排序。</p>
+<p><em><strong>*P*</strong></em> ：根据CPU使用百分比大小进行排序。</p>
+<p><em><strong>*T*</strong></em> ：根据时间或者累计时间进行排序。</p>
+<p><em><strong>*W*</strong></em> ：写top配置文件的方法。将当前设置写入~/toprc文件中。</p>
+<p>转自：<a href="https://javaforall.cn/128103.html%E5%8E%9F%E6%96%87%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps://javaforall.cn">https://javaforall.cn/128103.html原文链接：https://javaforall.cn</a></p>
 ]]></content>
       <categories>
         <category>系统</category>
       </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
   </entry>
   <entry>
-    <title>zabbix 清理历史数据</title>
-    <url>/2023/071761914.html</url>
-    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
-<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
-<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
-<p>root@Testl]$ date +%s -d”20160929”</p>
-<p>1475078400</p>
-<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
-<p>Query OK, 36093 rows affected (43.64 sec)</p>
+    <title>ssh免密登录问题</title>
+    <url>/2023/071760022.html</url>
+    <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
+<p>免密登录出问题：&nbsp;1.sshd_conf 配置检查；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.id_rsa.pub变动；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.查看authorized_keys；</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.权限问题 ：.ssh目录下的authorized_keys文件需要600或644权限</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5.&nbsp;StrictModes问题编辑sudo vi /etc/ssh/sshd_config，找到#StrictModes yes改成StrictModes no</p>
+<p>服务器A需要免密码访问服务器B：</p>
+<ol>
+<li>在A上面生成公钥密钥，执行命令</li>
+</ol>
 <p>&nbsp;</p>
-<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
-<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history;</p>
-<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
-<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>&nbsp;</p>
-<p>mysql&gt; optimize table history_uint;</p>
-<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
-<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
-<p>漫长时间等待以后看下效果：</p>
-<p>原来数据：</p>
-<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
-<p>压缩中：</p>
-<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
-<p>find -size +50M -exec ls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
-<p>最终删两个表以后数据：</p>
-<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
-<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
-<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
-<p>完了以后，重启mysql，zabbix，nginx试试；</p>
-<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
+<p>&nbsp;ssh-keygen -t rsa 或者 ssh-keygen -t rsa -P ‘’</p>
+<p>一路回车即可，会在~/.ssh目录下生成 id_rsa和id_rsa.pub两个文件，id_rsa为私钥，id_rsa.pub为公钥</p>
+<ol start="2">
+<li>将公钥id_rsa.pub拷贝到B机器上</li>
+</ol>
+<p>&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub</p>
+<ol start="3">
+<li>在服务器B对应的用户root/.ssh下面将id_rsa.pub追加到~/.ssh/authorized_keys文件中</li>
+</ol>
+<p>cd&nbsp;/home/user/.ssh</p>
+<p>cat id_rsa.pub &gt;&gt; authorized_keys&nbsp; 注意是&gt;&gt;别覆盖了；</p>
+<ol start="4">
+<li>设置 authorized_keys权限</li>
+</ol>
+<p>&nbsp;chmod 600 ~/.ssh/authorized_keys</p>
 <hr>
 ]]></content>
-      <tags>
-        <tag>点滴</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>xtrabackup还原mysql</title>
-    <url>/2023/11284499.html</url>
-    <content><![CDATA[<p>1.下载ALI平台备份包：</p>
-<p>wget -c  “<a href="http://rdsbak-shanghai-v2-3az.oss-cn-shanghai-internal.aliyuncs.com/custins69321456/hins25992165_data_20230823211743_qp.xb?Expires=16931mOQ1VDcN">http://rdsbak-shanghai-v2-3az.oss-cn-shanghai-internal.aliyuncs.com/custins69321456/hins25992165_data_20230823211743_qp.xb?Expires=16931mOQ1VDcN</a>…..” -O 2023082121_qp.xb &gt; /tmp/download.log </p>
-<p>命令：nohup wget -c -t 0 “备份文件下载地址” -O 下载的目标路径及文件名 &gt; 下载输出日志到对应文件 &amp;</p>
-<p>示例：nohup wget -c -t 0 “<a href="https://example.aliyundoc.com/examplebackup.qp.xb">https://example.aliyundoc.com/examplebackup.qp.xb</a>“ -O /backup/examplebackup.qp.xb &gt; /tmp/download.log &amp;</p>
-<p>各命令代表含义如下：</p>
-<p>-t 0：无限重试。</p>
-<p>-c：支持断点续传。</p>
-<p>-O：下载的目标路径及文件名。</p>
-<p>nohup：避免因手误执行复制操作或者终端断开连接，把正在进行的下载中断，且当下载完毕后，之前的进程将会自动退出。</p>
-<p>命令：nohup curl -C - –retry 10 “备份文件下载地址” -o 自定义文件名 &gt; 下载输出日志到对应文件 &amp;</p>
-<p>示例：nohup curl -C –retry 10 “<a href="https://example.aliyundoc.com/examplebackup.qp.xb">https://example.aliyundoc.com/examplebackup.qp.xb</a>“ -o backup.qp.xb &gt; /tmp/download.log &amp;</p>
-<p>各命令代表含义如下：</p>
-<p>–retry 10：任务失败时的重试次数，以上示例表示重试10次。</p>
-<p>-C -：支持自动断点续传。</p>
-<p>-o：下载的目标路径及文件名。</p>
-<p>nohup：避免因手误执行复制操作或者终端断开连接，把正在进行的下载中断，且当下载完毕后，之前的进程将会自动退出。</p>
-<p>2  XtraBackup 还原</p>
-<p>下载Percona XtraBackup 2.4.28为例，安装命令如下：</p>
-<p>如果是MySQL 5.7、5.6或5.5实例，下载并安装Percona XtraBackup 2.4，如果是MySQL 8.0实例，下载并安装Percona XtraBackup 8.0，具体请参见<a href="https://docs.percona.com/percona-xtrabackup/8.0/installation.html">Percona XtraBackup 8.0</a>。</p>
-<p>wget <a href="https://downloads.percona.com/downloads/Percona-XtraBackup-2.4/Percona-XtraBackup-2.4.28/binary/redhat/7/x86_64/percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm">https://downloads.percona.com/downloads/Percona-XtraBackup-2.4/Percona-XtraBackup-2.4.28/binary/redhat/7/x86_64/percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm</a></p>
-<p> sudo yum localinstall -y percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm</p>
-<p> 安装解压工具qpress：</p>
-<p>## 下载可执行文件的tar包</p>
-<p>wget “<a href="https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/file-manage-files/zh-CN/20230406/flxd/qpress-11-linux-x64.tar">https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/file-manage-files/zh-CN/20230406/flxd/qpress-11-linux-x64.tar</a>“</p>
-<p> ## 解压下载的tar包，取出可执行文件</p>
-<p>tar -xvf qpress-11-linux-x64.tar</p>
-<p> ## 设置qpress文件的执行权限</p>
-<p>sudo chmod 775 qpress</p>
-<p> ## 拷贝qpress到/usr/bin中</p>
-<p>sudo cp qpress /usr/bin</p>
-<p>解压：</p>
-<p>cat 20230823211743_qp.xb |xbstream -x -v -C /data/mysql_data/</p>
-<p>innobackupex –decompress –remove-original /data/mysql_data/</p>
-<p>## 步骤一：解包</p>
-<p>cat 20230823211743_qp.xb |xbstream -x -v -C /data/mysql_data/</p>
-<p> ## 步骤二：解压</p>
-<p>### MySQL 5.5/5.6/5.7</p>
-<p>innobackupex –decompress –remove-original /data/mysql_data/</p>
-<p><img src="/../images/20231128_1.png" alt="img"> </p>
-<p>Mysql5.7恢复：</p>
-<p>innobackupex –defaults-file=/var/mysql_bkdata/backup-my.cnf –apply-log /data/mysql_data/</p>
-<p><img src="/../images/20231128_2.png" alt="img"> </p>
-<p>编辑my.cnf</p>
-<p>datadir=/data/mysql/</p>
-<p>innodb_undo_tablespaces=2</p>
-<p>innodb_undo_directory=/data/mysql/</p>
-<p>#@</p>
-<p> 修改****datadir****的参数取值为/var/mysql_newdata。</p>
-<p>放大查看复制代码</p>
-<p>datadir = /var/mysql_newdata</p>
-<p> mysql_newdata为自建数据库的新数据目录，已在[准备工作]中创建。</p>
-<p>在my.cnf中添加如下内容。</p>
-<p>innodb_undo_tablespaces=2</p>
-<p>innodb_undo_directory=/var/mysql_newdata</p>
-<p>参数****innodb_undo_tablespaces****的取值需要与/var/mysql_bkdata/backup-my.cnf中的取值相同，您可以使用cat /var/mysql_bkdata/backup-my.cnf | grep innodb_undo_tablespaces查询。</p>
-<p>恢复数据。</p>
-<p>sudo innobackupex –defaults-file=/etc/my.cnf –copy-back /data/mysql_data/</p>
-<p>从备份目录copy到数据目录</p>
-<p><img src="/../images/20231128_3.png" alt="img"> </p>
-<p><img src="/../images/20231128_4.png" alt="img"> </p>
-<p>给于mysql新目录权限，进入mysql</p>
-]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
       <tags>
         <tag>随笔</tag>
       </tags>
@@ -1972,6 +1992,152 @@
 <h2 id="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"><a href="#vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。" class="headerlink" title="vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。"></a>vsftp用户锁定目录折腾好久，只对自己做一个小笔记而已。</h2>]]></content>
       <tags>
         <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>windows2012 RDP 连接失败</title>
+    <url>/2023/120114297.html</url>
+    <content><![CDATA[<p>   完美解决RDO”连接无法继续，因为未启用身份验证，并且远程计算机需要启用身份验证以进行连接” </p>
+<p><img src="/../images/20231201_1.jpg" alt="img"> </p>
+<p>解决：<br>1.先用win7自带远程工具mstsc连接到Win10 （或者 服务器Windows Server 2016 ）<br>2.开始-运行-gpedit.msc，进入组策略编辑器<br>3.找到左侧边栏 计算机配置-管理模板-Windows组件-远程桌面服务-远程桌面会话主机-【安全】项<br>4.修改“远程（RDP）连接要求使用指定的安全层”，改为启用，安全层选择RDP<br>5.修改“要求使用网络级别的身份验证对远程连接的用户进行身份验证”，改为禁用<br>6.重启计算机 （或者运行 gpupdate 更新组策略）</p>
+<p>.<img src="/../images/20231201_2.jpg" alt="img"></p>
+<p>打开【安全】项的原始状态是： (计算机配置-管理模板-Windows组件-远程桌面服务-远程桌面会话主机-【安全】)</p>
+<p>​    需要修改的是右边窗口的两项：“****远程（RDP）连接要求使用指定的安全层*<em><strong>” 、“</strong></em>*要求使用网络级别的身份验证对远程连接的用户进行身份验证****”</p>
+<p><img src="/../images/20231201_3.jpg" alt="img"> </p>
+<p>开始修改，如下方两个截图说明：</p>
+<p><img src="/../images/20231201_4.jpg" alt="img"> </p>
+<p><img src="/../images/20231201_5.jpg" alt="img"> </p>
+<p>完成。</p>
+<p>转自：<a href="https://www.579yun.cn/helparticle/44.html">https://www.579yun.cn/helparticle/44.html</a></p>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>xtrabackup还原mysql</title>
+    <url>/2023/11284499.html</url>
+    <content><![CDATA[<p>1.下载ALI平台备份包：</p>
+<p>wget -c  “<a href="http://rdsbak-shanghai-v2-3az.oss-cn-shanghai-internal.aliyuncs.com/custins69321456/hins25992165_data_20230823211743_qp.xb?Expires=16931mOQ1VDcN">http://rdsbak-shanghai-v2-3az.oss-cn-shanghai-internal.aliyuncs.com/custins69321456/hins25992165_data_20230823211743_qp.xb?Expires=16931mOQ1VDcN</a>…..” -O 2023082121_qp.xb &gt; /tmp/download.log </p>
+<p>命令：nohup wget -c -t 0 “备份文件下载地址” -O 下载的目标路径及文件名 &gt; 下载输出日志到对应文件 &amp;</p>
+<p>示例：nohup wget -c -t 0 “<a href="https://example.aliyundoc.com/examplebackup.qp.xb">https://example.aliyundoc.com/examplebackup.qp.xb</a>“ -O /backup/examplebackup.qp.xb &gt; /tmp/download.log &amp;</p>
+<p>各命令代表含义如下：</p>
+<p>-t 0：无限重试。</p>
+<p>-c：支持断点续传。</p>
+<p>-O：下载的目标路径及文件名。</p>
+<p>nohup：避免因手误执行复制操作或者终端断开连接，把正在进行的下载中断，且当下载完毕后，之前的进程将会自动退出。</p>
+<p>命令：nohup curl -C - –retry 10 “备份文件下载地址” -o 自定义文件名 &gt; 下载输出日志到对应文件 &amp;</p>
+<p>示例：nohup curl -C –retry 10 “<a href="https://example.aliyundoc.com/examplebackup.qp.xb">https://example.aliyundoc.com/examplebackup.qp.xb</a>“ -o backup.qp.xb &gt; /tmp/download.log &amp;</p>
+<p>各命令代表含义如下：</p>
+<p>–retry 10：任务失败时的重试次数，以上示例表示重试10次。</p>
+<p>-C -：支持自动断点续传。</p>
+<p>-o：下载的目标路径及文件名。</p>
+<p>nohup：避免因手误执行复制操作或者终端断开连接，把正在进行的下载中断，且当下载完毕后，之前的进程将会自动退出。</p>
+<p>2  XtraBackup 还原</p>
+<p>下载Percona XtraBackup 2.4.28为例，安装命令如下：</p>
+<p>如果是MySQL 5.7、5.6或5.5实例，下载并安装Percona XtraBackup 2.4，如果是MySQL 8.0实例，下载并安装Percona XtraBackup 8.0，具体请参见<a href="https://docs.percona.com/percona-xtrabackup/8.0/installation.html">Percona XtraBackup 8.0</a>。</p>
+<p>wget <a href="https://downloads.percona.com/downloads/Percona-XtraBackup-2.4/Percona-XtraBackup-2.4.28/binary/redhat/7/x86_64/percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm">https://downloads.percona.com/downloads/Percona-XtraBackup-2.4/Percona-XtraBackup-2.4.28/binary/redhat/7/x86_64/percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm</a></p>
+<p> sudo yum localinstall -y percona-xtrabackup-24-2.4.28-1.el7.x86_64.rpm</p>
+<p> 安装解压工具qpress：</p>
+<p>## 下载可执行文件的tar包</p>
+<p>wget “<a href="https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/file-manage-files/zh-CN/20230406/flxd/qpress-11-linux-x64.tar">https://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/file-manage-files/zh-CN/20230406/flxd/qpress-11-linux-x64.tar</a>“</p>
+<p> ## 解压下载的tar包，取出可执行文件</p>
+<p>tar -xvf qpress-11-linux-x64.tar</p>
+<p> ## 设置qpress文件的执行权限</p>
+<p>sudo chmod 775 qpress</p>
+<p> ## 拷贝qpress到/usr/bin中</p>
+<p>sudo cp qpress /usr/bin</p>
+<p>解压：</p>
+<p>cat 20230823211743_qp.xb |xbstream -x -v -C /data/mysql_data/</p>
+<p>innobackupex –decompress –remove-original /data/mysql_data/</p>
+<p>## 步骤一：解包</p>
+<p>cat 20230823211743_qp.xb |xbstream -x -v -C /data/mysql_data/</p>
+<p> ## 步骤二：解压</p>
+<p>### MySQL 5.5/5.6/5.7</p>
+<p>innobackupex –decompress –remove-original /data/mysql_data/</p>
+<p><img src="/../images/20231128_1.png" alt="img"> </p>
+<p>Mysql5.7恢复：</p>
+<p>innobackupex –defaults-file=/var/mysql_bkdata/backup-my.cnf –apply-log /data/mysql_data/</p>
+<p><img src="/../images/20231128_2.png" alt="img"> </p>
+<p>编辑my.cnf</p>
+<p>datadir=/data/mysql/</p>
+<p>innodb_undo_tablespaces=2</p>
+<p>innodb_undo_directory=/data/mysql/</p>
+<p>#@</p>
+<p> 修改****datadir****的参数取值为/var/mysql_newdata。</p>
+<p>放大查看复制代码</p>
+<p>datadir = /var/mysql_newdata</p>
+<p> mysql_newdata为自建数据库的新数据目录，已在[准备工作]中创建。</p>
+<p>在my.cnf中添加如下内容。</p>
+<p>innodb_undo_tablespaces=2</p>
+<p>innodb_undo_directory=/var/mysql_newdata</p>
+<p>参数****innodb_undo_tablespaces****的取值需要与/var/mysql_bkdata/backup-my.cnf中的取值相同，您可以使用cat /var/mysql_bkdata/backup-my.cnf | grep innodb_undo_tablespaces查询。</p>
+<p>恢复数据。</p>
+<p>sudo innobackupex –defaults-file=/etc/my.cnf –copy-back /data/mysql_data/</p>
+<p>从备份目录copy到数据目录</p>
+<p><img src="/../images/20231128_3.png" alt="img"> </p>
+<p><img src="/../images/20231128_4.png" alt="img"> </p>
+<p>给于mysql新目录权限，进入mysql</p>
+]]></content>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>zabbix 清理历史数据</title>
+    <url>/2023/071761914.html</url>
+    <content><![CDATA[<p> 项目上线不到一个月，zabbix数据居然快100G，监控项太多，数据量太大，zabbix负载重，暂时不想升级硬件，只好内部挖掘下，清除下历史数据；一般保留1个月的数据，zabbix这个项目只是做监控报警用，数据保留太多没太大参考意义；</p>
+<p>&nbsp; &nbsp; 一般都是这几个表太大，&nbsp;history，&nbsp;history_uint，history_log，有的直接了当直接清空表，简洁方便，不过要是有人需要参考数据，那还蛮尴尬的；有的做一个独立分表，做存储过程，蛮高效，不过项目不一样只做简单监控不必那么麻烦；</p>
+<p>套路都一样：停掉zabbix，mysql添加skip new以便于删除数据后压缩存储空间，截取需要清除的时间点：</p>
+<p>root@Testl]$ date +%s -d”20160929”</p>
+<p>1475078400</p>
+<p>mysql&gt; delete from history where clock&lt;1475078400;</p>
+<p>Query OK, 36093 rows affected (43.64 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; delete from history_uint whereclock &lt; 1475078400;</p>
+<p>Query OK, 21501392 rows affected (25 min51.48 sec)</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history;</p>
+<p>Query OK, 12175692 rows affected (5 min9.16 sec)</p>
+<p>Records: 12175692&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>&nbsp;</p>
+<p>mysql&gt; optimize table history_uint;</p>
+<p>Query OK, 145195609 rows affected (54 min29.07 sec)</p>
+<p>Records: 145195609&nbsp; Duplicates: 0&nbsp;Warnings: 0</p>
+<p>漫长时间等待以后看下效果：</p>
+<p>原来数据：</p>
+<p>-rw-rw—- 1 mysql mysql 1.4G Oct 28 13:23history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 12M Oct 28 13:23 items.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 96M Oct 28 13:23 events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 17G Oct 28 13:23 history_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 56G Oct 28 13:23 history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23 trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql&nbsp; 72M Oct 28 13:23 trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 112K Oct 28 13:59sessions.ibd</p>
+<p>压缩中：</p>
+<p>缩进过程生成/#sql-5f11_3.ibd文件，作业完毕就是history_uint.ibd文件；</p>
+<p>find -size +50M -exec ls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 14:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 9.2G Oct 28 15:31./#sql-5f11_3.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 13:23./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 13:23 ./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 13:23./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 13:23./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 17G Oct 28 14:59./history_uint.ibd</p>
+<p>最终删两个表以后数据：</p>
+<p>zabbix]$ find -size +50M -execls -lh {} ;</p>
+<p>-rw-rw—- 1 mysql mysql 960M Oct 28 15:42./history.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 56G Oct 28 15:42./history_log.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 96M Oct 28 15:42./events.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 252M Oct 28 15:41./trends_uint.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 72M Oct 28 15:41./trends.ibd</p>
+<p>-rw-rw—- 1 mysql mysql 11G Oct 28 15:42./history_uint.ibd</p>
+<p>完了以后，重启mysql，zabbix，nginx试试；</p>
+<p>看着history_log那么大好忧伤，准备truncate掉。以后可以做个脚本，每月定期执行删除记录；</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
       </tags>
   </entry>
   <entry>
@@ -2104,35 +2270,6 @@
 ]]></content>
       <tags>
         <tag>心得</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>zabbix监控业务进程变动</title>
-    <url>/2023/111359213.html</url>
-    <content><![CDATA[<p>Zabbix 监控进程宕机</p>
-<p>  业务需求后端进程宕机以后能在短时间内迅速拉起，业务影响不大，但是开发需要查看coredump，要求能监控到pid变化；在现有构架下zabbix能监控并报警；</p>
-<p>当然zabbix设置报警设置就不再一一</p>
-<p>在每台服务器/etc/zabbix/zabbix_agentd.conf设置路径：此例只需要piddiff.sh</p>
-<p>UserParameter=checkpid,sh /usr/local/script/piddiff.sh</p>
-<p>UserParameter=test,sh /usr/local/script/test.sh</p>
-<p>UserParameter=discovery.process,/usr/local/script/disprocess.sh</p>
-<p>UserParameter=process.check[*],/usr/local/script/proc_check.sh $1 $2 $3</p>
-<p>/usr/local/script下面存放脚本</p>
-<p>Vim piddiff.sh</p>
-<p>aapid为业务监控id 取值根据业务需求；</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#/bin/sh</span></span><br><span class="line"></span><br><span class="line">onl_ok=1</span><br><span class="line"></span><br><span class="line">onl_cored=3</span><br><span class="line"></span><br><span class="line"><span class="built_in">dir</span>=/usr/local/script</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ ! -f <span class="string">"<span class="variable">$dir</span>/old.txt"</span> ]];<span class="keyword">then</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/old.txt</span><br><span class="line"></span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">         <span class="built_in">sleep</span> 1s           </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/now.txt</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ! diff -q <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; /dev/null; <span class="keyword">then</span></span><br><span class="line"></span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_cored</span></span><br><span class="line">    </span><br><span class="line">          diff -c <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; <span class="variable">$dir</span>/`<span class="built_in">date</span> <span class="string">"+%Y%m%d%H%M"</span>`_diff.txt</span><br><span class="line">    </span><br><span class="line">          <span class="built_in">cat</span> <span class="variable">$dir</span>/now.txt &gt;<span class="variable">$dir</span>/old.txt</span><br><span class="line">    </span><br><span class="line">     <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_ok</span>    </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>一个简单的判断脚本；</p>
-<p>Zabbix30秒会抓取一次，正常没变化为1，有变化为3，那么zabbix抓取数值为3则表示pid有变化，会发出警报；</p>
-<p>Zabbix设置：</p>
-<p>监控项模板添加如下：</p>
-<p><img src="/../images/20231113-1.png"></p>
-<p>触发器：{Template OS Linux:checkpid.last()}=3</p>
-<p><img src="/../images/20231113-2.png"></p>
-<hr>
-]]></content>
-      <tags>
-        <tag>工具</tag>
       </tags>
   </entry>
   <entry>
@@ -2269,6 +2406,35 @@
 <p>dos2unix -k $FILE</p>
 <p>/bin/mail -s “$2” $1 &lt; $FILE</p>
 <p>zabbix-管理–示警媒介类型–定制脚本-sendmail脚本，–添加联系人邮件。。</p>
+]]></content>
+      <tags>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>zabbix监控业务进程变动</title>
+    <url>/2023/111359213.html</url>
+    <content><![CDATA[<p>Zabbix 监控进程宕机</p>
+<p>  业务需求后端进程宕机以后能在短时间内迅速拉起，业务影响不大，但是开发需要查看coredump，要求能监控到pid变化；在现有构架下zabbix能监控并报警；</p>
+<p>当然zabbix设置报警设置就不再一一</p>
+<p>在每台服务器/etc/zabbix/zabbix_agentd.conf设置路径：此例只需要piddiff.sh</p>
+<p>UserParameter=checkpid,sh /usr/local/script/piddiff.sh</p>
+<p>UserParameter=test,sh /usr/local/script/test.sh</p>
+<p>UserParameter=discovery.process,/usr/local/script/disprocess.sh</p>
+<p>UserParameter=process.check[*],/usr/local/script/proc_check.sh $1 $2 $3</p>
+<p>/usr/local/script下面存放脚本</p>
+<p>Vim piddiff.sh</p>
+<p>aapid为业务监控id 取值根据业务需求；</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#/bin/sh</span></span><br><span class="line"></span><br><span class="line">onl_ok=1</span><br><span class="line"></span><br><span class="line">onl_cored=3</span><br><span class="line"></span><br><span class="line"><span class="built_in">dir</span>=/usr/local/script</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ ! -f <span class="string">"<span class="variable">$dir</span>/old.txt"</span> ]];<span class="keyword">then</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/old.txt</span><br><span class="line"></span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">         <span class="built_in">sleep</span> 1s           </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/now.txt</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ! diff -q <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; /dev/null; <span class="keyword">then</span></span><br><span class="line"></span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_cored</span></span><br><span class="line">    </span><br><span class="line">          diff -c <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; <span class="variable">$dir</span>/`<span class="built_in">date</span> <span class="string">"+%Y%m%d%H%M"</span>`_diff.txt</span><br><span class="line">    </span><br><span class="line">          <span class="built_in">cat</span> <span class="variable">$dir</span>/now.txt &gt;<span class="variable">$dir</span>/old.txt</span><br><span class="line">    </span><br><span class="line">     <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_ok</span>    </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>一个简单的判断脚本；</p>
+<p>Zabbix30秒会抓取一次，正常没变化为1，有变化为3，那么zabbix抓取数值为3则表示pid有变化，会发出警报；</p>
+<p>Zabbix设置：</p>
+<p>监控项模板添加如下：</p>
+<p><img src="/../images/20231113-1.png"></p>
+<p>触发器：{Template OS Linux:checkpid.last()}=3</p>
+<p><img src="/../images/20231113-2.png"></p>
+<hr>
 ]]></content>
       <tags>
         <tag>工具</tag>

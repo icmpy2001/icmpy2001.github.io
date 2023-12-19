@@ -6,7 +6,7 @@
   <link href="https://blog.icmpy.net/atom.xml" rel="self"/>
   
   <link href="https://blog.icmpy.net/"/>
-  <updated>2023-12-15T04:16:01.264Z</updated>
+  <updated>2023-12-19T07:44:32.101Z</updated>
   <id>https://blog.icmpy.net/</id>
   
   <author>
@@ -17,11 +17,38 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>ps-top</title>
+    <link href="https://blog.icmpy.net/2023/121939275.html"/>
+    <id>https://blog.icmpy.net/2023/121939275.html</id>
+    <published>2023-12-19T07:33:43.000Z</published>
+    <updated>2023-12-19T07:44:32.101Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;经常用到的命令，详细的命令参数确实掌握的不牢，复习一下~&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;一&lt;/strong&gt;.进程概念&lt;/p&gt;
+&lt;p&gt;　　进程就是系统未完成并且正在进行的工作&lt;/p&gt;
+&lt;p&gt;二.查看进程&lt;/p&gt;
+&lt;p&gt;【1】图形方式查看：gnome-system-monit</summary>
+        
+      
+    
+    
+    
+    <category term="系统" scheme="https://blog.icmpy.net/categories/%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>hello,mongodb</title>
     <link href="https://blog.icmpy.net/2023/12146947.html"/>
     <id>https://blog.icmpy.net/2023/12146947.html</id>
     <published>2023-12-14T09:13:51.000Z</published>
-    <updated>2023-12-15T04:16:01.264Z</updated>
+    <updated>2023-12-15T04:16:01.000Z</updated>
     
     
       
@@ -468,33 +495,6 @@
     
     
     <category term="随笔" scheme="https://blog.icmpy.net/tags/%E9%9A%8F%E7%AC%94/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>zabbix3.0.1安装过程的小坑</title>
-    <link href="https://blog.icmpy.net/2023/081629672.html"/>
-    <id>https://blog.icmpy.net/2023/081629672.html</id>
-    <published>2023-08-16T08:26:00.000Z</published>
-    <updated>2023-12-14T09:25:36.437Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;1.安装&lt;/p&gt;
-&lt;p&gt;首先lamp环境安装完毕，开始安装zabbix；&lt;/p&gt;
-&lt;p&gt;下载完毕zabbix-3.0.1.tar.gz，解压&lt;/p&gt;
-&lt;p&gt;cd &amp;nbsp;zabbix-3.0.1&lt;/p&gt;
-&lt;p&gt;./configure</summary>
-        
-      
-    
-    
-    
-    
-    <category term="工具" scheme="https://blog.icmpy.net/tags/%E5%B7%A5%E5%85%B7/"/>
     
   </entry>
   
