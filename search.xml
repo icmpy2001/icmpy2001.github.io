@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Debian 10挂载加swap</title>
+    <url>/2023/111727163.html</url>
+    <content><![CDATA[<p>以根目录挂载为4G例：<br>dd if=/dev/zero of=/swapfile count=4096 bs=1M</p>
+<p>ls / | grep swapfile<br>chmod 600 /swapfile<br>ls -lh /swapfile<br>-rw——- 1 root root 4.0G Aug 17 12:14 /swapfile<br>通过运行以下命令告诉服务器设置swap文件：<br>mkswap /swapfile<br>swapon /swapfile<br>free -m<br>vi /etc/fstab<br>/swapfile swap swap defaults 0 0<br>保存。</p>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Centos同时安装python2和python3</title>
     <url>/2023/11203350.html</url>
     <content><![CDATA[<p>   在centos中，自带有python2，因此需要经常安装python3。但是这里有一个坑，就是centos的yum是用python2写的，如果正常编译安装python3，那么yum就会直接挂了。为了方便以后编译安装python3，不用天天去网上找教程仅供参考。</p>
@@ -44,10 +57,13 @@
 ]]></content>
   </entry>
   <entry>
-    <title>Debian 10挂载加swap</title>
-    <url>/2023/111727163.html</url>
-    <content><![CDATA[<p>以根目录挂载为4G例：<br>dd if=/dev/zero of=/swapfile count=4096 bs=1M</p>
-<p>ls / | grep swapfile<br>chmod 600 /swapfile<br>ls -lh /swapfile<br>-rw——- 1 root root 4.0G Aug 17 12:14 /swapfile<br>通过运行以下命令告诉服务器设置swap文件：<br>mkswap /swapfile<br>swapon /swapfile<br>free -m<br>vi /etc/fstab<br>/swapfile swap swap defaults 0 0<br>保存。</p>
+    <title>Debian10 安装ossfs</title>
+    <url>/2023/111750151.html</url>
+    <content><![CDATA[<p>1.<br>sudo apt-get install automake autotools-dev g++  git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev  make pkg-config<br>2.<br>git clone <a href="https://github.com/aliyun/ossfs.git">https://github.com/aliyun/ossfs.git</a><br>cd ossfs/<br> ./autogen.sh<br>  ./configure<br>Sudo   make<br> Sudo make install<br>3.配置bucket信息和accessKey信息：<br>echo Bucket名称:要是用的AccessKeyId:对应的AccessKeySecret  &gt; /etc/passwd-ossfs<br>示例：<br>mkdir -p /data/ossfs<br>cosfs examplebucket-1250000000 /data/ossfs -ourl=<a href="http://cos.ap-guangzhou.myqcloud.com/">http://cos.ap-guangzhou.myqcloud.com</a> </p>
+<p>ossfs ts-1121-patch-oss  /data/ossfs/ -ourl=<a href="https://oss-cn-hangzhou-internal.aliyuncs.com/">https://oss-cn-hangzhou-internal.aliyuncs.com</a> -oallow_other</p>
+<p>其中：<br><mountpoint> 为本地挂载目录（例如/mnt）。<br><region> 为地域简称， 例如 ap-guangzhou 、 eu-frankfurt 等。更多地域简称信息，请参见 可用地域。<br>-odbglevel 指定日志级别，默认为crit，可选值为crit、error、warn、info、debug。<br>-oallow_other 允许非挂载用户访问挂载文件夹。</region></mountpoint></p>
+<p>创建启动脚本：<br>Vim /etc/init.d/ossfs<br>ossfs demo-patch-oss /data/ossfs/ -ourl=oss-cn-hangzhou-internal.aliyuncs.com -oallow_other<br>Chmod u+x /etc/init.dossfs</p>
+<p>Centos：<br>chkncondif ossf on<br>Debian;<br>update-rc.d  ossfs  defaults</p>
 ]]></content>
       <categories>
         <category>系统</category>
@@ -57,13 +73,159 @@
       </tags>
   </entry>
   <entry>
-    <title>Debian10 安装ossfs</title>
-    <url>/2023/111750151.html</url>
-    <content><![CDATA[<p>1.<br>sudo apt-get install automake autotools-dev g++  git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev  make pkg-config<br>2.<br>git clone <a href="https://github.com/aliyun/ossfs.git">https://github.com/aliyun/ossfs.git</a><br>cd ossfs/<br> ./autogen.sh<br>  ./configure<br>Sudo   make<br> Sudo make install<br>3.配置bucket信息和accessKey信息：<br>echo Bucket名称:要是用的AccessKeyId:对应的AccessKeySecret  &gt; /etc/passwd-ossfs<br>示例：<br>mkdir -p /data/ossfs<br>cosfs examplebucket-1250000000 /data/ossfs -ourl=<a href="http://cos.ap-guangzhou.myqcloud.com/">http://cos.ap-guangzhou.myqcloud.com</a> </p>
-<p>ossfs ts-1121-patch-oss  /data/ossfs/ -ourl=<a href="https://oss-cn-hangzhou-internal.aliyuncs.com/">https://oss-cn-hangzhou-internal.aliyuncs.com</a> -oallow_other</p>
-<p>其中：<br><mountpoint> 为本地挂载目录（例如/mnt）。<br><region> 为地域简称， 例如 ap-guangzhou 、 eu-frankfurt 等。更多地域简称信息，请参见 可用地域。<br>-odbglevel 指定日志级别，默认为crit，可选值为crit、error、warn、info、debug。<br>-oallow_other 允许非挂载用户访问挂载文件夹。</region></mountpoint></p>
-<p>创建启动脚本：<br>Vim /etc/init.d/ossfs<br>ossfs demo-patch-oss /data/ossfs/ -ourl=oss-cn-hangzhou-internal.aliyuncs.com -oallow_other<br>Chmod u+x /etc/init.dossfs</p>
-<p>Centos：<br>chkncondif ossf on<br>Debian;<br>update-rc.d  ossfs  defaults</p>
+    <title>Rsync同步文件</title>
+    <url>/2023/081064777.html</url>
+    <content><![CDATA[<p>Rsync常用的一款同步文件工具。配置也很方便。</p>
+<p>&nbsp;</p>
+<p>yum install sync -y或者apt-get install sync</p>
+<ul>
+<li>服务安装好之后，/etc下没有配置文件，一般情况可以copy示例文件到/etc下</li>
+</ul>
+<p>&nbsp;</p>
+<p>#cp&nbsp;/usr/share/doc/rsync/examples/rsyncd.conf&nbsp;/etc</p>
+<p>&nbsp;</p>
+<p>vim /etc/rsyncd.conf</p>
+<p>uid = common</p>
+<p>gid = common</p>
+<p>use chroot = no</p>
+<p>max connections = 10</p>
+<p>strict modes = yes</p>
+<p>hosts allow = 192.168.2.12&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #可以空格，允许多个</p>
+<p>hosts deny = *</p>
+<p>port = 5699&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;#默认开启端口</p>
+<p>pid file = /var/run/rsyncd.pid</p>
+<p>lock file = /var/run/rsync.lock</p>
+<p>log file = /var/log/rsyncd.log</p>
+<p>[hmt]</p>
+<p>path = /data/www/html/</p>
+<p>comment = hello</p>
+<p>ignore errors</p>
+<p>read only = no</p>
+<p>write only = no</p>
+<p>hosts allow = 192.168.2.12&nbsp;</p>
+<p>list = false</p>
+<p>auth users = hmt</p>
+<p>secrets file = /etc/rsync.password</p>
+<ul>
+<li>建立/etc/rsyncd/rsyncd.secrets文件</li>
+</ul>
+<p>#vim /etc/rsync.password</p>
+<p>#cat /etc/rsyncd/rsyncd.secrets</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;hmt:123456</p>
+<ul>
+<li>为了密码的安全性，我们必须把权限设为600</li>
+</ul>
+<p> chown root:root /etc/rsyncd/rsyncd.secrets</p>
+<p>chmod 600&nbsp;&nbsp;/etc/rsync.password</p>
+<p> chmod 600&nbsp;/etc/rsyncd/rsyncd.secrets</p>
+<p> vim /etc/rsyncd/rsyncd.motd</p>
+<p>&nbsp;</p>
+<p>启动rsync：</p>
+<p>systemctl start rsyncd.service</p>
+<p>&nbsp;lsof -i:5699</p>
+<p>lsof -i:5699</p>
+<p>COMMAND PID USER&nbsp; &nbsp;FD&nbsp; &nbsp;TYPE&nbsp; &nbsp;DEVICE SIZE/OFF NODE NAME</p>
+<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 4u&nbsp; IPv4 22661487&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
+<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 5u&nbsp; IPv6 22661488&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
+<p>至此服务器端安装完毕；</p>
+<p>客户端安装配置：</p>
+<p>&nbsp;</p>
+<p>yum -y install rsync</p>
+<p>&nbsp;客户端需要vim&nbsp;/etc/rsync.password&nbsp;</p>
+<p>cat&nbsp;&nbsp;/etc/rsync.password</p>
+<p>123456</p>
+<p>运行：</p>
+<p>rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
+<p>Password: 这里要输入rsync的密码，是服务器端提供的，在前面的例子中，我们用的是 asdf，输入的密码并不显示出来；输好后就回车；&nbsp;注：&nbsp;这个命令的意思就是说，用rsync 用户登录到服务器上，把/data/www/html&nbsp;数据，同步到本地目录/data/www/html/上。当然本地的目录是可以你自己定义的，比如 dave也是可以的；当你在客户端上，当前操作的目录下没有/tmp/test/这个目录时，系统会自动为你创建一个；当存在/tmp/test/这个目录中，你要注意它的写权限。</p>
+<p>参数说明：</p>
+<p>&nbsp;-a 参数，相当于-rlptgoD，</p>
+<p>&nbsp;&nbsp;&nbsp;-r 是递归 -l 是链接文件，意思是拷贝链接文件；</p>
+<p>&nbsp;&nbsp;&nbsp;-p 表示保持文件原有权限；</p>
+<p>&nbsp;&nbsp;&nbsp;-t 保持文件原有时间；<br>&nbsp;&nbsp;&nbsp;-g 保持文件原有用户组；</p>
+<p>&nbsp;&nbsp;&nbsp;-o 保持文件原有属主；</p>
+<p>&nbsp;&nbsp;&nbsp;-D 相当于块设备文件；</p>
+<p>&nbsp;&nbsp;&nbsp;-z 传输时压缩；</p>
+<p>&nbsp;&nbsp;&nbsp;-P 传输进度；</p>
+<p>&nbsp;&nbsp;&nbsp;-v 传输时的进度等信息，和-P有点关系</p>
+<p>&nbsp;<br>*</p>
+<p>rsync -avzP &nbsp;–delete <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools&nbsp;/tmp/test/</p>
+<p>–delete 选项，表示服务器上的数据要与客户端完全一致，如果 /tmp/test/目录中有服务器上不存在的文件，则删除。最终目的是让/tmp/test/目录上的数据完全与服务器上保持一致；用的时候要小心点，最好不要把已经有重要数所据的目录，当做本地更新目录，否则会把你的数据全部删除；
+&nbsp;</p>
+<p>计划任务同步：</p>
+<p>*/5 * * * * rsync -zvaP <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools /tmp/test/ –password-file=/etc/rsyncd/rsyncd.secrets</p>
+<p>*/5 * * * * rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
+<p>&nbsp;</p>
+]]></content>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Tengine 安装</title>
+    <url>/2023/111458217.html</url>
+    <content><![CDATA[<p>Tengine安装</p>
+<p>Tengine 是由淘宝网发起的 Web 服务器项目。它在 Nginx 的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。Tengine 的性能和稳定性已经在大型的网站如淘宝网，天猫商城等得到了很好的检验。它的最终目标是打造一个高效、稳定、安全、易用的 Web 平台。</p>
+<p>Tengine 特性：</p>
+<p>支持 HTTP 的 CONNECT 方法，可用于正向代理场景；</p>
+<p>支持异步 OpenSSL，可使用硬件如：QAT 进行 HTTPS 的加速与卸载；</p>
+<p>增强相关运维、监控能力，比如异步打印日志及回滚，本地 DNS 缓存，内存监控等；</p>
+<p>Stream 模块支持 server_name 指令；</p>
+<p>更加强大的负载均衡能力，包括一致性 hash 模块、会话保持模块，还可以对后端的服务器进行主动健康检查，根据服务器状态自动上线下线，以及动态解析 upstream 中出现的域名；</p>
+<p>输入过滤器机制支持。通过使用这种机制 Web 应用防火墙的编写更为方便；</p>
+<p>支持设置 proxy、memcached、fastcgi、scgi、uwsgi 在后端失败时的重试次数；</p>
+<p>动态脚本语言 Lua 支持。扩展功能非常高效简单；</p>
+<p>支持按指定关键字(域名，url等)收集 Tengine 运行状态；</p>
+<p>组合多个 CSS、JavaScript 文件的访问请求变成一个请求；</p>
+<p>自动去除空白字符和注释从而减小页面的体积</p>
+<p>自动根据 CPU 数目设置进程个数和绑定 CPU 亲缘性；</p>
+<p>监控系统的负载和资源占用从而对系统进行保护；</p>
+<p>显示对运维人员更友好的出错信息，便于定位出错机器；；</p>
+<p>更强大的防攻击（访问速度限制）模块；</p>
+<p>更方便的命令行参数，如列出编译的模块列表、支持的指令等；</p>
+<p>支持 Dubbo 协议；</p>
+<p>可以根据访问文件类型设置过期时间；</p>
+<p>下载源码包：</p>
+<p>tengine 源码：<a href="http://tengine.taobao.org/download_cn.html">http://tengine.taobao.org/download_cn.html</a></p>
+<p>pcre 源码：<a href="http://www.pcre.org/">http://www.pcre.org/</a></p>
+<p>openssl 源码：<a href="https://www.openssl.org/source/">https://www.openssl.org/source/</a></p>
+<p>zlib 源码：<a href="http://www.zlib.net/">http://www.zlib.net/</a></p>
+<p>安装包：</p>
+<p>支持lua模块</p>
+<p>wget <a href="http://luajit.org/download/LuaJIT-2.0.4.tar.gz">http://luajit.org/download/LuaJIT-2.0.4.tar.gz</a></p>
+<p>#wget <a href="https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz">https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz</a></p>
+<p>#wget <a href="https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz">https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz</a></p>
+<p>安装LuaJIT</p>
+<p>tar xf LuaJIT-2.0.4.tar.gz</p>
+<p>#cd xf LuaJIT-2.0.4</p>
+<p>#make PREFIX=/usr/local/luajit</p>
+<p>#make install PREFIX=/usr/local/luajit</p>
+<p>#ln -s /usr/local/luajit/lib/libluajit-5.1.so.2 /lib64/libluajit-5.1.so.2</p>
+<p>添加环境变量</p>
+<p>export LUAJIT_LIB=/usr/local/luajit/lib</p>
+<p>export LUAJIT_INC=/usr/local/luajit/include/luajit-2.0</p>
+<p>#source /etc/profile</p>
+<p>安装tingine</p>
+<p>#tar xf v0.3.0.tar.gz</p>
+<p>#tar xf v0.10.13.tar.gz</p>
+<p>#tar xf nginx-1.12.0.tar.gz</p>
+<p>debain 环境下安装：<br>sudo apt-get install -y  openssl libssl-dev<br>sudo apt-get install  -y libpcre3 libpcre3-dev<br>apt-get install  -y zlib1g-dev<br>Centos环境下安装：<br>yum -y update &amp;&amp; yum install -y gcc wget tree pcre-devel <br>zlib-devel openssl openssl-devel <br>libxml2 libxml2-dev libxslt-devel gd-devel <br>ncurses-devel perl perl-ExtUtils-Embed <br>gperftools </p>
+<p>cd tengine-2.2.2</p>
+<p> ./configure –conf-path=/etc/nginx/nginx.conf –user=www-data –group=www-data –prefix=/etc/nginx –sbin-path=/usr/sbin/nginx –with-ipv6  –error-log-path=/var/log/nginx/error.log –http-log-path=/var/log/nginx/access.log  –pid-path=/var/run/nginx.pid –lock-path=/var/lock/nginx.lock –http-client-body-temp-path=/var/cache/nginx/client_temp  –http-proxy-temp-path=/var/cache/nginx/proxy_temp –http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp  –http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp –http-scgi-temp-path=/var/cache/nginx/scgi_temp  –without-select_module –without-http_uwsgi_module –without-http_empty_gif_module –with-http_ssl_module –with-http_addition_module  –with-http_sub_module –with-http_dav_module –with-http_flv_module –with-http_gunzip_module  –with-http_gzip_static_module –with-http_random_index_module  –with-http_secure_link_module –with-http_stub_status_module –with-http_realip_module  –with-http_concat_module=shared –with-http_sysguard_module=shared  –with-http_dyups_module –with-file-aio –add-module=../ngx_devel_kit-0.3.0/  –add-module=../lua-nginx-module-0.10.13/ \</p>
+<p>Make </p>
+<p>Make install</p>
+<p>Make会报错：cc1: all warnings being treated as errors</p>
+<p>make[1]: *** [objs/Makefile:617: objs/src/core/ngx_murmurhash.o] Error 1</p>
+<p>make[1]: Leaving directory ‘/home/tools/install/tengine-2.2.2’</p>
+<p>vim objs/Makefile：</p>
+<p>CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused -Werror -g  -DNDK_SET_VAR</p>
+<p> -Werror -g去掉</p>
+<p>CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused  -DNDK_SET_VAR</p>
+<p>sed -i “s/ -Werror -g / /g” ./objs/Makefile<br>make &amp;&amp; make install<br>echo <code>nginx -v</code></p>
+<p>#不显示版本号<br>sed -i “/server_tokens off;/a server_tag off; \n server_info off;” nginx.conf<br>mkdir -p /var/cache/nginx/scgi_temp<br>chown www-data.root /var/cache/nginx/scgi_temp</p>
+<p>添加系统服务：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat &gt;&gt;/etc/systemd/system/nginx.service &lt;&lt;EOF</span><br><span class="line">[Unit]</span><br><span class="line">Description=The nginx HTTP and reverse proxy server</span><br><span class="line">After=syslog.target network.target remote-fs.target nss-lookup.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">PIDFile=/var/run/nginx.pid</span><br><span class="line">ExecStartPre=/usr/sbin/nginx -t -c /etc/nginx/nginx.conf</span><br><span class="line">ExecStart=/usr/sbin/nginx -c /etc/nginx/nginx.conf</span><br><span class="line">ExecReload=/usr/sbin/nginx -s reload</span><br><span class="line">ExecStop=/usr/sbin/nginx -s stop</span><br><span class="line">ExecQuit=/usr/sbin/nginx -s quit</span><br><span class="line">PrivateTmp=true</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br></pre></td></tr></tbody></table></figure>
+
+<p>后续就是优化配置了。</p>
 ]]></content>
       <categories>
         <category>系统</category>
@@ -278,168 +440,6 @@
 <p>Could not find log4j2 configuration at path /usr/share/logstash/config/log4j2.properties. Using default config which logs errors to the console</p>
 <p>等等可以看日志找出这些问题；本次安装遇到最大问题是乱码，做一次点滴笔记。</p>
 <hr>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Rsync同步文件</title>
-    <url>/2023/081064777.html</url>
-    <content><![CDATA[<p>Rsync常用的一款同步文件工具。配置也很方便。</p>
-<p>&nbsp;</p>
-<p>yum install sync -y或者apt-get install sync</p>
-<ul>
-<li>服务安装好之后，/etc下没有配置文件，一般情况可以copy示例文件到/etc下</li>
-</ul>
-<p>&nbsp;</p>
-<p>#cp&nbsp;/usr/share/doc/rsync/examples/rsyncd.conf&nbsp;/etc</p>
-<p>&nbsp;</p>
-<p>vim /etc/rsyncd.conf</p>
-<p>uid = common</p>
-<p>gid = common</p>
-<p>use chroot = no</p>
-<p>max connections = 10</p>
-<p>strict modes = yes</p>
-<p>hosts allow = 192.168.2.12&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #可以空格，允许多个</p>
-<p>hosts deny = *</p>
-<p>port = 5699&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;#默认开启端口</p>
-<p>pid file = /var/run/rsyncd.pid</p>
-<p>lock file = /var/run/rsync.lock</p>
-<p>log file = /var/log/rsyncd.log</p>
-<p>[hmt]</p>
-<p>path = /data/www/html/</p>
-<p>comment = hello</p>
-<p>ignore errors</p>
-<p>read only = no</p>
-<p>write only = no</p>
-<p>hosts allow = 192.168.2.12&nbsp;</p>
-<p>list = false</p>
-<p>auth users = hmt</p>
-<p>secrets file = /etc/rsync.password</p>
-<ul>
-<li>建立/etc/rsyncd/rsyncd.secrets文件</li>
-</ul>
-<p>#vim /etc/rsync.password</p>
-<p>#cat /etc/rsyncd/rsyncd.secrets</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;hmt:123456</p>
-<ul>
-<li>为了密码的安全性，我们必须把权限设为600</li>
-</ul>
-<p> chown root:root /etc/rsyncd/rsyncd.secrets</p>
-<p>chmod 600&nbsp;&nbsp;/etc/rsync.password</p>
-<p> chmod 600&nbsp;/etc/rsyncd/rsyncd.secrets</p>
-<p> vim /etc/rsyncd/rsyncd.motd</p>
-<p>&nbsp;</p>
-<p>启动rsync：</p>
-<p>systemctl start rsyncd.service</p>
-<p>&nbsp;lsof -i:5699</p>
-<p>lsof -i:5699</p>
-<p>COMMAND PID USER&nbsp; &nbsp;FD&nbsp; &nbsp;TYPE&nbsp; &nbsp;DEVICE SIZE/OFF NODE NAME</p>
-<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 4u&nbsp; IPv4 22661487&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
-<p>rsync&nbsp; &nbsp;750 root&nbsp; &nbsp; 5u&nbsp; IPv6 22661488&nbsp; &nbsp; &nbsp; 0t0&nbsp; TCP *:5699 (LISTEN)</p>
-<p>至此服务器端安装完毕；</p>
-<p>客户端安装配置：</p>
-<p>&nbsp;</p>
-<p>yum -y install rsync</p>
-<p>&nbsp;客户端需要vim&nbsp;/etc/rsync.password&nbsp;</p>
-<p>cat&nbsp;&nbsp;/etc/rsync.password</p>
-<p>123456</p>
-<p>运行：</p>
-<p>rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
-<p>Password: 这里要输入rsync的密码，是服务器端提供的，在前面的例子中，我们用的是 asdf，输入的密码并不显示出来；输好后就回车；&nbsp;注：&nbsp;这个命令的意思就是说，用rsync 用户登录到服务器上，把/data/www/html&nbsp;数据，同步到本地目录/data/www/html/上。当然本地的目录是可以你自己定义的，比如 dave也是可以的；当你在客户端上，当前操作的目录下没有/tmp/test/这个目录时，系统会自动为你创建一个；当存在/tmp/test/这个目录中，你要注意它的写权限。</p>
-<p>参数说明：</p>
-<p>&nbsp;-a 参数，相当于-rlptgoD，</p>
-<p>&nbsp;&nbsp;&nbsp;-r 是递归 -l 是链接文件，意思是拷贝链接文件；</p>
-<p>&nbsp;&nbsp;&nbsp;-p 表示保持文件原有权限；</p>
-<p>&nbsp;&nbsp;&nbsp;-t 保持文件原有时间；<br>&nbsp;&nbsp;&nbsp;-g 保持文件原有用户组；</p>
-<p>&nbsp;&nbsp;&nbsp;-o 保持文件原有属主；</p>
-<p>&nbsp;&nbsp;&nbsp;-D 相当于块设备文件；</p>
-<p>&nbsp;&nbsp;&nbsp;-z 传输时压缩；</p>
-<p>&nbsp;&nbsp;&nbsp;-P 传输进度；</p>
-<p>&nbsp;&nbsp;&nbsp;-v 传输时的进度等信息，和-P有点关系</p>
-<p>&nbsp;<br>*</p>
-<p>rsync -avzP &nbsp;–delete <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools&nbsp;/tmp/test/</p>
-<p>–delete 选项，表示服务器上的数据要与客户端完全一致，如果 /tmp/test/目录中有服务器上不存在的文件，则删除。最终目的是让/tmp/test/目录上的数据完全与服务器上保持一致；用的时候要小心点，最好不要把已经有重要数所据的目录，当做本地更新目录，否则会把你的数据全部删除；
-&nbsp;</p>
-<p>计划任务同步：</p>
-<p>*/5 * * * * rsync -zvaP <a href="mailto:rsync@192.168.2.150">rsync@192.168.2.150</a>::hometools /tmp/test/ –password-file=/etc/rsyncd/rsyncd.secrets</p>
-<p>*/5 * * * * rsync -avz –port 5699 –password-file=/etc/rsync.password <a href="mailto:hmt@192.168.2.12">hmt@192.168.2.12</a>::hmt&nbsp; /data/www/html</p>
-<p>&nbsp;</p>
-]]></content>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Tengine 安装</title>
-    <url>/2023/111458217.html</url>
-    <content><![CDATA[<p>Tengine安装</p>
-<p>Tengine 是由淘宝网发起的 Web 服务器项目。它在 Nginx 的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。Tengine 的性能和稳定性已经在大型的网站如淘宝网，天猫商城等得到了很好的检验。它的最终目标是打造一个高效、稳定、安全、易用的 Web 平台。</p>
-<p>Tengine 特性：</p>
-<p>支持 HTTP 的 CONNECT 方法，可用于正向代理场景；</p>
-<p>支持异步 OpenSSL，可使用硬件如：QAT 进行 HTTPS 的加速与卸载；</p>
-<p>增强相关运维、监控能力，比如异步打印日志及回滚，本地 DNS 缓存，内存监控等；</p>
-<p>Stream 模块支持 server_name 指令；</p>
-<p>更加强大的负载均衡能力，包括一致性 hash 模块、会话保持模块，还可以对后端的服务器进行主动健康检查，根据服务器状态自动上线下线，以及动态解析 upstream 中出现的域名；</p>
-<p>输入过滤器机制支持。通过使用这种机制 Web 应用防火墙的编写更为方便；</p>
-<p>支持设置 proxy、memcached、fastcgi、scgi、uwsgi 在后端失败时的重试次数；</p>
-<p>动态脚本语言 Lua 支持。扩展功能非常高效简单；</p>
-<p>支持按指定关键字(域名，url等)收集 Tengine 运行状态；</p>
-<p>组合多个 CSS、JavaScript 文件的访问请求变成一个请求；</p>
-<p>自动去除空白字符和注释从而减小页面的体积</p>
-<p>自动根据 CPU 数目设置进程个数和绑定 CPU 亲缘性；</p>
-<p>监控系统的负载和资源占用从而对系统进行保护；</p>
-<p>显示对运维人员更友好的出错信息，便于定位出错机器；；</p>
-<p>更强大的防攻击（访问速度限制）模块；</p>
-<p>更方便的命令行参数，如列出编译的模块列表、支持的指令等；</p>
-<p>支持 Dubbo 协议；</p>
-<p>可以根据访问文件类型设置过期时间；</p>
-<p>下载源码包：</p>
-<p>tengine 源码：<a href="http://tengine.taobao.org/download_cn.html">http://tengine.taobao.org/download_cn.html</a></p>
-<p>pcre 源码：<a href="http://www.pcre.org/">http://www.pcre.org/</a></p>
-<p>openssl 源码：<a href="https://www.openssl.org/source/">https://www.openssl.org/source/</a></p>
-<p>zlib 源码：<a href="http://www.zlib.net/">http://www.zlib.net/</a></p>
-<p>安装包：</p>
-<p>支持lua模块</p>
-<p>wget <a href="http://luajit.org/download/LuaJIT-2.0.4.tar.gz">http://luajit.org/download/LuaJIT-2.0.4.tar.gz</a></p>
-<p>#wget <a href="https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz">https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz</a></p>
-<p>#wget <a href="https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz">https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz</a></p>
-<p>安装LuaJIT</p>
-<p>tar xf LuaJIT-2.0.4.tar.gz</p>
-<p>#cd xf LuaJIT-2.0.4</p>
-<p>#make PREFIX=/usr/local/luajit</p>
-<p>#make install PREFIX=/usr/local/luajit</p>
-<p>#ln -s /usr/local/luajit/lib/libluajit-5.1.so.2 /lib64/libluajit-5.1.so.2</p>
-<p>添加环境变量</p>
-<p>export LUAJIT_LIB=/usr/local/luajit/lib</p>
-<p>export LUAJIT_INC=/usr/local/luajit/include/luajit-2.0</p>
-<p>#source /etc/profile</p>
-<p>安装tingine</p>
-<p>#tar xf v0.3.0.tar.gz</p>
-<p>#tar xf v0.10.13.tar.gz</p>
-<p>#tar xf nginx-1.12.0.tar.gz</p>
-<p>debain 环境下安装：<br>sudo apt-get install -y  openssl libssl-dev<br>sudo apt-get install  -y libpcre3 libpcre3-dev<br>apt-get install  -y zlib1g-dev<br>Centos环境下安装：<br>yum -y update &amp;&amp; yum install -y gcc wget tree pcre-devel <br>zlib-devel openssl openssl-devel <br>libxml2 libxml2-dev libxslt-devel gd-devel <br>ncurses-devel perl perl-ExtUtils-Embed <br>gperftools </p>
-<p>cd tengine-2.2.2</p>
-<p> ./configure –conf-path=/etc/nginx/nginx.conf –user=www-data –group=www-data –prefix=/etc/nginx –sbin-path=/usr/sbin/nginx –with-ipv6  –error-log-path=/var/log/nginx/error.log –http-log-path=/var/log/nginx/access.log  –pid-path=/var/run/nginx.pid –lock-path=/var/lock/nginx.lock –http-client-body-temp-path=/var/cache/nginx/client_temp  –http-proxy-temp-path=/var/cache/nginx/proxy_temp –http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp  –http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp –http-scgi-temp-path=/var/cache/nginx/scgi_temp  –without-select_module –without-http_uwsgi_module –without-http_empty_gif_module –with-http_ssl_module –with-http_addition_module  –with-http_sub_module –with-http_dav_module –with-http_flv_module –with-http_gunzip_module  –with-http_gzip_static_module –with-http_random_index_module  –with-http_secure_link_module –with-http_stub_status_module –with-http_realip_module  –with-http_concat_module=shared –with-http_sysguard_module=shared  –with-http_dyups_module –with-file-aio –add-module=../ngx_devel_kit-0.3.0/  –add-module=../lua-nginx-module-0.10.13/ \</p>
-<p>Make </p>
-<p>Make install</p>
-<p>Make会报错：cc1: all warnings being treated as errors</p>
-<p>make[1]: *** [objs/Makefile:617: objs/src/core/ngx_murmurhash.o] Error 1</p>
-<p>make[1]: Leaving directory ‘/home/tools/install/tengine-2.2.2’</p>
-<p>vim objs/Makefile：</p>
-<p>CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused -Werror -g  -DNDK_SET_VAR</p>
-<p> -Werror -g去掉</p>
-<p>CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused  -DNDK_SET_VAR</p>
-<p>sed -i “s/ -Werror -g / /g” ./objs/Makefile<br>make &amp;&amp; make install<br>echo <code>nginx -v</code></p>
-<p>#不显示版本号<br>sed -i “/server_tokens off;/a server_tag off; \n server_info off;” nginx.conf<br>mkdir -p /var/cache/nginx/scgi_temp<br>chown www-data.root /var/cache/nginx/scgi_temp</p>
-<p>添加系统服务：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat &gt;&gt;/etc/systemd/system/nginx.service &lt;&lt;EOF</span><br><span class="line">[Unit]</span><br><span class="line">Description=The nginx HTTP and reverse proxy server</span><br><span class="line">After=syslog.target network.target remote-fs.target nss-lookup.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">PIDFile=/var/run/nginx.pid</span><br><span class="line">ExecStartPre=/usr/sbin/nginx -t -c /etc/nginx/nginx.conf</span><br><span class="line">ExecStart=/usr/sbin/nginx -c /etc/nginx/nginx.conf</span><br><span class="line">ExecReload=/usr/sbin/nginx -s reload</span><br><span class="line">ExecStop=/usr/sbin/nginx -s stop</span><br><span class="line">ExecQuit=/usr/sbin/nginx -s quit</span><br><span class="line">PrivateTmp=true</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br></pre></td></tr></tbody></table></figure>
-
-<p>后续就是优化配置了。</p>
 ]]></content>
       <categories>
         <category>系统</category>
@@ -996,6 +996,24 @@
       </tags>
   </entry>
   <entry>
+    <title>Hello World</title>
+    <url>/2023/062516107.html</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>hello,mongodb</title>
     <url>/2023/12146947.html</url>
     <content><![CDATA[<p>Mongodb 安装：</p>
@@ -1049,7 +1067,7 @@
 <p>wget <a href="https://downloads.mongodb.com/compass/mongodb-mongosh-2.1.1.x86_64.rpm">https://downloads.mongodb.com/compass/mongodb-mongosh-2.1.1.x86_64.rpm</a></p>
 <p>yum localinstall mongodb-mongosh-2.1.1.x86_64.rpm</p>
 <p><img src="/../images/20231214_2.png"></p>
-<h2 id="三-操作"><a href="#三-操作" class="headerlink" title="三. 操作"></a>三. 操作</h2><p>进入以后设置管理员账号，</p>
+<h2 id="三-使用Mongodb"><a href="#三-使用Mongodb" class="headerlink" title="三. 使用Mongodb"></a>三. 使用Mongodb</h2><p>进入以后设置管理员账号，</p>
 <p>test&gt; use admin</p>
 <p>switched to db admin</p>
 <p>admin&gt; db.createUser({user:”root”,pwd:”admin123”,roles:[{role:”root”,db:”admin”}]})</p>
@@ -1119,24 +1137,6 @@
       <tags>
         <tag>mongodb</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2023/062516107.html</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
   </entry>
   <entry>
     <title>hexogit搭建个人网站</title>
@@ -1253,6 +1253,20 @@
 ]]></content>
   </entry>
   <entry>
+    <title>kafka Create topic 报错</title>
+    <url>/2023/071361284.html</url>
+    <content><![CDATA[<p>bin/kafka-console-consumer.sh –bootstrap-server localhost:9092 –topic kk_log<br>报错如下：<br>WARN [Consumer clientId=consumer-1, groupId=console-consumer-507] Connection to node -1 could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)</p>
+<p>配置server.confg时候设置的<br>advertised.listeners=PLAINTEXT://10.171.222.26:9092<br>此时需要用配置的IP而非localhost地址：</p>
+<p>nohup bin/zookeeper-server-start.sh config/zookeeper.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>nohup bin/kafka-server-start.sh config/server.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>netstat -ntpl|egrep “(2181|9092)”<br>运行起来再试试<br>bin/kafka-console-consumer.sh –bootstrap-server 10.171.222.26:9092 –topic kk_log<br>应该就可以了。<br>做个小笔记。</p>
+<p>PS zookeeper 报错，宕掉；</p>
+<p>[2016-06-27 12:07:14,065] INFO Closed socket connection for client /127.0.0.1:58824 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn) [2016-<br>[2016-06-27 12:07:17,351] INFO Refusing session request for client /127.0.0.1:58834 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)<br>[2016-06-27 12:07:17,351] INFO Closed socket connection for client /127.0.0.1:58834 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn)<br>[2016-06-27 12:07:19,048] INFO Accepted socket connection from /127.0.0.1:58840 (org.apache.zookeeper.server.NIOServerCnxnFactory)<br>[2016-06-27 12:07:19,048] INFO Refusing session request for client /127.0.0.1:58840 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)</p>
+<p>解决方法</p>
+<p>报错原因：服务器上还有应用在不停的向zookeeper发送请求</p>
+<p>解决方法：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用top -u [username]查看该用户下的所有进程，发现多了一个java进程在运行着；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、kill掉与java相关的进程；</p>
+<p>2、关闭zookeeper，删除zoo.cfg中的dataDir配置的文件夹；</p>
+<h2 id="3、重启zookeeper。"><a href="#3、重启zookeeper。" class="headerlink" title="3、重启zookeeper。"></a>3、重启zookeeper。</h2>]]></content>
+  </entry>
+  <entry>
     <title>linux install shadowsocks</title>
     <url>/2023/071659235.html</url>
     <content><![CDATA[<h1 id="1-安装Python和pip"><a href="#1-安装Python和pip" class="headerlink" title="1. 安装Python和pip"></a>1. 安装Python和pip</h1><p>sudo apt-get update</p>
@@ -1271,20 +1285,6 @@
       <tags>
         <tag>随笔</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>kafka Create topic 报错</title>
-    <url>/2023/071361284.html</url>
-    <content><![CDATA[<p>bin/kafka-console-consumer.sh –bootstrap-server localhost:9092 –topic kk_log<br>报错如下：<br>WARN [Consumer clientId=consumer-1, groupId=console-consumer-507] Connection to node -1 could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)</p>
-<p>配置server.confg时候设置的<br>advertised.listeners=PLAINTEXT://10.171.222.26:9092<br>此时需要用配置的IP而非localhost地址：</p>
-<p>nohup bin/zookeeper-server-start.sh config/zookeeper.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>nohup bin/kafka-server-start.sh config/server.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>netstat -ntpl|egrep “(2181|9092)”<br>运行起来再试试<br>bin/kafka-console-consumer.sh –bootstrap-server 10.171.222.26:9092 –topic kk_log<br>应该就可以了。<br>做个小笔记。</p>
-<p>PS zookeeper 报错，宕掉；</p>
-<p>[2016-06-27 12:07:14,065] INFO Closed socket connection for client /127.0.0.1:58824 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn) [2016-<br>[2016-06-27 12:07:17,351] INFO Refusing session request for client /127.0.0.1:58834 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)<br>[2016-06-27 12:07:17,351] INFO Closed socket connection for client /127.0.0.1:58834 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn)<br>[2016-06-27 12:07:19,048] INFO Accepted socket connection from /127.0.0.1:58840 (org.apache.zookeeper.server.NIOServerCnxnFactory)<br>[2016-06-27 12:07:19,048] INFO Refusing session request for client /127.0.0.1:58840 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)</p>
-<p>解决方法</p>
-<p>报错原因：服务器上还有应用在不停的向zookeeper发送请求</p>
-<p>解决方法：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用top -u [username]查看该用户下的所有进程，发现多了一个java进程在运行着；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、kill掉与java相关的进程；</p>
-<p>2、关闭zookeeper，删除zoo.cfg中的dataDir配置的文件夹；</p>
-<h2 id="3、重启zookeeper。"><a href="#3、重启zookeeper。" class="headerlink" title="3、重启zookeeper。"></a>3、重启zookeeper。</h2>]]></content>
   </entry>
   <entry>
     <title>linux有足够内存还使用swap</title>
@@ -1525,6 +1525,19 @@
 ]]></content>
       <tags>
         <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>/var/log/messages日志恢复</title>
+    <url>/2023/112018778.html</url>
+    <content><![CDATA[<p>Linux容易犯的一个错误是把日志文件给直接删除，而不是删除日志文件的内容。<br>直接删除日志文件往往导致新产生的日志记录无法被写入到日志文件中（因为它已经被删除了），而仅仅重新新建（touch）同样名字的文件是解决不了问题的。<br>本文以Unbutu系统为例，介绍如何恢复被误删除的syslog文件：<br>首先，在以root用户执行如下lsof命令，查询打开/var/log/messages文件的进程的进程ID(PID)。<br>root@zck:/var/log# lsof | grep messages<br>rsyslogd 544 syslog 7w REG 8,1 214641 134422 /var/log/messages<br>从上面命令输出可以看到，这个打开/var/log/messages文件的进程的PID是544，文件/var/log/messages的文件描述符（FD）号是7。<br>根据上述的PID和FD，可以在/proc找到对应的文件：<br>root@zck:/var/log#ls -al /proc/544/fd/7<br>l-wx—— 1 root root 64 2012-07-14 14:48 7 -&gt; /var/log/messages<br>将文件/proc/544/fd/7拷贝到/var/log/messages<br>cp /proc/544/fd/7 /var/log/messages&nbsp;</p>
+<p>然后重新启动syslog服务即可恢复被误删除的日志文件，并且新的日志记录能够继续被写入日志文件。<br>以root用户运行service命令。其中，service命令的第2个参数可能是syslog、也可能是rsyslog。<br>具体可以使用通过命令查询得知。<br>登录后复制<br>root@zck:/proc/544/fd# service –status-all<br> [ ? ] …<br> [ ? ] rc.local<br> [ ? ] rsyslog<br> [ ? ] screen-cleanup<br> [ ? ] …  #——————————-</p>
+<p>复制代码代码如下:<br>root@zck:/proc/544/fd# service rsyslog restart<br>rsyslog start/running, process 2673</p>
+<p>清空日志文件：<br>cat /dev/null&gt;/var/log/messages</p>
+<p>转自url:<a href="https://blog.51cto.com/u_11146845/6240737">https://blog.51cto.com/u_11146845/6240737</a></p>
+]]></content>
+      <tags>
+        <tag>点滴</tag>
       </tags>
   </entry>
   <entry>
@@ -1863,19 +1876,6 @@
       </categories>
   </entry>
   <entry>
-    <title>/var/log/messages日志恢复</title>
-    <url>/2023/112018778.html</url>
-    <content><![CDATA[<p>Linux容易犯的一个错误是把日志文件给直接删除，而不是删除日志文件的内容。<br>直接删除日志文件往往导致新产生的日志记录无法被写入到日志文件中（因为它已经被删除了），而仅仅重新新建（touch）同样名字的文件是解决不了问题的。<br>本文以Unbutu系统为例，介绍如何恢复被误删除的syslog文件：<br>首先，在以root用户执行如下lsof命令，查询打开/var/log/messages文件的进程的进程ID(PID)。<br>root@zck:/var/log# lsof | grep messages<br>rsyslogd 544 syslog 7w REG 8,1 214641 134422 /var/log/messages<br>从上面命令输出可以看到，这个打开/var/log/messages文件的进程的PID是544，文件/var/log/messages的文件描述符（FD）号是7。<br>根据上述的PID和FD，可以在/proc找到对应的文件：<br>root@zck:/var/log#ls -al /proc/544/fd/7<br>l-wx—— 1 root root 64 2012-07-14 14:48 7 -&gt; /var/log/messages<br>将文件/proc/544/fd/7拷贝到/var/log/messages<br>cp /proc/544/fd/7 /var/log/messages&nbsp;</p>
-<p>然后重新启动syslog服务即可恢复被误删除的日志文件，并且新的日志记录能够继续被写入日志文件。<br>以root用户运行service命令。其中，service命令的第2个参数可能是syslog、也可能是rsyslog。<br>具体可以使用通过命令查询得知。<br>登录后复制<br>root@zck:/proc/544/fd# service –status-all<br> [ ? ] …<br> [ ? ] rc.local<br> [ ? ] rsyslog<br> [ ? ] screen-cleanup<br> [ ? ] …  #——————————-</p>
-<p>复制代码代码如下:<br>root@zck:/proc/544/fd# service rsyslog restart<br>rsyslog start/running, process 2673</p>
-<p>清空日志文件：<br>cat /dev/null&gt;/var/log/messages</p>
-<p>转自url:<a href="https://blog.51cto.com/u_11146845/6240737">https://blog.51cto.com/u_11146845/6240737</a></p>
-]]></content>
-      <tags>
-        <tag>点滴</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ssh免密登录问题</title>
     <url>/2023/071760022.html</url>
     <content><![CDATA[<p>一台内网多个开发公用服务器，各自用户对对应的a，b台服务器做过免密登录，一直很好用，突然不能用了；追缘由以前的服务器多用户感觉吃力太慢，于是乎换了一台高配服务器，开发省事直接把原来的公钥给复制过来了，倒也是相安无事，前几天小伙伴处理服务器c免密，把公钥重新生成了，覆盖了原来的文件，vim&nbsp;id_rsa.pub 复制到服务器上面的，结果，开发a.b服务器不能免密了，处理的c服务器也不能免密登录；开发的a,b服务器因为公钥改了导致，c服务器检查了sshd_conf和authorized_keys以后，vim&nbsp;id_rsa.pub贴上去的内容有问题，so还是&nbsp;scp id_rsa.pub root@B:~/id_rsa.pub，然后登录b服务器cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys这样安全些。</p>
@@ -2151,6 +2151,138 @@
       </tags>
   </entry>
   <entry>
+    <title>zabbix 设置163报警邮箱</title>
+    <url>/2023/120119617.html</url>
+    <content><![CDATA[<h2 id="1-测试端口是否开放："><a href="#1-测试端口是否开放：" class="headerlink" title="1.测试端口是否开放："></a>1.测试端口是否开放：</h2><p>nc -w 2 smtp.exmail.qq.com 465 &lt; /dev/null &amp;&amp; echo “port is ok”</p>
+<p>nc -w 2 smtp.exmail.qq.com 25 &lt; /dev/null &amp;&amp; echo “port is ok”</p>
+<p>首先拿到163邮箱的授权码，邮箱设置–选择“POP/SMTP/IMAP”选项，选择“IMAP/SMTP服务”，点击开启，扫码页面可以选择扫码发送短信，或者点击下方“手动发送短信”，点击“我已发送”后，如果系统检测到用户成功发送短信，即获取到授权码。授权码可以在多个第三方客户端使用。</p>
+<h2 id="2-配置163邮箱"><a href="#2-配置163邮箱" class="headerlink" title="2.配置163邮箱"></a>2.配置163邮箱</h2><p>zabbix路径:/usr/lib/zabbix/,执行：</p>
+<p>certutil -A -n “GeoTrust SSL CA - G3” -t “Pu,Pu,Pu” -d /usr/lib/zabbix/.certs./ -i /usr/lib/zabbix/.certs./163.crt</p>
+<p>certutil:  unable to open “/usr/lib/zabbix/.certs./163.crt” for reading (-5950, 2).</p>
+<p>没有到.certs 目录下执行或者certs不可读</p>
+<p>cd .certs/</p>
+<p> certutil -A -n “GeoTrust SSL CA - G3” -t “Pu,Pu,Pu” -d ./ -i 163.crt</p>
+<p>Notice: Trust flag u is set automatically if the private key is present.</p>
+<p>依然报错；</p>
+<p> echo “hehe” | mail -v -s “test”  <a href="mailto:abc1@qq.com">abc1@qq.com</a></p>
+<p>Resolving host smtp.163.com . . .Could not resolve host: smtp.163.com</p>
+<p>Vim /etc/mail.rc</p>
+<p>set from=邮箱地址</p>
+<p>set smtp=smtps://smtp.163.com:465</p>
+<p>set smtp-auth-user=账号名不要加@</p>
+<p>set smtp-auth-password=授权码</p>
+<p>set smtp-auth=login</p>
+<p>set ssl-verify=ignore</p>
+<p>=后面不要“”</p>
+<p>测试发邮件：</p>
+<p> echo “邮件正文” | mail -s “ZABBIX-TEST” <a href="mailto:cxxx@163.com">cxxx@163.com</a></p>
+<p>Resolving host smtp.163.com . . . done.</p>
+<p>Connecting to 103.74.29.40:465 . . . connected.</p>
+<p>Error initializing NSS: Unknown error -8015.</p>
+<p>Error initializing NSS: Unknown error -8015.</p>
+<p>“/root/dead.letter” 11/320</p>
+<p>. . . message not sent.</p>
+<p>很莫名奇妙，最终在root下面生产.certs，首先在/root下生成相应文件，在copy到zabbix路径下面；</p>
+<p>cd /root</p>
+<p> mkdir .certs</p>
+<p> echo -n | openssl s_client -connect smtp.163.com:465 | sed -ne ‘/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p’ &gt; /root/.certs/163.crt</p>
+<p>depth=2 C = US, O = DigiCert Inc, OU = <a href="http://www.digicert.com/">www.digicert.com</a>, CN = DigiCert Global Root CA</p>
+<p>verify return:1</p>
+<p>depth=1 C = US, O = DigiCert Inc, CN = GeoTrust RSA CN CA G2</p>
+<p>verify return:1</p>
+<p>depth=0 C = CN, ST = zhejiang, L = hangzhou, O = “NetEase (Hangzhou) Network Co., Ltd”, CN = *.163.com</p>
+<p>verify return:1</p>
+<p>DONE</p>
+<p>certutil -A -n “GeoTrust SSL CA” -t “C,,” -d /root/.certs -i /root/.certs/163.crt</p>
+<p>certutil -A -n “GeoTrust Global CA” -t “C,,” -d /root/.certs -i /root/.certs/163.crt</p>
+<p>Cd .certs</p>
+<p>certutil -A -n “GeoTrust SSL CA - G3” -t “Pu,Pu,Pu” -d /root/.certs/./ -i /root/.certs/163.crt</p>
+<p>Notice: Trust flag u is set automatically if the private key is present.</p>
+<p> ls /root/.certs/</p>
+<p>163.crt  cert8.db  key3.db  secmod.db</p>
+<p>certutil -L -d /root/.certs</p>
+<p>Certificate Nickname                     Trust Attributes</p>
+<p>​                               SSL,S/MIME,JAR/XPI</p>
+<p>GeoTrust SSL CA                        P,P,P</p>
+<p>cp -a /root/.certs/ /etc/zabbix/ &amp;&amp; cd /etc/zabbix &amp;&amp; chmod 777 -R .certs</p>
+<p> tail -10f /etc/mail.rc</p>
+<p>set from=<a href="mailto:email@163.com">email@163.com</a></p>
+<p>set smtp=smtps://smtp.163.com:465</p>
+<p>set smtp-auth-user=用户名不带@</p>
+<p>set smtp-auth-password=授权码</p>
+<p>set smtp-auth=login</p>
+<p>set ssl-verify=ignore</p>
+<p>set nss-config-dir=/etc/zabbix/.certs</p>
+<p> echo “邮件正文” | mail -s “ZABBIX-TEST” <a href="mailto:cxxx@163.com">cxxx@163.com</a></p>
+<p>成功了；</p>
+<p>Zabbix安装，参照官网<a href="https://www.zabbix.com/cn/download">https://www.zabbix.com/cn/download</a></p>
+<p>或者网上一大堆源码安装教程；</p>
+<h2 id="3-邮件报警配置："><a href="#3-邮件报警配置：" class="headerlink" title="3.邮件报警配置："></a>3.邮件报警配置：</h2><p>Zabbix5.0安装调试完毕，邮件系统发送，给多用户发送遇到了问题，期初创建了多个用户，用163邮件通知，也有sendmail脚本通知，钉钉通知脚本都用过，</p>
+<p>设置了3种通知方式：163邮件通知，钉钉报警给机器人，sendmail脚本发送报警；</p>
+<p><img src="/../images/20231201_6.png"></p>
+<p> 1）163邮件通知：</p>
+<p><img src="/../images/20231201_7.png"></p>
+<p><img src="/../images/20231201_8.png"></p>
+<p>消息模版：</p>
+<p>问题：</p>
+<p>主题：</p>
+<p>TRIGGER.STATUS,服务器:HOSTNAME1,发生:TRIGGER.NAME</p>
+<p>消息：</p>
+<p>告警主机:HOST.NAME</p>
+<p>告警IP:HOST.IP</p>
+<p>告警时间:EVENT.DATE-EVENT.TIME</p>
+<p>告警等级:TRIGGER.SEVERITY</p>
+<p>告警信息:TRIGGER.NAME:ITEM.VALUE</p>
+<p>问题详情:ITEM.NAME:ITEM.VALUE</p>
+<p>当前状态:TRIGGER.STATUS:ITEM.VALUE</p>
+<p>事件ID:EVENT.ID</p>
+<p>——-FROM ZABBIX 平台——-163邮局—-</p>
+<p>问题恢复：</p>
+<p>主题：</p>
+<p>恢复{TRIGGER.STATUS}, 服务器:{HOSTNAME1}: {TRIGGER.NAME} 已恢复！</p>
+<p>消息：</p>
+<p>告警主机: {HOSTNAME1}</p>
+<p>主机地址: {HOST.IP}</p>
+<p>告警等级: {TRIGGER.SEVERITY}</p>
+<p>监控项目: {TRIGGER.KEY1}</p>
+<p>问题详情: {ITEM.NAME}:{ITEM.VALUE}</p>
+<p>当前状态: {TRIGGER.STATUS}: {ITEM.VALUE1}</p>
+<p>告警信息: {TRIGGER.NAME}</p>
+<p>告警时间: {EVENT.DATE} {EVENT.TIME}</p>
+<p>事件ID: {EVENT.ID}</p>
+<p>——来自zabbix监控平台–163邮局—–</p>
+<p>问题更新：</p>
+<p>Updated problem in {EVENT.AGE}: {EVENT.NAME}</p>
+<p>消息：</p>
+<p>{USER.FULLNAME} {EVENT.UPDATE.ACTION} problem at {EVENT.UPDATE.DATE} {EVENT.UPDATE.TIME}.</p>
+<p>{EVENT.UPDATE.MESSAGE}</p>
+<p>Current problem status is {EVENT.STATUS}, age is {EVENT.AGE}, acknowledged: {EVENT.ACK.STATUS}.</p>
+<p>——来自zabbix监控平台–163邮局—–</p>
+<p> 2）Sendmail.sh</p>
+<p>脚本：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">\#!/bin/bash</span><br><span class="line"></span><br><span class="line">\#export.UTF-8</span><br><span class="line"></span><br><span class="line">FILE=/var/log/zabbix/mailtmp.txt</span><br><span class="line"></span><br><span class="line">echo "$3" &gt;$FILE</span><br><span class="line"></span><br><span class="line">dos2unix -k $FILE</span><br><span class="line"></span><br><span class="line">/bin/mail -s "$2" $1 &lt; $FILE</span><br><span class="line"></span><br><span class="line">\#!/bin/bash</span><br><span class="line"></span><br><span class="line">\#messages=`echo $3 | tr '\r\n' '\n'`</span><br><span class="line"></span><br><span class="line">\#subject=`echo $2 | tr '\r\n' '\n'`</span><br><span class="line"></span><br><span class="line">\#echo "${messages}" | mail -v -s "${subject}" $1 &gt;&gt;/var/log/zabbix/mailx.log 2&gt;&amp;1</span><br></pre></td></tr></tbody></table></figure>
+
+
+<p>消息模版基本一致；</p>
+<p>3）钉钉告警：</p>
+<p>钉钉脚本：</p>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">\<span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#coding:utf-8</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#zabbix钉钉报警</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests,json,sys,os,datetime</span><br><span class="line"></span><br><span class="line">webhook=<span class="string">"https://oapi.dingtalk.com/robot/send?access_token=21211212111abcababcb..."</span>    <span class="comment">#说明：这里改为自己创建的机器人的webhook的值，钉钉个人现在不好申请了；</span></span><br><span class="line"></span><br><span class="line">user=sys.argv[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">text=sys.argv[<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">data={</span><br><span class="line"></span><br><span class="line">  <span class="string">"msgtype"</span>: <span class="string">"text"</span>,</span><br><span class="line"></span><br><span class="line">  <span class="string">"text"</span>: {</span><br><span class="line"></span><br><span class="line">​    <span class="string">"content"</span>: text</span><br><span class="line"></span><br><span class="line">  },</span><br><span class="line"></span><br><span class="line">  <span class="string">"at"</span>: {</span><br><span class="line"></span><br><span class="line">​    <span class="string">"atMobiles"</span>: [</span><br><span class="line"></span><br><span class="line">​      user</span><br><span class="line"></span><br><span class="line">​    ],</span><br><span class="line"></span><br><span class="line">​    <span class="string">"isAtAll"</span>: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">headers = {<span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>}</span><br><span class="line"></span><br><span class="line">x=requests.post(url=webhook,data=json.dumps(data),headers=headers)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> os.path.exists(<span class="string">"/usr/local/zabbix/log/ding.log"</span>):</span><br><span class="line"></span><br><span class="line">  f=<span class="built_in">open</span>(<span class="string">"/usr/local/zabbix/log/ding.log"</span>,<span class="string">"a+"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">  f=<span class="built_in">open</span>(<span class="string">"/usr/local/zabbix/log/ding.log"</span>,<span class="string">"w+"</span>)</span><br><span class="line"></span><br><span class="line">f.write(<span class="string">"\n"</span>+<span class="string">"--"</span>*<span class="number">30</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> x.json()[<span class="string">"errcode"</span>] == <span class="number">0</span>:</span><br><span class="line"></span><br><span class="line">  f.write(<span class="string">"\n"</span>+<span class="built_in">str</span>(datetime.datetime.now())+<span class="string">"   "</span>+<span class="built_in">str</span>(user)+<span class="string">"   "</span>+<span class="string">"发送成功"</span>+<span class="string">"\n"</span>+<span class="built_in">str</span>(text))</span><br><span class="line"></span><br><span class="line">  f.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">  f.write(<span class="string">"\n"</span>+<span class="built_in">str</span>(datetime.datetime.now()) + <span class="string">"   "</span> + <span class="built_in">str</span>(user) + <span class="string">"   "</span> + <span class="string">"发送失败"</span> + <span class="string">"\n"</span> + <span class="built_in">str</span>(text))</span><br><span class="line"></span><br><span class="line">  f.close()</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Zabbix_server.conf</p>
+<p>设置脚本路径：AlertScriptsPath=/usr/lib/zabbix/alertscripts</p>
+<p>ExternalScripts=/usr/lib/zabbix/externalscripts</p>
+<p>所监控的服务器设置监控脚本：/etc/zabbix/zabbix_agentd.conf</p>
+<p># UserParameter=</p>
+<p>UserParameter=dis.process,/usr/lib/zabbix/alertscripts/discovery_process.sh</p>
+<p>UserParameter=proc.check[*],/usr/lib/zabbix/alertscripts/process_check.sh $1 $2 $3</p>
+<p>遇到问题：邮件只能发送给admin，建立的其他用户一直没收到邮件，后来添加到admin用户以后可以收到，其他用户没收到邮件挺奇怪的事情，现在没头绪。</p>
+<p><img src="/../images/20231201_9.png"></p>
+]]></content>
+      <tags>
+        <tag>zabbix</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>zabbix3.0.1安装过程的小坑</title>
     <url>/2023/081629672.html</url>
     <content><![CDATA[<p>1.安装</p>
@@ -2284,138 +2416,6 @@
 <p>dos2unix -k $FILE</p>
 <p>/bin/mail -s “$2” $1 &lt; $FILE</p>
 <p>zabbix-管理–示警媒介类型–定制脚本-sendmail脚本，–添加联系人邮件。。</p>
-]]></content>
-      <tags>
-        <tag>zabbix</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>zabbix 设置163报警邮箱</title>
-    <url>/2023/120119617.html</url>
-    <content><![CDATA[<h2 id="1-测试端口是否开放："><a href="#1-测试端口是否开放：" class="headerlink" title="1.测试端口是否开放："></a>1.测试端口是否开放：</h2><p>nc -w 2 smtp.exmail.qq.com 465 &lt; /dev/null &amp;&amp; echo “port is ok”</p>
-<p>nc -w 2 smtp.exmail.qq.com 25 &lt; /dev/null &amp;&amp; echo “port is ok”</p>
-<p>首先拿到163邮箱的授权码，邮箱设置–选择“POP/SMTP/IMAP”选项，选择“IMAP/SMTP服务”，点击开启，扫码页面可以选择扫码发送短信，或者点击下方“手动发送短信”，点击“我已发送”后，如果系统检测到用户成功发送短信，即获取到授权码。授权码可以在多个第三方客户端使用。</p>
-<h2 id="2-配置163邮箱"><a href="#2-配置163邮箱" class="headerlink" title="2.配置163邮箱"></a>2.配置163邮箱</h2><p>zabbix路径:/usr/lib/zabbix/,执行：</p>
-<p>certutil -A -n “GeoTrust SSL CA - G3” -t “Pu,Pu,Pu” -d /usr/lib/zabbix/.certs./ -i /usr/lib/zabbix/.certs./163.crt</p>
-<p>certutil:  unable to open “/usr/lib/zabbix/.certs./163.crt” for reading (-5950, 2).</p>
-<p>没有到.certs 目录下执行或者certs不可读</p>
-<p>cd .certs/</p>
-<p> certutil -A -n “GeoTrust SSL CA - G3” -t “Pu,Pu,Pu” -d ./ -i 163.crt</p>
-<p>Notice: Trust flag u is set automatically if the private key is present.</p>
-<p>依然报错；</p>
-<p> echo “hehe” | mail -v -s “test”  <a href="mailto:abc1@qq.com">abc1@qq.com</a></p>
-<p>Resolving host smtp.163.com . . .Could not resolve host: smtp.163.com</p>
-<p>Vim /etc/mail.rc</p>
-<p>set from=邮箱地址</p>
-<p>set smtp=smtps://smtp.163.com:465</p>
-<p>set smtp-auth-user=账号名不要加@</p>
-<p>set smtp-auth-password=授权码</p>
-<p>set smtp-auth=login</p>
-<p>set ssl-verify=ignore</p>
-<p>=后面不要“”</p>
-<p>测试发邮件：</p>
-<p> echo “邮件正文” | mail -s “ZABBIX-TEST” <a href="mailto:cxxx@163.com">cxxx@163.com</a></p>
-<p>Resolving host smtp.163.com . . . done.</p>
-<p>Connecting to 103.74.29.40:465 . . . connected.</p>
-<p>Error initializing NSS: Unknown error -8015.</p>
-<p>Error initializing NSS: Unknown error -8015.</p>
-<p>“/root/dead.letter” 11/320</p>
-<p>. . . message not sent.</p>
-<p>很莫名奇妙，最终在root下面生产.certs，首先在/root下生成相应文件，在copy到zabbix路径下面；</p>
-<p>cd /root</p>
-<p> mkdir .certs</p>
-<p> echo -n | openssl s_client -connect smtp.163.com:465 | sed -ne ‘/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p’ &gt; /root/.certs/163.crt</p>
-<p>depth=2 C = US, O = DigiCert Inc, OU = <a href="http://www.digicert.com/">www.digicert.com</a>, CN = DigiCert Global Root CA</p>
-<p>verify return:1</p>
-<p>depth=1 C = US, O = DigiCert Inc, CN = GeoTrust RSA CN CA G2</p>
-<p>verify return:1</p>
-<p>depth=0 C = CN, ST = zhejiang, L = hangzhou, O = “NetEase (Hangzhou) Network Co., Ltd”, CN = *.163.com</p>
-<p>verify return:1</p>
-<p>DONE</p>
-<p>certutil -A -n “GeoTrust SSL CA” -t “C,,” -d /root/.certs -i /root/.certs/163.crt</p>
-<p>certutil -A -n “GeoTrust Global CA” -t “C,,” -d /root/.certs -i /root/.certs/163.crt</p>
-<p>Cd .certs</p>
-<p>certutil -A -n “GeoTrust SSL CA - G3” -t “Pu,Pu,Pu” -d /root/.certs/./ -i /root/.certs/163.crt</p>
-<p>Notice: Trust flag u is set automatically if the private key is present.</p>
-<p> ls /root/.certs/</p>
-<p>163.crt  cert8.db  key3.db  secmod.db</p>
-<p>certutil -L -d /root/.certs</p>
-<p>Certificate Nickname                     Trust Attributes</p>
-<p>​                               SSL,S/MIME,JAR/XPI</p>
-<p>GeoTrust SSL CA                        P,P,P</p>
-<p>cp -a /root/.certs/ /etc/zabbix/ &amp;&amp; cd /etc/zabbix &amp;&amp; chmod 777 -R .certs</p>
-<p> tail -10f /etc/mail.rc</p>
-<p>set from=<a href="mailto:email@163.com">email@163.com</a></p>
-<p>set smtp=smtps://smtp.163.com:465</p>
-<p>set smtp-auth-user=用户名不带@</p>
-<p>set smtp-auth-password=授权码</p>
-<p>set smtp-auth=login</p>
-<p>set ssl-verify=ignore</p>
-<p>set nss-config-dir=/etc/zabbix/.certs</p>
-<p> echo “邮件正文” | mail -s “ZABBIX-TEST” <a href="mailto:cxxx@163.com">cxxx@163.com</a></p>
-<p>成功了；</p>
-<p>Zabbix安装，参照官网<a href="https://www.zabbix.com/cn/download">https://www.zabbix.com/cn/download</a></p>
-<p>或者网上一大堆源码安装教程；</p>
-<h2 id="3-邮件报警配置："><a href="#3-邮件报警配置：" class="headerlink" title="3.邮件报警配置："></a>3.邮件报警配置：</h2><p>Zabbix5.0安装调试完毕，邮件系统发送，给多用户发送遇到了问题，期初创建了多个用户，用163邮件通知，也有sendmail脚本通知，钉钉通知脚本都用过，</p>
-<p>设置了3种通知方式：163邮件通知，钉钉报警给机器人，sendmail脚本发送报警；</p>
-<p><img src="/../images/20231201_6.png"></p>
-<p> 1）163邮件通知：</p>
-<p><img src="/../images/20231201_7.png"></p>
-<p><img src="/../images/20231201_8.png"></p>
-<p>消息模版：</p>
-<p>问题：</p>
-<p>主题：</p>
-<p>TRIGGER.STATUS,服务器:HOSTNAME1,发生:TRIGGER.NAME</p>
-<p>消息：</p>
-<p>告警主机:HOST.NAME</p>
-<p>告警IP:HOST.IP</p>
-<p>告警时间:EVENT.DATE-EVENT.TIME</p>
-<p>告警等级:TRIGGER.SEVERITY</p>
-<p>告警信息:TRIGGER.NAME:ITEM.VALUE</p>
-<p>问题详情:ITEM.NAME:ITEM.VALUE</p>
-<p>当前状态:TRIGGER.STATUS:ITEM.VALUE</p>
-<p>事件ID:EVENT.ID</p>
-<p>——-FROM ZABBIX 平台——-163邮局—-</p>
-<p>问题恢复：</p>
-<p>主题：</p>
-<p>恢复{TRIGGER.STATUS}, 服务器:{HOSTNAME1}: {TRIGGER.NAME} 已恢复！</p>
-<p>消息：</p>
-<p>告警主机: {HOSTNAME1}</p>
-<p>主机地址: {HOST.IP}</p>
-<p>告警等级: {TRIGGER.SEVERITY}</p>
-<p>监控项目: {TRIGGER.KEY1}</p>
-<p>问题详情: {ITEM.NAME}:{ITEM.VALUE}</p>
-<p>当前状态: {TRIGGER.STATUS}: {ITEM.VALUE1}</p>
-<p>告警信息: {TRIGGER.NAME}</p>
-<p>告警时间: {EVENT.DATE} {EVENT.TIME}</p>
-<p>事件ID: {EVENT.ID}</p>
-<p>——来自zabbix监控平台–163邮局—–</p>
-<p>问题更新：</p>
-<p>Updated problem in {EVENT.AGE}: {EVENT.NAME}</p>
-<p>消息：</p>
-<p>{USER.FULLNAME} {EVENT.UPDATE.ACTION} problem at {EVENT.UPDATE.DATE} {EVENT.UPDATE.TIME}.</p>
-<p>{EVENT.UPDATE.MESSAGE}</p>
-<p>Current problem status is {EVENT.STATUS}, age is {EVENT.AGE}, acknowledged: {EVENT.ACK.STATUS}.</p>
-<p>——来自zabbix监控平台–163邮局—–</p>
-<p> 2）Sendmail.sh</p>
-<p>脚本：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">\#!/bin/bash</span><br><span class="line"></span><br><span class="line">\#export.UTF-8</span><br><span class="line"></span><br><span class="line">FILE=/var/log/zabbix/mailtmp.txt</span><br><span class="line"></span><br><span class="line">echo "$3" &gt;$FILE</span><br><span class="line"></span><br><span class="line">dos2unix -k $FILE</span><br><span class="line"></span><br><span class="line">/bin/mail -s "$2" $1 &lt; $FILE</span><br><span class="line"></span><br><span class="line">\#!/bin/bash</span><br><span class="line"></span><br><span class="line">\#messages=`echo $3 | tr '\r\n' '\n'`</span><br><span class="line"></span><br><span class="line">\#subject=`echo $2 | tr '\r\n' '\n'`</span><br><span class="line"></span><br><span class="line">\#echo "${messages}" | mail -v -s "${subject}" $1 &gt;&gt;/var/log/zabbix/mailx.log 2&gt;&amp;1</span><br></pre></td></tr></tbody></table></figure>
-
-
-<p>消息模版基本一致；</p>
-<p>3）钉钉告警：</p>
-<p>钉钉脚本：</p>
-<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">\<span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#coding:utf-8</span></span><br><span class="line"></span><br><span class="line">\<span class="comment">#zabbix钉钉报警</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests,json,sys,os,datetime</span><br><span class="line"></span><br><span class="line">webhook=<span class="string">"https://oapi.dingtalk.com/robot/send?access_token=21211212111abcababcb..."</span>    <span class="comment">#说明：这里改为自己创建的机器人的webhook的值，钉钉个人现在不好申请了；</span></span><br><span class="line"></span><br><span class="line">user=sys.argv[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">text=sys.argv[<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">data={</span><br><span class="line"></span><br><span class="line">  <span class="string">"msgtype"</span>: <span class="string">"text"</span>,</span><br><span class="line"></span><br><span class="line">  <span class="string">"text"</span>: {</span><br><span class="line"></span><br><span class="line">​    <span class="string">"content"</span>: text</span><br><span class="line"></span><br><span class="line">  },</span><br><span class="line"></span><br><span class="line">  <span class="string">"at"</span>: {</span><br><span class="line"></span><br><span class="line">​    <span class="string">"atMobiles"</span>: [</span><br><span class="line"></span><br><span class="line">​      user</span><br><span class="line"></span><br><span class="line">​    ],</span><br><span class="line"></span><br><span class="line">​    <span class="string">"isAtAll"</span>: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">headers = {<span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>}</span><br><span class="line"></span><br><span class="line">x=requests.post(url=webhook,data=json.dumps(data),headers=headers)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> os.path.exists(<span class="string">"/usr/local/zabbix/log/ding.log"</span>):</span><br><span class="line"></span><br><span class="line">  f=<span class="built_in">open</span>(<span class="string">"/usr/local/zabbix/log/ding.log"</span>,<span class="string">"a+"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">  f=<span class="built_in">open</span>(<span class="string">"/usr/local/zabbix/log/ding.log"</span>,<span class="string">"w+"</span>)</span><br><span class="line"></span><br><span class="line">f.write(<span class="string">"\n"</span>+<span class="string">"--"</span>*<span class="number">30</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> x.json()[<span class="string">"errcode"</span>] == <span class="number">0</span>:</span><br><span class="line"></span><br><span class="line">  f.write(<span class="string">"\n"</span>+<span class="built_in">str</span>(datetime.datetime.now())+<span class="string">"   "</span>+<span class="built_in">str</span>(user)+<span class="string">"   "</span>+<span class="string">"发送成功"</span>+<span class="string">"\n"</span>+<span class="built_in">str</span>(text))</span><br><span class="line"></span><br><span class="line">  f.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">  f.write(<span class="string">"\n"</span>+<span class="built_in">str</span>(datetime.datetime.now()) + <span class="string">"   "</span> + <span class="built_in">str</span>(user) + <span class="string">"   "</span> + <span class="string">"发送失败"</span> + <span class="string">"\n"</span> + <span class="built_in">str</span>(text))</span><br><span class="line"></span><br><span class="line">  f.close()</span><br></pre></td></tr></tbody></table></figure>
-
-<p>Zabbix_server.conf</p>
-<p>设置脚本路径：AlertScriptsPath=/usr/lib/zabbix/alertscripts</p>
-<p>ExternalScripts=/usr/lib/zabbix/externalscripts</p>
-<p>所监控的服务器设置监控脚本：/etc/zabbix/zabbix_agentd.conf</p>
-<p># UserParameter=</p>
-<p>UserParameter=dis.process,/usr/lib/zabbix/alertscripts/discovery_process.sh</p>
-<p>UserParameter=proc.check[*],/usr/lib/zabbix/alertscripts/process_check.sh $1 $2 $3</p>
-<p>遇到问题：邮件只能发送给admin，建立的其他用户一直没收到邮件，后来添加到admin用户以后可以收到，其他用户没收到邮件挺奇怪的事情，现在没头绪。</p>
-<p><img src="/../images/20231201_9.png"></p>
 ]]></content>
       <tags>
         <tag>zabbix</tag>
