@@ -48,5 +48,4 @@ https://blog.icmpy.net/tags/git/
 https://blog.icmpy.net/tags/mongodb/
 https://blog.icmpy.net/tags/%E5%B7%A5%E5%85%B7/
 https://blog.icmpy.net/tags/zabbix/
-https://blog.icmpy.net/tags/%E5%B7%A5%E5%85%B7-zabbix/
 https://blog.icmpy.net/categories/%E7%B3%BB%E7%BB%9F/
