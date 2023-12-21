@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Debian 10挂载加swap</title>
-    <url>/2023/111727163.html</url>
-    <content><![CDATA[<p>以根目录挂载为4G例：<br>dd if=/dev/zero of=/swapfile count=4096 bs=1M</p>
-<p>ls / | grep swapfile<br>chmod 600 /swapfile<br>ls -lh /swapfile<br>-rw——- 1 root root 4.0G Aug 17 12:14 /swapfile<br>通过运行以下命令告诉服务器设置swap文件：<br>mkswap /swapfile<br>swapon /swapfile<br>free -m<br>vi /etc/fstab<br>/swapfile swap swap defaults 0 0<br>保存。</p>
-]]></content>
-      <categories>
-        <category>系统</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Centos同时安装python2和python3</title>
     <url>/2023/11203350.html</url>
     <content><![CDATA[<p>   在centos中，自带有python2，因此需要经常安装python3。但是这里有一个坑，就是centos的yum是用python2写的，如果正常编译安装python3，那么yum就会直接挂了。为了方便以后编译安装python3，不用天天去网上找教程仅供参考。</p>
@@ -55,6 +42,19 @@
 </li>
 </ol>
 ]]></content>
+  </entry>
+  <entry>
+    <title>Debian 10挂载加swap</title>
+    <url>/2023/111727163.html</url>
+    <content><![CDATA[<p>以根目录挂载为4G例：<br>dd if=/dev/zero of=/swapfile count=4096 bs=1M</p>
+<p>ls / | grep swapfile<br>chmod 600 /swapfile<br>ls -lh /swapfile<br>-rw——- 1 root root 4.0G Aug 17 12:14 /swapfile<br>通过运行以下命令告诉服务器设置swap文件：<br>mkswap /swapfile<br>swapon /swapfile<br>free -m<br>vi /etc/fstab<br>/swapfile swap swap defaults 0 0<br>保存。</p>
+]]></content>
+      <categories>
+        <category>系统</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
   </entry>
   <entry>
     <title>Debian10 安装ossfs</title>
@@ -996,24 +996,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Hello World</title>
-    <url>/2023/062516107.html</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>hello,mongodb</title>
     <url>/2023/12146947.html</url>
     <content><![CDATA[<p>Mongodb 安装：</p>
@@ -1139,18 +1121,22 @@
       </tags>
   </entry>
   <entry>
-    <title>kafka Create topic 报错</title>
-    <url>/2023/071361284.html</url>
-    <content><![CDATA[<p>bin/kafka-console-consumer.sh –bootstrap-server localhost:9092 –topic kk_log<br>报错如下：<br>WARN [Consumer clientId=consumer-1, groupId=console-consumer-507] Connection to node -1 could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)</p>
-<p>配置server.confg时候设置的<br>advertised.listeners=PLAINTEXT://10.171.222.26:9092<br>此时需要用配置的IP而非localhost地址：</p>
-<p>nohup bin/zookeeper-server-start.sh config/zookeeper.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>nohup bin/kafka-server-start.sh config/server.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>netstat -ntpl|egrep “(2181|9092)”<br>运行起来再试试<br>bin/kafka-console-consumer.sh –bootstrap-server 10.171.222.26:9092 –topic kk_log<br>应该就可以了。<br>做个小笔记。</p>
-<p>PS zookeeper 报错，宕掉；</p>
-<p>[2016-06-27 12:07:14,065] INFO Closed socket connection for client /127.0.0.1:58824 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn) [2016-<br>[2016-06-27 12:07:17,351] INFO Refusing session request for client /127.0.0.1:58834 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)<br>[2016-06-27 12:07:17,351] INFO Closed socket connection for client /127.0.0.1:58834 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn)<br>[2016-06-27 12:07:19,048] INFO Accepted socket connection from /127.0.0.1:58840 (org.apache.zookeeper.server.NIOServerCnxnFactory)<br>[2016-06-27 12:07:19,048] INFO Refusing session request for client /127.0.0.1:58840 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)</p>
-<p>解决方法</p>
-<p>报错原因：服务器上还有应用在不停的向zookeeper发送请求</p>
-<p>解决方法：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用top -u [username]查看该用户下的所有进程，发现多了一个java进程在运行着；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、kill掉与java相关的进程；</p>
-<p>2、关闭zookeeper，删除zoo.cfg中的dataDir配置的文件夹；</p>
-<h2 id="3、重启zookeeper。"><a href="#3、重启zookeeper。" class="headerlink" title="3、重启zookeeper。"></a>3、重启zookeeper。</h2>]]></content>
+    <title>Hello World</title>
+    <url>/2023/062516107.html</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
   </entry>
   <entry>
     <title>hexogit搭建个人网站</title>
@@ -1266,6 +1252,20 @@
 <p>由于做了ssl证书，80做了个跳转到443上面，域名需要到平台做解析，A记录到自己的服务器，如果流量大的话可以做cdn，Cname到平台给的记录值，ssl证书申请，主流云平台都可以免费申请，填写一些资料以后很快就可以签发证书，选择对应的证书上传即可。</p>
 <p>hexo主题优化网上有好多：<br><a href="https://godweiyang.com/2018/04/13/hexo-blog/">https://godweiyang.com/2018/04/13/hexo-blog/</a></p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>kafka Create topic 报错</title>
+    <url>/2023/071361284.html</url>
+    <content><![CDATA[<p>bin/kafka-console-consumer.sh –bootstrap-server localhost:9092 –topic kk_log<br>报错如下：<br>WARN [Consumer clientId=consumer-1, groupId=console-consumer-507] Connection to node -1 could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)</p>
+<p>配置server.confg时候设置的<br>advertised.listeners=PLAINTEXT://10.171.222.26:9092<br>此时需要用配置的IP而非localhost地址：</p>
+<p>nohup bin/zookeeper-server-start.sh config/zookeeper.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>nohup bin/kafka-server-start.sh config/server.properties &gt; /dev/null 2&gt;&amp;1 &amp;<br>netstat -ntpl|egrep “(2181|9092)”<br>运行起来再试试<br>bin/kafka-console-consumer.sh –bootstrap-server 10.171.222.26:9092 –topic kk_log<br>应该就可以了。<br>做个小笔记。</p>
+<p>PS zookeeper 报错，宕掉；</p>
+<p>[2016-06-27 12:07:14,065] INFO Closed socket connection for client /127.0.0.1:58824 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn) [2016-<br>[2016-06-27 12:07:17,351] INFO Refusing session request for client /127.0.0.1:58834 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)<br>[2016-06-27 12:07:17,351] INFO Closed socket connection for client /127.0.0.1:58834 (no session established for client) (org.apache.zookeeper.server.NIOServerCnxn)<br>[2016-06-27 12:07:19,048] INFO Accepted socket connection from /127.0.0.1:58840 (org.apache.zookeeper.server.NIOServerCnxnFactory)<br>[2016-06-27 12:07:19,048] INFO Refusing session request for client /127.0.0.1:58840 as it has seen zxid 0xd820 our last zxid is 0x20 client must try another server (org.apache.zookeeper.server.ZooKeeperServer)</p>
+<p>解决方法</p>
+<p>报错原因：服务器上还有应用在不停的向zookeeper发送请求</p>
+<p>解决方法：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用top -u [username]查看该用户下的所有进程，发现多了一个java进程在运行着；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、kill掉与java相关的进程；</p>
+<p>2、关闭zookeeper，删除zoo.cfg中的dataDir配置的文件夹；</p>
+<h2 id="3、重启zookeeper。"><a href="#3、重启zookeeper。" class="headerlink" title="3、重启zookeeper。"></a>3、重启zookeeper。</h2>]]></content>
   </entry>
   <entry>
     <title>linux install shadowsocks</title>
@@ -1592,6 +1592,125 @@
       </tags>
   </entry>
   <entry>
+    <title>php 安装redis，protobuf,mcryp扩展</title>
+    <url>/2023/081036272.html</url>
+    <content><![CDATA[<p>&nbsp; 测试机上测试一些数据需要用到redis扩展，偷懒yum安装的php，以前yum install php-pecl-redis.x86_64可以安装扩展，这次找不到安装包，不折腾手动安装下。</p>
+<p>1.下载phpredis</p>
+<p>cd /usr/local/src</p>
+<p>wget <a href="https://github.com/nicolasff/phpredis/archive/2.2.4.tar.gz">https://github.com/nicolasff/phpredis/archive/2.2.4.tar.gz</a></p>
+<p>tar -zxvf 2.2.4.tar.gz</p>
+<p>cd phpredis-2.2.4/</p>
+<p>2.用phpize生成configure配置文件</p>
+<p>/usr/bin/phpize&nbsp; #会生成几个新文件，默认安装路径自定义的按照自定义路径；</p>
+<p>./configure –with-php-config=/usr/bin/php-config</p>
+<p>make #编译</p>
+<p>make install #安装</p>
+<p>make test #测试</p>
+<p>3.配置php支持</p>
+<p>vim /usr/local/php/etc/php.ini #编辑配置文件，在最后一行添加以下内容</p>
+<p>extension=”redis.so”</p>
+<ol start="4">
+<li></li>
+</ol>
+<p>重启http加载查看phpinfo信息：</p>
+<p>redis</p>
+<p>Redis Supportenabled</p>
+<p>Redis Version2.2.4</p>
+<p>成功！</p>
+<p>php扩展Protobuf</p>
+<p>下载protobuf扩展包：wget <a href="https://github.com/allegro/php-protobuf/archive/master.zip%E8%BF%99%E4%B8%AAmaster.zip%E4%BC%9A%E6%8A%A5%E9%94%99%EF%BC%9B">https://github.com/allegro/php-protobuf/archive/master.zip这个master.zip会报错；</a></p>
+<p>master.zip</p>
+<p>cd /home/tools/php-protobuf-master/</p>
+<p>phpize</p>
+<p>可能会报错php-devel</p>
+<p>yum install php-devel</p>
+<p>./configure<br>1.<br>make&nbsp;&amp;&amp;&nbsp;make&nbsp;install<br>1.</p>
+<p>If you ever happen to want to link against installed libraries</p>
+<p>in a given directory, LIBDIR, you must either use libtool, and</p>
+<p>specify the full pathname of the library, or use the `-LLIBDIR’</p>
+<p>flag during linking and do at least one of the following:</p>
+<p>&nbsp;&nbsp; - add LIBDIR to the `LD_LIBRARY_PATH’ environment variable</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; during execution</p>
+<p>&nbsp;&nbsp; - add LIBDIR to the `LD_RUN_PATH’ environment variable</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; during linking</p>
+<p>&nbsp;&nbsp; - use the `-Wl,-rpath -Wl,LIBDIR’ linker flag</p>
+<p>&nbsp;&nbsp; - have your system administrator add LIBDIR to `/etc/ld.so.conf’</p>
+<p>&nbsp;</p>
+<p>See any operating system documentation about shared libraries for</p>
+<p>more information, such as the ld(1) and ld.so(8) manual pages.</p>
+<hr>
+<p>&nbsp;</p>
+<p>Build complete.</p>
+<p>Don’t forget to run ‘make test’.</p>
+<p>&nbsp;</p>
+<p>Installing shared extensions:&nbsp;&nbsp;&nbsp;&nbsp; /usr/lib64/php/modules/</p>
+<p>然后再php.ini增加</p>
+<p>extension = protocolbuffers.so</p>
+<p>重启下http就可以了；</p>
+<p>装载protobuff库：</p>
+<p>&nbsp;pear&nbsp;channel-discover&nbsp;pear.pollinimini.net&nbsp;</p>
+<p>pear&nbsp;install&nbsp;drslump/Protobuf-beta&nbsp;</p>
+<p>mcryp扩展：</p>
+<p>yum install libmcrypt libmcrypt-devel mcrypt mhash 如果报错找不到补丁的话手动安装；</p>
+<p>下载Libmcrypt,mhash,mcrypt安装包</p>
+<p>Libmcrypt(libmcrypt-2.5.8.tar.gz)：<a href="http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91774&amp;release_id=487459">http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91774&amp;release_id=487459</a></p>
+<p>mcrypt(mcrypt-2.6.8.tar.gz ):<a href="http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91948&amp;release_id=642101">http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91948&amp;release_id=642101</a></p>
+<p>mhash(mhash-0.9.9.9.tar.gz):<a href="http://sourceforge.net/project/showfiles.php?group_id=4286&amp;package_id=4300&amp;release_id=645636">http://sourceforge.net/project/showfiles.php?group_id=4286&amp;package_id=4300&amp;release_id=645636</a></p>
+<p>2.先安装Libmcrypt</p>
+<p>tar -zxvf libmcrypt-2.5.8.tar.gz</p>
+<p>cd libmcrypt-2.5.8</p>
+<p>./configure</p>
+<p>make</p>
+<p>make install</p>
+<p>说明：libmcript默认安装在/usr/local&nbsp;</p>
+<p>3.再安装mhash</p>
+<p>tar -zxvf mhash-0.9.9.9.tar.gz</p>
+<p>cd mhash-0.9.9.9</p>
+<p>./configure</p>
+<p>make &amp;&amp; make install</p>
+<p>4.最后安装mcrypt</p>
+<p>tar -zxvf mcrypt-2.6.8.tar.gz</p>
+<p>cd mcrypt-2.6.8</p>
+<p>LD_LIBRARY_PATH=/usr/local/lib ./configure</p>
+<p>make &amp;&amp; make install</p>
+<p>说明：由于在配置Mcrypt时，会找不到libmcrypt的链接库，导致无法编译，因为Libmcrypt的链接库在/usr/local/lib文件夹下。</p>
+<p>因次，在配置mcrypt时要加入LD_LIBRARY_PATH=/usr/local/lib导入键接库。</p>
+<p>到&nbsp;<a href="http://cn.php.net/releases/">http://cn.php.net/releases/</a>&nbsp;网页下找到自己对应php版本，下载后解压</p>
+<p>cd php-5.4.16/ext/mcrypt/</p>
+<p>phpize (执行phpize命令（phpize是用来扩展php扩展模块的，通过phpize可以建立php的外挂模块，如果没有？yum install php-devel)</p>
+<p>phpize&nbsp;</p>
+<p>Configuring for:</p>
+<p>PHP Api Version:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;20100412</p>
+<p>Zend Module Api No:&nbsp; &nbsp; &nbsp; 20100525</p>
+<p>Zend Extension Api No:&nbsp; &nbsp;220100525</p>
+<p>yum 安装php./configure就可以，定制的需要自己的路径如比：./configure –with-php-config=/usr/bin/php-config</p>
+<p>./configure</p>
+<p>make &amp;&amp; make install</p>
+<p>Libraries have been installed in:</p>
+<p>&nbsp; &nbsp;/home/tools/php-5.4.16/ext/mcrypt/modules</p>
+<p>If you ever happen to want to link against installed libraries</p>
+<p>in a given directory, LIBDIR, you must either use libtool, and</p>
+<p>specify the full pathname of the library, or use the `-LLIBDIR’</p>
+<p>flag during linking and do at least one of the following:</p>
+<p>&nbsp; &nbsp;- add LIBDIR to the `LD_LIBRARY_PATH’ environment variable</p>
+<p>&nbsp; &nbsp; &nbsp;during execution</p>
+<p>&nbsp; &nbsp;- add LIBDIR to the `LD_RUN_PATH’ environment variable</p>
+<p>&nbsp; &nbsp; &nbsp;during linking</p>
+<p>&nbsp; &nbsp;- use the `-Wl,-rpath -Wl,LIBDIR’ linker flag</p>
+<p>&nbsp; &nbsp;- have your system administrator add LIBDIR to `/etc/ld.so.conf’</p>
+<p>See any operating system documentation about shared libraries for</p>
+<p>more information, such as the ld(1) and ld.so(8) manual pages.</p>
+<hr>
+<p>Build complete.</p>
+<p>Don’t forget to run ‘make test’.</p>
+<p>Installing shared extensions:&nbsp; &nbsp; &nbsp;/usr/lib64/php/modules/</p>
+<p>php.ini添加一条extension=mcrypt.so</p>
+<p>extension = protocolbuffers.so</p>
+<p>extension = mcrypt.so</p>
+<hr>
+]]></content>
+  </entry>
+  <entry>
     <title>ps-top</title>
     <url>/2023/121939275.html</url>
     <content><![CDATA[<p>经常用到的命令，详细的命令参数确实掌握的不牢，复习一下~</p>
@@ -1761,125 +1880,6 @@
       <categories>
         <category>系统</category>
       </categories>
-  </entry>
-  <entry>
-    <title>php 安装redis，protobuf,mcryp扩展</title>
-    <url>/2023/081036272.html</url>
-    <content><![CDATA[<p>&nbsp; 测试机上测试一些数据需要用到redis扩展，偷懒yum安装的php，以前yum install php-pecl-redis.x86_64可以安装扩展，这次找不到安装包，不折腾手动安装下。</p>
-<p>1.下载phpredis</p>
-<p>cd /usr/local/src</p>
-<p>wget <a href="https://github.com/nicolasff/phpredis/archive/2.2.4.tar.gz">https://github.com/nicolasff/phpredis/archive/2.2.4.tar.gz</a></p>
-<p>tar -zxvf 2.2.4.tar.gz</p>
-<p>cd phpredis-2.2.4/</p>
-<p>2.用phpize生成configure配置文件</p>
-<p>/usr/bin/phpize&nbsp; #会生成几个新文件，默认安装路径自定义的按照自定义路径；</p>
-<p>./configure –with-php-config=/usr/bin/php-config</p>
-<p>make #编译</p>
-<p>make install #安装</p>
-<p>make test #测试</p>
-<p>3.配置php支持</p>
-<p>vim /usr/local/php/etc/php.ini #编辑配置文件，在最后一行添加以下内容</p>
-<p>extension=”redis.so”</p>
-<ol start="4">
-<li></li>
-</ol>
-<p>重启http加载查看phpinfo信息：</p>
-<p>redis</p>
-<p>Redis Supportenabled</p>
-<p>Redis Version2.2.4</p>
-<p>成功！</p>
-<p>php扩展Protobuf</p>
-<p>下载protobuf扩展包：wget <a href="https://github.com/allegro/php-protobuf/archive/master.zip%E8%BF%99%E4%B8%AAmaster.zip%E4%BC%9A%E6%8A%A5%E9%94%99%EF%BC%9B">https://github.com/allegro/php-protobuf/archive/master.zip这个master.zip会报错；</a></p>
-<p>master.zip</p>
-<p>cd /home/tools/php-protobuf-master/</p>
-<p>phpize</p>
-<p>可能会报错php-devel</p>
-<p>yum install php-devel</p>
-<p>./configure<br>1.<br>make&nbsp;&amp;&amp;&nbsp;make&nbsp;install<br>1.</p>
-<p>If you ever happen to want to link against installed libraries</p>
-<p>in a given directory, LIBDIR, you must either use libtool, and</p>
-<p>specify the full pathname of the library, or use the `-LLIBDIR’</p>
-<p>flag during linking and do at least one of the following:</p>
-<p>&nbsp;&nbsp; - add LIBDIR to the `LD_LIBRARY_PATH’ environment variable</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp; during execution</p>
-<p>&nbsp;&nbsp; - add LIBDIR to the `LD_RUN_PATH’ environment variable</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp; during linking</p>
-<p>&nbsp;&nbsp; - use the `-Wl,-rpath -Wl,LIBDIR’ linker flag</p>
-<p>&nbsp;&nbsp; - have your system administrator add LIBDIR to `/etc/ld.so.conf’</p>
-<p>&nbsp;</p>
-<p>See any operating system documentation about shared libraries for</p>
-<p>more information, such as the ld(1) and ld.so(8) manual pages.</p>
-<hr>
-<p>&nbsp;</p>
-<p>Build complete.</p>
-<p>Don’t forget to run ‘make test’.</p>
-<p>&nbsp;</p>
-<p>Installing shared extensions:&nbsp;&nbsp;&nbsp;&nbsp; /usr/lib64/php/modules/</p>
-<p>然后再php.ini增加</p>
-<p>extension = protocolbuffers.so</p>
-<p>重启下http就可以了；</p>
-<p>装载protobuff库：</p>
-<p>&nbsp;pear&nbsp;channel-discover&nbsp;pear.pollinimini.net&nbsp;</p>
-<p>pear&nbsp;install&nbsp;drslump/Protobuf-beta&nbsp;</p>
-<p>mcryp扩展：</p>
-<p>yum install libmcrypt libmcrypt-devel mcrypt mhash 如果报错找不到补丁的话手动安装；</p>
-<p>下载Libmcrypt,mhash,mcrypt安装包</p>
-<p>Libmcrypt(libmcrypt-2.5.8.tar.gz)：<a href="http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91774&amp;release_id=487459">http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91774&amp;release_id=487459</a></p>
-<p>mcrypt(mcrypt-2.6.8.tar.gz ):<a href="http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91948&amp;release_id=642101">http://sourceforge.net/project/showfiles.php?group_id=87941&amp;package_id=91948&amp;release_id=642101</a></p>
-<p>mhash(mhash-0.9.9.9.tar.gz):<a href="http://sourceforge.net/project/showfiles.php?group_id=4286&amp;package_id=4300&amp;release_id=645636">http://sourceforge.net/project/showfiles.php?group_id=4286&amp;package_id=4300&amp;release_id=645636</a></p>
-<p>2.先安装Libmcrypt</p>
-<p>tar -zxvf libmcrypt-2.5.8.tar.gz</p>
-<p>cd libmcrypt-2.5.8</p>
-<p>./configure</p>
-<p>make</p>
-<p>make install</p>
-<p>说明：libmcript默认安装在/usr/local&nbsp;</p>
-<p>3.再安装mhash</p>
-<p>tar -zxvf mhash-0.9.9.9.tar.gz</p>
-<p>cd mhash-0.9.9.9</p>
-<p>./configure</p>
-<p>make &amp;&amp; make install</p>
-<p>4.最后安装mcrypt</p>
-<p>tar -zxvf mcrypt-2.6.8.tar.gz</p>
-<p>cd mcrypt-2.6.8</p>
-<p>LD_LIBRARY_PATH=/usr/local/lib ./configure</p>
-<p>make &amp;&amp; make install</p>
-<p>说明：由于在配置Mcrypt时，会找不到libmcrypt的链接库，导致无法编译，因为Libmcrypt的链接库在/usr/local/lib文件夹下。</p>
-<p>因次，在配置mcrypt时要加入LD_LIBRARY_PATH=/usr/local/lib导入键接库。</p>
-<p>到&nbsp;<a href="http://cn.php.net/releases/">http://cn.php.net/releases/</a>&nbsp;网页下找到自己对应php版本，下载后解压</p>
-<p>cd php-5.4.16/ext/mcrypt/</p>
-<p>phpize (执行phpize命令（phpize是用来扩展php扩展模块的，通过phpize可以建立php的外挂模块，如果没有？yum install php-devel)</p>
-<p>phpize&nbsp;</p>
-<p>Configuring for:</p>
-<p>PHP Api Version:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;20100412</p>
-<p>Zend Module Api No:&nbsp; &nbsp; &nbsp; 20100525</p>
-<p>Zend Extension Api No:&nbsp; &nbsp;220100525</p>
-<p>yum 安装php./configure就可以，定制的需要自己的路径如比：./configure –with-php-config=/usr/bin/php-config</p>
-<p>./configure</p>
-<p>make &amp;&amp; make install</p>
-<p>Libraries have been installed in:</p>
-<p>&nbsp; &nbsp;/home/tools/php-5.4.16/ext/mcrypt/modules</p>
-<p>If you ever happen to want to link against installed libraries</p>
-<p>in a given directory, LIBDIR, you must either use libtool, and</p>
-<p>specify the full pathname of the library, or use the `-LLIBDIR’</p>
-<p>flag during linking and do at least one of the following:</p>
-<p>&nbsp; &nbsp;- add LIBDIR to the `LD_LIBRARY_PATH’ environment variable</p>
-<p>&nbsp; &nbsp; &nbsp;during execution</p>
-<p>&nbsp; &nbsp;- add LIBDIR to the `LD_RUN_PATH’ environment variable</p>
-<p>&nbsp; &nbsp; &nbsp;during linking</p>
-<p>&nbsp; &nbsp;- use the `-Wl,-rpath -Wl,LIBDIR’ linker flag</p>
-<p>&nbsp; &nbsp;- have your system administrator add LIBDIR to `/etc/ld.so.conf’</p>
-<p>See any operating system documentation about shared libraries for</p>
-<p>more information, such as the ld(1) and ld.so(8) manual pages.</p>
-<hr>
-<p>Build complete.</p>
-<p>Don’t forget to run ‘make test’.</p>
-<p>Installing shared extensions:&nbsp; &nbsp; &nbsp;/usr/lib64/php/modules/</p>
-<p>php.ini添加一条extension=mcrypt.so</p>
-<p>extension = protocolbuffers.so</p>
-<p>extension = mcrypt.so</p>
-<hr>
-]]></content>
   </entry>
   <entry>
     <title>ssh免密登录问题</title>
@@ -2289,35 +2289,6 @@
       </tags>
   </entry>
   <entry>
-    <title>zabbix监控业务进程变动</title>
-    <url>/2023/111359213.html</url>
-    <content><![CDATA[<p>Zabbix 监控进程宕机</p>
-<p>  业务需求后端进程宕机以后能在短时间内迅速拉起，业务影响不大，但是开发需要查看coredump，要求能监控到pid变化；在现有构架下zabbix能监控并报警；</p>
-<p>当然zabbix设置报警设置就不再一一</p>
-<p>在每台服务器/etc/zabbix/zabbix_agentd.conf设置路径：此例只需要piddiff.sh</p>
-<p>UserParameter=checkpid,sh /usr/local/script/piddiff.sh</p>
-<p>UserParameter=test,sh /usr/local/script/test.sh</p>
-<p>UserParameter=discovery.process,/usr/local/script/disprocess.sh</p>
-<p>UserParameter=process.check[*],/usr/local/script/proc_check.sh $1 $2 $3</p>
-<p>/usr/local/script下面存放脚本</p>
-<p>Vim piddiff.sh</p>
-<p>aapid为业务监控id 取值根据业务需求；</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#/bin/sh</span></span><br><span class="line"></span><br><span class="line">onl_ok=1</span><br><span class="line"></span><br><span class="line">onl_cored=3</span><br><span class="line"></span><br><span class="line"><span class="built_in">dir</span>=/usr/local/script</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ ! -f <span class="string">"<span class="variable">$dir</span>/old.txt"</span> ]];<span class="keyword">then</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/old.txt</span><br><span class="line"></span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">         <span class="built_in">sleep</span> 1s           </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/now.txt</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ! diff -q <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; /dev/null; <span class="keyword">then</span></span><br><span class="line"></span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_cored</span></span><br><span class="line">    </span><br><span class="line">          diff -c <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; <span class="variable">$dir</span>/`<span class="built_in">date</span> <span class="string">"+%Y%m%d%H%M"</span>`_diff.txt</span><br><span class="line">    </span><br><span class="line">          <span class="built_in">cat</span> <span class="variable">$dir</span>/now.txt &gt;<span class="variable">$dir</span>/old.txt</span><br><span class="line">    </span><br><span class="line">     <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_ok</span>    </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>一个简单的判断脚本；</p>
-<p>Zabbix30秒会抓取一次，正常没变化为1，有变化为3，那么zabbix抓取数值为3则表示pid有变化，会发出警报；</p>
-<p>Zabbix设置：</p>
-<p>监控项模板添加如下：</p>
-<p><img src="/../images/20231113_1.png"></p>
-<p>触发器：{Template OS Linux:checkpid.last()}=3</p>
-<p><img src="/../images/20231113_2.png"></p>
-<hr>
-]]></content>
-      <tags>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>zabbix3.0.1安装过程的小坑</title>
     <url>/2023/081629672.html</url>
     <content><![CDATA[<p>1.安装</p>
@@ -2454,6 +2425,35 @@
 ]]></content>
       <tags>
         <tag>zabbix</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>zabbix监控业务进程变动</title>
+    <url>/2023/111359213.html</url>
+    <content><![CDATA[<p>Zabbix 监控进程宕机</p>
+<p>  业务需求后端进程宕机以后能在短时间内迅速拉起，业务影响不大，但是开发需要查看coredump，要求能监控到pid变化；在现有构架下zabbix能监控并报警；</p>
+<p>当然zabbix设置报警设置就不再一一</p>
+<p>在每台服务器/etc/zabbix/zabbix_agentd.conf设置路径：此例只需要piddiff.sh</p>
+<p>UserParameter=checkpid,sh /usr/local/script/piddiff.sh</p>
+<p>UserParameter=test,sh /usr/local/script/test.sh</p>
+<p>UserParameter=discovery.process,/usr/local/script/disprocess.sh</p>
+<p>UserParameter=process.check[*],/usr/local/script/proc_check.sh $1 $2 $3</p>
+<p>/usr/local/script下面存放脚本</p>
+<p>Vim piddiff.sh</p>
+<p>aapid为业务监控id 取值根据业务需求；</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#/bin/sh</span></span><br><span class="line"></span><br><span class="line">onl_ok=1</span><br><span class="line"></span><br><span class="line">onl_cored=3</span><br><span class="line"></span><br><span class="line"><span class="built_in">dir</span>=/usr/local/script</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [[ ! -f <span class="string">"<span class="variable">$dir</span>/old.txt"</span> ]];<span class="keyword">then</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/old.txt</span><br><span class="line"></span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">         <span class="built_in">sleep</span> 1s           </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"> ps aux|grep aapid |grep -v grep|grep -v /bin/bash|awk  <span class="string">'{print $2,$11}'</span> &gt; <span class="variable">$dir</span>/now.txt</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ! diff -q <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; /dev/null; <span class="keyword">then</span></span><br><span class="line"></span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_cored</span></span><br><span class="line">    </span><br><span class="line">          diff -c <span class="variable">$dir</span>/old.txt  <span class="variable">$dir</span>/now.txt &gt; <span class="variable">$dir</span>/`<span class="built_in">date</span> <span class="string">"+%Y%m%d%H%M"</span>`_diff.txt</span><br><span class="line">    </span><br><span class="line">          <span class="built_in">cat</span> <span class="variable">$dir</span>/now.txt &gt;<span class="variable">$dir</span>/old.txt</span><br><span class="line">    </span><br><span class="line">     <span class="keyword">else</span></span><br><span class="line">    </span><br><span class="line">          <span class="built_in">echo</span> <span class="variable">$onl_ok</span>    </span><br><span class="line"></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>一个简单的判断脚本；</p>
+<p>Zabbix30秒会抓取一次，正常没变化为1，有变化为3，那么zabbix抓取数值为3则表示pid有变化，会发出警报；</p>
+<p>Zabbix设置：</p>
+<p>监控项模板添加如下：</p>
+<p><img src="/../images/20231113_1.png"></p>
+<p>触发器：{Template OS Linux:checkpid.last()}=3</p>
+<p><img src="/../images/20231113_2.png"></p>
+<hr>
+]]></content>
+      <tags>
+        <tag>工具</tag>
       </tags>
   </entry>
 </search>
